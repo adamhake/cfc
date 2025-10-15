@@ -30,8 +30,8 @@ export default function IconLogo(props: React.SVGProps<SVGSVGElement>) {
           y2="44"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.2" stop-color="#DB8A06" />
-          <stop offset="1" stop-color="#F3D6F7" />
+          <stop offset="0.2" stopColor="#DB8A06" />
+          <stop offset="1" stopColor="#F3D6F7" />
         </linearGradient>
       </defs>
     </svg>
