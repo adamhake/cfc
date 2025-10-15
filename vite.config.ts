@@ -7,13 +7,13 @@ import viteTsConfigPaths from "vite-tsconfig-paths";
 
 const config = defineConfig({
   plugins: [
-    netlify(),
     // this is the plugin that enables path aliases
     viteTsConfigPaths({
       projects: ["./tsconfig.json"],
     }),
-    tailwindcss(),
     tanstackStart(),
+    netlify(),
+    tailwindcss(),
     viteReact(),
   ],
 });
