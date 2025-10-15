@@ -1,0 +1,153 @@
+import Event from "@/components/Event/event";
+import GetInvolved from "@/components/GetInvolved/get-involved";
+import Hero from "@/components/Hero/hero";
+import Quote from "@/components/Quote/quote";
+import Vision from "@/components/Vision/vision";
+import { events } from "@/data/events";
+import { createFileRoute } from "@tanstack/react-router";
+
+export const Route = createFileRoute("/")({
+  component: Home,
+});
+
+// Donation buttons
+// Partner Callout
+//  - Church Hill Rotary Club
+//  - Church Hill Association
+//  - The Park homepage section
+
+// const tickerImgs = [
+// 	"/volunteers.webp",
+// 	"/roundhouse_evening.webp",
+// 	"/chimbo_sign.webp",
+// 	"/grove_cleanup.webp",
+// 	"/sign_cleanup.webp",
+// ];
+
+function Home() {
+  return (
+    <div className="space-y-24 pb-24">
+      <Hero />
+      <div className="-mt-24 space-y-24 bg-grey-50 px-4 py-24 lg:px-0">
+        <div className="mx-auto max-w-6xl space-y-6">
+          <h2 className="font-display text-xl text-green-800 md:text-2xl">Our Mission</h2>
+          <p className="max-w-4xl font-body text-2xl leading-tight font-medium text-grey-900 md:text-3xl">
+            The Chimborazo Park Conservancy and Friends of Chimborazo Park preserve and enhance this
+            Church Hill landmark through community stewardship.
+          </p>
+          <p className="mt-4 max-w-4xl font-body text-grey-800 md:text-lg">
+            Established in 2023 as a 501(c)(3) non-profit, we formed to continue essential park
+            support after the dissolution of Enrichmond. Since then, our volunteers and partners
+            have contributed generous donations, grants, and countless hours to build a sustainable
+            foundation for the park's future.
+          </p>
+          {/*<div className="grid grid-cols-4 gap-6 mt-14">
+						{tickerImgs.map((src) => (
+							<div
+								key={src}
+								className="relative rounded-xl overflow-hidden w-full aspect-[4/3]"
+							>
+								<img
+									src={src}
+									alt="Volunteers"
+									className="absolute inset-0 object-cover w-full h-full"
+								/>
+								<div className="absolute z-10 inset-0 bg-green-700/20"></div>
+							</div>
+						))}
+					</div>*/}
+        </div>
+        <div className="mx-auto max-w-6xl space-y-6">
+          <h2 className="font-display text-xl text-green-800 md:text-2xl">Our Vision</h2>
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-14">
+            <Vision
+              title="Restoration"
+              icon="leafy-green"
+              description="Preserving Chimborazo's historic character through careful
+						reconstruction and repair of the park's unique heritage elements."
+            />
+            <Vision
+              contentPosition="left"
+              title="Recreation"
+              icon="trees"
+              description="Providing vibrant play spaces, natural areas, and a dog park where neighbors of all ages—and their pets—can gather and stay active."
+            />
+            <Vision
+              title="Connection"
+              icon="heart-handshake"
+              description="Building an inclusive, welcoming park through volunteer stewardship and partnerships that strengthen our Church Hill neighborhood."
+            />
+            <Vision
+              title="Preservation"
+              icon="book-open-text"
+              contentPosition="left"
+              description="Honoring all chapters of Chimborazo's rich history and ensuring its complete story is shared and understood by future generations."
+            />
+          </div>
+        </div>
+      </div>
+      <div>
+        <div className="mx-auto max-w-6xl space-y-6 px-4 md:px-0">
+          <h2 className="font-display text-xl text-green-800 md:text-2xl">The Park</h2>
+          <p className="text-gray-800 font-body md:text-lg">
+            Chimborazo Hill's story reaches back centuries—from the indigenous Powhatan people to
+            its pivotal role in the Civil War. In 1874, as Richmond rebuilt, the city transformed
+            this storied site into a public park for all residents to enjoy.
+          </p>
+          <div className="mx-auto w-56 overflow-hidden rounded-xl border border-grey-800 bg-grey-50">
+            <img src="/cutshaw_wilfred.webp" alt="Wilfred Cutshaw" className="h-auto w-full" />
+            <p className="p-2 font-body text-xs font-medium text-grey-800">Wilfred Cutshaw</p>
+          </div>
+          <p className="text-gray-800 font-body md:text-lg">
+            City engineer Wilfred Cutshaw spent decades in the late 1800s designing winding cobbled
+            carriage roads that embraced the steep terrain, revealing breathtaking vistas at every
+            turn. These paths connected Church Hill with the traditionally African American Fulton
+            neighborhood below, creating vital links between communities.
+          </p>
+          <p className="text-gray-800 font-body md:text-lg">
+            By the turn of the 20th century, Chimborazo had become Richmond's beloved suburban
+            retreat. Visitors arrived by streetcar to enjoy the bandstand, refreshment pavilion, and
+            sweeping 180-degree views of the James River and downtown—a golden era that lasted
+            through World War II.
+          </p>
+          <p className="text-gray-800 font-body md:text-lg">
+            Today, the park includes scenic trails, a dog park, the historic Round House, a picnic
+            gazebo, and an eight-foot Statue of Liberty replica erected by Boy Scouts in the 1950s.
+            But time and reduced funding have taken their toll—many of the park's original and
+            historic features have fallen into disrepair.
+          </p>
+          <p className="text-gray-800 font-body md:text-lg">
+            <strong className="font-semibold">We're changing that.</strong> The Chimborazo Park
+            Conservancy is restoring, repairing, and enhancing this treasured greenspace to ensure
+            it remains beautiful, safe, and inclusive for generations to come.
+          </p>
+        </div>
+      </div>
+      <div>
+        <GetInvolved />
+      </div>
+      <div className="bg-grey-50 px-4 py-24 md:px-0">
+        <div className="mx-auto max-w-6xl">
+          <h2 className="font-display text-xl text-green-800 md:text-2xl">Events</h2>
+          <div className="mt-10 grid grid-cols-1 gap-14 md:grid-cols-2">
+            {events.map((event, index) => (
+              <Event
+                key={`event-${event.id}`}
+                description="Id cupidatat fugiat quis eu dolor non ut elit Lorem culpa reprehenderit dolor et nisi deserunt. Duis ullamco sit fugiat dolor id Lorem officia ad do ullamco."
+                title="Chimbo Park Conservancy Gala"
+                location="Meet at the fountain circle"
+                date="November, 6, 2025"
+                time="9am - 1pm"
+                image={{
+                  src: ["/festival.webp", "/recreation.webp", "/get_involved.webp"][index % 3],
+                  alt: "Chimbo Park Conservancy Gala",
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+      <Quote />
+    </div>
+  );
+}
