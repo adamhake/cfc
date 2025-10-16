@@ -1,9 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { MasonryPhotoAlbum } from "react-photo-album";
 import "react-photo-album/masonry.css";
+import type { MediaImage } from "@/data/media";
 
 export const Route = createFileRoute("/media")({
   component: Media,
+  loader: async () => {
+    try {
+      const response = await fetch("/.netlify/functions/get-media");
+      if (!response.ok) {
+        throw new Error("Failed to fetch media");
+      }
+      const images: MediaImage[] = await response.json();
+      return { images };
+    } catch (error) {
+      console.error("Error loading media:", error);
+      // Return empty array on error - we'll show a fallback message
+      return { images: [] };
+    }
+  },
   head: () => ({
     meta: [
       {
@@ -66,14 +81,18 @@ export const Route = createFileRoute("/media")({
   }),
 });
 
-const photos = [
-  { src: "/chimbo_arial.webp", width: 800, height: 600 },
-  { src: "/chimbo_circle.webp", width: 1600, height: 900 },
-  { src: "/chimbo_prom.webp", width: 1200, height: 1200 },
-  { src: "/chimbo_prom.webp", width: 1200, height: 1200 },
-];
-
 function Media() {
+  const { images } = Route.useLoaderData();
+
+  // Convert MediaImage format to react-photo-album format
+  const photos = images.map((img) => ({
+    src: img.src,
+    width: img.width,
+    height: img.height,
+    alt: img.alt,
+    title: img.caption, // Used for hover text
+  }));
+
   return (
     <div>
       <div className="relative h-[50vh] w-full overflow-hidden px-4">
@@ -93,15 +112,34 @@ function Media() {
         </div>
       </div>
       <div className="mx-auto max-w-6xl py-24">
-        <MasonryPhotoAlbum
-          photos={photos}
-          columns={3}
-          render={{
-            wrapper: (props) => (
-              <div {...props} className={`${props.className} overflow-hidden rounded-2xl`} />
-            ),
-          }}
-        />
+        {images.length === 0 ? (
+          <div className="text-center text-gray-600">
+            <p className="text-lg">No images available yet.</p>
+            <p className="mt-2 text-sm">Check back soon for photos of our park and events!</p>
+          </div>
+        ) : (
+          <>
+            <MasonryPhotoAlbum
+              photos={photos}
+              columns={(containerWidth) => {
+                if (containerWidth < 640) return 1;
+                if (containerWidth < 1024) return 2;
+                return 3;
+              }}
+              render={{
+                wrapper: (props, context) => (
+                  <div {...props} className={`${props.className} group relative overflow-hidden rounded-2xl`}>
+                    {context.photo.title && (
+                      <div className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/70 to-transparent p-4 opacity-0 transition-opacity group-hover:opacity-100">
+                        <p className="text-sm text-white">{context.photo.title}</p>
+                      </div>
+                    )}
+                  </div>
+                ),
+              }}
+            />
+          </>
+        )}
       </div>
     </div>
   );

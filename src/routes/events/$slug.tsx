@@ -26,7 +26,8 @@ export const Route = createFileRoute("/events/$slug")({
         const markdownPath = `../../data/events/${event.markdownFile}`;
         const loadMarkdown = markdownFiles[markdownPath];
         if (loadMarkdown) {
-          markdownContent = await loadMarkdown();
+          const module = await loadMarkdown();
+          markdownContent = typeof module === 'string' ? module : module.default;
         }
       } catch (error) {
         console.warn(`Failed to load markdown file: ${event.markdownFile}`, error);
