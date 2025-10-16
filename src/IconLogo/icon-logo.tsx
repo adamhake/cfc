@@ -1,11 +1,15 @@
+import { useId } from "react";
+
 export default function IconLogo(props: React.SVGProps<SVGSVGElement>) {
+  const gradientId = useId();
+
   return (
     <svg
       width="107"
       height="100"
       viewBox="0 0 107 100"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid meet"
       {...props}
     >
       <title>Chimbo Park Conservancy Logo</title>
@@ -19,11 +23,11 @@ export default function IconLogo(props: React.SVGProps<SVGSVGElement>) {
       />
       <path
         d="M52 44C52.094 32.0838 62.108 22 74 22C85.892 22 96 31.9893 96 44H99C104.793 21.3971 107 0 107 0C107 0 42.475 5.69801 19.561 28.8683C15.181 33.3369 12.025 38.4911 10 44"
-        fill="url(#paint0_linear_14_8)"
+        fill={`url(#${gradientId})`}
       />
       <defs>
         <linearGradient
-          id="paint0_linear_14_8"
+          id={gradientId}
           x1="58.5"
           y1="0"
           x2="58.5"

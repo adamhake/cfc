@@ -62,7 +62,7 @@ export default function Header() {
           {/* Logo - Mobile only */}
           <Link
             to="/"
-            className="flex h-12 w-12 items-center justify-center rounded-full border border-grey-100 bg-grey-50/75 backdrop-blur backdrop-filter md:hidden"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-grey-100 bg-grey-50/75 text-green-800 backdrop-blur backdrop-filter md:hidden"
           >
             <IconLogo className="h-7 w-7" />
           </Link>
@@ -86,7 +86,7 @@ export default function Header() {
           <button
             type="button"
             onClick={() => setMenuOpen((s) => !s)}
-            className="cursor-pointer rounded-xl border border-grey-200 bg-grey-100/75 px-4 py-2 text-center font-body text-sm font-semibold text-grey-800 uppercase backdrop-blur backdrop-filter transition md:w-28 md:border-green-800 md:bg-green-700 md:text-white md:hover:border-green-700 md:hover:bg-green-700 md:hover:text-grey-100"
+            className="cursor-pointer rounded-xl border border-grey-200 bg-grey-100/75 px-4 py-2 text-center font-body text-sm font-semibold text-green-800 uppercase backdrop-blur backdrop-filter transition md:w-28 md:border-green-800 md:bg-green-700 md:text-white md:hover:border-green-700 md:hover:bg-green-700 md:hover:text-grey-100"
           >
             <span className="hidden md:inline">Donate</span>
             <Menu className="h-6 w-6 md:hidden" />
