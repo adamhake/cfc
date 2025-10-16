@@ -33,15 +33,15 @@ export const Route = createFileRoute("/media")({
       },
       {
         property: "og:image",
-        content: "https://chimboparkconservancy.org/chimbo_hero_adj.webp",
+        content: "https://chimboparkconservancy.org/bike_sunset.webp",
       },
       {
         property: "og:image:width",
-        content: "1200",
+        content: "2000",
       },
       {
         property: "og:image:height",
-        content: "630",
+        content: "1262",
       },
       {
         name: "twitter:title",
@@ -54,7 +54,7 @@ export const Route = createFileRoute("/media")({
       },
       {
         name: "twitter:image",
-        content: "https://chimboparkconservancy.org/chimbo_hero_adj.webp",
+        content: "https://chimboparkconservancy.org/bike_sunset.webp",
       },
     ],
     links: [
@@ -76,13 +76,21 @@ const photos = [
 function Media() {
   return (
     <div>
-      <div className="relative h-[50vh] w-full overflow-hidden bg-[url(/chimbo_hero_adj.webp)] bg-cover px-4">
+      <div className="relative h-[50vh] w-full overflow-hidden px-4">
+        <img
+          src="/bike_sunset.webp"
+          alt="Chimborazo Park landscape"
+          width={2000}
+          height={1262}
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="eager"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-green-900/70 to-green-800/50"></div>
         <div className="absolute inset-0 z-10 flex items-center justify-center">
           <div className="mx-auto w-full max-w-6xl text-center">
             <h1 className="font-display text-5xl text-white">Media</h1>
           </div>
         </div>
-        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-r from-green-900/70 to-green-800/50"></div>
       </div>
       <div className="mx-auto max-w-6xl py-24">
         <MasonryPhotoAlbum
