@@ -124,18 +124,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         </ClientOnly>
         {children}
         <Footer />
-        <TanStackDevtools
-          config={{
-            position: "bottom-left",
-          }}
-          plugins={[
-            {
-              name: "Tanstack Router",
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-            TanStackQueryDevtools,
-          ]}
-        />
         <Scripts />
       </body>
     </html>
