@@ -12,6 +12,7 @@ export interface Event {
     width: number;
     height: number;
   };
+  markdownFile?: string;
 }
 
 export const events: Event[] = [
@@ -78,6 +79,7 @@ export const events: Event[] = [
       width: 1600,
       height: 1041,
     },
+    markdownFile: "spring-cleanup-2025.md",
   },
   {
     id: 5,
@@ -94,6 +96,7 @@ export const events: Event[] = [
       width: 1200,
       height: 1600,
     },
+    markdownFile: "all-about-trees-presentation.md",
   },
   {
     id: 6,
@@ -110,5 +113,6 @@ export const events: Event[] = [
       width: 1600,
       height: 1041,
     },
+    markdownFile: "chimborazo-park-community-tree-planting.md",
   },
 ];

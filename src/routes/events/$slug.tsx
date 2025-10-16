@@ -3,15 +3,28 @@ import { Calendar, Clock, MapPin } from "lucide-react";
 import { Button } from "@/components/Button/button";
 import { events } from "@/data/events";
 import EventStatusChip from "@/components/EventStatusChip/event-status-chip";
+import { Markdown } from "@/components/Markdown/markdown";
 
 export const Route = createFileRoute("/events/$slug")({
   component: EventPage,
-  loader: ({ params }) => {
+  loader: async ({ params }) => {
     const event = events.find((e) => e.slug === params.slug);
     if (!event) {
       throw notFound();
     }
-    return { event };
+
+    let markdownContent: string | null = null;
+    if (event.markdownFile) {
+      try {
+        // Use dynamic import with ?raw to load markdown as string at build time
+        const markdown = await import(`../../data/events/${event.markdownFile}?raw`);
+        markdownContent = markdown.default;
+      } catch (error) {
+        console.warn(`Failed to load markdown file: ${event.markdownFile}`, error);
+      }
+    }
+
+    return { event, markdownContent };
   },
   head: ({ loaderData }) => {
     if (!loaderData?.event) return { meta: [] };
@@ -100,7 +113,7 @@ export const Route = createFileRoute("/events/$slug")({
   },
 });
 function EventPage() {
-  const { event } = Route.useLoaderData();
+  const { event, markdownContent } = Route.useLoaderData();
 
   const isPast = new Date(event.date) < new Date();
 
@@ -134,60 +147,14 @@ function EventPage() {
       <div
         className={`mx-auto flex w-full max-w-6xl ${isPast ? "flex-col" : "flex-col-reverse"} gap-14 px-4 py-16 md:grid md:grid-cols-6 md:gap-14 md:py-24 lg:px-0`}
       >
-        <main className="col-span-4 space-y-4 text-lg leading-normal text-grey-800">
-          <p>
-            Dolor sunt velit sunt mollit commodo do nisi qui cupidatat proident. Consequat eiusmod
-            amet laborum quis velit ea pariatur labore elit nisi sunt. Culpa cillum velit voluptate
-            et nulla officia commodo ipsum culpa et officia. Id laboris Lorem dolore quis amet elit
-            eu nulla minim. Consectetur est laboris sunt aliqua deserunt. Ea magna sit laborum Lorem
-            ut pariatur.
-          </p>
-          <div className="order-1 my-10 grid grid-cols-4 grid-rows-1">
-            <div className="col-span-1 flex flex-col gap-8">
-              <div className="relative aspect-square w-full overflow-hidden rounded-2xl">
-                <img
-                  src="/grove_cleanup.webp"
-                  alt=""
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-              </div>
-              <div className="relative aspect-square w-full overflow-hidden rounded-2xl">
-                <img
-                  src="/volunteers.webp"
-                  alt=""
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-              </div>
-            </div>
-            <div className="relative col-span-3 h-full w-full overflow-hidden rounded-2xl">
-              <img
-                src="/sign_cleanup.webp"
-                alt=""
-                className="absolute inset-0 h-full w-full object-cover"
-              />
-            </div>
-          </div>
-          <p>
-            Nisi eiusmod reprehenderit irure in ipsum. Proident esse aliqua cillum tempor labore
-            amet eu aliqua. Minim excepteur quis voluptate. Aliqua nisi ad veniam in ea Lorem
-            nostrud. Eu in do consequat excepteur aliqua ex id excepteur exercitation duis quis
-            pariatur sit tempor aliquip. Enim ut Lorem eiusmod deserunt consectetur aliquip duis
-            exercitation laboris duis labore cupidatat do adipisicing. Amet consequat sunt ad amet
-            quis ipsum sint esse aliquip exercitation et veniam. Labore cillum deserunt ex veniam.
-            Consequat commodo reprehenderit veniam fugiat occaecat officia fugiat adipisicing.
-          </p>
-          <p>
-            Enim qui nisi est nulla incididunt ipsum Lorem minim nostrud ullamco ad sunt cupidatat
-            aliquip reprehenderit. Ut cillum laboris voluptate ad occaecat id ipsum officia
-            reprehenderit excepteur incididunt est consequat elit. Ut reprehenderit labore dolore
-            qui officia anim officia ipsum qui anim.
-          </p>
-          <h2 className="mt-10 font-display text-2xl">FAQs</h2>
-          <h3 className="font-display text-xl">What is the cost of the event?</h3>
-          <p>
-            The cost of the event is $50 per person. This includes admission to the event, a meal,
-            and a souvenir.
-          </p>
+        <main className="col-span-4">
+          {markdownContent ? (
+            <Markdown content={markdownContent} />
+          ) : (
+            <p className="text-lg leading-normal text-grey-800">
+              Event details coming soon. Check back later for more information about this event.
+            </p>
+          )}
         </main>
         <aside className={`w-full md:col-span-2`}>
           <div className="space-y-8 rounded-2xl border border-grey-100 bg-grey-50 p-6 md:p-8">
