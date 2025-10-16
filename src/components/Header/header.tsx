@@ -19,15 +19,15 @@ export default function Header() {
         <header className="flex w-full items-center justify-between rounded-2xl">
           <Link
             to="/"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-grey-100 bg-grey-50/75 backdrop-blur backdrop-filter"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-grey-100 bg-grey-50/75 backdrop-blur backdrop-filter"
           >
-            <IconLogo className="h-6 w-6" />
+            <IconLogo className="h-7 w-7" />
           </Link>
           <button
             type="button"
-            className="cursor-pointer rounded-xl border border-grey-100 bg-grey-50/75 px-4 py-2 font-body text-sm font-semibold text-green-800 uppercase backdrop-blur backdrop-filter transition hover:border-green-700 hover:bg-green-700 hover:text-grey-100"
+            className="cursor-pointer rounded-xl border border-green-800 bg-green-800/75 px-4 py-2 font-body text-sm font-semibold text-grey-100 uppercase backdrop-blur backdrop-filter transition"
           >
-            <Menu className="h-5 w-5" />
+            <Menu className="h-6 w-6" />
           </button>
         </header>
       </div>
