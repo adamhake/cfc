@@ -16,13 +16,16 @@ export default function Header() {
   if (isMoblie) {
     return (
       <div className="fixed top-4 right-4 left-4 z-20 flex flex-row items-center justify-center">
-        <header className="flex w-full items-center justify-between rounded-2xl border border-grey-100 bg-grey-50/75 p-3 backdrop-blur backdrop-filter">
-          <Link to="/">
-            <IconLogo className="mx-3 h-8 w-8" />
+        <header className="flex w-full items-center justify-between rounded-2xl">
+          <Link
+            to="/"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-grey-100 bg-grey-50/75 backdrop-blur backdrop-filter"
+          >
+            <IconLogo className="h-6 w-6" />
           </Link>
           <button
             type="button"
-            className="cursor-pointer rounded-xl border border-green-800 px-4 py-2 font-body text-sm font-semibold text-green-800 uppercase transition hover:border-green-700 hover:bg-green-700 hover:text-grey-100"
+            className="cursor-pointer rounded-xl border border-grey-100 bg-grey-50/75 px-4 py-2 font-body text-sm font-semibold text-green-800 uppercase backdrop-blur backdrop-filter transition hover:border-green-700 hover:bg-green-700 hover:text-grey-100"
           >
             <Menu className="h-5 w-5" />
           </button>
