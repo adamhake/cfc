@@ -19,7 +19,7 @@ const config = defineConfig({
     viteTsConfigPaths({
       projects: ["./tsconfig.json"],
     }),
-    tanstackStart(),
+    tanstackStart({ sitemap: { enabled: true } }),
     netlify(),
     tailwindcss(),
     viteReact(),

@@ -4,6 +4,66 @@ import "react-photo-album/masonry.css";
 
 export const Route = createFileRoute("/media")({
   component: Media,
+  head: () => ({
+    meta: [
+      {
+        title: "Media Gallery | Chimborazo Park Conservancy",
+      },
+      {
+        name: "description",
+        content:
+          "Browse photos of Chimborazo Park, our community events, volunteer activities, and the ongoing restoration of this historic Richmond landmark.",
+      },
+      {
+        property: "og:title",
+        content: "Media Gallery | Chimborazo Park Conservancy",
+      },
+      {
+        property: "og:description",
+        content:
+          "Photos of Chimborazo Park, community events, volunteer activities, and historic restoration efforts in Church Hill, Richmond, VA.",
+      },
+      {
+        property: "og:type",
+        content: "website",
+      },
+      {
+        property: "og:url",
+        content: "https://chimboparkconservancy.org/media",
+      },
+      {
+        property: "og:image",
+        content: "https://chimboparkconservancy.org/chimbo_hero_adj.webp",
+      },
+      {
+        property: "og:image:width",
+        content: "1200",
+      },
+      {
+        property: "og:image:height",
+        content: "630",
+      },
+      {
+        name: "twitter:title",
+        content: "Media Gallery | Chimborazo Park Conservancy",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Photos of Chimborazo Park, community events, and volunteer activities in Church Hill, Richmond, VA.",
+      },
+      {
+        name: "twitter:image",
+        content: "https://chimboparkconservancy.org/chimbo_hero_adj.webp",
+      },
+    ],
+    links: [
+      {
+        rel: "canonical",
+        href: "https://chimboparkconservancy.org/media",
+      },
+    ],
+  }),
 });
 
 const photos = [

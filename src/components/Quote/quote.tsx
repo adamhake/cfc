@@ -1,12 +1,15 @@
+import { Image } from "@unpic/react";
 import { QuoteIcon } from "lucide-react";
 
 export default function Quote() {
   return (
     <div className="px-4 lg:px-0">
       <div className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-3xl bg-green-800 px-4 py-16 lg:py-24">
-        <img
-          src="/chimbo_arial.webp"
-          alt="Quote Icon"
+        <Image
+          src="/rock_sunset.webp"
+          width={1600}
+          height={1200}
+          alt="Overlooking the city from Chimborazo Park"
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute top-0 left-0 h-full w-full bg-green-800/60"></div>

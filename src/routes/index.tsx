@@ -1,6 +1,7 @@
 import Event from "@/components/Event/event";
 import GetInvolved from "@/components/GetInvolved/get-involved";
 import Hero from "@/components/Hero/hero";
+import Partners from "@/components/Partners/partners";
 import Quote from "@/components/Quote/quote";
 import Vision from "@/components/Vision/vision";
 import { events } from "@/data/events";
@@ -8,6 +9,72 @@ import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: Home,
+  head: () => ({
+    meta: [
+      {
+        title: "Home | Chimborazo Park Conservancy",
+      },
+      {
+        name: "description",
+        content:
+          "The Chimborazo Park Conservancy preserves and enhances this Church Hill landmark through community stewardship. Join us in restoring Richmond's historic park.",
+      },
+      {
+        property: "og:title",
+        content: "Chimborazo Park Conservancy | Preserving Richmond's Historic Park",
+      },
+      {
+        property: "og:description",
+        content:
+          "A 501(c)(3) non-profit dedicated to preserving and enhancing Chimborazo Park through restoration, recreation, connection, and preservation of this Church Hill landmark.",
+      },
+      {
+        property: "og:type",
+        content: "website",
+      },
+      {
+        property: "og:url",
+        content: "https://chimboparkconservancy.org",
+      },
+      {
+        property: "og:image",
+        content: "https://chimboparkconservancy.org/bike_sunset.webp",
+      },
+      {
+        property: "og:image:width",
+        content: "2000",
+      },
+      {
+        property: "og:image:height",
+        content: "1262",
+      },
+      {
+        name: "twitter:title",
+        content: "Chimborazo Park Conservancy | Preserving Richmond's Historic Park",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "A 501(c)(3) non-profit dedicated to preserving and enhancing Chimborazo Park through restoration, recreation, connection, and preservation.",
+      },
+      {
+        name: "twitter:image",
+        content: "https://chimboparkconservancy.org/bike_sunset.webp",
+      },
+    ],
+    links: [
+      {
+        rel: "canonical",
+        href: "https://chimboparkconservancy.org",
+      },
+      {
+        rel: "preload",
+        as: "image",
+        href: "/bike_sunset.webp",
+        fetchpriority: "high",
+      },
+    ],
+  }),
 });
 
 // Donation buttons
@@ -94,10 +161,10 @@ function Home() {
             its pivotal role in the Civil War. In 1874, as Richmond rebuilt, the city transformed
             this storied site into a public park for all residents to enjoy.
           </p>
-          <div className="mx-auto w-56 overflow-hidden rounded-xl border border-grey-800 bg-grey-50">
+          {/*<div className="mx-auto w-56 overflow-hidden rounded-xl border border-grey-800 bg-grey-50">
             <img src="/cutshaw_wilfred.webp" alt="Wilfred Cutshaw" className="h-auto w-full" />
             <p className="p-2 font-body text-xs font-medium text-grey-800">Wilfred Cutshaw</p>
-          </div>
+          </div>*/}
           <p className="text-gray-800 font-body md:text-lg">
             City engineer Wilfred Cutshaw spent decades in the late 1800s designing winding cobbled
             carriage roads that embraced the steep terrain, revealing breathtaking vistas at every
@@ -130,22 +197,16 @@ function Home() {
         <div className="mx-auto max-w-6xl">
           <h2 className="font-display text-xl text-green-800 md:text-2xl">Events</h2>
           <div className="mt-10 grid grid-cols-1 gap-14 md:grid-cols-2">
-            {events.map((event, index) => (
-              <Event
-                key={`event-${event.id}`}
-                description="Id cupidatat fugiat quis eu dolor non ut elit Lorem culpa reprehenderit dolor et nisi deserunt. Duis ullamco sit fugiat dolor id Lorem officia ad do ullamco."
-                title="Chimbo Park Conservancy Gala"
-                location="Meet at the fountain circle"
-                date="November, 6, 2025"
-                time="9am - 1pm"
-                image={{
-                  src: ["/festival.webp", "/recreation.webp", "/get_involved.webp"][index % 3],
-                  alt: "Chimbo Park Conservancy Gala",
-                }}
-              />
-            ))}
+            {events
+              .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+              .map((event) => (
+                <Event key={`event-${event.id}`} {...event} />
+              ))}
           </div>
         </div>
+      </div>
+      <div>
+        <Partners />
       </div>
       <Quote />
     </div>

@@ -1,19 +1,112 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, notFound } from "@tanstack/react-router";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import { Button } from "@/components/Button/button";
+import { events } from "@/data/events";
 
 export const Route = createFileRoute("/events/$slug")({
   component: EventPage,
+  loader: ({ params }) => {
+    const event = events.find((e) => e.slug === params.slug);
+    if (!event) {
+      throw notFound();
+    }
+    return { event };
+  },
+  head: ({ loaderData }) => {
+    if (!loaderData?.event) return { meta: [] };
+
+    const { event } = loaderData;
+    const imageUrl = `https://chimboparkconservancy.org/${event.image.src}`;
+    const eventUrl = `https://chimboparkconservancy.org/events/${event.slug}`;
+
+    // Format date for display
+    const eventDate = new Date(event.date);
+    const formattedDate = eventDate.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+
+    return {
+      meta: [
+        {
+          title: `${event.title} | Chimborazo Park Conservancy`,
+        },
+        {
+          name: "description",
+          content: `${event.description} Join us on ${formattedDate} at ${event.time} at ${event.location}.`,
+        },
+        {
+          property: "og:title",
+          content: event.title,
+        },
+        {
+          property: "og:description",
+          content: `${event.description} Join us on ${formattedDate} at ${event.time}.`,
+        },
+        {
+          property: "og:type",
+          content: "article",
+        },
+        {
+          property: "og:url",
+          content: eventUrl,
+        },
+        {
+          property: "og:image",
+          content: imageUrl,
+        },
+        {
+          property: "og:image:width",
+          content: event.image.width.toString(),
+        },
+        {
+          property: "og:image:height",
+          content: event.image.height.toString(),
+        },
+        {
+          property: "og:image:alt",
+          content: event.image.alt,
+        },
+        {
+          property: "article:published_time",
+          content: event.date,
+        },
+        {
+          name: "twitter:title",
+          content: event.title,
+        },
+        {
+          name: "twitter:description",
+          content: `${event.description} ${formattedDate} at ${event.time}.`,
+        },
+        {
+          name: "twitter:image",
+          content: imageUrl,
+        },
+        {
+          name: "twitter:image:alt",
+          content: event.image.alt,
+        },
+      ],
+      links: [
+        {
+          rel: "canonical",
+          href: eventUrl,
+        },
+      ],
+    };
+  },
 });
 function EventPage() {
+  const { event } = Route.useLoaderData();
+
   return (
     <div>
       <div className="relative h-[40vh] w-full overflow-hidden bg-green-400 bg-cover px-4">
         <div className="absolute inset-0 z-10 flex items-end justify-start">
           <div className="mx-auto mb-16 w-full max-w-6xl space-y-6">
-            <h1 className="max-w-3xl font-display text-5xl text-white">
-              Fall Cleanup and Tree Planting
-            </h1>
+            <h1 className="max-w-3xl font-display text-5xl text-white">{event.title}</h1>
           </div>
         </div>
         <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-r from-green-900/70 to-green-800/50"></div>

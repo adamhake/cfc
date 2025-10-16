@@ -2,7 +2,22 @@ import { Button } from "../Button/button";
 
 export default function Hero() {
   return (
-    <div className="relative h-[80vh] w-full overflow-hidden bg-[url(/chimbo_hero_adj.webp)] bg-cover px-4">
+    <div className="relative h-[80vh] w-full overflow-hidden px-4">
+      {/* Hero Image */}
+      <img
+        src="/bike_sunset.webp"
+        alt="Chimborazo Park landscape with historic views of Richmond's Church Hill neighborhood"
+        width={2000}
+        height={1262}
+        className="absolute inset-0 h-full w-full object-cover"
+        fetchPriority="high"
+        loading="eager"
+      />
+
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-green-900/70 to-green-800/50"></div>
+
+      {/* Content */}
       <div className="absolute inset-4 z-10 flex items-end justify-start lg:inset-0">
         <div className="mx-auto mb-4 w-full max-w-6xl space-y-6 lg:mb-16">
           <h1 className="font-display text-3xl text-white lg:text-5xl">
@@ -18,7 +33,6 @@ export default function Hero() {
           </Button>
         </div>
       </div>
-      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-r from-green-900/70 to-green-800/50"></div>
     </div>
   );
 }
