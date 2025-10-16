@@ -2,6 +2,7 @@ import { Event as EventData } from "@/data/events";
 import { Link } from "@tanstack/react-router";
 import { Image } from "@unpic/react";
 import { Calendar, Clock, MapPin } from "lucide-react";
+import EventStatusChip from "../EventStatusChip/event-status-chip";
 
 export default function Event({
   title,
@@ -30,15 +31,7 @@ export default function Event({
       />
       <div className="absolute top-0 left-0 h-full w-full bg-green-900/60"></div>
       <div className="relative z-[2] space-y-8 p-8">
-        {isPast ? (
-          <span className="rounded-xl border border-green-200 p-2 text-xs font-semibold tracking-wider text-green-200 uppercase">
-            Past
-          </span>
-        ) : (
-          <span className="rounded-xl border border-green-200 bg-green-200 p-2 text-xs font-semibold tracking-wider text-grey-900 uppercase">
-            Upcoming
-          </span>
-        )}
+        <EventStatusChip isPast={isPast} />
         <h3 className="mt-6 font-display text-3xl text-green-50">{title}</h3>
         <p className="text-lg text-green-50">{description}</p>
         <div className="mt-4 flex flex-col gap-2">

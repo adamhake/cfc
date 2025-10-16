@@ -25,7 +25,7 @@ export default function Header() {
           </Link>
           <button
             type="button"
-            className="cursor-pointer rounded-xl border border-green-800 bg-green-800/75 px-4 py-2 font-body text-sm font-semibold text-grey-100 uppercase backdrop-blur backdrop-filter transition"
+            className="cursor-pointer rounded-xl border border-grey-200 bg-grey-100/75 px-4 py-2 font-body text-sm font-semibold text-grey-800 uppercase backdrop-blur backdrop-filter transition"
           >
             <Menu className="h-6 w-6" />
           </button>

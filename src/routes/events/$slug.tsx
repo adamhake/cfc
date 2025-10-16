@@ -2,6 +2,7 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import { Button } from "@/components/Button/button";
 import { events } from "@/data/events";
+import EventStatusChip from "@/components/EventStatusChip/event-status-chip";
 
 export const Route = createFileRoute("/events/$slug")({
   component: EventPage,
@@ -101,17 +102,38 @@ export const Route = createFileRoute("/events/$slug")({
 function EventPage() {
   const { event } = Route.useLoaderData();
 
+  const isPast = new Date(event.date) < new Date();
+
   return (
     <div>
-      <div className="relative h-[40vh] w-full overflow-hidden bg-green-400 bg-cover px-4">
+      <div className="relative h-auto w-full overflow-hidden bg-green-400 bg-cover py-20 pt-48 md:h-[50vh]">
+        {/* Hero Image */}
+        <img
+          src={`/${event.image.src}`}
+          alt={event.image.alt}
+          width={event.image.width}
+          height={event.image.height}
+          className="absolute inset-0 h-full w-full object-cover"
+          fetchPriority="high"
+          loading="eager"
+        />
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-green-900/55 to-green-800/35"></div>
+
         <div className="absolute inset-0 z-10 flex items-end justify-start">
-          <div className="mx-auto mb-16 w-full max-w-6xl space-y-6">
-            <h1 className="max-w-3xl font-display text-5xl text-white">{event.title}</h1>
+          <div className="mx-auto mb-16 w-full max-w-4xl space-y-3 px-4 text-center md:space-y-6">
+            <div>
+              <EventStatusChip isPast={isPast} />
+            </div>
+            <h1 className="font-display text-2xl text-white md:text-5xl">{event.title}</h1>
           </div>
         </div>
         <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-r from-green-900/70 to-green-800/50"></div>
       </div>
-      <div className="mx-auto grid max-w-6xl grid-cols-6 gap-14 py-24">
+      <div
+        className={`mx-auto flex w-full max-w-6xl ${isPast ? "flex-col" : "flex-col-reverse"} gap-14 px-4 py-16 md:grid md:grid-cols-6 md:gap-14 md:py-24 lg:px-0`}
+      >
         <main className="col-span-4 space-y-4 text-lg leading-normal text-grey-800">
           <p>
             Dolor sunt velit sunt mollit commodo do nisi qui cupidatat proident. Consequat eiusmod
@@ -120,7 +142,7 @@ function EventPage() {
             eu nulla minim. Consectetur est laboris sunt aliqua deserunt. Ea magna sit laborum Lorem
             ut pariatur.
           </p>
-          <div className="my-10 grid grid-cols-4 grid-rows-1 gap-8">
+          <div className="order-1 my-10 grid grid-cols-4 grid-rows-1">
             <div className="col-span-1 flex flex-col gap-8">
               <div className="relative aspect-square w-full overflow-hidden rounded-2xl">
                 <img
@@ -167,21 +189,21 @@ function EventPage() {
             and a souvenir.
           </p>
         </main>
-        <aside className="col-span-2">
-          <div className="space-y-8 rounded-2xl border border-grey-100 bg-grey-50 p-8">
-            <h2 className="font-display text-2xl">Event Details</h2>
+        <aside className={`w-full md:col-span-2`}>
+          <div className="space-y-8 rounded-2xl border border-grey-100 bg-grey-50 p-6 md:p-8">
+            <h2 className="font-display text-xl md:text-2xl">Event Details</h2>
             <div className="flex flex-col gap-2">
               <div className="flex gap-2">
                 <Calendar className="h-5 w-5 stroke-green-700" />
-                <span className="font-body font-medium text-grey-800">November 6, 2023</span>
+                <span className="font-body font-medium text-grey-800">{event.date}</span>
               </div>
               <div className="flex gap-2">
                 <Clock className="h-5 w-5 stroke-green-700" />
-                <span className="font-body font-medium text-grey-800">9am - 12pm</span>
+                <span className="font-body font-medium text-grey-800">{event.time}</span>
               </div>
               <div className="flex gap-2">
                 <MapPin className="h-5 w-5 stroke-green-700" />
-                <span className="font-body font-medium text-grey-800">Meet at the Roundhouse</span>
+                <span className="font-body font-medium text-grey-800">{event.location}</span>
               </div>
             </div>
             <Button>Register</Button>
