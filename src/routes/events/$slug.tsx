@@ -5,6 +5,12 @@ import { events } from "@/data/events";
 import EventStatusChip from "@/components/EventStatusChip/event-status-chip";
 import { Markdown } from "@/components/Markdown/markdown";
 
+// Pre-load all markdown files using glob import
+const markdownFiles = import.meta.glob<{ default: string }>("../../data/events/*.md", {
+  query: "?raw",
+  import: "default",
+});
+
 export const Route = createFileRoute("/events/$slug")({
   component: EventPage,
   loader: async ({ params }) => {
@@ -16,9 +22,12 @@ export const Route = createFileRoute("/events/$slug")({
     let markdownContent: string | null = null;
     if (event.markdownFile) {
       try {
-        // Use dynamic import with ?raw to load markdown as string at build time
-        const markdown = await import(`../../data/events/${event.markdownFile}?raw`);
-        markdownContent = markdown.default;
+        // Load markdown file from pre-loaded glob
+        const markdownPath = `../../data/events/${event.markdownFile}`;
+        const loadMarkdown = markdownFiles[markdownPath];
+        if (loadMarkdown) {
+          markdownContent = await loadMarkdown();
+        }
       } catch (error) {
         console.warn(`Failed to load markdown file: ${event.markdownFile}`, error);
       }
