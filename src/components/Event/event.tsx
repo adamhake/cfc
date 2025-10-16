@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Image } from "@unpic/react";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import EventStatusChip from "../EventStatusChip/event-status-chip";
+import { formatDateString } from "@/utils/time";
 
 export default function Event({
   title,
@@ -14,7 +15,7 @@ export default function Event({
   image,
 }: EventData) {
   const isPast = new Date(date) < new Date();
-  const fmtDate = new Date(date).toLocaleDateString("en-US");
+  const fmtDate = formatDateString(date, "short");
 
   return (
     <Link

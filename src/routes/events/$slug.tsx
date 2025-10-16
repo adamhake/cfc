@@ -4,6 +4,7 @@ import { Button } from "@/components/Button/button";
 import { events } from "@/data/events";
 import EventStatusChip from "@/components/EventStatusChip/event-status-chip";
 import { Markdown } from "@/components/Markdown/markdown";
+import { formatDateString } from "@/utils/time";
 
 // Pre-load all markdown files using glob import
 const markdownFiles = import.meta.glob<{ default: string }>("../../data/events/*.md", {
@@ -27,7 +28,7 @@ export const Route = createFileRoute("/events/$slug")({
         const loadMarkdown = markdownFiles[markdownPath];
         if (loadMarkdown) {
           const module = await loadMarkdown();
-          markdownContent = typeof module === 'string' ? module : module.default;
+          markdownContent = typeof module === "string" ? module : module.default;
         }
       } catch (error) {
         console.warn(`Failed to load markdown file: ${event.markdownFile}`, error);
@@ -172,7 +173,9 @@ function EventPage() {
             <div className="flex flex-col gap-2">
               <div className="flex gap-2">
                 <Calendar className="h-5 w-5 stroke-green-700" />
-                <span className="font-body font-medium text-grey-800">{event.date}</span>
+                <span className="font-body font-medium text-grey-800">
+                  {formatDateString(event.date)}
+                </span>
               </div>
               <div className="flex gap-2">
                 <Clock className="h-5 w-5 stroke-green-700" />

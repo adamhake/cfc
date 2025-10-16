@@ -11,6 +11,7 @@ export const Route = createFileRoute("/media")({
       if (!response.ok) {
         throw new Error("Failed to fetch media");
       }
+      console.log("Fetched media");
       const images: MediaImage[] = await response.json();
       return { images };
     } catch (error) {
@@ -113,7 +114,7 @@ function Media() {
       </div>
       <div className="mx-auto max-w-6xl py-24">
         {images.length === 0 ? (
-          <div className="text-center text-gray-600">
+          <div className="text-gray-600 text-center">
             <p className="text-lg">No images available yet.</p>
             <p className="mt-2 text-sm">Check back soon for photos of our park and events!</p>
           </div>
@@ -128,9 +129,12 @@ function Media() {
               }}
               render={{
                 wrapper: (props, context) => (
-                  <div {...props} className={`${props.className} group relative overflow-hidden rounded-2xl`}>
+                  <div
+                    {...props}
+                    className={`${props.className} group relative overflow-hidden rounded-2xl`}
+                  >
                     {context.photo.title && (
-                      <div className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/70 to-transparent p-4 opacity-0 transition-opacity group-hover:opacity-100">
+                      <div className="absolute right-0 bottom-0 left-0 z-10 bg-gradient-to-t from-black/70 to-transparent p-4 opacity-0 transition-opacity group-hover:opacity-100">
                         <p className="text-sm text-white">{context.photo.title}</p>
                       </div>
                     )}

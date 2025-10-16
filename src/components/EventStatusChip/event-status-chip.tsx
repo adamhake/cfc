@@ -1,4 +1,4 @@
-import { cn } from "@/helpers/cn";
+import { cn } from "@/utils/cn";
 
 export default function EventStatusChip({ isPast }: { isPast: boolean }) {
   const classes = cn(
