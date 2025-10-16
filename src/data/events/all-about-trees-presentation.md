@@ -7,16 +7,19 @@ Author **Mike Tidwell** will share insights from his research on climate change'
 ## Topics Covered
 
 ### Climate Change & Urban Trees
+
 - How rising temperatures affect tree health and survival
 - The urban heat island effect and its impact on neighborhoods
 - Native vs. non-native species in a changing climate
 
 ### Richmond's Urban Forestry Master Plan
+
 - Goals and timeline for expanding Richmond's tree canopy
 - Community involvement opportunities
 - How the plan addresses environmental justice
 
 ### Heat Island Mitigation
+
 - The role of trees in cooling our neighborhoods
 - Strategic planting for maximum impact
 - Case studies from Richmond communities
@@ -24,6 +27,7 @@ Author **Mike Tidwell** will share insights from his research on climate change'
 ## Panel Discussion
 
 Following the presentation, our expert panel will answer questions about:
+
 - Tree planting and care in your neighborhood
 - Selecting the right trees for your property
 - Getting involved in Richmond's urban forestry initiatives
@@ -31,6 +35,7 @@ Following the presentation, our expert panel will answer questions about:
 ## Event Partners
 
 This event is co-sponsored by:
+
 - Chimborazo Park Conservancy
 - Church Hill Association
 

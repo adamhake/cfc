@@ -6,7 +6,7 @@ import { defineConfig, globalIgnores } from "eslint/config";
 import pluginRouter from "@tanstack/eslint-plugin-router";
 
 export default defineConfig([
-  globalIgnores(["dist", "src/routeTree.gen.ts"]),
+  globalIgnores(["dist", "src/routeTree.gen.ts", ".netlify"]),
   js.configs.recommended,
   tseslint.configs.recommended,
   reactHooks.configs.flat.recommended,

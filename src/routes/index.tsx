@@ -71,7 +71,7 @@ export const Route = createFileRoute("/")({
         rel: "preload",
         as: "image",
         href: "/bike_sunset.webp",
-        fetchpriority: "high",
+        fetchPriority: "high",
       },
     ],
   }),

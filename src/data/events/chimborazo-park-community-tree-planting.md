@@ -44,6 +44,7 @@ Volunteers of all ages are welcome! Children under 12 must be accompanied by an 
 ## Impact
 
 Each tree planted will:
+
 - Sequester approximately 48 pounds of CO2 per year
 - Improve air quality by filtering pollutants
 - Reduce stormwater runoff
