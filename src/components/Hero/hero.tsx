@@ -2,7 +2,7 @@ import { Button } from "../Button/button";
 
 export default function Hero() {
   return (
-    <div className="relative h-[80vh] w-full overflow-hidden px-4">
+    <div className="relative h-[75vh] w-full overflow-hidden px-4 lg:h-[80vh]">
       {/* Hero Image */}
       <img
         src="/bike_sunset.webp"
