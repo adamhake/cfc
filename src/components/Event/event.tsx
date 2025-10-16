@@ -32,7 +32,7 @@ export default function Event({
       <div className="absolute top-0 left-0 h-full w-full bg-green-900/60"></div>
       <div className="relative z-[2] space-y-8 p-8">
         <EventStatusChip isPast={isPast} />
-        <h3 className="mt-6 font-display text-3xl text-green-50">{title}</h3>
+        <h3 className="font-display text-3xl text-green-50">{title}</h3>
         <p className="text-lg text-green-50">{description}</p>
         <div className="mt-4 flex flex-col gap-2">
           <div className="flex gap-2">
