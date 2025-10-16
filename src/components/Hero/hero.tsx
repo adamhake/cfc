@@ -15,7 +15,7 @@ export default function Hero() {
       />
 
       {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-green-900/70 to-green-800/50"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-green-900/55 to-green-800/35"></div>
 
       {/* Content */}
       <div className="absolute inset-4 z-10 flex items-end justify-start lg:inset-0">

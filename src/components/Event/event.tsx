@@ -13,6 +13,7 @@ export default function Event({
   image,
 }: EventData) {
   const isPast = new Date(date) < new Date();
+  const fmtDate = new Date(date).toLocaleDateString("en-US");
 
   return (
     <Link
@@ -39,19 +40,19 @@ export default function Event({
           </span>
         )}
         <h3 className="mt-6 font-display text-3xl text-green-50">{title}</h3>
-        <p className="text-green-100">{description}</p>
+        <p className="text-lg text-green-50">{description}</p>
         <div className="mt-4 flex flex-col gap-2">
           <div className="flex gap-2">
             <Calendar className="h-5 w-5 stroke-green-200" />
-            <span className="font-body text-sm font-medium text-green-100">{date}</span>
+            <span className="font-body font-medium text-green-100">{fmtDate}</span>
           </div>
           <div className="flex gap-2">
             <Clock className="h-5 w-5 stroke-green-200" />
-            <span className="font-body text-sm font-medium text-green-100">{time}</span>
+            <span className="font-body font-medium text-green-100">{time}</span>
           </div>
           <div className="flex gap-2">
             <MapPin className="h-5 w-5 stroke-green-200" />
-            <span className="font-body text-sm font-medium text-green-100">{location}</span>
+            <span className="font-body font-medium text-green-100">{location}</span>
           </div>
         </div>
       </div>

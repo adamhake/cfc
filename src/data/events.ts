@@ -20,7 +20,7 @@ export const events: Event[] = [
     title: "Spring Clean-up 2022",
     slug: "spring-cleanup-2022",
     description:
-      "Chimbo Park Conservancy is a non-profit organization dedicated to preserving and enhancing the beauty of Chimbo Park.",
+      "Join neighbors for our spring park clean-up to prepare Chimborazo for the warmer months ahead. All ages welcome—bring gloves and community spirit.",
     date: "2022-04-23",
     time: "9am - 12pm",
     location: "Meet at the center circle",
@@ -52,7 +52,7 @@ export const events: Event[] = [
     title: "Spring Clean-up 2023",
     slug: "spring-cleanup-2023",
     description:
-      "Chimbo Park Conservancy is a non-profit organization dedicated to preserving and enhancing the beauty of Chimbo Park.",
+      "Help beautify our historic park as we clear winter debris and prepare trails and greenspaces for spring. Community volunteers of all ages are encouraged to participate.",
     date: "2023-04-01",
     time: "9am - 12pm",
     location: "Meet at the center circle",
@@ -68,7 +68,7 @@ export const events: Event[] = [
     title: "Spring Clean-up 2025",
     slug: "spring-cleanup-2025",
     description:
-      "Join us for our annual spring clean-up event. Coffee and refreshments will be provided.",
+      "Kick off spring by joining fellow Church Hill neighbors to refresh and ready our beloved park for the season. Coffee and refreshments provided.",
     date: "2024-04-26",
     time: "9am - 1pm",
     location: "Meet at the round house",
@@ -83,7 +83,8 @@ export const events: Event[] = [
     id: 5,
     title: "All About Trees Presentation",
     slug: "all-about-trees-presentation",
-    description: ". Co-sponsored by Chimborazo Park Conservancy and Church Hill Association",
+    description:
+      "Discover how climate change impacts our urban trees with author Mike Tidwell and Richmond experts discussing solutions from heat island mitigation to the city's new Urban Forestry Master Plan. Co-sponsored by Chimborazo Park Conservancy and Church Hill Association.",
     date: "2025-10-01",
     time: "7pm - 9pm",
     location: "Perish Hall, St. John's Church",
