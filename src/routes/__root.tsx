@@ -15,6 +15,7 @@ interface MyRouterContext {
   theme: ThemeMode;
   setTheme: (theme: ThemeMode) => void;
   resolvedTheme: ResolvedTheme;
+  _themeManager?: any; // Internal theme manager for reactivity
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
