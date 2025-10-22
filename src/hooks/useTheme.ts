@@ -4,7 +4,6 @@ import {
   type ThemeMode,
   type ResolvedTheme,
   getSystemPreference,
-  resolveTheme,
   applyTheme,
   validateTheme,
 } from "@/utils/theme";
