@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Calendar, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "../Button/button";
+import { ThemeToggle } from "../ThemeToggle/theme-toggle";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -138,6 +139,9 @@ export default function Header() {
                       >
                         Get Involved
                       </a>
+                    </li>
+                    <li className="pt-2">
+                      <ThemeToggle variant="nav-item" showLabel={true} />
                     </li>
                   </ul>
                 </nav>
