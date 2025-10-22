@@ -4,9 +4,9 @@ export default function Partners() {
   return (
     <div className="px-4 lg:px-0">
       <div className="mx-auto max-w-6xl">
-        <h2 className="font-display text-xl text-green-800 md:text-2xl">Partners</h2>
+        <h2 className="font-display text-xl text-green-800 dark:text-green-400 md:text-2xl">Partners</h2>
         <div className="mt-10 grid grid-cols-1 gap-14 md:grid-cols-2">
-          <div className="flex flex-col items-center justify-center gap-10 rounded-2xl border-2 border-grey-100 p-8 text-center">
+          <div className="flex flex-col items-center justify-center gap-10 rounded-2xl border-2 border-grey-100 p-8 text-center dark:border-grey-700 dark:bg-grey-800">
             <a href="https://www.churchhillrotary.org/" target="_blank">
               <Image
                 width={275}
@@ -17,12 +17,12 @@ export default function Partners() {
               />
             </a>
             <a href="https://www.churchhillrotary.org/" target="_blank">
-              <h3 className="hover-border-green-800 font-display text-xl">
+              <h3 className="hover-border-green-800 font-display text-xl dark:text-grey-100 dark:hover:text-green-400">
                 Church Hill Rotary Club
               </h3>
             </a>
           </div>
-          <div className="flex flex-col items-center justify-center gap-10 rounded-2xl border-2 border-grey-100 p-8 text-center">
+          <div className="flex flex-col items-center justify-center gap-10 rounded-2xl border-2 border-grey-100 p-8 text-center dark:border-grey-700 dark:bg-grey-800">
             <a href="https://www.churchhill.org/" target="_blank">
               <Image
                 width={201}
@@ -33,7 +33,7 @@ export default function Partners() {
               />
             </a>
             <a href="https://www.churchhill.org/" target="_blank">
-              <h3 className="hover-border-green-800 font-display text-xl">
+              <h3 className="hover-border-green-800 font-display text-xl dark:text-grey-100 dark:hover:text-green-400">
                 Church Hill Association
               </h3>
             </a>
