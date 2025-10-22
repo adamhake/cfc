@@ -8,9 +8,13 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
+import type { ThemeMode, ResolvedTheme } from "@/utils/theme";
 
 interface MyRouterContext {
   queryClient: QueryClient;
+  theme: ThemeMode;
+  setTheme: (theme: ThemeMode) => void;
+  resolvedTheme: ResolvedTheme;
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
