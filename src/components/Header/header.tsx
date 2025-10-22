@@ -1,10 +1,10 @@
 import IconLogo from "@/IconLogo/icon-logo";
+import { Link } from "@tanstack/react-router";
 import { useClickAway } from "@uidotdev/usehooks";
 import { AnimatePresence, motion } from "framer-motion";
 import { Calendar, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "../Button/button";
-import { Link } from "@tanstack/react-router";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -44,7 +44,7 @@ export default function Header() {
     <div className="fixed top-4 right-4 left-4 z-20 flex flex-row items-center justify-center">
       <header
         ref={ref}
-        className="w-full max-w-6xl rounded-2xl transition md:border md:border-grey-100 md:bg-grey-50/75 md:p-3 md:backdrop-blur md:backdrop-filter dark:md:bg-grey-100"
+        className="w-full max-w-6xl rounded-2xl transition md:border md:border-grey-100 md:bg-grey-100/75 md:p-3 md:backdrop-blur md:backdrop-filter dark:md:bg-grey-100"
       >
         <div className="flex w-full items-center justify-between gap-2">
           {/* Menu button - Desktop only */}
