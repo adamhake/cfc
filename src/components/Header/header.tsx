@@ -261,6 +261,9 @@ export default function Header() {
                       Media
                     </Link>
                   </li>
+                  <li className="pt-4">
+                    <ThemeToggle variant="button" showLabel={true} />
+                  </li>
                 </ul>
               </nav>
 
