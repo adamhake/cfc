@@ -6,6 +6,7 @@ import {
   getSystemPreference,
   resolveTheme,
   applyTheme,
+  validateTheme,
 } from "@/utils/theme";
 
 export interface UseThemeReturn {
@@ -22,6 +23,7 @@ export interface UseThemeReturn {
 export function useTheme(): UseThemeReturn {
   const router = useRouter();
   const context = router.options.context;
+  const currentTheme = context.theme;
 
   const [systemPreference, setSystemPreference] = useState<ResolvedTheme>(
     getSystemPreference()
@@ -38,31 +40,31 @@ export function useTheme(): UseThemeReturn {
       setSystemPreference(newPreference);
 
       // If user has system preference enabled, update resolved theme
-      if (context.theme === 'system') {
+      if (currentTheme === 'system') {
         applyTheme(newPreference);
       }
     };
 
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
-  }, [context.theme]);
+  }, [currentTheme]);
 
   // Listen to storage events for multi-tab sync
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
+    const setTheme = context.setTheme;
+
     const handleStorage = (e: StorageEvent) => {
       if (e.key === 'theme' && e.newValue) {
-        const newTheme = e.newValue as ThemeMode;
-        const newResolved = resolveTheme(newTheme);
-        context.setTheme(newTheme);
-        applyTheme(newResolved);
+        const newTheme = validateTheme(e.newValue);
+        setTheme(newTheme);
       }
     };
 
     window.addEventListener('storage', handleStorage);
     return () => window.removeEventListener('storage', handleStorage);
-  }, [context]);
+  }, [context.setTheme]);
 
   return {
     theme: context.theme,
