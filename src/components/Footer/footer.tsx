@@ -1,10 +1,15 @@
+import { ThemeToggle } from "../ThemeToggle/theme-toggle";
+
 export default function Footer() {
   return (
-    <footer className="border-t border-t-grey-100 bg-grey-50 pt-14 pb-8 text-grey-800 dark:border-t-grey-800 dark:bg-grey-900 dark:text-grey-100">
+    <footer className="border-t border-t-grey-100 bg-grey-50 pt-14 pb-8 text-grey-800 dark:border-t-green-600 dark:bg-green-900 dark:text-grey-100">
       <div className="mx-auto max-w-6xl px-4">
         <div className="flex flex-col items-center justify-between md:flex-row">
-          <div className="mb-4 md:mb-0">
-            <p className="text-sm">&copy; {new Date().getFullYear()} Friends of Chimborazo Park</p>
+          <div className="mb-4 space-y-4 md:mb-0">
+            <ThemeToggle variant="button" showLabel={true} />
+            <p className="font-body text-sm">
+              &copy; {new Date().getFullYear()} Friends of Chimborazo Park
+            </p>
           </div>
           <div className="flex space-x-4">
             <a

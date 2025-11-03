@@ -93,45 +93,33 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   return (
-    <div className="space-y-24 pb-24">
+    <div className="space-y-24 bg-grey-50 pb-24 text-grey-900 lg:px-0 dark:bg-green-900 dark:text-grey-100">
       <Hero />
-      <div className="-mt-24 space-y-24 bg-grey-50 px-4 py-24 lg:px-0">
+      <div className="-mt-24 space-y-24 px-4 py-24 text-grey-900 lg:px-0">
         <div className="mx-auto max-w-6xl space-y-6">
-          <h2 className="font-display text-xl text-green-800 md:text-2xl">Our Mission</h2>
-          <p className="max-w-4xl font-body text-2xl leading-tight font-medium text-grey-900 md:text-3xl">
+          <h2 className="font-display text-xl text-green-800 md:text-2xl dark:text-green-400">
+            Our Mission
+          </h2>
+          <p className="max-w-4xl font-body text-2xl leading-tight font-medium md:text-3xl dark:text-grey-100">
             The Chimborazo Park Conservancy and Friends of Chimborazo Park preserve and enhance this
             Church Hill landmark through community stewardship.
           </p>
-          <p className="mt-4 max-w-4xl font-body text-grey-800 md:text-lg">
+          <p className="mt-4 max-w-4xl font-body text-grey-800 md:text-lg dark:text-grey-100">
             Established in 2023 as a 501(c)(3) non-profit, we formed to continue essential park
             support after the dissolution of Enrichmond. Since then, our volunteers and partners
             have contributed generous donations, grants, and countless hours to build a sustainable
             foundation for the park's future.
           </p>
-          {/*<div className="grid grid-cols-4 gap-6 mt-14">
-						{tickerImgs.map((src) => (
-							<div
-								key={src}
-								className="relative rounded-xl overflow-hidden w-full aspect-[4/3]"
-							>
-								<img
-									src={src}
-									alt="Volunteers"
-									className="absolute inset-0 object-cover w-full h-full"
-								/>
-								<div className="absolute z-10 inset-0 bg-green-700/20"></div>
-							</div>
-						))}
-					</div>*/}
         </div>
         <div className="mx-auto max-w-6xl space-y-6">
-          <h2 className="font-display text-xl text-green-800 md:text-2xl">Our Vision</h2>
+          <h2 className="font-display text-xl text-green-800 md:text-2xl dark:text-green-400">
+            Our Vision
+          </h2>
           <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-14">
             <Vision
               title="Restoration"
               icon="leafy-green"
-              description="Preserving Chimborazo's historic character through careful
-						reconstruction and repair of the park's unique heritage elements."
+              description="Preserving Chimborazo's historic character through careful reconstruction and repair of the park's unique heritage elements."
             />
             <Vision
               contentPosition="left"
@@ -153,9 +141,11 @@ function Home() {
           </div>
         </div>
       </div>
-      <div>
+      <div className="bg-grey-50 text-grey-900 lg:px-0 dark:bg-green-900 dark:text-grey-100">
         <div className="mx-auto max-w-6xl space-y-6 px-4 md:px-0">
-          <h2 className="font-display text-xl text-green-800 md:text-2xl">The Park</h2>
+          <h2 className="font-display text-xl text-green-800 md:text-2xl dark:text-green-400">
+            The Park
+          </h2>
           <p className="text-gray-800 font-body md:text-lg">
             Chimborazo Hill's story reaches back centuries—from the indigenous Powhatan people to
             its pivotal role in the Civil War. In 1874, as Richmond rebuilt, the city transformed
@@ -193,9 +183,11 @@ function Home() {
       <div>
         <GetInvolved />
       </div>
-      <div className="bg-grey-50 px-4 py-24 md:px-0">
+      <div className="bg-grey-50 px-4 py-24 md:px-0 dark:bg-green-900">
         <div className="mx-auto max-w-6xl">
-          <h2 className="font-display text-xl text-green-800 md:text-2xl">Events</h2>
+          <h2 className="font-display text-xl text-green-800 md:text-2xl dark:text-green-400">
+            Events
+          </h2>
           <div className="mt-10 grid grid-cols-1 gap-14 md:grid-cols-2">
             {events
               .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
