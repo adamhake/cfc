@@ -14,23 +14,31 @@ interface VisionProps {
 function getIcon(icon: string) {
   switch (icon) {
     case "leafy-green":
-      return <LeafyGreen className="h-8 w-8 stroke-green-700 dark:stroke-green-400 md:h-10 md:w-10" />;
+      return (
+        <LeafyGreen className="h-8 w-8 stroke-green-700 md:h-10 md:w-10 dark:stroke-green-400" />
+      );
     case "trees":
-      return <Trees className="h-8 w-8 stroke-green-700 dark:stroke-green-400 md:h-10 md:w-10" />;
+      return <Trees className="h-8 w-8 stroke-green-700 md:h-10 md:w-10 dark:stroke-green-400" />;
     case "heart-handshake":
-      return <HeartHandshake className="h-8 w-8 stroke-green-700 dark:stroke-green-400 md:h-10 md:w-10" />;
+      return (
+        <HeartHandshake className="h-8 w-8 stroke-green-700 md:h-10 md:w-10 dark:stroke-green-400" />
+      );
     case "book-open-text":
-      return <BookOpenText className="h-8 w-8 stroke-green-700 dark:stroke-green-400 md:h-10 md:w-10" />;
+      return (
+        <BookOpenText className="h-8 w-8 stroke-green-700 md:h-10 md:w-10 dark:stroke-green-400" />
+      );
     default:
       return null;
   }
 }
 export default function Vision({ title, icon, description }: VisionProps) {
   return (
-    <div className="overflow-hidden rounded-2xl border-2 border-grey-200 bg-grey-50 p-8 font-body font-medium dark:border-grey-700 dark:bg-grey-800 lg:p-10">
+    <div className="overflow-hidden rounded-2xl border-2 border-grey-200 bg-grey-50 p-8 font-body font-medium lg:p-10 dark:border-green-600 dark:bg-green-900">
       {getIcon(icon)}
-      <h3 className="mt-2 mb-6 font-display text-2xl text-grey-900 dark:text-grey-100 md:text-3xl">{title}</h3>
-      <p className="text-grey-800 dark:text-grey-200 md:text-lg">{description}</p>
+      <h3 className="mt-2 mb-6 font-display text-2xl text-grey-900 md:text-3xl dark:text-grey-100">
+        {title}
+      </h3>
+      <p className="text-grey-800 md:text-lg dark:text-grey-200">{description}</p>
     </div>
   );
 }

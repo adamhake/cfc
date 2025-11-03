@@ -1,12 +1,12 @@
-import { useRouter } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import {
-  type ThemeMode,
   type ResolvedTheme,
-  getSystemPreference,
+  type ThemeMode,
   applyTheme,
+  getSystemPreference,
   validateTheme,
 } from "@/utils/theme";
+import { useRouter } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 
 export interface UseThemeReturn {
   theme: ThemeMode;
@@ -27,59 +27,58 @@ export function useTheme(): UseThemeReturn {
   const [theme, setThemeState] = useState<ThemeMode>(context.theme);
   const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(context.resolvedTheme);
 
-  const [systemPreference, setSystemPreference] = useState<ResolvedTheme>(
-    getSystemPreference()
-  );
+  const [systemPreference, setSystemPreference] = useState<ResolvedTheme>(getSystemPreference());
 
   // Subscribe to theme manager updates
   useEffect(() => {
-    // @ts-expect-error - _themeManager is internal but needed for reactivity
     const themeManager = context._themeManager;
     if (!themeManager) return;
 
-    const unsubscribe = themeManager.subscribe((newTheme: ThemeMode, newResolved: ResolvedTheme) => {
-      setThemeState(newTheme);
-      setResolvedTheme(newResolved);
-    });
+    const unsubscribe = themeManager.subscribe(
+      (newTheme: ThemeMode, newResolved: ResolvedTheme) => {
+        setThemeState(newTheme);
+        setResolvedTheme(newResolved);
+      },
+    );
 
     return unsubscribe;
   }, [context]);
 
   // Listen to system preference changes
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const handleChange = (e: MediaQueryListEvent) => {
-      const newPreference = e.matches ? 'dark' : 'light';
+      const newPreference = e.matches ? "dark" : "light";
       setSystemPreference(newPreference);
 
       // If user has system preference enabled, update resolved theme
-      if (theme === 'system') {
+      if (theme === "system") {
         applyTheme(newPreference);
       }
     };
 
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
   }, [theme]);
 
   // Listen to storage events for multi-tab sync
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     const setTheme = context.setTheme;
 
     const handleStorage = (e: StorageEvent) => {
-      if (e.key === 'theme' && e.newValue) {
+      if (e.key === "theme" && e.newValue) {
         const newTheme = validateTheme(e.newValue);
         setTheme(newTheme);
       }
     };
 
-    window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
   }, [context.setTheme]);
 
   return {
