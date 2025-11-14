@@ -26,7 +26,7 @@ export const events: Event[] = [
     time: "9am - 12pm",
     location: "Meet at the center circle",
     image: {
-      src: "sign_cleanup_2022.webp",
+      src: "/sign_cleanup_2022.webp",
       alt: "Volunteers cleaning Chimborazo Park",
       width: 1200,
       height: 1357,
@@ -42,7 +42,7 @@ export const events: Event[] = [
     time: "12pm - 5pm",
     location: "Chimborazo Park Round House",
     image: {
-      src: "roundhouse_evening.webp",
+      src: "/roundhouse_evening.webp",
       alt: "Chimborazo Park Round House",
       width: 2048,
       height: 1536,
@@ -58,7 +58,7 @@ export const events: Event[] = [
     time: "9am - 12pm",
     location: "Meet at the center circle",
     image: {
-      src: "volunteers.webp",
+      src: "/volunteers.webp",
       alt: "Volunteers cleaning Chimborazo Park",
       width: 1600,
       height: 1041,
@@ -74,7 +74,7 @@ export const events: Event[] = [
     time: "9am - 1pm",
     location: "Meet at the round house",
     image: {
-      src: "volunteers.webp",
+      src: "/volunteers.webp",
       alt: "Volunteers cleaning Chimborazo Park",
       width: 1600,
       height: 1041,
@@ -91,7 +91,7 @@ export const events: Event[] = [
     time: "7pm - 9pm",
     location: "Perish Hall, St. John's Church",
     image: {
-      src: "oaks.webp",
+      src: "/oaks.webp",
       alt: "Oak trees in Chimborazo Park",
       width: 1200,
       height: 1600,
@@ -108,7 +108,7 @@ export const events: Event[] = [
     time: "9am - 1pm",
     location: "Chimborazo Park",
     image: {
-      src: "tree_planting_plan.webp",
+      src: "/tree_planting_plan.webp",
       alt: "2025 Tree Planting Plan for Chimborazo Park",
       width: 1600,
       height: 1041,
