@@ -1,7 +1,9 @@
+import Container from "@/components/Container/container";
+import PageHero from "@/components/PageHero/page-hero";
+import type { MediaImage } from "@/data/media";
 import { createFileRoute } from "@tanstack/react-router";
 import { MasonryPhotoAlbum } from "react-photo-album";
 import "react-photo-album/masonry.css";
-import type { MediaImage } from "@/data/media";
 
 export const Route = createFileRoute("/media")({
   component: Media,
@@ -96,23 +98,14 @@ function Media() {
 
   return (
     <div>
-      <div className="relative h-[50vh] w-full overflow-hidden px-4">
-        <img
-          src="/bike_sunset.webp"
-          alt="Chimborazo Park landscape"
-          width={2000}
-          height={1262}
-          className="absolute inset-0 h-full w-full object-cover"
-          loading="eager"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-green-900/70 to-green-800/50"></div>
-        <div className="absolute inset-0 z-10 flex items-center justify-center">
-          <div className="mx-auto w-full max-w-6xl text-center">
-            <h1 className="font-display text-5xl text-white">Media</h1>
-          </div>
-        </div>
-      </div>
-      <div className="mx-auto max-w-6xl py-24">
+      <PageHero
+        title="Media"
+        imageSrc="/bike_sunset.webp"
+        imageAlt="Chimborazo Park landscape"
+        imageWidth={2000}
+        imageHeight={1262}
+      />
+      <Container className="py-24">
         {images.length === 0 ? (
           <div className="text-gray-600 text-center">
             <p className="text-lg">No images available yet.</p>
@@ -144,7 +137,7 @@ function Media() {
             />
           </>
         )}
-      </div>
+      </Container>
     </div>
   );
 }

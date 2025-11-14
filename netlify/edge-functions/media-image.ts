@@ -22,7 +22,7 @@ export default async (request: Request, context: Context) => {
     // Get the image blob with strong consistency for immediate availability
     const blob = await store.get(key, {
       type: "blob",
-      consistency: "strong"
+      consistency: "strong",
     });
 
     if (!blob) {
@@ -49,7 +49,7 @@ export default async (request: Request, context: Context) => {
         "Cache-Control": "public, max-age=31536000, immutable", // Cache for 1 year
         "CDN-Cache-Control": "public, max-age=31536000, immutable", // Netlify CDN
         "Netlify-CDN-Cache-Control": "public, max-age=31536000, immutable", // Netlify-specific
-        "Vary": "Accept", // Allow different formats if needed
+        Vary: "Accept", // Allow different formats if needed
       },
     });
   } catch (error) {
@@ -58,7 +58,7 @@ export default async (request: Request, context: Context) => {
       status: 500,
       headers: {
         "Cache-Control": "no-cache", // Don't cache errors
-      }
+      },
     });
   }
 };

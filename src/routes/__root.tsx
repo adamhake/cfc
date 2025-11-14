@@ -1,25 +1,31 @@
+import { ErrorBoundary } from "@/components/ErrorBoundary/error-boundary";
 import Footer from "@/components/Footer/footer";
 import Header from "@/components/Header/header";
+import type { PaletteMode } from "@/utils/palette";
+import type { ResolvedTheme, ThemeMode } from "@/utils/theme";
 import type { QueryClient } from "@tanstack/react-query";
-import {
-  ClientOnly,
-  createRootRouteWithContext,
-  HeadContent,
-  Scripts,
-} from "@tanstack/react-router";
+import { createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
-import type { ThemeMode, ResolvedTheme } from "@/utils/theme";
 
 interface MyRouterContext {
   queryClient: QueryClient;
   theme: ThemeMode;
   setTheme: (theme: ThemeMode) => void;
   resolvedTheme: ResolvedTheme;
-  _themeManager?: any; // Internal theme manager for reactivity
+  _themeManager?: unknown; // Internal theme manager for reactivity
+  palette: PaletteMode;
+  setPalette: (palette: PaletteMode) => void;
+  _paletteManager?: unknown; // Internal palette manager for reactivity
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   head: () => ({
+    // scripts: [
+    //   {
+    //     defer: true,
+    //     src: "https://zeffy-scripts.s3.ca-central-1.amazonaws.com/embed-form-script.min.js",
+    //   },
+    // ],
     meta: [
       {
         charSet: "utf-8",
@@ -125,20 +131,26 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
-        <HeadContent />
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
+                  // Apply theme
                   const stored = localStorage.getItem('theme');
                   const preference = stored || 'system';
                   const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                   const shouldBeDark = preference === 'dark' || (preference === 'system' && systemDark);
                   if (shouldBeDark) {
                     document.documentElement.classList.add('dark');
+                  }
+
+                  // Apply palette (default is now 'olive')
+                  const palette = localStorage.getItem('palette-preference');
+                  if (palette && palette !== 'olive') {
+                    document.documentElement.setAttribute('data-palette', palette);
                   }
                 } catch (e) {
                   // Ignore localStorage errors
@@ -147,17 +159,24 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             `,
           }}
         />
+        <HeadContent />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
       </head>
-      <body className="bg-stone-50 dark:bg-stone-900">
-        <ClientOnly>
+      <body className="bg-grey-50 dark:bg-green-900">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-primary-700 focus:px-4 focus:py-2 focus:text-primary-50 focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 focus:outline-none"
+        >
+          Skip to main content
+        </a>
+        <ErrorBoundary>
           <Header />
-        </ClientOnly>
-        {children}
-        <Footer />
+          <main id="main-content">{children}</main>
+          <Footer />
+        </ErrorBoundary>
         <Scripts />
       </body>
     </html>

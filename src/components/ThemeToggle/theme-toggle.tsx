@@ -63,7 +63,7 @@ export function ThemeToggle({
       <button
         onClick={handleToggle}
         type="button"
-        className={`flex items-center gap-2 font-body font-medium text-grey-800 transition hover:border-b-2 hover:border-b-green-700 dark:text-grey-100 dark:hover:border-b-green-500 ${className}`}
+        className={`flex items-center gap-2 font-body font-medium text-grey-800 transition hover:border-b-2 hover:border-b-primary-700 dark:text-grey-100 dark:hover:border-b-primary-500 ${className}`}
         aria-label={getAriaLabel()}
       >
         <motion.span
@@ -83,7 +83,7 @@ export function ThemeToggle({
     <button
       onClick={handleToggle}
       type="button"
-      className={`flex items-center gap-2 rounded-xl border border-grey-200 bg-grey-100/75 px-4 py-2 font-body text-xs font-semibold text-grey-800 uppercase backdrop-blur backdrop-filter transition hover:border-grey-300 hover:bg-grey-200 dark:border-grey-700 dark:bg-green-800/75 dark:text-grey-100 dark:hover:border-green-600 dark:hover:bg-green-800 ${className}`}
+      className={`flex items-center gap-2 rounded-xl border border-grey-200 bg-grey-100/75 px-4 py-2 font-body text-xs font-semibold text-grey-800 uppercase backdrop-blur backdrop-filter transition hover:border-grey-300 hover:bg-grey-200 dark:border-grey-700 dark:bg-primary-800/75 dark:text-grey-100 dark:hover:border-primary-600 dark:hover:bg-primary-800 ${className}`}
       aria-label={getAriaLabel()}
     >
       <motion.span

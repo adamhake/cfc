@@ -42,12 +42,14 @@ ADMIN_API_KEY=your-secure-admin-key-here
 ```
 
 **To find your Site ID:**
+
 1. Go to your Netlify dashboard at https://app.netlify.com
 2. Select your site
 3. Navigate to Site settings > General > Project information
 4. Copy the "Site ID"
 
 **To get your Personal Access Token:**
+
 1. Go to https://app.netlify.com/user/applications#personal-access-tokens
 2. Click "New access token"
 3. Give it a name like "Blobs Migration"
@@ -55,6 +57,7 @@ ADMIN_API_KEY=your-secure-admin-key-here
 5. ⚠️ **Keep this secret!** Never commit it to git
 
 **For the Admin API Key:**
+
 - Generate a secure random string (e.g., using `openssl rand -base64 32`)
 - This is used for the upload function to prevent unauthorized uploads
 
@@ -67,6 +70,7 @@ npx tsx scripts/migrate-images.ts
 ```
 
 This will:
+
 - Read all `.webp` images from the `public/` directory
 - Extract dimensions using `sharp`
 - Upload to Netlify Blobs with metadata (alt text, captions, dimensions)
@@ -86,6 +90,7 @@ Note: `NETLIFY_SITE_ID` is automatically available in Netlify's environment.
 ### Viewing Images
 
 Simply visit `/media` on your site. Images will load from Netlify Blobs with:
+
 - Responsive masonry layout (1-3 columns based on screen size)
 - Captions appear on hover
 - Proper alt text for accessibility
@@ -107,6 +112,7 @@ curl -X POST https://your-site.netlify.app/.netlify/functions/upload-media \
 ```
 
 Required fields:
+
 - `image`: The image file
 - `key`: Unique identifier (usually the filename)
 - `alt`: Alt text for accessibility
@@ -114,6 +120,7 @@ Required fields:
 - `height`: Image height in pixels
 
 Optional fields:
+
 - `caption`: Caption displayed on hover
 
 ### Image Metadata Structure
@@ -155,6 +162,7 @@ Images uploaded in development are stored locally and won't persist to productio
 ### Edge Function Architecture
 
 Images are served via **Netlify Edge Functions** running on Deno Deploy's global network:
+
 - ✅ **Low latency worldwide** - Functions execute close to users
 - ✅ **No cold starts** - Edge Functions are always warm
 - ✅ **Optimized for reads** - Perfect for frequently-accessed media
@@ -163,18 +171,22 @@ Images are served via **Netlify Edge Functions** running on Deno Deploy's global
 ### Caching Headers
 
 **Images** (Edge Function at `/media-img/{key}`):
+
 ```
 Cache-Control: public, max-age=31536000, immutable
 CDN-Cache-Control: public, max-age=31536000, immutable
 ```
+
 - **1 year browser cache** - After first load, served from local cache (no network!)
 - **1 year CDN cache** - Netlify CDN caches at the edge globally
 - **immutable** - Browser knows file never changes (optimizes refresh behavior)
 
 **Media List** (Function at `/.netlify/functions/get-media`):
+
 ```
 Cache-Control: public, max-age=300, s-maxage=600
 ```
+
 - **5 minutes client cache** - Reduces API calls
 - **10 minutes CDN cache** - Faster list retrieval, balances freshness
 - New images appear within 10 minutes without redeployment
@@ -182,16 +194,19 @@ Cache-Control: public, max-age=300, s-maxage=600
 ### Performance Characteristics
 
 **First Load:**
+
 1. Client requests `/media`
 2. Loader fetches list from `get-media` (~50-200ms)
 3. Browser loads images from edge function (~20-100ms per image)
 4. Subsequent images load in parallel
 
 **Subsequent Loads:**
+
 1. List served from browser/CDN cache (~0-10ms)
 2. Images served from browser cache (~0ms, no network request!)
 
 **Upload New Image:**
+
 1. Upload via `upload-media` with strong consistency
 2. Appears in feed within 10 minutes (CDN cache expiry)
 3. First load ~20-100ms, then cached for 1 year
@@ -206,16 +221,17 @@ Cache-Control: public, max-age=300, s-maxage=600
 
 ### Comparison to Traditional Approaches
 
-| Approach | First Load | Cached Load | Global Performance |
-|----------|------------|-------------|-------------------|
-| Git + Public folder | ~50-200ms | ~0-10ms | Varies by CDN |
-| Regular Functions | ~200-500ms | ~0-10ms | Single region bottleneck |
-| **Edge Functions (ours)** | **~20-100ms** | **~0ms** | **Globally optimized** |
-| AWS S3 + CloudFront | ~50-150ms | ~0-10ms | Excellent (but more setup) |
+| Approach                  | First Load    | Cached Load | Global Performance         |
+| ------------------------- | ------------- | ----------- | -------------------------- |
+| Git + Public folder       | ~50-200ms     | ~0-10ms     | Varies by CDN              |
+| Regular Functions         | ~200-500ms    | ~0-10ms     | Single region bottleneck   |
+| **Edge Functions (ours)** | **~20-100ms** | **~0ms**    | **Globally optimized**     |
+| AWS S3 + CloudFront       | ~50-150ms     | ~0-10ms     | Excellent (but more setup) |
 
 ### Expected Performance Metrics
 
 For a typical gallery visit:
+
 - **Initial page load**: 0.5-2 seconds (depending on # of images)
 - **Return visit**: <100ms (everything cached)
 - **New image upload**: Available within 10 minutes
@@ -224,6 +240,7 @@ For a typical gallery visit:
 ### Monitoring Performance
 
 Check your site's performance in:
+
 1. Netlify Analytics - Real user monitoring
 2. Browser DevTools Network tab - See cache hits
 3. Lighthouse - Should score 90+ for performance
@@ -264,6 +281,7 @@ Potential improvements you could add:
 ## Cost Considerations
 
 Netlify Blobs pricing (as of 2025):
+
 - **Free tier**: Included in free plan with limits
 - **Pro tier**: Higher limits, check Netlify pricing page
 

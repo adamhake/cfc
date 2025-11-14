@@ -46,6 +46,7 @@ The dark mode system extends the existing `MyRouterContext` to include theme sta
 - **Theme Toggle Component**: Reusable toggle button for theme switching
 
 **Data Flow**:
+
 ```
 User Interaction → useTheme hook → Router Context → localStorage
                                   → HTML class update → CSS application
@@ -62,10 +63,10 @@ interface MyRouterContext {
   queryClient: QueryClient;
   theme: ThemeMode;
   setTheme: (theme: ThemeMode) => void;
-  resolvedTheme: 'light' | 'dark';
+  resolvedTheme: "light" | "dark";
 }
 
-type ThemeMode = 'light' | 'dark' | 'system';
+type ThemeMode = "light" | "dark" | "system";
 ```
 
 #### Context Initialization
@@ -88,12 +89,13 @@ Create `src/hooks/useTheme.ts` that:
 - Listens to system preference changes
 
 **Hook API**:
+
 ```typescript
 const {
-  theme,           // Current preference: 'light' | 'dark' | 'system'
-  setTheme,        // Update theme preference
-  resolvedTheme,   // Actual theme applied: 'light' | 'dark'
-  systemPreference // OS preference: 'light' | 'dark'
+  theme, // Current preference: 'light' | 'dark' | 'system'
+  setTheme, // Update theme preference
+  resolvedTheme, // Actual theme applied: 'light' | 'dark'
+  systemPreference, // OS preference: 'light' | 'dark'
 } = useTheme();
 ```
 
@@ -104,8 +106,9 @@ const {
 Add to `RootDocument` component in `src/routes/__root.tsx`:
 
 ```javascript
-<script dangerouslySetInnerHTML={{
-  __html: `
+<script
+  dangerouslySetInnerHTML={{
+    __html: `
     (function() {
       try {
         const stored = localStorage.getItem('theme');
@@ -119,11 +122,13 @@ Add to `RootDocument` component in `src/routes/__root.tsx`:
         // Ignore localStorage errors
       }
     })();
-  `
-}} />
+  `,
+  }}
+/>
 ```
 
 This script:
+
 - Runs synchronously before React hydration
 - Reads localStorage preference
 - Applies `.dark` class to `<html>` element
@@ -144,6 +149,7 @@ This script:
 **File**: `src/components/ThemeToggle/theme-toggle.tsx`
 
 **Features**:
+
 - Three-state toggle: light → dark → system → light
 - Icons from `lucide-react`: Sun, Moon, Monitor
 - Shows current state with label
@@ -151,13 +157,14 @@ This script:
 - Smooth transitions using Framer Motion
 
 **Component Structure**:
+
 ```typescript
 interface ThemeToggleProps {
-  variant?: 'button' | 'dropdown-item';
+  variant?: "button" | "dropdown-item";
   showLabel?: boolean;
 }
 
-export function ThemeToggle({ variant = 'button', showLabel = true }: ThemeToggleProps)
+export function ThemeToggle({ variant = "button", showLabel = true }: ThemeToggleProps);
 ```
 
 **Storybook Stories**: Include all states and variants
@@ -165,11 +172,13 @@ export function ThemeToggle({ variant = 'button', showLabel = true }: ThemeToggl
 #### Header Integration
 
 **Desktop Dropdown Menu** (lines 107-166 in `header.tsx`):
+
 - Add ThemeToggle after navigation links
 - Place in left column with navigation items
 - Style consistent with existing nav items
 
 **Mobile Full-Screen Menu** (lines 185-275 in `header.tsx`):
+
 - Add ThemeToggle in footer section
 - Position above Donate button
 - Full-width button matching mobile styles
@@ -181,19 +190,23 @@ export function ThemeToggle({ variant = 'button', showLabel = true }: ThemeToggl
 Use existing green/grey palette from `src/styles.css` with `dark:` variants:
 
 **Backgrounds**:
+
 - Light: `grey-50`, `grey-100` → Dark: `grey-900`, `grey-950`
 - Cards: `grey-100` → `grey-800`
 - Overlays: `grey-100/75` → `grey-800/75`
 
 **Text Colors**:
+
 - Primary: `grey-800`, `grey-900` → `grey-100`, `grey-50`
 - Secondary: `grey-600` → `grey-300`
 - Accent: `green-700`, `green-800` → `green-400`, `green-500`
 
 **Borders & Dividers**:
+
 - Light: `grey-200`, `grey-300` → Dark: `grey-700`, `grey-600`
 
 **Interactive States**:
+
 - Hover backgrounds adjusted for visibility in both modes
 - Focus rings remain visible with sufficient contrast
 
@@ -274,22 +287,20 @@ setItem()    .dark     ThemeToggle
 function setTheme(newTheme: ThemeMode) {
   // 1. Update localStorage
   try {
-    localStorage.setItem('theme', newTheme);
+    localStorage.setItem("theme", newTheme);
   } catch (e) {
-    console.warn('Failed to save theme preference', e);
+    console.warn("Failed to save theme preference", e);
   }
 
   // 2. Calculate resolved theme
-  const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const resolvedTheme = newTheme === 'system'
-    ? (systemDark ? 'dark' : 'light')
-    : newTheme;
+  const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const resolvedTheme = newTheme === "system" ? (systemDark ? "dark" : "light") : newTheme;
 
   // 3. Update HTML class
-  if (resolvedTheme === 'dark') {
-    document.documentElement.classList.add('dark');
+  if (resolvedTheme === "dark") {
+    document.documentElement.classList.add("dark");
   } else {
-    document.documentElement.classList.remove('dark');
+    document.documentElement.classList.remove("dark");
   }
 
   // 4. Update context state (triggers re-render)
@@ -303,25 +314,25 @@ Listen to OS theme changes:
 
 ```typescript
 useEffect(() => {
-  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
   const handleChange = (e: MediaQueryListEvent) => {
-    if (theme === 'system') {
+    if (theme === "system") {
       // User has system preference enabled, update resolved theme
-      const newResolved = e.matches ? 'dark' : 'light';
+      const newResolved = e.matches ? "dark" : "light";
       updateResolvedTheme(newResolved);
 
       // Update HTML class
-      if (newResolved === 'dark') {
-        document.documentElement.classList.add('dark');
+      if (newResolved === "dark") {
+        document.documentElement.classList.add("dark");
       } else {
-        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.remove("dark");
       }
     }
   };
 
-  mediaQuery.addEventListener('change', handleChange);
-  return () => mediaQuery.removeEventListener('change', handleChange);
+  mediaQuery.addEventListener("change", handleChange);
+  return () => mediaQuery.removeEventListener("change", handleChange);
 }, [theme]);
 ```
 
@@ -332,15 +343,15 @@ Listen to storage events for cross-tab sync:
 ```typescript
 useEffect(() => {
   const handleStorage = (e: StorageEvent) => {
-    if (e.key === 'theme' && e.newValue) {
+    if (e.key === "theme" && e.newValue) {
       // Another tab changed theme preference
       const newTheme = e.newValue as ThemeMode;
       updateThemeFromStorage(newTheme);
     }
   };
 
-  window.addEventListener('storage', handleStorage);
-  return () => window.removeEventListener('storage', handleStorage);
+  window.addEventListener("storage", handleStorage);
+  return () => window.removeEventListener("storage", handleStorage);
 }, []);
 ```
 
@@ -349,17 +360,19 @@ useEffect(() => {
 #### localStorage Failures
 
 **Scenarios**:
+
 - Private browsing mode (localStorage disabled)
 - Storage quota exceeded
 - SecurityError in sandboxed contexts
 
 **Handling**:
+
 ```typescript
 function safeLocalStorageGet(key: string, fallback: string): string {
   try {
     return localStorage.getItem(key) ?? fallback;
   } catch (e) {
-    console.warn('localStorage access failed, using fallback', e);
+    console.warn("localStorage access failed, using fallback", e);
     return fallback;
   }
 }
@@ -368,7 +381,7 @@ function safeLocalStorageSet(key: string, value: string): void {
   try {
     localStorage.setItem(key, value);
   } catch (e) {
-    console.warn('localStorage write failed', e);
+    console.warn("localStorage write failed", e);
     // Continue without persistence - use in-memory state only
   }
 }
@@ -377,12 +390,14 @@ function safeLocalStorageSet(key: string, value: string): void {
 #### SSR Safety
 
 **Server-Side**:
+
 - No localStorage access (undefined)
 - No window/document objects
 - Default to 'system' preference
 - No HTML class manipulation
 
 **Client-Side**:
+
 - Check for `typeof window !== 'undefined'`
 - Guard all browser API access
 - Blocking script only runs in browser
@@ -390,14 +405,15 @@ function safeLocalStorageSet(key: string, value: string): void {
 #### Invalid Data
 
 **localStorage Validation**:
+
 ```typescript
-type ThemeMode = 'light' | 'dark' | 'system';
+type ThemeMode = "light" | "dark" | "system";
 
 function validateTheme(value: string | null): ThemeMode {
-  if (value === 'light' || value === 'dark' || value === 'system') {
+  if (value === "light" || value === "dark" || value === "system") {
     return value;
   }
-  return 'system'; // Default fallback
+  return "system"; // Default fallback
 }
 ```
 
@@ -416,34 +432,40 @@ function validateTheme(value: string | null): ThemeMode {
 #### Manual Testing Checklist
 
 **Basic Functionality**:
+
 - [ ] Toggle works in desktop dropdown menu
 - [ ] Toggle works in mobile full-screen menu
 - [ ] Toggle cycles through all three states correctly
 - [ ] Current theme is visually indicated in toggle button
 
 **Persistence**:
+
 - [ ] Preference persists across page navigation
 - [ ] Preference persists after browser close/reopen
 - [ ] Preference persists in localStorage under 'theme' key
 
 **System Preference**:
+
 - [ ] 'system' mode auto-applies OS theme
 - [ ] OS theme change updates site immediately when 'system' selected
 - [ ] OS theme change ignored when manual mode selected
 
 **SSR & Performance**:
+
 - [ ] No theme flash on initial page load
 - [ ] No theme flash on hard refresh
 - [ ] No layout shift when theme applies
 - [ ] Theme loads before first paint
 
 **Edge Cases**:
+
 - [ ] Multiple tabs sync theme changes
 - [ ] First visit with no stored preference
 - [ ] Clear localStorage and revisit - defaults to 'system'
 - [ ] Private browsing mode works (no localStorage)
 
 **Visual Quality**:
+
 - [ ] All text readable in both themes
 - [ ] Sufficient contrast on all components
 - [ ] Images/overlays look good in both themes
@@ -451,6 +473,7 @@ function validateTheme(value: string | null): ThemeMode {
 - [ ] Focus indicators visible in both themes
 
 **Accessibility**:
+
 - [ ] Toggle button keyboard accessible
 - [ ] Screen reader announces current theme
 - [ ] WCAG AA contrast ratios verified
@@ -459,6 +482,7 @@ function validateTheme(value: string | null): ThemeMode {
 #### Browser Testing
 
 Test in:
+
 - Chrome/Edge (Chromium)
 - Firefox
 - Safari (macOS/iOS)
@@ -467,6 +491,7 @@ Test in:
 #### Automated Testing Considerations
 
 While primarily manual testing, consider adding:
+
 - Storybook stories for ThemeToggle component states
 - Visual regression tests (if Chromatic or similar available)
 - Unit tests for theme utility functions
@@ -532,6 +557,7 @@ While primarily manual testing, consider adding:
 ## Implementation Phases
 
 ### Phase 1: Core Infrastructure
+
 1. Create `src/utils/theme.ts` with types and utilities
 2. Create `src/hooks/useTheme.ts` hook
 3. Extend router context in `__root.tsx`
@@ -541,6 +567,7 @@ While primarily manual testing, consider adding:
 **Success Criteria**: Can access theme via hook, toggle updates HTML class
 
 ### Phase 2: Theme Toggle Component
+
 1. Create `ThemeToggle` component
 2. Integrate with useTheme hook
 3. Add Storybook stories
@@ -549,6 +576,7 @@ While primarily manual testing, consider adding:
 **Success Criteria**: Toggle cycles through states, visually correct
 
 ### Phase 3: Header Integration
+
 1. Add ThemeToggle to desktop dropdown menu
 2. Add ThemeToggle to mobile full-screen menu
 3. Style consistently with existing design
@@ -557,6 +585,7 @@ While primarily manual testing, consider adding:
 **Success Criteria**: Toggle accessible and functional in both menus
 
 ### Phase 4: Component Dark Mode Styles
+
 1. Add `dark:` variants to Header
 2. Add `dark:` variants to Button component
 3. Add `dark:` variants to Hero, Event cards
@@ -566,6 +595,7 @@ While primarily manual testing, consider adding:
 **Success Criteria**: All components have appropriate dark mode styling
 
 ### Phase 5: Testing & Refinement
+
 1. Manual testing checklist
 2. Cross-browser testing
 3. Accessibility verification
@@ -579,48 +609,56 @@ While primarily manual testing, consider adding:
 ### Why TanStack Router Integration?
 
 **Advantages**:
+
 - Leverages existing architecture (consistent with QueryClient pattern)
 - Enables SSR-safe theme initialization
 - Makes theme available throughout route tree
 - Single source of truth for application state
 
 **Alternatives Considered**:
+
 - React Context + Custom Hook: More boilerplate, separate from router
 - Lightweight Hook Only: Simpler but no SSR benefits, less integrated
 
 ### Why localStorage Over Cookies?
 
 **Advantages**:
+
 - Simpler implementation (no cookie parsing)
 - Better privacy (not sent with requests)
 - More storage space available
 - Standard pattern for client-side preferences
 
 **Trade-offs**:
+
 - Requires blocking script for SSR (acceptable with current approach)
 - Not available server-side (mitigated by 'system' default)
 
 ### Why Blocking Script Over SSR Cookie?
 
 **Advantages**:
+
 - No server-side logic required
 - Works with static site deployment
 - Simpler implementation
 - Proven pattern (used by many frameworks)
 
 **Trade-offs**:
+
 - Small inline script in HTML
 - Relies on localStorage being available
 
 ### Why Three-State Toggle?
 
 **Advantages**:
+
 - Respects user OS preference by default
 - Allows manual override when needed
 - "System" option reduces decision fatigue
 - Future-proof for OS theme changes
 
 **Trade-offs**:
+
 - Slightly more complex UI than light/dark toggle
 - Requires explaining "system" option (mitigated with icon)
 
@@ -650,6 +688,7 @@ This design provides a robust, SSR-safe dark mode implementation that integrates
 The phased implementation approach allows for incremental development and testing, with clear success criteria at each phase. Visual refinement of dark mode colors can be iterated on once the feature is functional.
 
 **Next Steps**:
+
 1. Set up isolated git worktree for development
 2. Create detailed implementation plan with task breakdown
 3. Begin Phase 1: Core Infrastructure implementation

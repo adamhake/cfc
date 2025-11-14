@@ -31,7 +31,11 @@ export function useTheme(): UseThemeReturn {
 
   // Subscribe to theme manager updates
   useEffect(() => {
-    const themeManager = context._themeManager;
+    const themeManager = context._themeManager as
+      | {
+          subscribe: (callback: (theme: ThemeMode, resolved: ResolvedTheme) => void) => () => void;
+        }
+      | undefined;
     if (!themeManager) return;
 
     const unsubscribe = themeManager.subscribe(

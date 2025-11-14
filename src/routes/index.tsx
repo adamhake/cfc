@@ -1,8 +1,10 @@
+import Container from "@/components/Container/container";
 import Event from "@/components/Event/event";
 import GetInvolved from "@/components/GetInvolved/get-involved";
-import Hero from "@/components/Hero/hero";
+import HeroSoftGradientDivider from "@/components/Hero/hero-soft-gradient-divider";
 import Partners from "@/components/Partners/partners";
 import Quote from "@/components/Quote/quote";
+import SectionHeader from "@/components/SectionHeader/section-header";
 import Vision from "@/components/Vision/vision";
 import { events } from "@/data/events";
 import { createFileRoute } from "@tanstack/react-router";
@@ -93,13 +95,10 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   return (
-    <div className="space-y-24 bg-grey-50 pb-24 text-grey-900 lg:px-0 dark:bg-green-900 dark:text-grey-100">
-      <Hero />
+    <div className="space-y-24 pb-24 text-grey-900 lg:px-0 dark:text-grey-100">
+      <HeroSoftGradientDivider />
       <div className="-mt-24 space-y-24 px-4 py-24 text-grey-900 lg:px-0">
-        <div className="mx-auto max-w-6xl space-y-6">
-          <h2 className="font-display text-xl text-green-800 md:text-2xl dark:text-green-400">
-            Our Mission
-          </h2>
+        <Container spacing="md">
           <p className="max-w-4xl font-body text-2xl leading-tight font-medium md:text-3xl dark:text-grey-100">
             The Chimborazo Park Conservancy and Friends of Chimborazo Park preserve and enhance this
             Church Hill landmark through community stewardship.
@@ -110,11 +109,9 @@ function Home() {
             have contributed generous donations, grants, and countless hours to build a sustainable
             foundation for the park's future.
           </p>
-        </div>
-        <div className="mx-auto max-w-6xl space-y-6">
-          <h2 className="font-display text-xl text-green-800 md:text-2xl dark:text-green-400">
-            Our Vision
-          </h2>
+        </Container>
+        <Container spacing="md">
+          <SectionHeader title="Our Vision" size="large" />
           <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-14">
             <Vision
               title="Restoration"
@@ -122,7 +119,6 @@ function Home() {
               description="Preserving Chimborazo's historic character through careful reconstruction and repair of the park's unique heritage elements."
             />
             <Vision
-              contentPosition="left"
               title="Recreation"
               icon="trees"
               description="Providing vibrant play spaces, natural areas, and a dog park where neighbors of all ages—and their pets—can gather and stay active."
@@ -135,17 +131,14 @@ function Home() {
             <Vision
               title="Preservation"
               icon="book-open-text"
-              contentPosition="left"
               description="Honoring all chapters of Chimborazo's rich history and ensuring its complete story is shared and understood by future generations."
             />
           </div>
-        </div>
+        </Container>
       </div>
-      <div className="bg-grey-50 text-grey-900 lg:px-0 dark:bg-green-900 dark:text-grey-100">
-        <div className="mx-auto max-w-6xl space-y-6 px-4 md:px-0">
-          <h2 className="font-display text-xl text-green-800 md:text-2xl dark:text-green-400">
-            The Park
-          </h2>
+      <div className="text-grey-900 lg:px-0 dark:text-grey-100">
+        <Container spacing="md" className="px-4 md:px-0">
+          <SectionHeader title="The Park" size="large" />
           <p className="text-gray-800 font-body md:text-lg">
             Chimborazo Hill's story reaches back centuries—from the indigenous Powhatan people to
             its pivotal role in the Civil War. In 1874, as Richmond rebuilt, the city transformed
@@ -178,16 +171,14 @@ function Home() {
             Conservancy is restoring, repairing, and enhancing this treasured greenspace to ensure
             it remains beautiful, safe, and inclusive for generations to come.
           </p>
-        </div>
+        </Container>
       </div>
       <div>
         <GetInvolved />
       </div>
-      <div className="bg-grey-50 px-4 py-24 md:px-0 dark:bg-green-900">
-        <div className="mx-auto max-w-6xl">
-          <h2 className="font-display text-xl text-green-800 md:text-2xl dark:text-green-400">
-            Events
-          </h2>
+      <div className="px-4 py-24 md:px-0">
+        <Container>
+          <SectionHeader title="Events" size="large" />
           <div className="mt-10 grid grid-cols-1 gap-14 md:grid-cols-2">
             {events
               .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
@@ -195,10 +186,13 @@ function Home() {
                 <Event key={`event-${event.id}`} {...event} />
               ))}
           </div>
-        </div>
+        </Container>
       </div>
-      <div>
-        <Partners />
+      <div className="px-4 py-24 md:px-0">
+        <Container>
+          <SectionHeader title="Partners" size="large" />
+          <Partners />
+        </Container>
       </div>
       <Quote />
     </div>
