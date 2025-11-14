@@ -108,7 +108,9 @@ async function migrateImages() {
 
   if (!token) {
     console.error("❌ Error: NETLIFY_TOKEN environment variable is required for local migration");
-    console.error("   Get your token from: https://app.netlify.com/user/applications#personal-access-tokens");
+    console.error(
+      "   Get your token from: https://app.netlify.com/user/applications#personal-access-tokens",
+    );
     console.error("   Then add it to your .env file:");
     console.error("   NETLIFY_TOKEN=your-token-here");
     process.exit(1);
@@ -163,7 +165,7 @@ async function migrateImages() {
         // Upload to Netlify Blobs (convert Buffer to ArrayBuffer)
         const arrayBuffer = buffer.buffer.slice(
           buffer.byteOffset,
-          buffer.byteOffset + buffer.byteLength
+          buffer.byteOffset + buffer.byteLength,
         ) as ArrayBuffer;
         await store.set(filename, arrayBuffer, {
           metadata: {

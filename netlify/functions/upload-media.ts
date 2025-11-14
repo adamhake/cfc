@@ -27,10 +27,9 @@ export default async (req: Request, context: Context) => {
 
     // Validate required fields
     if (!file || !alt || !width || !height || !key) {
-      return new Response(
-        "Missing required fields: image, alt, width, height, key",
-        { status: 400 }
-      );
+      return new Response("Missing required fields: image, alt, width, height, key", {
+        status: 400,
+      });
     }
 
     // Validate file type
@@ -71,18 +70,15 @@ export default async (req: Request, context: Context) => {
         headers: {
           "Content-Type": "application/json",
         },
-      }
+      },
     );
   } catch (error) {
     console.error("Error uploading media:", error);
-    return new Response(
-      JSON.stringify({ error: "Failed to upload media" }),
-      {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    return new Response(JSON.stringify({ error: "Failed to upload media" }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }
 };

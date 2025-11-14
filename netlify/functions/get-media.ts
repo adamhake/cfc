@@ -50,10 +50,7 @@ export default async (_req: Request, context: Context) => {
     const images = results.filter((img): img is MediaImage => img !== null);
 
     // Sort by upload date (newest first)
-    images.sort(
-      (a, b) =>
-        new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
-    );
+    images.sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime());
 
     return new Response(JSON.stringify(images), {
       status: 200,
@@ -64,14 +61,11 @@ export default async (_req: Request, context: Context) => {
     });
   } catch (error) {
     console.error("Error fetching media:", error);
-    return new Response(
-      JSON.stringify({ error: "Failed to fetch media" }),
-      {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    return new Response(JSON.stringify({ error: "Failed to fetch media" }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }
 };

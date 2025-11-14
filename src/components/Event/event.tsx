@@ -1,9 +1,9 @@
 import { Event as EventData } from "@/data/events";
+import { formatDateString } from "@/utils/time";
 import { Link } from "@tanstack/react-router";
 import { Image } from "@unpic/react";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import EventStatusChip from "../EventStatusChip/event-status-chip";
-import { formatDateString } from "@/utils/time";
 
 export default function Event({
   title,
@@ -21,7 +21,7 @@ export default function Event({
     <Link
       to="/events/$slug"
       params={{ slug }}
-      className="group relative cursor-pointer overflow-hidden rounded-3xl bg-green-600 dark:bg-green-700"
+      className="group relative cursor-pointer overflow-hidden rounded-2xl border border-accent-600/20 bg-primary-600 transition-transform active:scale-98 dark:border-accent-500/20 dark:bg-primary-700"
     >
       <Image
         src={image.src}
@@ -30,23 +30,29 @@ export default function Event({
         height={image.height}
         className="absolute inset-0 h-full w-full object-cover transition-opacity group-hover:opacity-0"
       />
-      <div className="absolute top-0 left-0 h-full w-full bg-green-900/60 dark:bg-grey-900/70"></div>
-      <div className="relative z-[2] space-y-8 p-8">
+      <div className="absolute top-0 left-0 h-full w-full bg-primary-900/60 dark:bg-grey-900/70"></div>
+      <div className="relative z-10 space-y-8 p-8">
         <EventStatusChip isPast={isPast} />
-        <h3 className="font-display text-3xl text-green-50 dark:text-grey-100">{title}</h3>
-        <p className="text-lg text-green-50 dark:text-grey-200">{description}</p>
+        <h3 className="font-display text-3xl text-primary-50 dark:text-grey-100">{title}</h3>
+        <p className="text-lg text-primary-50 dark:text-grey-200">{description}</p>
         <div className="mt-4 flex flex-col gap-2">
           <div className="flex gap-2">
-            <Calendar className="h-5 w-5 stroke-green-200 dark:stroke-grey-300" />
-            <span className="font-body font-medium text-green-100 dark:text-grey-300">{fmtDate}</span>
+            <Calendar className="h-5 w-5 stroke-primary-200 dark:stroke-grey-300" />
+            <span className="font-body font-medium text-primary-100 dark:text-grey-300">
+              {fmtDate}
+            </span>
           </div>
           <div className="flex gap-2">
-            <Clock className="h-5 w-5 stroke-green-200 dark:stroke-grey-300" />
-            <span className="font-body font-medium text-green-100 dark:text-grey-300">{time}</span>
+            <Clock className="h-5 w-5 stroke-primary-200 dark:stroke-grey-300" />
+            <span className="font-body font-medium text-primary-100 dark:text-grey-300">
+              {time}
+            </span>
           </div>
           <div className="flex gap-2">
-            <MapPin className="h-5 w-5 stroke-green-200 dark:stroke-grey-300" />
-            <span className="font-body font-medium text-green-100 dark:text-grey-300">{location}</span>
+            <MapPin className="h-5 w-5 stroke-primary-200 dark:stroke-grey-300" />
+            <span className="font-body font-medium text-primary-100 dark:text-grey-300">
+              {location}
+            </span>
           </div>
         </div>
       </div>

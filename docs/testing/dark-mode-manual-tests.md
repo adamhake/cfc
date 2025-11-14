@@ -12,6 +12,7 @@ Comprehensive manual testing of the dark mode implementation revealed that the c
 ## Basic Functionality
 
 ### Desktop Menu
+
 - [x] Theme toggle button visible in desktop dropdown menu
 - [ ] **ISSUE**: Toggle button does not respond to clicks - theme does not cycle
 - [x] Toggle has appropriate icon (Sun/Moon/Monitor)
@@ -20,11 +21,13 @@ Comprehensive manual testing of the dark mode implementation revealed that the c
 **Finding:** The ThemeToggle component renders correctly in the menu but clicking it does not trigger the `setTheme` function. The button appears to be non-functional in user interaction.
 
 ### Mobile Menu
+
 - [x] Theme toggle button accessible in mobile full-screen menu
 - [x] Mobile menu opens correctly
 - [ ] **ISSUE**: Same as desktop - toggle does not respond to user clicks
 
 **Screenshots:**
+
 - `initial-load.png` - Initial page load (light mode)
 - `menu-open.png` - Desktop menu with theme toggle visible
 - `mobile-view.png` - Mobile viewport view
@@ -40,6 +43,7 @@ Comprehensive manual testing of the dark mode implementation revealed that the c
 **Finding:** When theme is set programmatically (`localStorage.setItem('theme', 'dark')`), persistence works perfectly. The blocking script in `__root.tsx` successfully prevents theme flash.
 
 **Test performed:**
+
 1. Manually set `localStorage.setItem('theme', 'dark')`
 2. Manually applied dark class: `document.documentElement.classList.add('dark')`
 3. Refreshed page
@@ -75,6 +79,7 @@ When dark mode was manually applied, the following was observed:
 - [x] Border colors visible in dark mode
 
 **Screenshots:**
+
 - `dark-mode-manual.png` - Dark mode applied manually
 - `after-refresh.png` - Dark mode persisted after refresh
 
@@ -100,12 +105,14 @@ When dark mode was manually applied, the following was observed:
 **Description:** The ThemeToggle component renders correctly in both desktop and mobile menus, but clicking the button does not trigger theme changes.
 
 **Evidence:**
+
 - Button is visible and has correct styling
 - Button has proper aria-label
 - Clicking button does not change localStorage value
 - Clicking button does not add/remove 'dark' class from document element
 
 **Possible Causes:**
+
 1. Event handler may not be properly connected
 2. Router context may not be accessible to the component
 3. `setTheme` function in router context may not be properly initialized
@@ -113,12 +120,14 @@ When dark mode was manually applied, the following was observed:
 
 **Workaround Confirmed:**
 Manual theme application works perfectly:
+
 ```javascript
-localStorage.setItem('theme', 'dark');
-document.documentElement.classList.add('dark');
+localStorage.setItem("theme", "dark");
+document.documentElement.classList.add("dark");
 ```
 
 **Recommendations:**
+
 1. Check that `useTheme` hook is properly accessing router context
 2. Verify `setTheme` function is correctly passed through router context
 3. Add console logging to `ThemeToggle` component to debug click events
@@ -157,20 +166,20 @@ Despite the toggle button issue, several aspects work correctly:
 
 ```javascript
 // Check current theme
-localStorage.getItem('theme')
+localStorage.getItem("theme");
 
 // Check if dark class is applied
-document.documentElement.classList.contains('dark')
+document.documentElement.classList.contains("dark");
 
 // Manual theme application (for testing)
-localStorage.setItem('theme', 'dark');
-document.documentElement.classList.add('dark');
+localStorage.setItem("theme", "dark");
+document.documentElement.classList.add("dark");
 
 // Check both values
 JSON.stringify({
-  theme: localStorage.getItem('theme'),
-  hasDarkClass: document.documentElement.classList.contains('dark')
-})
+  theme: localStorage.getItem("theme"),
+  hasDarkClass: document.documentElement.classList.contains("dark"),
+});
 ```
 
 ## Conclusion

@@ -5,7 +5,18 @@
       "Bash(cat:*)",
       "WebSearch",
       "Bash(npm install:*)",
-      "Bash(npm run check-types:*)"
+      "Bash(npm run check-types:*)",
+      "Skill(superpowers:brainstorm)",
+      "Skill(superpowers:brainstorming)",
+      "Bash(mkdir:*)",
+      "Bash(npx tsc:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git log:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run check:*)",
+      "Bash(git checkout:*)",
+      "mcp__plugin_superpowers-chrome_chrome__use_browser"
     ],
     "deny": [],
     "ask": []

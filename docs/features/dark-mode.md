@@ -21,6 +21,7 @@ Your preference is saved and will persist across visits.
 ## System Preference
 
 If you select "System" mode (monitor icon), the site will automatically:
+
 - Match your OS theme when you first visit
 - Update immediately when you change your OS theme
 - Sync across multiple tabs/windows
@@ -28,6 +29,7 @@ If you select "System" mode (monitor icon), the site will automatically:
 ## Browser Support
 
 Dark mode works in all modern browsers that support:
+
 - CSS custom properties
 - localStorage
 - `prefers-color-scheme` media query
