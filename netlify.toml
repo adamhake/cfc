@@ -1,6 +1,7 @@
 [build]
   command = "vite build"
-  dir = "dist/client"
-[dev]
-  command = "vite dev"
-  port = 3000
+  publish = "dist/client"
+
+[[edge_functions]]
+  path = "/media-img/*"
+  function = "media-image"

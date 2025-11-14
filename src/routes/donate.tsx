@@ -1,7 +1,6 @@
 import Container from "@/components/Container/container";
 import PageHero from "@/components/PageHero/page-hero";
 import { createFileRoute } from "@tanstack/react-router";
-import "react-photo-album/masonry.css";
 
 export const Route = createFileRoute("/donate")({
   component: Donate,

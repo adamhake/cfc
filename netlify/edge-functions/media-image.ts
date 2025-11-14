@@ -16,12 +16,12 @@ export default async (request: Request, context: Context) => {
     // Open the media store
     const store = getStore({
       name: "media",
-      siteID: context.site.id,
+      siteID: context.site?.id,
     });
 
     // Get the image blob with strong consistency for immediate availability
     const blob = await store.get(key, {
-      type: "blob",
+      type: "arrayBuffer",
       consistency: "strong",
     });
 

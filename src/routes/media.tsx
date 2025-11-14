@@ -1,25 +1,27 @@
 import Container from "@/components/Container/container";
 import PageHero from "@/components/PageHero/page-hero";
-import type { MediaImage } from "@/data/media";
+import ImageGallery, { type GalleryImage } from "@/components/ImageGallery/image-gallery";
+import { getMediaImages } from "@/data/media-server";
 import { createFileRoute } from "@tanstack/react-router";
-import { MasonryPhotoAlbum } from "react-photo-album";
-import "react-photo-album/masonry.css";
+import { useState } from "react";
+import { Button } from "@/components/Button/button";
 
 export const Route = createFileRoute("/media")({
   component: Media,
   loader: async () => {
     try {
-      const response = await fetch("/.netlify/functions/get-media");
-      if (!response.ok) {
-        throw new Error("Failed to fetch media");
-      }
-      console.log("Fetched media");
-      const images: MediaImage[] = await response.json();
-      return { images };
+      console.log("[media loader] Fetching media images...");
+      const images = await getMediaImages();
+      console.log(`[media loader] Received ${images.length} images`);
+
+      return { images, error: null };
     } catch (error) {
-      console.error("Error loading media:", error);
-      // Return empty array on error - we'll show a fallback message
-      return { images: [] };
+      console.error("[media loader] Error loading media:", error);
+      // Return error details for debugging
+      return {
+        images: [],
+        error: error instanceof Error ? error.message : String(error),
+      };
     }
   },
   head: () => ({
@@ -84,58 +86,109 @@ export const Route = createFileRoute("/media")({
   }),
 });
 
-function Media() {
-  const { images } = Route.useLoaderData();
+const INITIAL_IMAGE_COUNT = 9;
 
-  // Convert MediaImage format to react-photo-album format
-  const photos = images.map((img) => ({
-    src: img.src,
-    width: img.width,
-    height: img.height,
-    alt: img.alt,
-    title: img.caption, // Used for hover text
-  }));
+function Media() {
+  const loaderData = Route.useLoaderData();
+  const { images, error } = loaderData;
+  const [visibleCount, setVisibleCount] = useState(INITIAL_IMAGE_COUNT);
+
+  // Convert MediaImage format to GalleryImage format
+  const galleryImages: GalleryImage[] = (images || [])
+    .filter((img) => {
+      // Ensure all required properties exist and are valid numbers
+      const isValid =
+        img &&
+        img.src &&
+        typeof img.width === "number" &&
+        typeof img.height === "number" &&
+        img.width > 0 &&
+        img.height > 0;
+
+      if (!isValid) {
+        console.warn("[Media] Filtering out invalid image:", img);
+      }
+
+      return isValid;
+    })
+    .map((img) => ({
+      src: img.src,
+      width: img.width,
+      height: img.height,
+      alt: img.alt || "Park image",
+      caption: img.caption,
+    }));
+
+  const visibleImages = galleryImages.slice(0, visibleCount);
+  const hasMore = visibleCount < galleryImages.length;
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => Math.min(prev + INITIAL_IMAGE_COUNT, galleryImages.length));
+  };
 
   return (
-    <div>
+    <div className="min-h-screen">
       <PageHero
-        title="Media"
+        title="Media Gallery"
+        subtitle="Explore photos of our park, community events, and restoration efforts"
         imageSrc="/bike_sunset.webp"
         imageAlt="Chimborazo Park landscape"
         imageWidth={2000}
         imageHeight={1262}
       />
-      <Container className="py-24">
-        {images.length === 0 ? (
-          <div className="text-gray-600 text-center">
-            <p className="text-lg">No images available yet.</p>
-            <p className="mt-2 text-sm">Check back soon for photos of our park and events!</p>
+      <Container maxWidth="6xl" spacing="md" className="px-4 py-16 md:py-24">
+        {error ? (
+          <div className="mx-auto max-w-2xl rounded-2xl border border-red-200 bg-red-50/30 p-12 text-center dark:border-red-700/30 dark:bg-red-900/20">
+            <div className="mb-4 text-6xl">⚠️</div>
+            <h2 className="mb-3 font-display text-2xl font-semibold text-grey-900 dark:text-grey-100">
+              Error Loading Images
+            </h2>
+            <p className="font-body text-lg text-grey-700 dark:text-grey-300">
+              {error}
+            </p>
+            <p className="mt-4 font-body text-sm text-grey-600 dark:text-grey-400">
+              Check the browser console for more details.
+            </p>
+          </div>
+        ) : images.length === 0 ? (
+          <div className="mx-auto max-w-2xl rounded-2xl border border-primary-200 bg-primary-50/30 p-12 text-center dark:border-primary-700/30 dark:bg-primary-900/20">
+            <div className="mb-4 text-6xl">📷</div>
+            <h2 className="mb-3 font-display text-2xl font-semibold text-grey-900 dark:text-grey-100">
+              No Images Yet
+            </h2>
+            <p className="font-body text-lg text-grey-700 dark:text-grey-300">
+              Check back soon for photos of our park and community events!
+            </p>
+          </div>
+        ) : galleryImages.length === 0 ? (
+          <div className="mx-auto max-w-2xl rounded-2xl border border-primary-200 bg-primary-50/30 p-12 text-center dark:border-primary-700/30 dark:bg-primary-900/20">
+            <div className="mb-4 text-6xl">📷</div>
+            <h2 className="mb-3 font-display text-2xl font-semibold text-grey-900 dark:text-grey-100">
+              No Valid Images
+            </h2>
+            <p className="font-body text-lg text-grey-700 dark:text-grey-300">
+              Some images were found but they're missing required metadata. Check the console for
+              details.
+            </p>
           </div>
         ) : (
-          <>
-            <MasonryPhotoAlbum
-              photos={photos}
-              columns={(containerWidth) => {
-                if (containerWidth < 640) return 1;
-                if (containerWidth < 1024) return 2;
-                return 3;
-              }}
-              render={{
-                wrapper: (props, context) => (
-                  <div
-                    {...props}
-                    className={`${props.className} group relative overflow-hidden rounded-2xl`}
-                  >
-                    {context.photo.title && (
-                      <div className="absolute right-0 bottom-0 left-0 z-10 bg-gradient-to-t from-black/70 to-transparent p-4 opacity-0 transition-opacity group-hover:opacity-100">
-                        <p className="text-sm text-white">{context.photo.title}</p>
-                      </div>
-                    )}
-                  </div>
-                ),
-              }}
+          <div className="space-y-12">
+            <ImageGallery
+              images={visibleImages}
+              variant="masonry"
+              columns={{ default: 1, sm: 2, md: 3, lg: 3 }}
+              showCaptions={true}
+              captionPosition="below"
+              gap="lg"
             />
-          </>
+            {hasMore && (
+              <div className="flex justify-center">
+                <Button onClick={handleLoadMore} variant="primary" size="standard">
+                  Load More Photos
+                </Button>
+              </div>
+            )}
+          </div>
         )}
       </Container>
     </div>

@@ -63,10 +63,10 @@ function Events() {
       <PageHero
         title="Events"
         subtitle="Join us in preserving and enhancing Chimborazo Park"
-        backgroundImage={{
-          src: "/volunteers.webp",
-          alt: "Community volunteers at Chimborazo Park",
-        }}
+        imageSrc="/volunteers.webp"
+        imageAlt="Community volunteers at Chimborazo Park"
+        imageWidth={2000}
+        imageHeight={1333}
       />
 
       <Container spacing="md" className="px-4 md:px-0">

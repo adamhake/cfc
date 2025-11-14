@@ -1,6 +1,7 @@
 import { ErrorBoundary } from "@/components/ErrorBoundary/error-boundary";
 import Footer from "@/components/Footer/footer";
 import Header from "@/components/Header/header";
+import { NotFound } from "@/components/NotFound/not-found";
 import type { PaletteMode } from "@/utils/palette";
 import type { ResolvedTheme, ThemeMode } from "@/utils/theme";
 import type { QueryClient } from "@tanstack/react-query";
@@ -19,6 +20,7 @@ interface MyRouterContext {
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
+  notFoundComponent: NotFound,
   head: () => ({
     // scripts: [
     //   {

@@ -5,9 +5,9 @@ import { useClickAway } from "@uidotdev/usehooks";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { Button } from "../Button/button";
 import EventCardCondensed from "../EventCardCondensed/event-card-condensed";
 import { ThemeToggle } from "../ThemeToggle/theme-toggle";
-import { Button } from "../Button/button";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -198,13 +198,12 @@ export default function Header() {
                     </li>
                     <li>
                       <Link
-                        to="/"
-                        hash="events"
+                        to="/events"
                         onClick={() => setMenuOpen(false)}
                         className="group inline-block font-body text-lg font-medium text-grey-800 transition focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-100"
                       >
                         <span
-                          className={`border-b-2 transition group-hover:border-accent-600 dark:group-hover:border-accent-400 ${currentPath === "/" && currentHash === "#events" ? "border-accent-600 dark:border-accent-400" : "border-transparent"}`}
+                          className={`border-b-2 transition group-hover:border-accent-600 dark:group-hover:border-accent-400 ${currentPath === "/events" ? "border-accent-600 dark:border-accent-400" : "border-transparent"}`}
                         >
                           Events
                         </span>
@@ -324,12 +323,16 @@ export default function Header() {
               >
                 <div className="flex flex-col text-right font-display">
                   <span className="text-base leading-none font-semibold">Chimborazo</span>
-                  <span className="text-xs leading-none text-primary-700 dark:text-primary-400">Park Conservancy</span>
+                  <span className="text-xs leading-none text-primary-700 dark:text-primary-400">
+                    Park Conservancy
+                  </span>
                 </div>
                 <IconLogo className="h-10 w-10 shrink-0" />
                 <div className="flex flex-col font-display">
                   <span className="text-base leading-none font-semibold">Friends of</span>
-                  <span className="text-xs leading-none text-primary-700 dark:text-primary-400">Chimborazo Park</span>
+                  <span className="text-xs leading-none text-primary-700 dark:text-primary-400">
+                    Chimborazo Park
+                  </span>
                 </div>
               </Link>
 
@@ -368,10 +371,9 @@ export default function Header() {
                     transition={{ delay: 0.2 }}
                   >
                     <Link
-                      to="/"
-                      hash="events"
+                      to="/events"
                       onClick={() => setMenuOpen(false)}
-                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/" && currentHash === "#events" ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
+                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/events" ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
                     >
                       Events
                     </Link>

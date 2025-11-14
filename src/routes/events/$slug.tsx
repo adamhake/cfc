@@ -1,10 +1,12 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
-import { Calendar, Clock, MapPin } from "lucide-react";
+import { createFileRoute, notFound, Link } from "@tanstack/react-router";
+import { Calendar, Clock, MapPin, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/Button/button";
 import { events } from "@/data/events";
 import EventStatusChip from "@/components/EventStatusChip/event-status-chip";
 import { Markdown } from "@/components/Markdown/markdown";
 import { formatDateString } from "@/utils/time";
+import Container from "@/components/Container/container";
+import { motion } from "framer-motion";
 
 // Pre-load all markdown files using glob import
 const markdownFiles = import.meta.glob<{ default: string }>("../../data/events/*.md", {
@@ -129,67 +131,193 @@ function EventPage() {
   const isPast = new Date(event.date) < new Date();
 
   return (
-    <div>
-      <div className="relative h-auto w-full overflow-hidden bg-green-400 bg-cover py-20 pt-48 md:h-[50vh]">
-        {/* Hero Image */}
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <header
+        className="relative h-[55vh] w-full overflow-visible"
+        role="banner"
+        aria-label="Event header"
+      >
         <img
-          src={`/${event.image.src}`}
+          src={event.image.src}
           alt={event.image.alt}
           width={event.image.width}
           height={event.image.height}
           className="absolute inset-0 h-full w-full object-cover"
-          fetchPriority="high"
           loading="eager"
+          fetchPriority="high"
         />
-
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-green-900/55 to-green-800/35"></div>
-
-        <div className="absolute inset-0 z-10 flex items-end justify-start">
-          <div className="mx-auto mb-16 w-full max-w-4xl space-y-3 px-4 text-center md:space-y-6">
-            <div>
-              <EventStatusChip isPast={isPast} />
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-primary-900/75 to-primary-800/55 dark:from-primary-950/85 dark:to-primary-900/65"
+          aria-hidden="true"
+        ></div>
+        <div className="absolute inset-0 z-10 flex items-center justify-center">
+          <div className="mx-auto w-full max-w-6xl px-4">
+            <div className="text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="mb-6"
+              >
+                <EventStatusChip isPast={isPast} />
+              </motion.div>
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="font-display text-4xl text-primary-50 md:text-5xl lg:text-6xl dark:text-grey-50"
+              >
+                {event.title}
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="mt-6 font-body text-lg text-primary-100 md:text-xl dark:text-grey-200"
+              >
+                {event.description}
+              </motion.p>
             </div>
-            <h1 className="font-display text-2xl text-white md:text-5xl">{event.title}</h1>
           </div>
         </div>
-        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-r from-green-900/70 to-green-800/50"></div>
-      </div>
-      <div
-        className={`mx-auto flex w-full max-w-6xl ${isPast ? "flex-col" : "flex-col-reverse"} gap-14 px-4 py-16 md:grid md:grid-cols-6 md:gap-14 md:py-24 lg:px-0`}
-      >
-        <main className="col-span-4">
-          {markdownContent ? (
-            <Markdown content={markdownContent} />
-          ) : (
-            <p className="text-lg leading-normal text-grey-800">
-              Event details coming soon. Check back later for more information about this event.
-            </p>
-          )}
-        </main>
-        <aside className={`w-full md:col-span-2`}>
-          <div className="space-y-8 rounded-2xl border border-grey-100 bg-grey-50 p-6 md:p-8">
-            <h2 className="font-display text-xl md:text-2xl">Event Details</h2>
-            <div className="flex flex-col gap-2">
-              <div className="flex gap-2">
-                <Calendar className="h-5 w-5 stroke-green-700" />
-                <span className="font-body font-medium text-grey-800">
-                  {formatDateString(event.date)}
-                </span>
+
+        {/* Organic wave divider */}
+        <div className="absolute bottom-[-1px] left-0 w-full overflow-hidden leading-[0]">
+          <svg
+            viewBox="0 0 1200 120"
+            preserveAspectRatio="none"
+            className="relative block h-16 w-full lg:h-24"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ display: "block" }}
+          >
+            <path
+              d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60 L1200,120 L0,120 Z"
+              className="fill-grey-50 dark:fill-green-900"
+            />
+            <path
+              d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60"
+              className="fill-none stroke-accent-600 dark:stroke-accent-500"
+              strokeWidth="7"
+            />
+          </svg>
+        </div>
+      </header>
+
+      {/* Back Button */}
+      <Container spacing="md" className="px-4 pt-8 md:px-0">
+        <Link
+          to="/events"
+          className="group inline-flex items-center gap-2 font-body text-sm font-medium text-primary-700 transition-colors hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
+        >
+          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+          <span>Back to Events</span>
+        </Link>
+      </Container>
+
+      {/* Main Content */}
+      <Container spacing="md" className="px-4 py-12 md:px-0 md:py-16">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+          {/* Main Content */}
+          <motion.main
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="lg:col-span-8"
+          >
+            {markdownContent ? (
+              <div className="prose prose-lg max-w-none dark:prose-invert">
+                <Markdown content={markdownContent} />
               </div>
-              <div className="flex gap-2">
-                <Clock className="h-5 w-5 stroke-green-700" />
-                <span className="font-body font-medium text-grey-800">{event.time}</span>
+            ) : (
+              <div className="rounded-2xl border border-primary-200 bg-primary-50/30 p-8 md:p-12 dark:border-primary-700/30 dark:bg-primary-900/20">
+                <p className="font-body text-lg leading-relaxed text-grey-700 dark:text-grey-300">
+                  Event details coming soon. Check back later for more information about this event.
+                </p>
               </div>
-              <div className="flex gap-2">
-                <MapPin className="h-5 w-5 stroke-green-700" />
-                <span className="font-body font-medium text-grey-800">{event.location}</span>
+            )}
+          </motion.main>
+
+          {/* Sidebar */}
+          <motion.aside
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="lg:col-span-4"
+          >
+            <div className="sticky top-24 space-y-6">
+              {/* Event Details Card */}
+              <div className="overflow-hidden rounded-2xl border border-accent-200 bg-white shadow-sm dark:border-accent-700/30 dark:bg-grey-800">
+                <div className="bg-gradient-to-br from-accent-50 to-accent-100/50 px-6 py-5 dark:from-accent-900/30 dark:to-accent-800/20">
+                  <h2 className="font-display text-xl font-semibold text-grey-900 md:text-2xl dark:text-grey-100">
+                    Event Details
+                  </h2>
+                </div>
+                <div className="space-y-6 p-6">
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <Calendar className="mt-1 h-5 w-5 flex-shrink-0 stroke-accent-600 dark:stroke-accent-400" />
+                      <div>
+                        <div className="font-body text-xs font-semibold uppercase text-grey-600 dark:text-grey-400">
+                          Date
+                        </div>
+                        <div className="font-body font-medium text-grey-900 dark:text-grey-100">
+                          {formatDateString(event.date)}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <Clock className="mt-1 h-5 w-5 flex-shrink-0 stroke-accent-600 dark:stroke-accent-400" />
+                      <div>
+                        <div className="font-body text-xs font-semibold uppercase text-grey-600 dark:text-grey-400">
+                          Time
+                        </div>
+                        <div className="font-body font-medium text-grey-900 dark:text-grey-100">
+                          {event.time}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <MapPin className="mt-1 h-5 w-5 flex-shrink-0 stroke-accent-600 dark:stroke-accent-400" />
+                      <div>
+                        <div className="font-body text-xs font-semibold uppercase text-grey-600 dark:text-grey-400">
+                          Location
+                        </div>
+                        <div className="font-body font-medium text-grey-900 dark:text-grey-100">
+                          {event.location}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {!isPast && (
+                    <div className="border-t border-accent-200 pt-6 dark:border-accent-700/30">
+                      <Button variant="accent" size="standard" className="w-full">
+                        Register for Event
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Call to Action */}
+              <div className="rounded-2xl border border-primary-200 bg-gradient-to-br from-primary-50 to-primary-100/50 p-6 dark:border-primary-700/30 dark:from-primary-900/20 dark:to-primary-800/10">
+                <h3 className="mb-3 font-display text-lg font-semibold text-grey-900 dark:text-grey-100">
+                  Stay Connected
+                </h3>
+                <p className="mb-4 font-body text-sm text-grey-700 dark:text-grey-300">
+                  Get updates on upcoming events and volunteer opportunities.
+                </p>
+                <Link to="/" hash="get-involved">
+                  <Button variant="outline" size="small" className="w-full">
+                    Subscribe to Updates
+                  </Button>
+                </Link>
               </div>
             </div>
-            <Button>Register</Button>
-          </div>
-        </aside>
-      </div>
+          </motion.aside>
+        </div>
+      </Container>
     </div>
   );
 }

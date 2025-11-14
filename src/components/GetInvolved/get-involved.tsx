@@ -49,7 +49,7 @@ export default function GetInvolved({
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Image side with cycling images */}
             <div className="relative h-64 lg:h-auto">
-              <AnimatePresence mode="wait">
+              <AnimatePresence initial={false}>
                 <motion.img
                   key={currentImageIndex}
                   src={images[currentImageIndex].src}
@@ -58,7 +58,7 @@ export default function GetInvolved({
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 1.2, ease: "easeInOut" }}
+                  transition={{ duration: 0.8, ease: "easeInOut" }}
                 />
               </AnimatePresence>
               <div className="absolute inset-0 bg-gradient-to-br from-accent-600/30 to-accent-800/40 dark:from-accent-900/50 dark:to-accent-950/60"></div>
