@@ -12,7 +12,13 @@ const config = defineConfig({
       projects: ["./tsconfig.json"],
     }),
     tanstackStart({ sitemap: { enabled: true } }),
-    netlify(),
+    netlify({
+      // Enable Netlify platform features in dev
+      platform: {
+        blobs: true,
+        functions: true,
+      },
+    }),
     webfontDownload(),
     tailwindcss(),
     viteReact(),

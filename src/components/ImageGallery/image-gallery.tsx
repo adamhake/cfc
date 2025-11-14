@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Image } from "@unpic/react";
-import { useState } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 
 export interface GalleryImage {
   src: string;
@@ -40,15 +40,116 @@ export default function ImageGallery({
   gap = "md",
 }: ImageGalleryProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [selectedImage, setSelectedImage] = useState<number | null>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
-  const getColumnClass = () => {
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (selectedImage !== null) {
+      document.body.style.overflow = "hidden";
+      // Focus the close button for accessibility
+      closeButtonRef.current?.focus();
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selectedImage]);
+
+  // Keyboard navigation for modal
+  useEffect(() => {
+    if (selectedImage === null) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedImage(null);
+      } else if (e.key === "ArrowLeft" && selectedImage > 0) {
+        setSelectedImage(selectedImage - 1);
+      } else if (e.key === "ArrowRight" && selectedImage < images.length - 1) {
+        setSelectedImage(selectedImage + 1);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedImage, images.length]);
+
+  // Memoize handlers for performance
+  const handleImageClick = useCallback((index: number) => {
+    setSelectedImage(index);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setSelectedImage(null);
+  }, []);
+
+  const handlePrevImage = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedImage((prev) => (prev !== null && prev > 0 ? prev - 1 : prev));
+  }, []);
+
+  const handleNextImage = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedImage((prev) => (prev !== null && prev < images.length - 1 ? prev + 1 : prev));
+  }, [images.length]);
+
+  // Memoize column classes for performance
+  const columnClass = useMemo(() => {
     const classes = [];
-    if (columns.default) classes.push(`grid-cols-${columns.default}`);
-    if (columns.sm) classes.push(`sm:grid-cols-${columns.sm}`);
-    if (columns.md) classes.push(`md:grid-cols-${columns.md}`);
-    if (columns.lg) classes.push(`lg:grid-cols-${columns.lg}`);
+
+    // Map column numbers to Tailwind classes
+    if (columns.default === 1) classes.push("grid-cols-1");
+    else if (columns.default === 2) classes.push("grid-cols-2");
+    else if (columns.default === 3) classes.push("grid-cols-3");
+    else if (columns.default === 4) classes.push("grid-cols-4");
+
+    if (columns.sm === 1) classes.push("sm:grid-cols-1");
+    else if (columns.sm === 2) classes.push("sm:grid-cols-2");
+    else if (columns.sm === 3) classes.push("sm:grid-cols-3");
+    else if (columns.sm === 4) classes.push("sm:grid-cols-4");
+
+    if (columns.md === 1) classes.push("md:grid-cols-1");
+    else if (columns.md === 2) classes.push("md:grid-cols-2");
+    else if (columns.md === 3) classes.push("md:grid-cols-3");
+    else if (columns.md === 4) classes.push("md:grid-cols-4");
+
+    if (columns.lg === 1) classes.push("lg:grid-cols-1");
+    else if (columns.lg === 2) classes.push("lg:grid-cols-2");
+    else if (columns.lg === 3) classes.push("lg:grid-cols-3");
+    else if (columns.lg === 4) classes.push("lg:grid-cols-4");
+
     return classes.join(" ");
-  };
+  }, [columns]);
+
+  const masonryColumnClass = useMemo(() => {
+    const classes = [];
+
+    // Map column numbers to Tailwind classes
+    if (columns.default === 1) classes.push("columns-1");
+    else if (columns.default === 2) classes.push("columns-2");
+    else if (columns.default === 3) classes.push("columns-3");
+    else if (columns.default === 4) classes.push("columns-4");
+
+    if (columns.sm === 1) classes.push("sm:columns-1");
+    else if (columns.sm === 2) classes.push("sm:columns-2");
+    else if (columns.sm === 3) classes.push("sm:columns-3");
+    else if (columns.sm === 4) classes.push("sm:columns-4");
+
+    if (columns.md === 1) classes.push("md:columns-1");
+    else if (columns.md === 2) classes.push("md:columns-2");
+    else if (columns.md === 3) classes.push("md:columns-3");
+    else if (columns.md === 4) classes.push("md:columns-4");
+
+    if (columns.lg === 1) classes.push("lg:columns-1");
+    else if (columns.lg === 2) classes.push("lg:columns-2");
+    else if (columns.lg === 3) classes.push("lg:columns-3");
+    else if (columns.lg === 4) classes.push("lg:columns-4");
+
+    return classes.join(" ");
+  }, [columns]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -75,21 +176,26 @@ export default function ImageGallery({
   if (variant === "masonry") {
     // Masonry layout using CSS columns
     return (
-      <motion.div
-        className={`columns-1 sm:columns-2 md:columns-3 lg:columns-4 ${gapClasses[gap]}`}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
+      <>
+      <div
+        className={`${masonryColumnClass} ${gapClasses[gap]}`}
+        role="list"
+        aria-label="Photo gallery"
       >
         {images.map((image, index) => (
-          <motion.div
-            key={index}
+          <div
+            key={`${image.src}-${index}`}
             className={`mb-${gap === "sm" ? "2" : gap === "md" ? "4" : "6"} break-inside-avoid ${image.showOnMobile === false ? "hidden sm:block" : ""}`}
-            variants={itemVariants}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
+            role="listitem"
           >
-            <div className="group relative overflow-hidden rounded-2xl">
+            <button
+              className="group relative w-full cursor-pointer overflow-hidden rounded-2xl shadow-sm transition-shadow hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+              onClick={() => handleImageClick(index)}
+              aria-label={`View ${image.alt}${image.caption ? `: ${image.caption}` : ""}`}
+              type="button"
+            >
               <Image
                 src={image.src}
                 alt={image.alt}
@@ -106,15 +212,108 @@ export default function ImageGallery({
                   <p className="font-body text-sm text-white md:text-base">{image.caption}</p>
                 </div>
               )}
-            </div>
-            {showCaptions && captionPosition === "below" && image.caption && (
-              <p className="mt-2 font-body text-sm text-neutral-700 dark:text-neutral-300">
-                {image.caption}
-              </p>
-            )}
-          </motion.div>
+              {showCaptions && captionPosition === "below" && image.caption && (
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent p-4 pt-12">
+                  <p className="font-body text-sm font-medium text-white drop-shadow-lg md:text-base">
+                    {image.caption}
+                  </p>
+                </div>
+              )}
+            </button>
+          </div>
         ))}
-      </motion.div>
+      </div>
+
+      {/* Lightbox Modal */}
+      {selectedImage !== null && (
+        <motion.div
+          ref={modalRef}
+          className="fixed inset-0 z-50 h-screen w-screen overflow-hidden bg-black/95"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={handleCloseModal}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Image viewer"
+        >
+          <button
+            ref={closeButtonRef}
+            className="absolute right-4 top-4 z-10 rounded-full bg-white/10 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white"
+            onClick={handleCloseModal}
+            aria-label="Close image viewer"
+            type="button"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <div className="flex h-full items-center justify-center p-4">
+            <div className="relative flex items-center gap-4 max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
+            {/* Previous button */}
+            {selectedImage > 0 && (
+              <button
+                className="rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white"
+                onClick={handlePrevImage}
+                aria-label="Previous image"
+                type="button"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+            )}
+            {/* Image container */}
+            <div className="relative max-w-7xl">
+              <img
+                src={images[selectedImage].src}
+                alt={images[selectedImage].alt}
+                className="max-h-[90vh] w-auto rounded-lg"
+              />
+              {images[selectedImage].caption && (
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-6 pt-16">
+                  <p className="font-body text-base text-white md:text-lg">
+                    {images[selectedImage].caption}
+                  </p>
+                </div>
+              )}
+            </div>
+            {/* Next button */}
+            {selectedImage < images.length - 1 && (
+              <button
+                className="rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white"
+                onClick={handleNextImage}
+                aria-label="Next image"
+                type="button"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            )}
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </>
     );
   }
 
@@ -122,7 +321,7 @@ export default function ImageGallery({
     // Staggered grid with alternating heights
     return (
       <motion.div
-        className={`grid ${getColumnClass()} ${gapClasses[gap]}`}
+        className={`grid ${columnClass} ${gapClasses[gap]}`}
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -167,7 +366,7 @@ export default function ImageGallery({
   // Default grid layout
   return (
     <motion.div
-      className={`grid ${getColumnClass()} ${gapClasses[gap]}`}
+      className={`grid ${columnClass} ${gapClasses[gap]}`}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -194,12 +393,12 @@ export default function ImageGallery({
                   hoveredIndex === index ? "opacity-100" : "opacity-0"
                 }`}
               >
-                <p className="text-sm text-white md:text-base">{image.caption}</p>
+                <p className="font-body text-sm text-white md:text-base">{image.caption}</p>
               </div>
             )}
           </div>
           {showCaptions && captionPosition === "below" && image.caption && (
-            <p className="mt-2 text-sm text-neutral-700 dark:text-neutral-300">{image.caption}</p>
+            <p className="mt-2 font-body text-sm text-neutral-700 dark:text-neutral-300">{image.caption}</p>
           )}
         </motion.div>
       ))}

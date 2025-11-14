@@ -291,7 +291,7 @@ function Home() {
           </p>
 
           {/* Content with subtle background and integrated image */}
-          <div className="mt-10 rounded-3xl bg-primary-50/30 p-6 md:p-10 lg:p-12 dark:bg-primary-900/10">
+          <div className="mt-10 rounded-3xl bg-primary-50/30 md:p-10 lg:p-12 dark:bg-primary-900/10">
             <div className="grid gap-8 md:grid-cols-2 md:gap-10 lg:gap-12">
               {/* Text content */}
               <div className="space-y-6">

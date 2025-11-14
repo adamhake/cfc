@@ -4,6 +4,9 @@ import type { MediaImage } from "../../src/data/media";
 
 export default async (_req: Request, context: Context) => {
   try {
+    console.log("[get-media] Starting to fetch media...");
+    console.log("[get-media] Site ID:", context.site?.id);
+
     // Open the media store
     const store = getStore({
       name: "media",
@@ -11,19 +14,26 @@ export default async (_req: Request, context: Context) => {
     });
 
     // List all blobs in the media store
+    console.log("[get-media] Listing blobs...");
     const { blobs } = await store.list();
+    console.log(`[get-media] Found ${blobs.length} blobs:`, blobs.map(b => b.key));
 
     // Fetch metadata for each image
     const imagePromises = blobs.map(async (blob) => {
+      console.log(`[get-media] Processing blob: ${blob.key}`);
+
       // Get the metadata stored with the blob
       const result = await store.getMetadata(blob.key, {
         consistency: "strong",
       });
 
       if (!result) {
+        console.log(`[get-media] No metadata found for: ${blob.key}`);
         // Skip blobs without metadata
         return null;
       }
+
+      console.log(`[get-media] Metadata for ${blob.key}:`, result.metadata);
 
       const typedMetadata = result.metadata as {
         width: number;
@@ -49,6 +59,8 @@ export default async (_req: Request, context: Context) => {
     const results = await Promise.all(imagePromises);
     const images = results.filter((img): img is MediaImage => img !== null);
 
+    console.log(`[get-media] Returning ${images.length} images`);
+
     // Sort by upload date (newest first)
     images.sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime());
 
@@ -60,8 +72,11 @@ export default async (_req: Request, context: Context) => {
       },
     });
   } catch (error) {
-    console.error("Error fetching media:", error);
-    return new Response(JSON.stringify({ error: "Failed to fetch media" }), {
+    console.error("[get-media] Error fetching media:", error);
+    return new Response(JSON.stringify({
+      error: "Failed to fetch media",
+      details: error instanceof Error ? error.message : String(error)
+    }), {
       status: 500,
       headers: {
         "Content-Type": "application/json",
