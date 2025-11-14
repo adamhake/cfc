@@ -44,12 +44,13 @@ export default function HeroSoftGradientDivider() {
       </div>
 
       {/* Organic wave divider - more pronounced */}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+      <div className="absolute bottom-[-1px] left-0 w-full overflow-hidden leading-[0]">
         <svg
           viewBox="0 0 1200 120"
           preserveAspectRatio="none"
           className="relative block h-16 w-full lg:h-24"
           xmlns="http://www.w3.org/2000/svg"
+          style={{ display: "block" }}
         >
           {/* Flowing natural curve - like rolling hills */}
           <path
