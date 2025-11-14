@@ -37,7 +37,7 @@ function RouteComponent() {
     <div>
       <PageHero
         title="Park Amenities"
-        subtitle="Discover everything Chimborazo Park has to offer"
+        subtitle="Explore the spaces, trails, and landmarks that make Chimborazo special"
         imageSrc="/bike_sunset.webp"
         imageAlt="Chimborazo Park landscape"
         imageWidth={2000}
@@ -68,9 +68,23 @@ function RouteComponent() {
       </PageHero>
 
       {/* Main Content */}
-      <div className="mx-auto max-w-6xl space-y-8 px-4 py-16 md:py-24">
+      <div className="mx-auto max-w-6xl space-y-24 px-4 py-16 pb-24">
+        {/* Introduction */}
+        <div className="max-w-4xl space-y-4">
+          <p className="font-body text-lg text-grey-800 md:text-xl dark:text-grey-200">
+            Chimborazo Park is a 33-acre treasure in the heart of Richmond's Church Hill
+            neighborhood, offering a unique blend of natural beauty, historic landmarks, and modern
+            amenities for all to enjoy.
+          </p>
+          <p className="font-body text-base text-grey-700 md:text-lg dark:text-grey-300">
+            From the sweeping bluff-top views to the wooded trails below, our park provides spaces
+            for recreation, reflection, and community gathering. Whether you're planning a special
+            event, walking your dog, or simply seeking a peaceful retreat, Chimborazo welcomes you.
+          </p>
+        </div>
+
         {/* Upper Park Amenities */}
-        <div className="pt-8">
+        <div>
           <div className="mb-4">
             <SectionHeader title="Upper Chimborazo" size="large" />
           </div>
@@ -150,7 +164,7 @@ function RouteComponent() {
         </div>
 
         {/* Lower Park Amenities */}
-        <div className="pt-16">
+        <div>
           <div className="mb-4">
             <SectionHeader title="Lower Chimborazo" size="large" />
           </div>
@@ -195,7 +209,7 @@ function RouteComponent() {
         </div>
 
         {/* Support the Park Section */}
-        <div className="pt-16">
+        <div>
           <div className="mb-4">
             <SectionHeader title="Support the Park" size="large" />
           </div>
@@ -232,14 +246,10 @@ function RouteComponent() {
         </div>
 
         {/* Get Involved Section */}
-        <div className="pt-16 pb-16">
-          <GetInvolved
-            title="Ready to Get Involved?"
-            description="Contact us to learn more about volunteer opportunities, dedications, and donation options. Together, we can ensure Chimborazo Park remains a vibrant community treasure."
-            imageSrc="/bike_sunset.webp"
-            imageAlt="Chimborazo Park volunteers making a difference"
-          />
-        </div>
+        <GetInvolved
+          title="Ready to Get Involved?"
+          description="Contact us to learn more about volunteer opportunities, dedications, and donation options. Together, we can ensure Chimborazo Park remains a vibrant community treasure."
+        />
       </div>
     </div>
   );

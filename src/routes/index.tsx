@@ -2,12 +2,13 @@ import Container from "@/components/Container/container";
 import Event from "@/components/Event/event";
 import GetInvolved from "@/components/GetInvolved/get-involved";
 import HeroSoftGradientDivider from "@/components/Hero/hero-soft-gradient-divider";
+import ImageGallery from "@/components/ImageGallery/image-gallery";
 import Partners from "@/components/Partners/partners";
 import Quote from "@/components/Quote/quote";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import Vision from "@/components/Vision/vision";
 import { events } from "@/data/events";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -94,10 +95,79 @@ export const Route = createFileRoute("/")({
 // ];
 
 function Home() {
+  const galleryImages = [
+    {
+      src: "/chimbo_arial.webp",
+      alt: "Aerial view of Chimborazo Park",
+      caption: "42 acres of natural beauty",
+      width: 1600,
+      height: 1200,
+      showOnMobile: true,
+    },
+    {
+      src: "/chimbo_sign.webp",
+      alt: "Historic Chimborazo Park sign",
+      caption: "Welcome to Chimborazo Park",
+      width: 1200,
+      height: 1600,
+      showOnMobile: false,
+    },
+    {
+      src: "/oaks.webp",
+      alt: "Historic oak trees",
+      caption: "Majestic century-old oaks",
+      width: 1600,
+      height: 1200,
+      showOnMobile: false,
+    },
+    {
+      src: "/rock_sunset.webp",
+      alt: "Sunset view from the park",
+      caption: "Stunning Richmond skyline views",
+      width: 2000,
+      height: 1262,
+      showOnMobile: false,
+    },
+    {
+      src: "/roundhouse_evening.webp",
+      alt: "Historic Round House at evening",
+      caption: "The park's iconic Round House",
+      width: 2000,
+      height: 1333,
+      showOnMobile: false,
+    },
+    {
+      src: "/bike_sunset.webp",
+      alt: "Cycling at sunset",
+      caption: "Scenic trails and recreation",
+      width: 2000,
+      height: 1262,
+      showOnMobile: false,
+    },
+    {
+      src: "/chimob_gaz.webp",
+      alt: "Park gazebo",
+      caption: "Historic gathering spaces",
+      width: 1600,
+      height: 1200,
+      showOnMobile: false,
+    },
+    {
+      src: "/recreation.webp",
+      alt: "Recreation activities in the park",
+      caption: "Active community spaces",
+      width: 1600,
+      height: 1200,
+      showOnMobile: false,
+    },
+  ];
+
   return (
     <div className="space-y-24 pb-24 text-grey-900 lg:px-0 dark:text-grey-100">
       <HeroSoftGradientDivider />
-      <div className="-mt-24 space-y-24 px-4 py-24 text-grey-900 lg:px-0">
+
+      {/* Intro + Gallery */}
+      <div className="px-4 text-grey-900 lg:px-0">
         <Container spacing="md">
           <p className="max-w-4xl font-body text-2xl leading-tight font-medium md:text-3xl dark:text-grey-100">
             The Chimborazo Park Conservancy and Friends of Chimborazo Park preserve and enhance this
@@ -109,10 +179,27 @@ function Home() {
             have contributed generous donations, grants, and countless hours to build a sustainable
             foundation for the park's future.
           </p>
+          <div className="mt-12">
+            <ImageGallery
+              images={galleryImages}
+              variant="masonry"
+              showCaptions={true}
+              captionPosition="hover"
+              gap="md"
+            />
+          </div>
         </Container>
+      </div>
+
+      {/* Our Vision */}
+      <div className="px-4 lg:px-0">
         <Container spacing="md">
           <SectionHeader title="Our Vision" size="large" />
-          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-14">
+          <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
+            Our mission is rooted in four core pillars that guide everything we do to make
+            Chimborazo Park a cherished landmark for generations to come.
+          </p>
+          <div className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-14">
             <Vision
               title="Restoration"
               icon="leafy-green"
@@ -136,64 +223,148 @@ function Home() {
           </div>
         </Container>
       </div>
+
+      {/* Events */}
+      <div className="px-4 md:px-0">
+        <Container>
+          <SectionHeader title="Events" size="large" />
+          <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
+            Join us for seasonal clean-ups, tree plantings, educational presentations, and community
+            gatherings that help preserve and enhance our historic park.
+          </p>
+
+          <div className="mt-10 space-y-10">
+            {/* Featured Event - Full Width */}
+            {events
+              .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+              .slice(0, 1)
+              .map((event) => (
+                <Event key={`event-featured-${event.id}`} {...event} />
+              ))}
+
+            {/* Recent Events Grid */}
+            <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
+              {events
+                .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                .slice(1, 3)
+                .map((event) => (
+                  <Event key={`event-${event.id}`} {...event} />
+                ))}
+            </div>
+          </div>
+
+          {/* View All Events CTA */}
+          <div className="mt-12 flex justify-center">
+            <Link
+              to="/events"
+              className="group inline-flex items-center gap-2 rounded-xl border-2 border-accent-600 bg-transparent px-6 py-3 font-body text-base font-semibold text-accent-700 uppercase transition-all hover:bg-accent-600 hover:text-white focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:border-accent-500 dark:text-accent-400 dark:hover:bg-accent-500 dark:hover:text-primary-900"
+            >
+              <span>View All Events</span>
+              <svg
+                className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+            </Link>
+          </div>
+        </Container>
+      </div>
+
+      {/* The Park */}
       <div className="text-grey-900 lg:px-0 dark:text-grey-100">
         <Container spacing="md" className="px-4 md:px-0">
           <SectionHeader title="The Park" size="large" />
-          <p className="text-gray-800 font-body md:text-lg">
+
+          {/* Enhanced opening with larger text */}
+          <p className="text-gray-800 font-body text-xl leading-relaxed font-medium md:text-2xl dark:text-grey-200">
             Chimborazo Hill's story reaches back centuries—from the indigenous Powhatan people to
             its pivotal role in the Civil War. In 1874, as Richmond rebuilt, the city transformed
             this storied site into a public park for all residents to enjoy.
           </p>
-          {/*<div className="mx-auto w-56 overflow-hidden rounded-xl border border-grey-800 bg-grey-50">
-            <img src="/cutshaw_wilfred.webp" alt="Wilfred Cutshaw" className="h-auto w-full" />
-            <p className="p-2 font-body text-xs font-medium text-grey-800">Wilfred Cutshaw</p>
-          </div>*/}
-          <p className="text-gray-800 font-body md:text-lg">
-            City engineer Wilfred Cutshaw spent decades in the late 1800s designing winding cobbled
-            carriage roads that embraced the steep terrain, revealing breathtaking vistas at every
-            turn. These paths connected Church Hill with the traditionally African American Fulton
-            neighborhood below, creating vital links between communities.
-          </p>
-          <p className="text-gray-800 font-body md:text-lg">
-            By the turn of the 20th century, Chimborazo had become Richmond's beloved suburban
-            retreat. Visitors arrived by streetcar to enjoy the bandstand, refreshment pavilion, and
-            sweeping 180-degree views of the James River and downtown—a golden era that lasted
-            through World War II.
-          </p>
-          <p className="text-gray-800 font-body md:text-lg">
-            Today, the park includes scenic trails, a dog park, the historic Round House, a picnic
-            gazebo, and an eight-foot Statue of Liberty replica erected by Boy Scouts in the 1950s.
-            But time and reduced funding have taken their toll—many of the park's original and
-            historic features have fallen into disrepair.
-          </p>
-          <p className="text-gray-800 font-body md:text-lg">
-            <strong className="font-semibold">We're changing that.</strong> The Chimborazo Park
-            Conservancy is restoring, repairing, and enhancing this treasured greenspace to ensure
-            it remains beautiful, safe, and inclusive for generations to come.
-          </p>
-        </Container>
-      </div>
-      <div>
-        <GetInvolved />
-      </div>
-      <div className="px-4 py-24 md:px-0">
-        <Container>
-          <SectionHeader title="Events" size="large" />
-          <div className="mt-10 grid grid-cols-1 gap-14 md:grid-cols-2">
-            {events
-              .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-              .map((event) => (
-                <Event key={`event-${event.id}`} {...event} />
-              ))}
+
+          {/* Content with subtle background and integrated image */}
+          <div className="mt-10 rounded-3xl bg-primary-50/30 p-6 md:p-10 lg:p-12 dark:bg-primary-900/10">
+            <div className="grid gap-8 md:grid-cols-2 md:gap-10 lg:gap-12">
+              {/* Text content */}
+              <div className="space-y-6">
+                <p className="text-gray-800 font-body md:text-lg dark:text-grey-200">
+                  City engineer Wilfred Cutshaw spent decades in the late 1800s designing winding
+                  cobbled carriage roads that embraced the steep terrain, revealing breathtaking
+                  vistas at every turn. These paths connected Church Hill with the traditionally
+                  African American Fulton neighborhood below, creating vital links between
+                  communities.
+                </p>
+                <p className="text-gray-800 font-body md:text-lg dark:text-grey-200">
+                  By the turn of the 20th century, Chimborazo had become Richmond's beloved suburban
+                  retreat. Visitors arrived by streetcar to enjoy the bandstand, refreshment
+                  pavilion, and sweeping 180-degree views of the James River and downtown—a golden
+                  era that lasted through World War II.
+                </p>
+              </div>
+
+              {/* Historic image */}
+              <div className="overflow-hidden rounded-2xl">
+                <img
+                  src="/chimbo_prom.webp"
+                  alt="Historic view of Chimborazo Park promenade"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            </div>
+
+            {/* Continued text */}
+            <div className="mt-8 space-y-6">
+              <p className="text-gray-800 font-body md:text-lg dark:text-grey-200">
+                Today, the park includes scenic trails, a dog park, the historic Round House, a
+                picnic gazebo, and an eight-foot Statue of Liberty replica erected by Boy Scouts in
+                the 1950s. But time and reduced funding have taken their toll—many of the park's
+                original and historic features have fallen into disrepair.
+              </p>
+
+              {/* Call-out final paragraph */}
+              <div className="rounded-2xl border border-primary-200/50 bg-gradient-to-br from-primary-100/60 to-primary-50/40 p-6 md:p-8 dark:border-primary-700/30 dark:from-primary-900/30 dark:to-primary-800/20">
+                <p className="text-gray-800 font-body text-lg leading-relaxed font-medium md:text-xl dark:text-grey-100">
+                  <strong className="font-display text-xl font-semibold text-primary-800 md:text-2xl dark:text-primary-200">
+                    We're changing that.
+                  </strong>{" "}
+                  The Chimborazo Park Conservancy is restoring, repairing, and enhancing this
+                  treasured greenspace to ensure it remains beautiful, safe, and inclusive for
+                  generations to come.
+                </p>
+              </div>
+            </div>
           </div>
         </Container>
       </div>
-      <div className="px-4 py-24 md:px-0">
+
+      {/* Get Involved */}
+      <div>
+        <GetInvolved />
+      </div>
+
+      {/* Partners */}
+      <div className="px-4 md:px-0">
         <Container>
           <SectionHeader title="Partners" size="large" />
-          <Partners />
+          <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
+            We're grateful to partner with local organizations that share our commitment to
+            preserving and enhancing Chimborazo Park for the entire community.
+          </p>
+          <div className="mt-12">
+            <Partners />
+          </div>
         </Container>
       </div>
+
+      {/* Quote */}
       <Quote />
     </div>
   );
