@@ -18,7 +18,9 @@ export default function SectionHeader({
   };
 
   return (
-    <Component className={`font-display text-accent-700 dark:text-accent-400 ${sizeClasses[size]}`}>
+    <Component
+      className={`font-display text-primary-700 dark:text-primary-400 ${sizeClasses[size]}`}
+    >
       {title}
     </Component>
   );

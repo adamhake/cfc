@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
+import { Button } from "../Button/button";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -61,12 +62,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 </pre>
               </details>
             )}
-            <button
-              onClick={() => window.location.reload()}
-              className="w-full rounded-xl border border-primary-800 bg-primary-700 px-6 py-3 font-body text-base font-semibold text-primary-50 uppercase transition hover:bg-primary-800 focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:border-primary-600 dark:bg-primary-600 dark:hover:bg-primary-500"
-            >
+            <Button onClick={() => window.location.reload()} variant="primary" className="w-full">
               Refresh Page
-            </button>
+            </Button>
           </div>
         </div>
       );

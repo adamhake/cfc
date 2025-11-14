@@ -117,12 +117,12 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Friends of Chimborazo Park. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <a
-              href="/privacy-policy"
+            <Link
+              to="/privacy-policy"
               className="font-body text-sm text-grey-600 transition hover:text-accent-700 dark:text-grey-400 dark:hover:text-accent-400"
             >
               Privacy Policy
-            </a>
+            </Link>
           </div>
         </div>
       </div>

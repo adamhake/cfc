@@ -33,10 +33,7 @@ export default function FlowingSection({
             className="relative block h-12 w-full lg:h-16"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path
-              d="M0,50 Q300,80 600,50 T1200,50 L1200,0 L0,0 Z"
-              className={waveColor}
-            />
+            <path d="M0,50 Q300,80 600,50 T1200,50 L1200,0 L0,0 Z" className={waveColor} />
           </svg>
         </div>
       )}
@@ -55,10 +52,7 @@ export default function FlowingSection({
             className="relative block h-12 w-full lg:h-16"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path
-              d="M0,50 Q300,20 600,50 T1200,50 L1200,100 L0,100 Z"
-              className={waveColor}
-            />
+            <path d="M0,50 Q300,20 600,50 T1200,50 L1200,100 L0,100 Z" className={waveColor} />
           </svg>
         </div>
       )}
