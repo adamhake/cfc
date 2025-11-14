@@ -16,7 +16,8 @@
       "Bash(npm run build:*)",
       "Bash(npm run check:*)",
       "Bash(git checkout:*)",
-      "mcp__plugin_superpowers-chrome_chrome__use_browser"
+      "mcp__plugin_superpowers-chrome_chrome__use_browser",
+      "Bash(npm run format:*)"
     ],
     "deny": [],
     "ask": []

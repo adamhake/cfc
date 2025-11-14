@@ -58,17 +58,18 @@ export default function PageHero({
       </div>
 
       {/* Organic wave divider */}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+      <div className="absolute bottom-[-1px] left-0 w-full overflow-hidden leading-[0]">
         <svg
           viewBox="0 0 1200 120"
           preserveAspectRatio="none"
           className="relative block h-16 w-full lg:h-24"
           xmlns="http://www.w3.org/2000/svg"
+          style={{ display: "block" }}
         >
           {/* Flowing natural curve */}
           <path
             d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60 L1200,120 L0,120 Z"
-            className="dark:fill-stone-900 fill-grey-50"
+            className="fill-grey-50 dark:fill-green-900"
           />
           {/* Accent color stroke following the curve */}
           <path

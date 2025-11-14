@@ -5,6 +5,9 @@ import Event from "@/components/Event/event";
 import EventStatusChip from "@/components/EventStatusChip/event-status-chip";
 import GetInvolved from "@/components/GetInvolved/get-involved";
 import HeroSoftGradientDivider from "@/components/Hero/hero-soft-gradient-divider";
+import ImageCard from "@/components/ImageCard/image-card";
+import ImageCarousel from "@/components/ImageCarousel/image-carousel";
+import ImageGallery from "@/components/ImageGallery/image-gallery";
 import InfoCard from "@/components/InfoCard/info-card";
 import PageHero from "@/components/PageHero/page-hero";
 import { PaletteSwitcher } from "@/components/PaletteSwitcher/palette-switcher";
@@ -80,6 +83,79 @@ function ComponentPlayground() {
       height: 1200,
     },
   };
+
+  // Sample data for imagery components
+  const sampleGalleryImages = [
+    {
+      src: "/chimbo_arial.webp",
+      alt: "Aerial view of Chimborazo Park",
+      caption: "Bird's eye view of the historic park grounds",
+      width: 1600,
+      height: 1200,
+    },
+    {
+      src: "/bike_sunset.webp",
+      alt: "Cycling at sunset",
+      caption: "Evening recreation on park trails",
+      width: 2000,
+      height: 1262,
+    },
+    {
+      src: "/oaks.webp",
+      alt: "Historic oak trees",
+      caption: "Majestic oak trees provide shade and beauty",
+      width: 1600,
+      height: 1200,
+    },
+    {
+      src: "/chimob_gaz.webp",
+      alt: "Park gazebo",
+      caption: "Gazebo gathering space",
+      width: 1600,
+      height: 1200,
+    },
+    {
+      src: "/chimbo_circle.webp",
+      alt: "Park circle area",
+      caption: "Historic circle monument",
+      width: 1600,
+      height: 1200,
+    },
+    {
+      src: "/rock_sunset.webp",
+      alt: "Sunset view from the park",
+      caption: "Stunning Richmond skyline views",
+      width: 2000,
+      height: 1262,
+    },
+  ];
+
+  const sampleCarouselImages = [
+    {
+      src: "/chimbo_hero_adj.webp",
+      alt: "Chimborazo Park vista",
+      title: "Discover Richmond's Hidden Gem",
+      caption: "42 acres of natural beauty and history in Church Hill",
+      width: 2000,
+      height: 1333,
+    },
+    {
+      src: "/bike_sunset.webp",
+      alt: "Cycling at sunset",
+      title: "Active Recreation",
+      caption: "Miles of trails for walking, running, and cycling",
+      width: 2000,
+      height: 1262,
+    },
+    {
+      src: "/oaks.webp",
+      alt: "Historic oak trees",
+      title: "Natural Heritage",
+      caption: "Centuries-old trees provide shade and tranquility",
+      width: 1600,
+      height: 1200,
+    },
+  ];
 
   return (
     <div className="min-h-screen pt-24 pb-16">
@@ -319,6 +395,191 @@ function ComponentPlayground() {
                 Partners
               </h3>
               <Partners />
+            </div>
+          </section>
+
+          {/* Imagery Components */}
+          <section>
+            <h2 className="mb-6 font-display text-2xl font-bold text-grey-900 dark:text-grey-100">
+              Imagery Components
+            </h2>
+
+            {/* ImageCarousel */}
+            <div className="mb-12">
+              <h3 className="mb-4 font-body text-sm font-semibold text-grey-600 uppercase dark:text-grey-400">
+                Image Carousel
+              </h3>
+              <p className="mb-4 font-body text-sm text-grey-600 dark:text-grey-300">
+                Touch-friendly carousel with auto-play, navigation arrows, and pagination dots.
+                Supports captions in overlay or below positions.
+              </p>
+              <div className="space-y-8">
+                <div>
+                  <p className="mb-3 font-body text-xs text-grey-500 dark:text-grey-400">
+                    Overlay Captions (Default)
+                  </p>
+                  <ImageCarousel
+                    images={sampleCarouselImages}
+                    autoPlay={true}
+                    autoPlayInterval={5000}
+                    showCaptions={true}
+                    captionPosition="overlay"
+                    aspectRatio="16/9"
+                  />
+                </div>
+                <div>
+                  <p className="mb-3 font-body text-xs text-grey-500 dark:text-grey-400">
+                    Below Captions
+                  </p>
+                  <ImageCarousel
+                    images={sampleCarouselImages}
+                    autoPlay={false}
+                    showCaptions={true}
+                    captionPosition="below"
+                    aspectRatio="4/3"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* ImageGallery */}
+            <div className="mb-12">
+              <h3 className="mb-4 font-body text-sm font-semibold text-grey-600 uppercase dark:text-grey-400">
+                Image Gallery
+              </h3>
+              <p className="mb-4 font-body text-sm text-grey-600 dark:text-grey-300">
+                Flexible gallery component with three layout variants: grid, masonry, and staggered.
+                Features hover captions with gradient overlays.
+              </p>
+              <div className="space-y-8">
+                <div>
+                  <p className="mb-3 font-body text-xs text-grey-500 dark:text-grey-400">
+                    Grid Layout
+                  </p>
+                  <ImageGallery
+                    images={sampleGalleryImages}
+                    variant="grid"
+                    columns={{ default: 1, sm: 2, md: 3 }}
+                    showCaptions={true}
+                    captionPosition="hover"
+                    gap="md"
+                  />
+                </div>
+                <div>
+                  <p className="mb-3 font-body text-xs text-grey-500 dark:text-grey-400">
+                    Masonry Layout
+                  </p>
+                  <ImageGallery
+                    images={sampleGalleryImages}
+                    variant="masonry"
+                    showCaptions={true}
+                    captionPosition="hover"
+                    gap="md"
+                  />
+                </div>
+                <div>
+                  <p className="mb-3 font-body text-xs text-grey-500 dark:text-grey-400">
+                    Staggered Grid Layout
+                  </p>
+                  <ImageGallery
+                    images={sampleGalleryImages}
+                    variant="staggered"
+                    columns={{ default: 1, sm: 2, md: 3 }}
+                    showCaptions={true}
+                    captionPosition="hover"
+                    gap="md"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* ImageCard */}
+            <div className="mb-8">
+              <h3 className="mb-4 font-body text-sm font-semibold text-grey-600 uppercase dark:text-grey-400">
+                Image Card
+              </h3>
+              <p className="mb-4 font-body text-sm text-grey-600 dark:text-grey-300">
+                Versatile card component combining imagery with text and CTAs. Three variants:
+                overlay, caption-below, and side-by-side.
+              </p>
+              <div className="space-y-8">
+                <div>
+                  <p className="mb-3 font-body text-xs text-grey-500 dark:text-grey-400">
+                    Overlay Variant
+                  </p>
+                  <ImageCard
+                    image={{
+                      src: "/chimbo_hero_adj.webp",
+                      alt: "Park vista",
+                      width: 2000,
+                      height: 1333,
+                    }}
+                    title="Volunteer with Us"
+                    description="Join our community of volunteers helping to preserve and enhance Chimborazo Park for future generations."
+                    variant="overlay"
+                    ctaText="Get Involved"
+                    ctaLink="#"
+                    aspectRatio="16/9"
+                  />
+                </div>
+                <div>
+                  <p className="mb-3 font-body text-xs text-grey-500 dark:text-grey-400">
+                    Caption Below Variant
+                  </p>
+                  <ImageCard
+                    image={{
+                      src: "/oaks.webp",
+                      alt: "Oak trees",
+                      width: 1600,
+                      height: 1200,
+                    }}
+                    title="Natural Heritage"
+                    description="Our historic oak trees have stood for centuries, providing shade and beauty to the Richmond community."
+                    variant="caption-below"
+                    ctaText="Learn More"
+                    ctaLink="#"
+                    aspectRatio="4/3"
+                  />
+                </div>
+                <div>
+                  <p className="mb-3 font-body text-xs text-grey-500 dark:text-grey-400">
+                    Side-by-Side Variant (Image Left)
+                  </p>
+                  <ImageCard
+                    image={{
+                      src: "/bike_sunset.webp",
+                      alt: "Cycling at sunset",
+                      width: 2000,
+                      height: 1262,
+                    }}
+                    title="Active Recreation"
+                    description="Explore miles of trails perfect for walking, running, and cycling while enjoying stunning views of Richmond."
+                    variant="side-by-side"
+                    imagePosition="left"
+                    ctaText="View Amenities"
+                    ctaLink="#"
+                  />
+                </div>
+                <div>
+                  <p className="mb-3 font-body text-xs text-grey-500 dark:text-grey-400">
+                    Side-by-Side Variant (Image Right)
+                  </p>
+                  <ImageCard
+                    image={{
+                      src: "/chimbo_circle.webp",
+                      alt: "Historic monument",
+                      width: 1600,
+                      height: 1200,
+                    }}
+                    title="Rich History"
+                    description="Discover the fascinating history of Chimborazo Park, from Civil War hospital to beloved community space."
+                    variant="side-by-side"
+                    imagePosition="right"
+                    ctaText="Explore History"
+                    ctaLink="#"
+                  />
+                </div>
+              </div>
             </div>
           </section>
 
