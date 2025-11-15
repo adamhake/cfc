@@ -151,7 +151,7 @@ function EventPage() {
           className="absolute inset-0 bg-gradient-to-r from-primary-900/75 to-primary-800/55 dark:from-primary-950/85 dark:to-primary-900/65"
           aria-hidden="true"
         ></div>
-        <div className="absolute inset-0 z-10 flex items-end justify-center px-4 pb-12 pt-20 lg:items-center lg:py-8">
+        <div className="absolute inset-0 z-10 flex items-end justify-center px-4 pb-16 pt-20 lg:items-center lg:py-8">
           <div className="mx-auto w-full max-w-6xl">
             <div className="text-center">
               <motion.div
