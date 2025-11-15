@@ -19,7 +19,7 @@ export default function Footer() {
           />
           <path
             d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60"
-            className="fill-none stroke-accent-600 dark:stroke-accent-500"
+            className="fill-none stroke-accent-500 dark:stroke-accent-500"
             strokeWidth="7"
           />
         </svg>
@@ -31,7 +31,7 @@ export default function Footer() {
           {/* About section */}
           <div className="space-y-4">
             <h3 className="font-display text-lg font-semibold text-primary-800 dark:text-primary-400">
-              Friends of Chimborazo Park
+              Chimborazo Park Conservancy
             </h3>
             <p className="font-body text-sm leading-relaxed text-grey-700 dark:text-grey-300">
               A 501(c)(3) non-profit dedicated to preserving and enhancing Chimborazo Park in
@@ -113,7 +113,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-grey-200 pt-8 md:flex-row dark:border-primary-700">
           <p className="font-body text-sm text-grey-600 dark:text-grey-400">
-            &copy; {new Date().getFullYear()} Friends of Chimborazo Park. All rights reserved.
+            &copy; {new Date().getFullYear()} Chimborazo Park Conservancy. All rights reserved.
           </p>
           <div className="flex gap-6">
             <Link
