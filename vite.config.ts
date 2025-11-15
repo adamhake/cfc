@@ -28,11 +28,14 @@ const config = defineConfig({
     chunkSizeWarningLimit: 1000,
     // Enable CSS code splitting
     cssCodeSplit: true,
+    // Enable source maps for production debugging
+    sourcemap: true,
     // Minify with terser for better compression
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true,
+        // Keep console.error and console.warn for debugging
+        pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.trace'],
         drop_debugger: true,
       },
     },
