@@ -224,60 +224,6 @@ function Home() {
         </Container>
       </div>
 
-      {/* Events */}
-      <div className="px-4 md:px-0">
-        <Container>
-          <SectionHeader title="Events" size="large" />
-          <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
-            Join us for seasonal clean-ups, tree plantings, educational presentations, and community
-            gatherings that help preserve and enhance our historic park.
-          </p>
-
-          <div className="mt-10 space-y-10">
-            {/* Featured Event - Full Width */}
-            {events
-              .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-              .slice(0, 1)
-              .map((event) => (
-                <Event key={`event-featured-${event.id}`} {...event} />
-              ))}
-
-            {/* Recent Events Grid */}
-            <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
-              {events
-                .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                .slice(1, 3)
-                .map((event) => (
-                  <Event key={`event-${event.id}`} {...event} />
-                ))}
-            </div>
-          </div>
-
-          {/* View All Events CTA */}
-          <div className="mt-12 flex justify-center">
-            <Link
-              to="/events"
-              className="group inline-flex items-center gap-2 rounded-xl border-2 border-accent-600 bg-transparent px-6 py-3 font-body text-base font-semibold text-accent-700 uppercase transition-all hover:bg-accent-600 hover:text-white focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:border-accent-500 dark:text-accent-400 dark:hover:bg-accent-500 dark:hover:text-primary-900"
-            >
-              <span>View All Events</span>
-              <svg
-                className="h-5 w-5 transition-transform group-hover:translate-x-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </Link>
-          </div>
-        </Container>
-      </div>
-
       {/* The Park */}
       <div className="text-grey-900 lg:px-0 dark:text-grey-100">
         <Container spacing="md" className="px-4 md:px-0">
@@ -341,6 +287,60 @@ function Home() {
                 </p>
               </div>
             </div>
+          </div>
+        </Container>
+      </div>
+
+      {/* Events */}
+      <div className="px-4 md:px-0">
+        <Container>
+          <SectionHeader title="Events" size="large" />
+          <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
+            Join us for seasonal clean-ups, tree plantings, educational presentations, and community
+            gatherings that help preserve and enhance our historic park.
+          </p>
+
+          <div className="mt-10 space-y-10">
+            {/* Featured Event - Full Width */}
+            {events
+              .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+              .slice(0, 1)
+              .map((event) => (
+                <Event key={`event-featured-${event.id}`} {...event} />
+              ))}
+
+            {/* Recent Events Grid */}
+            <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
+              {events
+                .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                .slice(1, 3)
+                .map((event) => (
+                  <Event key={`event-${event.id}`} {...event} />
+                ))}
+            </div>
+          </div>
+
+          {/* View All Events CTA */}
+          <div className="mt-12 flex justify-center">
+            <Link
+              to="/events"
+              className="group inline-flex items-center gap-2 rounded-xl border-2 border-accent-600 bg-transparent px-6 py-3 font-body text-base font-semibold text-accent-700 uppercase transition-all hover:bg-accent-600 hover:text-white focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:border-accent-500 dark:text-accent-400 dark:hover:bg-accent-500 dark:hover:text-primary-900"
+            >
+              <span>View All Events</span>
+              <svg
+                className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+            </Link>
           </div>
         </Container>
       </div>
