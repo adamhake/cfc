@@ -30,8 +30,12 @@ export const PaletteColor: React.FC<PaletteColorProps> = ({
   className = "",
 }) => {
   const Component = as as React.ElementType;
-  const isDarkMode =
-    typeof window !== "undefined" && document.documentElement.classList.contains("dark");
+  const [isDarkMode, setIsDarkMode] = React.useState(false);
+
+  // Use useEffect to avoid hydration mismatch
+  React.useEffect(() => {
+    setIsDarkMode(document.documentElement.classList.contains("dark"));
+  }, []);
 
   // Only apply if dark mode matches
   if (dark && !isDarkMode) {
