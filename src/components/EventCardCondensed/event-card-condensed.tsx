@@ -2,6 +2,7 @@ import { Event as EventData } from "@/data/events";
 import { formatDateString } from "@/utils/time";
 import { Link } from "@tanstack/react-router";
 import { Calendar } from "lucide-react";
+import { Image } from "@unpic/react";
 
 export default function EventCardCondensed({
   title,
@@ -19,10 +20,14 @@ export default function EventCardCondensed({
     >
       {/* Image background */}
       <div className="relative h-32 w-full overflow-hidden">
-        <img
+        <Image
           src={image.src}
           alt={image.alt}
+          width={image.width}
+          height={image.height}
           className="absolute inset-0 h-full w-full object-cover transition-transform group-hover:scale-105"
+          loading="lazy"
+          layout="fullWidth"
         />
         <div className="absolute inset-0 bg-primary-900/60"></div>
 

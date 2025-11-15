@@ -17,7 +17,8 @@
       "Bash(npm run check:*)",
       "Bash(git checkout:*)",
       "mcp__plugin_superpowers-chrome_chrome__use_browser",
-      "Bash(npm run format:*)"
+      "Bash(npm run format:*)",
+      "WebFetch(domain:pagespeed.web.dev)"
     ],
     "deny": [],
     "ask": []

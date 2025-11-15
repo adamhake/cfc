@@ -9,6 +9,7 @@ import SectionHeader from "@/components/SectionHeader/section-header";
 import Vision from "@/components/Vision/vision";
 import { events } from "@/data/events";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { Image } from "@unpic/react";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -258,10 +259,14 @@ function Home() {
 
               {/* Historic image */}
               <div className="overflow-hidden rounded-2xl">
-                <img
+                <Image
                   src="/chimbo_prom.webp"
                   alt="Historic view of Chimborazo Park promenade"
+                  width={1600}
+                  height={1200}
                   className="h-full w-full object-cover"
+                  loading="lazy"
+                  layout="constrained"
                 />
               </div>
             </div>
