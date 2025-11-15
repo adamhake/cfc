@@ -60,7 +60,7 @@ export default function HeroSoftGradientDivider() {
           {/* Accent color stroke following the curve */}
           <path
             d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60"
-            className="fill-none stroke-accent-600 dark:stroke-accent-500"
+            className="fill-none stroke-accent-500 dark:stroke-accent-500"
             strokeWidth="7"
           />
         </svg>
