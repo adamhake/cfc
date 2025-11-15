@@ -14,6 +14,54 @@ export const Route = createFileRoute("/privacy-policy")({
         content:
           "Privacy policy for Friends of Chimborazo Park, detailing how we collect, use, and protect your personal information.",
       },
+      {
+        property: "og:title",
+        content: "Privacy Policy | Chimborazo Park Conservancy",
+      },
+      {
+        property: "og:description",
+        content:
+          "Privacy policy for Friends of Chimborazo Park, detailing how we collect, use, and protect your personal information.",
+      },
+      {
+        property: "og:type",
+        content: "website",
+      },
+      {
+        property: "og:url",
+        content: "https://chimboparkconservancy.org/privacy-policy",
+      },
+      {
+        property: "og:image",
+        content: "https://chimboparkconservancy.org/bike_sunset.webp",
+      },
+      {
+        property: "og:image:width",
+        content: "2000",
+      },
+      {
+        property: "og:image:height",
+        content: "1262",
+      },
+      {
+        name: "twitter:title",
+        content: "Privacy Policy | Chimborazo Park Conservancy",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Privacy policy for Friends of Chimborazo Park, detailing how we collect, use, and protect your personal information.",
+      },
+      {
+        name: "twitter:image",
+        content: "https://chimboparkconservancy.org/bike_sunset.webp",
+      },
+    ],
+    links: [
+      {
+        rel: "canonical",
+        href: "https://chimboparkconservancy.org/privacy-policy",
+      },
     ],
   }),
 });
