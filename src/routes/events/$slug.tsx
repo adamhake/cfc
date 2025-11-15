@@ -134,7 +134,7 @@ function EventPage() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <header
-        className="relative min-h-[55vh] w-full overflow-hidden"
+        className="relative min-h-[70vh] w-full overflow-hidden lg:min-h-[55vh]"
         role="banner"
         aria-label="Event header"
       >
@@ -151,7 +151,7 @@ function EventPage() {
           className="absolute inset-0 bg-gradient-to-r from-primary-900/75 to-primary-800/55 dark:from-primary-950/85 dark:to-primary-900/65"
           aria-hidden="true"
         ></div>
-        <div className="absolute inset-0 z-10 flex items-center justify-center px-4 py-8">
+        <div className="absolute inset-0 z-10 flex items-end justify-center px-4 pb-12 pt-20 lg:items-center lg:py-8">
           <div className="mx-auto w-full max-w-6xl">
             <div className="text-center">
               <motion.div
