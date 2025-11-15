@@ -2,9 +2,10 @@ import { cn } from "@/utils/cn";
 
 export default function EventStatusChip({ isPast }: { isPast: boolean }) {
   const classes = cn(
-    "inline-block rounded-xl border border-primary-200 p-2 text-xs font-semibold tracking-wider uppercase dark:border-primary-600",
-    isPast ? "text-primary-200 dark:text-primary-300" : "text-primary-800 dark:text-primary-900",
-    isPast ? "bg-transparent dark:bg-transparent" : "bg-primary-200 dark:bg-primary-400",
+    "inline-block rounded-xl border px-3 py-2 text-xs font-semibold tracking-wider uppercase shadow-sm",
+    isPast
+      ? "border-primary-300/50 bg-primary-800/60 text-primary-50 dark:border-primary-600/50 dark:bg-primary-700/50 dark:text-primary-100"
+      : "border-accent-400/60 bg-accent-500 text-white dark:border-accent-400/70 dark:bg-accent-500 dark:text-grey-900",
   );
 
   return (
