@@ -58,8 +58,7 @@ export default function Footer() {
                 Amenities
               </Link>
               <Link
-                to="/"
-                hash="events"
+                to="/events"
                 className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
               >
                 Events
