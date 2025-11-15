@@ -15,7 +15,7 @@ export default function EventCardCondensed({
     <Link
       to="/events/$slug"
       params={{ slug }}
-      className="group relative block overflow-hidden rounded-xl border border-accent-600/20 bg-primary-600 transition-all hover:shadow-md dark:border-accent-500/20 dark:bg-primary-700"
+      className="group relative block overflow-hidden rounded-xl border border-accent-600/20 transition-all hover:shadow-md dark:border-accent-500/20"
     >
       {/* Image background */}
       <div className="relative h-32 w-full overflow-hidden">
@@ -24,12 +24,12 @@ export default function EventCardCondensed({
           alt={image.alt}
           className="absolute inset-0 h-full w-full object-cover transition-transform group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-primary-900/60 dark:bg-grey-900/70"></div>
+        <div className="absolute inset-0 bg-primary-900/60"></div>
 
         {/* Date badge */}
-        <div className="absolute top-3 right-3 flex items-center gap-2 rounded-lg bg-grey-900/80 px-3 py-1.5 backdrop-blur dark:bg-grey-900/80">
-          <Calendar className="h-4 w-4 stroke-grey-100" />
-          <span className="font-body text-sm font-medium text-grey-100">{fmtDate}</span>
+        <div className="absolute top-3 right-3 flex items-center gap-2 rounded-lg bg-primary-900/80 px-3 py-1.5 backdrop-blur">
+          <Calendar className="h-4 w-4 stroke-primary-100" />
+          <span className="font-body text-sm font-medium text-primary-100">{fmtDate}</span>
         </div>
       </div>
 

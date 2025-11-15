@@ -21,7 +21,7 @@ export default function Event({
     <Link
       to="/events/$slug"
       params={{ slug }}
-      className="group relative block min-h-[400px] cursor-pointer overflow-hidden rounded-2xl border border-accent-600/20 bg-primary-600 transition-transform active:scale-98 md:min-h-[450px] dark:border-accent-500/20 dark:bg-primary-700"
+      className="group relative block min-h-[400px] cursor-pointer overflow-hidden rounded-2xl border border-accent-600/20 transition-transform active:scale-98 md:min-h-[450px] dark:border-accent-500/20"
     >
       <Image
         src={image.src}
@@ -30,7 +30,7 @@ export default function Event({
         height={image.height}
         className="absolute inset-0 h-full w-full object-cover transition-opacity group-hover:opacity-0"
       />
-      <div className="absolute top-0 left-0 h-full w-full bg-primary-900/60 dark:bg-grey-900/70"></div>
+      <div className="absolute top-0 left-0 h-full w-full bg-primary-900/60"></div>
       <div className="relative z-10 space-y-6 p-8 md:space-y-8">
         <EventStatusChip isPast={isPast} />
         <h3 className="font-display text-3xl text-primary-50 dark:text-grey-100">{title}</h3>
