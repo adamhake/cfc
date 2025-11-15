@@ -228,7 +228,7 @@ export default function ImageGallery({
       {selectedImage !== null && (
         <motion.div
           ref={modalRef}
-          className="fixed inset-0 z-50 h-screen w-screen overflow-hidden bg-black/95"
+          className="fixed inset-0 z-50 flex h-full min-h-screen w-full min-w-full flex-col overflow-hidden bg-black/95"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -254,12 +254,12 @@ export default function ImageGallery({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-          <div className="flex h-full items-center justify-center p-4">
-            <div className="relative flex items-center gap-4 max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
-            {/* Previous button */}
+          <div className="flex h-full flex-1 items-center justify-center p-4 pb-20 md:pb-4">
+            <div className="relative flex flex-col items-center gap-4 md:max-h-[90vh] md:flex-row" onClick={(e) => e.stopPropagation()}>
+            {/* Previous button - hidden on mobile, shown on desktop */}
             {selectedImage > 0 && (
               <button
-                className="rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white"
+                className="hidden rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white md:block"
                 onClick={handlePrevImage}
                 aria-label="Previous image"
                 type="button"
@@ -280,7 +280,7 @@ export default function ImageGallery({
               <img
                 src={images[selectedImage].src}
                 alt={images[selectedImage].alt}
-                className="max-h-[90vh] w-auto rounded-lg"
+                className="max-h-[calc(100vh-180px)] w-auto rounded-lg md:max-h-[90vh]"
               />
               {images[selectedImage].caption && (
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-6 pt-16">
@@ -290,10 +290,10 @@ export default function ImageGallery({
                 </div>
               )}
             </div>
-            {/* Next button */}
+            {/* Next button - hidden on mobile, shown on desktop */}
             {selectedImage < images.length - 1 && (
               <button
-                className="rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white"
+                className="hidden rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white md:block"
                 onClick={handleNextImage}
                 aria-label="Next image"
                 type="button"
@@ -310,6 +310,43 @@ export default function ImageGallery({
               </button>
             )}
             </div>
+          </div>
+          {/* Mobile navigation buttons - positioned at bottom */}
+          <div className="fixed inset-x-0 bottom-0 flex justify-center gap-4 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-6 pb-8 md:hidden" onClick={(e) => e.stopPropagation()}>
+            <button
+              className={`rounded-full bg-white/10 p-4 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white ${selectedImage === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              onClick={handlePrevImage}
+              aria-label="Previous image"
+              type="button"
+              disabled={selectedImage === 0}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              className={`rounded-full bg-white/10 p-4 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white ${selectedImage === images.length - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              onClick={handleNextImage}
+              aria-label="Next image"
+              type="button"
+              disabled={selectedImage === images.length - 1}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
         </motion.div>
       )}
