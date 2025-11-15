@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { Image } from "@unpic/react";
 
 interface PageHeroProps {
   title: string;
@@ -9,6 +10,7 @@ interface PageHeroProps {
   imageHeight: number;
   children?: ReactNode;
   height?: "small" | "medium" | "large";
+  priority?: boolean;
 }
 
 export default function PageHero({
@@ -20,6 +22,7 @@ export default function PageHero({
   imageHeight,
   children,
   height = "medium",
+  priority = false,
 }: PageHeroProps) {
   const heightClasses = {
     small: "h-[45vh]",
@@ -33,13 +36,16 @@ export default function PageHero({
       role="banner"
       aria-label="Page header"
     >
-      <img
+      <Image
         src={imageSrc}
         alt={imageAlt}
         width={imageWidth}
         height={imageHeight}
         className="absolute inset-0 h-full w-full object-cover"
-        loading="eager"
+        loading={priority ? "eager" : "lazy"}
+        fetchpriority={priority ? "high" : undefined}
+        layout="fullWidth"
+        breakpoints={[320, 640, 1280, 1920]}
       />
       <div
         className="absolute inset-0 bg-gradient-to-r from-primary-900/70 to-primary-800/50"

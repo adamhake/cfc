@@ -15,7 +15,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "check-types": "tsc --noEmit",
-    "add-captions": "node scripts/add-captions.mjs"
+    "add-captions": "node scripts/add-captions.mjs",
+    "optimize-images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
     "@netlify/blobs": "^10.3.3",
@@ -68,6 +69,7 @@
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.7.1",
     "sharp": "^0.34.5",
+    "terser": "^5.44.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.4",
     "vite": "^7.2.2",
