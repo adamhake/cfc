@@ -1,4 +1,5 @@
 import { Button } from "../Button/button";
+import { Image } from "@unpic/react";
 
 /**
  * Hero Variation 6: Soft Gradient with Gentle Divider
@@ -8,14 +9,16 @@ export default function HeroSoftGradientDivider() {
   return (
     <div className="relative h-[75vh] w-full overflow-visible lg:h-[80vh]">
       {/* Hero Image */}
-      <img
+      <Image
         src="/bike_sunset.webp"
         alt="Chimborazo Park landscape with historic views of Richmond's Church Hill neighborhood"
         width={2000}
         height={1262}
         className="absolute inset-0 h-full w-full object-cover"
-        fetchPriority="high"
         loading="eager"
+        fetchpriority="high"
+        layout="fullWidth"
+        breakpoints={[320, 640, 1280, 1920, 2000]}
       />
 
       {/* Soft flowing gradient overlays */}

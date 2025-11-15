@@ -202,6 +202,7 @@ export default function ImageGallery({
                 width={image.width}
                 height={image.height}
                 className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
+                loading="lazy"
               />
               {showCaptions && captionPosition === "hover" && image.caption && (
                 <div
@@ -277,10 +278,13 @@ export default function ImageGallery({
             )}
             {/* Image container */}
             <div className="relative max-w-7xl">
-              <img
+              <Image
                 src={images[selectedImage].src}
                 alt={images[selectedImage].alt}
+                width={images[selectedImage].width}
+                height={images[selectedImage].height}
                 className="max-h-[calc(100vh-180px)] w-auto rounded-lg md:max-h-[90vh]"
+                loading="eager"
               />
               {images[selectedImage].caption && (
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-6 pt-16">
@@ -378,6 +382,7 @@ export default function ImageGallery({
                 width={image.width}
                 height={image.height}
                 className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
+                loading="lazy"
               />
               {showCaptions && captionPosition === "hover" && image.caption && (
                 <div
@@ -423,6 +428,7 @@ export default function ImageGallery({
               width={image.width}
               height={image.height}
               className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
             />
             {showCaptions && captionPosition === "hover" && image.caption && (
               <div
