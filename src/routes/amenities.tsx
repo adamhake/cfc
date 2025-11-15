@@ -1,5 +1,6 @@
 import AmenityCard from "@/components/AmenityCard/amenity-card";
 import GetInvolved from "@/components/GetInvolved/get-involved";
+import InfoCard from "@/components/InfoCard/info-card";
 import PageHero from "@/components/PageHero/page-hero";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import SupportOption from "@/components/SupportOption/support-option";
@@ -91,29 +92,7 @@ function RouteComponent() {
         imageWidth={2000}
         imageHeight={1262}
         height="large"
-      >
-        <div className="mx-auto mt-8 flex max-w-2xl items-center justify-center gap-6 rounded-lg bg-white/10 px-6 py-3 font-body text-sm text-white backdrop-blur-sm md:gap-8 md:text-base">
-          <div className="flex items-center gap-2">
-            <MapPin className="h-4 w-4 shrink-0 md:h-5 md:w-5" />
-            <div>
-              <div className="text-xs font-semibold tracking-wide text-white/70 uppercase">
-                Location
-              </div>
-              <div>3215 E. Broad St, Richmond VA</div>
-            </div>
-          </div>
-          <div className="h-10 w-px bg-white/30" aria-hidden="true"></div>
-          <div className="flex items-center gap-2">
-            <Clock className="h-4 w-4 shrink-0 md:h-5 md:w-5" />
-            <div>
-              <div className="text-xs font-semibold tracking-wide text-white/70 uppercase">
-                Hours
-              </div>
-              <div>Dawn to Dusk</div>
-            </div>
-          </div>
-        </div>
-      </PageHero>
+      />
 
       {/* Main Content */}
       <div className="mx-auto max-w-6xl space-y-24 px-4 py-16 pb-24">
@@ -129,6 +108,35 @@ function RouteComponent() {
             for recreation, reflection, and community gathering. Whether you're planning a special
             event, walking your dog, or simply seeking a peaceful retreat, Chimborazo welcomes you.
           </p>
+        </div>
+
+        {/* Location and Hours */}
+        <div className="max-w-3xl">
+          <div className="flex flex-col items-start gap-6 rounded-2xl border-2 border-grey-200 bg-white p-8 md:flex-row md:gap-12 dark:border-primary-600 dark:bg-primary-800">
+            <div className="flex items-center gap-3">
+              <MapPin className="h-5 w-5 shrink-0 stroke-primary-600 dark:stroke-primary-400" />
+              <div>
+                <div className="mb-0.5 font-display text-sm font-semibold uppercase tracking-wide text-grey-600 dark:text-grey-400">
+                  Location
+                </div>
+                <div className="font-body text-lg text-grey-900 dark:text-grey-100">
+                  3215 E. Broad St, Richmond VA
+                </div>
+              </div>
+            </div>
+            <div className="hidden h-12 w-px bg-grey-300 md:block dark:bg-primary-600" aria-hidden="true"></div>
+            <div className="flex items-center gap-3">
+              <Clock className="h-5 w-5 shrink-0 stroke-primary-600 dark:stroke-primary-400" />
+              <div>
+                <div className="mb-0.5 font-display text-sm font-semibold uppercase tracking-wide text-grey-600 dark:text-grey-400">
+                  Hours
+                </div>
+                <div className="font-body text-lg text-grey-900 dark:text-grey-100">
+                  Dawn to Dusk
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Upper Park Amenities */}

@@ -61,7 +61,7 @@ export default function GetInvolved({
                   transition={{ duration: 0.8, ease: "easeInOut" }}
                 />
               </AnimatePresence>
-              <div className="absolute inset-0 bg-gradient-to-br from-accent-600/30 to-accent-800/40 dark:from-accent-900/50 dark:to-accent-950/60"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-accent-600/20 to-accent-800/25 dark:from-accent-900/20 dark:to-accent-950/30"></div>
             </div>
 
             {/* Content side */}
