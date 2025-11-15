@@ -34,6 +34,18 @@ export const Route = createFileRoute("/events/")({
         content: "https://chimboparkconservancy.org/events",
       },
       {
+        property: "og:image",
+        content: "https://chimboparkconservancy.org/volunteers.webp",
+      },
+      {
+        property: "og:image:width",
+        content: "2000",
+      },
+      {
+        property: "og:image:height",
+        content: "1333",
+      },
+      {
         name: "twitter:title",
         content: "Events | Chimborazo Park Conservancy",
       },
@@ -41,6 +53,10 @@ export const Route = createFileRoute("/events/")({
         name: "twitter:description",
         content:
           "Join us for park clean-ups, tree plantings, educational presentations, and community gatherings.",
+      },
+      {
+        name: "twitter:image",
+        content: "https://chimboparkconservancy.org/volunteers.webp",
       },
     ],
     links: [
