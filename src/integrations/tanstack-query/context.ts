@@ -104,12 +104,35 @@ class PaletteStateManager {
   }
 }
 
-// Create singleton instances
-const themeManager = new ThemeStateManager();
-const paletteManager = new PaletteStateManager();
+// Create singleton instances for client-side only
+// For SSR, these will be recreated per request via getContext()
+let clientThemeManager: ThemeStateManager | null = null;
+let clientPaletteManager: PaletteStateManager | null = null;
 
 export function getContext() {
   const queryClient = new QueryClient();
+
+  // On the client, reuse the same managers to maintain state
+  // On the server, create new instances per request
+  const isClient = typeof window !== "undefined";
+
+  let themeManager: ThemeStateManager;
+  let paletteManager: PaletteStateManager;
+
+  if (isClient) {
+    if (!clientThemeManager) {
+      clientThemeManager = new ThemeStateManager();
+    }
+    if (!clientPaletteManager) {
+      clientPaletteManager = new PaletteStateManager();
+    }
+    themeManager = clientThemeManager;
+    paletteManager = clientPaletteManager;
+  } else {
+    // Server: always create fresh instances to avoid state leaking between requests
+    themeManager = new ThemeStateManager();
+    paletteManager = new PaletteStateManager();
+  }
 
   return {
     queryClient,
