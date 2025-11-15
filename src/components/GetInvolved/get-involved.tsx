@@ -40,7 +40,7 @@ export default function GetInvolved({
     <div className="px-4 lg:px-0">
       <div className="mx-auto max-w-6xl">
         <motion.div
-          className="overflow-hidden rounded-3xl bg-white shadow-md dark:bg-grey-800"
+          className="overflow-hidden rounded-3xl bg-white shadow-md dark:bg-transparent dark:border dark:border-accent-600/20"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -88,7 +88,7 @@ export default function GetInvolved({
                     placeholder="your.email@example.com"
                     required
                     aria-required="true"
-                    className="flex-1 rounded-xl border border-accent-300 bg-white px-4 py-3 font-body text-grey-900 placeholder-grey-500 shadow-sm transition focus:border-accent-600 focus:ring-2 focus:ring-accent-600/20 focus:outline-none dark:border-accent-700 dark:bg-grey-800 dark:text-grey-100 dark:placeholder-grey-400 dark:focus:border-accent-500 dark:focus:ring-accent-500/20"
+                    className="flex-1 rounded-xl border border-accent-300 bg-white px-4 py-3 font-body text-grey-900 placeholder-grey-500 shadow-sm transition focus:border-accent-600 focus:ring-2 focus:ring-accent-600/20 focus:outline-none dark:border-accent-600/30 dark:bg-transparent dark:text-grey-100 dark:placeholder-grey-400 dark:focus:border-accent-500 dark:focus:ring-accent-500/20"
                   />
                   <Button type="submit" variant="accent" size="small">
                     Subscribe
@@ -107,7 +107,7 @@ export default function GetInvolved({
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Follow us on Facebook (opens in new window)"
-                    className="rounded-lg bg-white p-3 shadow-sm transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:bg-grey-800"
+                    className="rounded-lg bg-white p-3 shadow-sm transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:bg-transparent dark:border dark:border-accent-600/30"
                   >
                     <svg
                       role="img"
@@ -125,7 +125,7 @@ export default function GetInvolved({
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Follow us on Instagram (opens in new window)"
-                    className="rounded-lg bg-white p-3 shadow-sm transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:bg-grey-800"
+                    className="rounded-lg bg-white p-3 shadow-sm transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:bg-transparent dark:border dark:border-accent-600/30"
                   >
                     <svg
                       role="img"
