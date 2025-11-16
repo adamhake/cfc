@@ -134,4 +134,12 @@ export default defineType({
       description: "Select the image gallery to display on the homepage",
     }),
   ],
+  preview: {
+    prepare() {
+      return {
+        title: "Homepage",
+        subtitle: "Site homepage content",
+      }
+    },
+  },
 })

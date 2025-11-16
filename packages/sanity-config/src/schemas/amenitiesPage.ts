@@ -213,4 +213,12 @@ export default defineType({
       validation: (rule) => rule.min(1),
     }),
   ],
+  preview: {
+    prepare() {
+      return {
+        title: "Amenities Page",
+        subtitle: "Park amenities and features",
+      }
+    },
+  },
 })
