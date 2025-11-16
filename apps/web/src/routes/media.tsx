@@ -138,14 +138,12 @@ function Media() {
       />
       <Container maxWidth="6xl" spacing="md" className="px-4 py-16 md:py-24">
         {error ? (
-          <div className="mx-auto max-w-2xl rounded-2xl border border-red-200 bg-red-50/30 p-12 text-center dark:border-red-700/30 dark:bg-red-900/20">
+          <div className="border-red-200 bg-red-50/30 dark:border-red-700/30 dark:bg-red-900/20 mx-auto max-w-2xl rounded-2xl border p-12 text-center">
             <div className="mb-4 text-6xl">⚠️</div>
             <h2 className="mb-3 font-display text-2xl font-semibold text-grey-900 dark:text-grey-100">
               Error Loading Images
             </h2>
-            <p className="font-body text-lg text-grey-700 dark:text-grey-300">
-              {error}
-            </p>
+            <p className="font-body text-lg text-grey-700 dark:text-grey-300">{error}</p>
             <p className="mt-4 font-body text-sm text-grey-600 dark:text-grey-400">
               Check the browser console for more details.
             </p>

@@ -10,25 +10,25 @@ import { queryOptions } from "@tanstack/react-query";
 
 // Query options for TanStack Query
 const eventsQueryOptions = queryOptions({
-  queryKey: ['events', 'all'],
+  queryKey: ["events", "all"],
   queryFn: async (): Promise<SanityEvent[]> => {
     try {
-      return await sanityClient.fetch(allEventsQuery)
+      return await sanityClient.fetch(allEventsQuery);
     } catch (error) {
-      console.warn('Failed to fetch events from Sanity, using static data:', error)
+      console.warn("Failed to fetch events from Sanity, using static data:", error);
       // Return empty array if Sanity is not configured
-      return []
+      return [];
     }
   },
   staleTime: 5 * 60 * 1000, // 5 minutes
   gcTime: 10 * 60 * 1000, // 10 minutes
-})
+});
 
 export const Route = createFileRoute("/events/")({
   component: Events,
   loader: async ({ context }) => {
     // Prefetch events data on the server
-    return context.queryClient.ensureQueryData(eventsQueryOptions)
+    return context.queryClient.ensureQueryData(eventsQueryOptions);
   },
   head: () => ({
     meta: [
@@ -93,15 +93,15 @@ export const Route = createFileRoute("/events/")({
 });
 
 function Events() {
-  const { data: sanityEvents } = Route.useLoaderData()
+  const { data: sanityEvents } = Route.useLoaderData();
 
   // Use Sanity events if available, otherwise fall back to static events
-  const eventsToDisplay = sanityEvents && sanityEvents.length > 0 ? sanityEvents : staticEvents
+  const eventsToDisplay = sanityEvents && sanityEvents.length > 0 ? sanityEvents : staticEvents;
 
   // Convert Sanity events to the format expected by the Event component
   const formattedEvents = eventsToDisplay.map((event: SanityEvent | StaticEvent) => {
     // Check if it's a Sanity event or static event
-    if ('_id' in event) {
+    if ("_id" in event) {
       // Sanity event
       return {
         id: event._id,
@@ -117,11 +117,11 @@ function Events() {
           width: event.heroImage.asset.metadata?.dimensions?.width || 1200,
           height: event.heroImage.asset.metadata?.dimensions?.height || 800,
         },
-      }
+      };
     }
     // Static event - return as is
-    return event
-  })
+    return event;
+  });
 
   // Sort events by date, newest first
   const sortedEvents = [...formattedEvents].sort(

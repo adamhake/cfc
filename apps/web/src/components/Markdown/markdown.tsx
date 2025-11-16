@@ -12,32 +12,32 @@ export function Markdown({ content }: MarkdownProps) {
       remarkPlugins={[remarkGfm]}
       components={{
         h1: ({ children }) => (
-          <h1 className="mb-6 mt-12 font-display text-4xl font-bold text-grey-900 first:mt-0 md:text-5xl dark:text-grey-100">
+          <h1 className="mt-12 mb-6 font-display text-4xl font-bold text-grey-900 first:mt-0 md:text-5xl dark:text-grey-100">
             {children}
           </h1>
         ),
         h2: ({ children }) => (
-          <h2 className="mb-4 mt-10 font-display text-3xl font-semibold text-primary-900 first:mt-0 md:text-4xl dark:text-primary-200">
+          <h2 className="mt-10 mb-4 font-display text-3xl font-semibold text-primary-900 first:mt-0 md:text-4xl dark:text-primary-200">
             {children}
           </h2>
         ),
         h3: ({ children }) => (
-          <h3 className="mb-3 mt-8 font-display text-2xl font-semibold text-grey-900 first:mt-0 md:text-3xl dark:text-grey-100">
+          <h3 className="mt-8 mb-3 font-display text-2xl font-semibold text-grey-900 first:mt-0 md:text-3xl dark:text-grey-100">
             {children}
           </h3>
         ),
         h4: ({ children }) => (
-          <h4 className="mb-3 mt-6 font-display text-xl font-semibold text-grey-900 first:mt-0 md:text-2xl dark:text-grey-100">
+          <h4 className="mt-6 mb-3 font-display text-xl font-semibold text-grey-900 first:mt-0 md:text-2xl dark:text-grey-100">
             {children}
           </h4>
         ),
         h5: ({ children }) => (
-          <h5 className="mb-2 mt-6 font-display text-lg font-semibold text-grey-900 first:mt-0 md:text-xl dark:text-grey-100">
+          <h5 className="mt-6 mb-2 font-display text-lg font-semibold text-grey-900 first:mt-0 md:text-xl dark:text-grey-100">
             {children}
           </h5>
         ),
         h6: ({ children }) => (
-          <h6 className="mb-2 mt-6 font-display text-base font-semibold text-grey-900 first:mt-0 md:text-lg dark:text-grey-100">
+          <h6 className="mt-6 mb-2 font-display text-base font-semibold text-grey-900 first:mt-0 md:text-lg dark:text-grey-100">
             {children}
           </h6>
         ),
@@ -56,15 +56,13 @@ export function Markdown({ content }: MarkdownProps) {
             {children}
           </ol>
         ),
-        li: ({ children }) => (
-          <li className="pl-2">
-            {children}
-          </li>
-        ),
+        li: ({ children }) => <li className="pl-2">{children}</li>,
         strong: ({ children }) => (
           <strong className="font-semibold text-grey-900 dark:text-grey-100">{children}</strong>
         ),
-        em: ({ children }) => <em className="italic text-grey-900 dark:text-grey-100">{children}</em>,
+        em: ({ children }) => (
+          <em className="text-grey-900 italic dark:text-grey-100">{children}</em>
+        ),
         a: ({ children, href }) => {
           const isExternal = href?.startsWith("http");
           return (
@@ -95,9 +93,7 @@ export function Markdown({ content }: MarkdownProps) {
             {children}
           </pre>
         ),
-        hr: () => (
-          <hr className="my-12 border-0 border-t border-grey-200 dark:border-grey-700" />
-        ),
+        hr: () => <hr className="my-12 border-0 border-t border-grey-200 dark:border-grey-700" />,
         table: ({ children }) => (
           <div className="my-8 overflow-x-auto">
             <table className="min-w-full divide-y divide-grey-200 rounded-2xl border border-grey-200 dark:divide-grey-700 dark:border-grey-700">

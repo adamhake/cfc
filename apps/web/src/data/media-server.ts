@@ -11,7 +11,7 @@ export const getMediaImages = createServerFn().handler(async () => {
 
     console.log("[getMediaImages] Site ID:", siteId);
     console.log("[getMediaImages] Token exists:", !!token);
-    console.log("[getMediaImages] Environment:", process.env.CONTEXT || 'local');
+    console.log("[getMediaImages] Environment:", process.env.CONTEXT || "local");
 
     if (!siteId) {
       throw new Error("NETLIFY_SITE_ID environment variable is not set");

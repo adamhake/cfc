@@ -68,15 +68,15 @@ export function NotFound() {
   ];
 
   return (
-    <div className="pt-24 pb-16 px-4 lg:px-0">
+    <div className="px-4 pt-24 pb-16 lg:px-0">
       <Container maxWidth="4xl" spacing="lg">
         {/* Hero Section */}
-        <div className="text-center space-y-6">
-          <div className="font-display text-8xl md:text-9xl font-bold text-primary-700/20 dark:text-primary-400/20">
+        <div className="space-y-6 text-center">
+          <div className="font-display text-8xl font-bold text-primary-700/20 md:text-9xl dark:text-primary-400/20">
             404
           </div>
           <SectionHeader title="Page Not Found" size="large" />
-          <p className="text-lg md:text-xl text-grey-700 max-w-2xl mx-auto dark:text-grey-300">
+          <p className="mx-auto max-w-2xl text-lg text-grey-700 md:text-xl dark:text-grey-300">
             Sorry, we couldn't find the page you're looking for. The page may have been moved,
             deleted, or doesn't exist.
           </p>
@@ -84,28 +84,28 @@ export function NotFound() {
 
         {/* Quick Links */}
         <div className="mt-16">
-          <h3 className="font-body text-xl font-semibold text-grey-900 mb-6 text-center dark:text-grey-100">
+          <h3 className="mb-6 text-center font-body text-xl font-semibold text-grey-900 dark:text-grey-100">
             Here are some helpful links to get you back on track:
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {quickLinks.map((link) => (
               <Link
                 key={link.href}
                 to={link.href}
-                className="group relative overflow-hidden rounded-2xl border-2 border-primary-200 bg-primary-50/50 p-6 transition-all hover:border-primary-400 hover:bg-primary-100/50 hover:shadow-lg active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:border-primary-800 dark:bg-primary-900/20 dark:hover:border-primary-600 dark:hover:bg-primary-900/40"
+                className="group relative overflow-hidden rounded-2xl border-2 border-primary-200 bg-primary-50/50 p-6 transition-all hover:border-primary-400 hover:bg-primary-100/50 hover:shadow-lg focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-98 dark:border-primary-800 dark:bg-primary-900/20 dark:hover:border-primary-600 dark:hover:bg-primary-900/40"
               >
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 rounded-lg bg-primary-200 p-3 text-primary-700 transition-colors group-hover:bg-primary-300 dark:bg-primary-800 dark:text-primary-300 dark:group-hover:bg-primary-700">
                     {link.icon}
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-display text-lg font-semibold text-primary-800 mb-1 dark:text-primary-300">
+                    <h4 className="mb-1 font-display text-lg font-semibold text-primary-800 dark:text-primary-300">
                       {link.title}
                     </h4>
                     <p className="text-sm text-grey-700 dark:text-grey-400">{link.description}</p>
                   </div>
                   <svg
-                    className="flex-shrink-0 h-5 w-5 text-primary-600 transition-transform group-hover:translate-x-1 dark:text-primary-400"
+                    className="h-5 w-5 flex-shrink-0 text-primary-600 transition-transform group-hover:translate-x-1 dark:text-primary-400"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -124,10 +124,10 @@ export function NotFound() {
         </div>
 
         {/* CTA */}
-        <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Button variant="accent" as="a" href="/">
             <svg
-              className="inline-block h-4 w-4 mr-2"
+              className="mr-2 inline-block h-4 w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -150,7 +150,7 @@ export function NotFound() {
             }}
           >
             <svg
-              className="inline-block h-4 w-4 mr-2"
+              className="mr-2 inline-block h-4 w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
