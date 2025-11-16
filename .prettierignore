@@ -1,0 +1,22 @@
+# Build outputs
+dist
+build
+.next
+.sanity
+.turbo
+
+# Dependencies
+node_modules
+pnpm-lock.yaml
+
+# Auto-generated files
+*.gen.ts
+routeTree.gen.ts
+sanity.types.ts
+
+# Netlify
+.netlify
+
+# Misc
+.DS_Store
+*.log
