@@ -1,32 +1,30 @@
-import { PortableText as BasePortableText } from '@portabletext/react'
-import type { PortableTextBlock, PortableTextComponents } from '@portabletext/react'
-import { urlForImage } from '@/lib/sanity'
+import { PortableText as BasePortableText } from "@portabletext/react";
+import type { PortableTextBlock, PortableTextComponents } from "@portabletext/react";
+import { urlForImage } from "@/lib/sanity";
 
 // Custom components for rendering portable text blocks
 const components: PortableTextComponents = {
   block: {
     // Paragraphs
     normal: ({ children }) => (
-      <p className="mb-4 font-body leading-relaxed text-grey-800 dark:text-grey-200">
-        {children}
-      </p>
+      <p className="mb-4 font-body leading-relaxed text-grey-800 dark:text-grey-200">{children}</p>
     ),
 
     // Headings
     h2: ({ children }) => (
-      <h2 className="mb-4 mt-8 font-display text-3xl font-bold text-primary-800 dark:text-primary-400">
+      <h2 className="mt-8 mb-4 font-display text-3xl font-bold text-primary-800 dark:text-primary-400">
         {children}
       </h2>
     ),
     h3: ({ children }) => (
-      <h3 className="mb-3 mt-6 font-display text-2xl font-bold text-primary-700 dark:text-primary-400">
+      <h3 className="mt-6 mb-3 font-display text-2xl font-bold text-primary-700 dark:text-primary-400">
         {children}
       </h3>
     ),
 
     // Blockquote
     blockquote: ({ children }) => (
-      <blockquote className="my-6 border-l-4 border-primary-600 bg-primary-50 py-4 pl-6 pr-4 font-body italic text-primary-900 dark:border-primary-400 dark:bg-primary-900/20 dark:text-primary-100">
+      <blockquote className="my-6 border-l-4 border-primary-600 bg-primary-50 py-4 pr-4 pl-6 font-body text-primary-900 italic dark:border-primary-400 dark:bg-primary-900/20 dark:text-primary-100">
         {children}
       </blockquote>
     ),
@@ -62,64 +60,59 @@ const components: PortableTextComponents = {
 
     // Links
     link: ({ children, value }) => {
-      const href = value?.href || ''
-      const isExternal = href.startsWith('http')
+      const href = value?.href || "";
+      const isExternal = href.startsWith("http");
 
       return (
         <a
           href={href}
-          target={isExternal ? '_blank' : undefined}
-          rel={isExternal ? 'noopener noreferrer' : undefined}
+          target={isExternal ? "_blank" : undefined}
+          rel={isExternal ? "noopener noreferrer" : undefined}
           className="font-body text-primary-700 underline decoration-primary-300 underline-offset-2 transition-colors hover:text-primary-600 hover:decoration-primary-500 dark:text-primary-400 dark:decoration-primary-600 dark:hover:text-primary-300"
         >
           {children}
         </a>
-      )
+      );
     },
   },
 
   types: {
     // Embedded images in portable text
     image: ({ value }) => {
-      if (!value?.asset) return null
+      if (!value?.asset) return null;
 
-      const imageUrl = urlForImage(value)
-        .width(1200)
-        .height(800)
-        .fit('max')
-        .auto('format')
-        .url()
+      const imageUrl = urlForImage(value).width(1200).height(800).fit("max").auto("format").url();
 
       return (
         <figure className="my-8">
           <img
             src={imageUrl}
-            alt={value.alt || ''}
+            alt={value.alt || ""}
             className="rounded-lg shadow-lg"
             loading="lazy"
           />
           {value.caption && (
-            <figcaption className="mt-2 font-body text-center text-sm italic text-grey-600 dark:text-grey-400">
+            <figcaption className="mt-2 text-center font-body text-sm text-grey-600 italic dark:text-grey-400">
               {value.caption}
             </figcaption>
           )}
         </figure>
-      )
+      );
     },
   },
-}
+};
 
 interface PortableTextProps {
-  value: PortableTextBlock[]
-  className?: string
+  value: PortableTextBlock[];
+  className?: string;
 }
 
-export function PortableText({ value, className = '' }: PortableTextProps) {
-  if (!value) return null
+export function PortableText({ value, className = "" }: PortableTextProps) {
+  if (!value) return null;
 
   return (
     <div className={`prose max-w-none dark:prose-invert ${className}`}>
       <BasePortableText value={value} components={components} />
     </div>
-  )
+  );
 }

@@ -25,23 +25,9 @@ export default defineType({
         defineField({
           name: "heroImage",
           title: "Hero Image",
-          type: "image",
-          options: {
-            hotspot: true,
-          },
-          fields: [
-            defineField({
-              name: "alt",
-              title: "Alternative text",
-              type: "string",
-              validation: (rule) => rule.required(),
-            }),
-            defineField({
-              name: "caption",
-              title: "Caption",
-              type: "string",
-            }),
-          ],
+          type: "reference",
+          to: [{ type: "mediaImage" }],
+          description: "Select an image from the media library to use as the hero image",
           validation: (rule) => rule.required(),
         }),
         defineField({

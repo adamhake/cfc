@@ -31,11 +31,11 @@ const config = defineConfig({
     // Enable source maps for production debugging
     sourcemap: true,
     // Minify with terser for better compression
-    minify: 'terser',
+    minify: "terser",
     terserOptions: {
       compress: {
         // Keep console.error and console.warn for debugging
-        pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.trace'],
+        pure_funcs: ["console.log", "console.info", "console.debug", "console.trace"],
         drop_debugger: true,
       },
     },

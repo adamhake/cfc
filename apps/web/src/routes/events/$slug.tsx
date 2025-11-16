@@ -78,7 +78,9 @@ export const Route = createFileRoute("/events/$slug")({
 
     // Get slug based on event type
     const eventSlug =
-      isSanityEvent && "slug" in event ? (event as SanityEvent).slug.current : (event as StaticEvent).slug;
+      isSanityEvent && "slug" in event
+        ? (event as SanityEvent).slug.current
+        : (event as StaticEvent).slug;
 
     const eventUrl = `https://chimboparkconservancy.org/events/${eventSlug}`;
 
@@ -135,7 +137,9 @@ export const Route = createFileRoute("/events/$slug")({
         },
         {
           property: "og:image:alt",
-          content: isSanityEvent ? (event as SanityEvent).heroImage.alt : (event as StaticEvent).image.alt,
+          content: isSanityEvent
+            ? (event as SanityEvent).heroImage.alt
+            : (event as StaticEvent).image.alt,
         },
         {
           property: "article:published_time",
@@ -155,7 +159,9 @@ export const Route = createFileRoute("/events/$slug")({
         },
         {
           name: "twitter:image:alt",
-          content: isSanityEvent ? (event as SanityEvent).heroImage.alt : (event as StaticEvent).image.alt,
+          content: isSanityEvent
+            ? (event as SanityEvent).heroImage.alt
+            : (event as StaticEvent).image.alt,
         },
       ],
       links: [
@@ -284,7 +290,7 @@ function EventPage() {
             {isSanityEvent && "body" in event && (event as SanityEvent).body ? (
               <PortableText value={(event as SanityEvent).body} />
             ) : markdownContent ? (
-              <div className="prose prose-lg dark:prose-invert max-w-none">
+              <div className="prose prose-lg max-w-none dark:prose-invert">
                 <Markdown content={markdownContent} />
               </div>
             ) : (

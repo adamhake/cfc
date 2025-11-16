@@ -1,70 +1,70 @@
 // TypeScript types for Sanity content
 // These match the schemas defined in @chimborazo/sanity-config
 
-import type { PortableTextBlock } from '@portabletext/react'
+import type { PortableTextBlock } from "@portabletext/react";
 
 export interface SanityImage {
   asset: {
-    _id: string
-    url: string
+    _id: string;
+    url: string;
     metadata?: {
       dimensions?: {
-        width: number
-        height: number
-        aspectRatio: number
-      }
-      lqip?: string
-      blurhash?: string
+        width: number;
+        height: number;
+        aspectRatio: number;
+      };
+      lqip?: string;
+      blurhash?: string;
       palette?: {
         dominant?: {
-          background: string
-          foreground: string
-        }
-      }
-    }
-  }
-  alt: string
-  caption?: string
+          background: string;
+          foreground: string;
+        };
+      };
+    };
+  };
+  alt: string;
+  caption?: string;
   hotspot?: {
-    x: number
-    y: number
-  }
+    x: number;
+    y: number;
+  };
   crop?: {
-    top: number
-    bottom: number
-    left: number
-    right: number
-  }
+    top: number;
+    bottom: number;
+    left: number;
+    right: number;
+  };
 }
 
 export interface SanityEvent {
-  _id: string
-  _type: 'event'
-  title: string
+  _id: string;
+  _type: "event";
+  title: string;
   slug: {
-    current: string
-  }
-  description: string
-  heroImage: SanityImage
-  date: string
-  time: string
-  location: string
-  body?: PortableTextBlock[]
-  featured?: boolean
-  publishedAt?: string
+    current: string;
+  };
+  description: string;
+  heroImage: SanityImage;
+  date: string;
+  time: string;
+  location: string;
+  body?: PortableTextBlock[];
+  featured?: boolean;
+  publishedAt?: string;
 }
 
 export interface SanityMediaImage {
-  _id: string
-  _type: 'mediaImage'
-  title: string
-  image: SanityImage
-  category: 'park-views' | 'events' | 'nature' | 'community' | 'history'
-  featured?: boolean
-  uploadedAt: string
+  _id: string;
+  _type: "mediaImage";
+  title: string;
+  image: SanityImage;
+  category: "park-views" | "events" | "nature" | "community" | "history";
+  featured?: boolean;
+  uploadedAt: string;
 }
 
 // Helper type for when we just need the slug
 export interface EventSlug {
-  slug: string
+  slug: string;
 }

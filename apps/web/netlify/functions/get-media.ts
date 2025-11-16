@@ -16,7 +16,10 @@ export default async (_req: Request, context: Context) => {
     // List all blobs in the media store
     console.log("[get-media] Listing blobs...");
     const { blobs } = await store.list();
-    console.log(`[get-media] Found ${blobs.length} blobs:`, blobs.map(b => b.key));
+    console.log(
+      `[get-media] Found ${blobs.length} blobs:`,
+      blobs.map((b) => b.key),
+    );
 
     // Fetch metadata for each image
     const imagePromises = blobs.map(async (blob) => {
@@ -73,14 +76,17 @@ export default async (_req: Request, context: Context) => {
     });
   } catch (error) {
     console.error("[get-media] Error fetching media:", error);
-    return new Response(JSON.stringify({
-      error: "Failed to fetch media",
-      details: error instanceof Error ? error.message : String(error)
-    }), {
-      status: 500,
-      headers: {
-        "Content-Type": "application/json",
+    return new Response(
+      JSON.stringify({
+        error: "Failed to fetch media",
+        details: error instanceof Error ? error.message : String(error),
+      }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-    });
+    );
   }
 };

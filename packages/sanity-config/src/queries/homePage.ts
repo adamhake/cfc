@@ -5,18 +5,22 @@ export const getHomePageQuery = defineQuery(`
     hero{
       heading,
       subheading,
-      heroImage{
-        asset->{
-          _id,
-          url,
-          metadata{
-            dimensions,
-            lqip
-          }
-        },
-        alt,
-        caption,
-        hotspot
+      heroImage->{
+        _id,
+        title,
+        image{
+          asset->{
+            _id,
+            url,
+            metadata{
+              dimensions,
+              lqip
+            }
+          },
+          alt,
+          caption,
+          hotspot
+        }
       },
       ctaButton
     },

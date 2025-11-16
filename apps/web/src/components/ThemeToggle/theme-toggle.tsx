@@ -33,7 +33,7 @@ export function ThemeToggle({
   const mounted = useSyncExternalStore(
     () => () => {}, // subscribe (no-op since this never changes)
     () => true, // getSnapshot (client)
-    () => false // getServerSnapshot (server)
+    () => false, // getServerSnapshot (server)
   );
 
   const handleToggle = () => {
