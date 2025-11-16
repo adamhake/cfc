@@ -10,7 +10,7 @@
   directory = "apps/web/netlify/functions"
   node_bundler = "esbuild"
 
-[edge_functions]
+[[edge_functions]]
   external_node_modules = ["@netlify/blobs"]
   path = "/media-img/*"
   function = "media-image"
