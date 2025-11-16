@@ -18,7 +18,20 @@
       "Bash(git checkout:*)",
       "mcp__plugin_superpowers-chrome_chrome__use_browser",
       "Bash(npm run format:*)",
-      "WebFetch(domain:pagespeed.web.dev)"
+      "WebFetch(domain:pagespeed.web.dev)",
+      "Bash(tree:*)",
+      "Bash(npm run migrate:events:dry-run:*)",
+      "Bash(npm run migrate:media:dry-run:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__sanity__search_docs",
+      "mcp__sanity__read_docs",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm exec sanity:*)",
+      "Bash(pnpm build:*)",
+      "mcp__sanity__list_projects",
+      "mcp__sanity__get_project_studios",
+      "mcp__sanity__list_datasets",
+      "mcp__sanity__list_workspace_schemas"
     ],
     "deny": [],
     "ask": []
