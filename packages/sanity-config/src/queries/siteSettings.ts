@@ -1,4 +1,4 @@
-import { defineQuery } from 'groq'
+import { defineQuery } from "groq"
 
 export const getSiteSettingsQuery = defineQuery(`
   *[_type == "siteSettings"][0]{

@@ -1,4 +1,4 @@
-import { defineQuery } from 'groq'
+import { defineQuery } from "groq"
 
 export const getPartnersQuery = defineQuery(`
   *[_type == "partner"] | order(order asc){

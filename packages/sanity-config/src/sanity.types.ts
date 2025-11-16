@@ -14,925 +14,947 @@
 
 // Source: schema.json
 export type MediaImage = {
-  _id: string;
-  _type: "mediaImage";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
+  _id: string
+  _type: "mediaImage"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
   image?: {
     asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    caption?: string;
-    _type: "image";
-  };
-  category?: "park-views" | "events" | "nature" | "community" | "history";
-  featured?: boolean;
-  uploadedAt?: string;
-};
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    caption?: string
+    _type: "image"
+  }
+  category?: "park-views" | "events" | "nature" | "community" | "history"
+  featured?: boolean
+  uploadedAt?: string
+}
 
 export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-};
+  _type: "sanity.imageCrop"
+  top?: number
+  bottom?: number
+  left?: number
+  right?: number
+}
 
 export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
-};
+  _type: "sanity.imageHotspot"
+  x?: number
+  y?: number
+  height?: number
+  width?: number
+}
 
 export type Partner = {
-  _id: string;
-  _type: "partner";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  slug?: Slug;
+  _id: string
+  _type: "partner"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
+  slug?: Slug
   logo?: {
     asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  };
-  description?: string;
-  websiteUrl?: string;
-  featured?: boolean;
-  order?: number;
-};
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: "image"
+  }
+  description?: string
+  websiteUrl?: string
+  featured?: boolean
+  order?: number
+}
 
 export type Slug = {
-  _type: "slug";
-  current?: string;
-  source?: string;
-};
+  _type: "slug"
+  current?: string
+  source?: string
+}
 
 export type Event = {
-  _id: string;
-  _type: "event";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  slug?: Slug;
-  description?: string;
+  _id: string
+  _type: "event"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
+  slug?: Slug
+  description?: string
   heroImage?: {
     asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    caption?: string;
-    _type: "image";
-  };
-  date?: string;
-  time?: string;
-  location?: string;
-  body?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal" | "h2" | "h3" | "blockquote";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  } | {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    caption?: string;
-    _type: "image";
-    _key: string;
-  }>;
-  featured?: boolean;
-  publishedAt?: string;
-};
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    caption?: string
+    _type: "image"
+  }
+  date?: string
+  time?: string
+  location?: string
+  body?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: "span"
+          _key: string
+        }>
+        style?: "normal" | "h2" | "h3" | "blockquote"
+        listItem?: "bullet" | "number"
+        markDefs?: Array<{
+          href?: string
+          _type: "link"
+          _key: string
+        }>
+        level?: number
+        _type: "block"
+        _key: string
+      }
+    | {
+        asset?: {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+        }
+        media?: unknown
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        alt?: string
+        caption?: string
+        _type: "image"
+        _key: string
+      }
+  >
+  featured?: boolean
+  publishedAt?: string
+}
 
 export type AmenitiesPage = {
-  _id: string;
-  _type: "amenitiesPage";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
+  _id: string
+  _type: "amenitiesPage"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
   pageHero?: {
-    title?: string;
-    description?: string;
+    title?: string
+    description?: string
     image?: {
       asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      alt?: string;
-      _type: "image";
-    };
-  };
+        _ref: string
+        _type: "reference"
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      _type: "image"
+    }
+  }
   introduction?: Array<{
     children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal" | "h2" | "h3";
-    listItem?: "bullet" | "number";
+      marks?: Array<string>
+      text?: string
+      _type: "span"
+      _key: string
+    }>
+    style?: "normal" | "h2" | "h3"
+    listItem?: "bullet" | "number"
     markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }>;
+      href?: string
+      _type: "link"
+      _key: string
+    }>
+    level?: number
+    _type: "block"
+    _key: string
+  }>
   amenities?: Array<{
-    title?: string;
-    slug?: Slug;
-    icon?: "playground" | "gazebo" | "monument" | "restroom" | "dog" | "trail";
-    description?: string;
-    details?: Array<string>;
+    title?: string
+    slug?: Slug
+    icon?: "playground" | "gazebo" | "monument" | "restroom" | "dog" | "trail"
+    description?: string
+    details?: Array<string>
     image?: {
       asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      alt?: string;
-      caption?: string;
-      _type: "image";
-    };
-    externalLink?: string;
-    section?: "upper-park" | "lower-park" | "both";
-    order?: number;
-    _key: string;
-  }>;
-};
+        _ref: string
+        _type: "reference"
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      caption?: string
+      _type: "image"
+    }
+    externalLink?: string
+    section?: "upper-park" | "lower-park" | "both"
+    order?: number
+    _key: string
+  }>
+}
 
 export type HomePage = {
-  _id: string;
-  _type: "homePage";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
+  _id: string
+  _type: "homePage"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
   hero?: {
-    heading?: string;
-    subheading?: string;
+    heading?: string
+    subheading?: string
     heroImage?: {
       asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      alt?: string;
-      caption?: string;
-      _type: "image";
-    };
+        _ref: string
+        _type: "reference"
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      caption?: string
+      _type: "image"
+    }
     ctaButton?: {
-      text?: string;
-      link?: string;
-    };
-  };
+      text?: string
+      link?: string
+    }
+  }
   visionPillars?: Array<{
-    title?: string;
-    icon?: "leafy-green" | "trees" | "heart-handshake" | "book-open-text";
-    description?: string;
-    order?: number;
-    _key: string;
-  }>;
+    title?: string
+    icon?: "leafy-green" | "trees" | "heart-handshake" | "book-open-text"
+    description?: string
+    order?: number
+    _key: string
+  }>
   featuredPartners?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "partner";
-  }>;
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    _key: string
+    [internalGroqTypeReferenceTo]?: "partner"
+  }>
   featuredQuote?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "quote";
-  };
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "quote"
+  }
   homepageGallery?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "gallery";
-  };
-};
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "gallery"
+  }
+}
 
 export type Gallery = {
-  _id: string;
-  _type: "gallery";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  galleryType?: "homepage" | "amenities" | "events" | "about";
+  _id: string
+  _type: "gallery"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
+  galleryType?: "homepage" | "amenities" | "events" | "about"
   images?: Array<{
     image?: {
       asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      alt?: string;
-      caption?: string;
-      _type: "image";
-    };
-    showOnMobile?: boolean;
-    _key: string;
-  }>;
-  order?: number;
-};
+        _ref: string
+        _type: "reference"
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      caption?: string
+      _type: "image"
+    }
+    showOnMobile?: boolean
+    _key: string
+  }>
+  order?: number
+}
 
 export type Quote = {
-  _id: string;
-  _type: "quote";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  quoteText?: string;
-  attribution?: string;
+  _id: string
+  _type: "quote"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  quoteText?: string
+  attribution?: string
   backgroundImage?: {
     asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    caption?: string;
-    _type: "image";
-  };
-  featured?: boolean;
-  category?: "nature" | "community" | "conservation" | "history";
-};
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    caption?: string
+    _type: "image"
+  }
+  featured?: boolean
+  category?: "nature" | "community" | "conservation" | "history"
+}
 
 export type SiteSettings = {
-  _id: string;
-  _type: "siteSettings";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  organizationName?: string;
-  alternativeName?: string;
-  description?: string;
+  _id: string
+  _type: "siteSettings"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  organizationName?: string
+  alternativeName?: string
+  description?: string
   parkAddress?: {
-    street?: string;
-    city?: string;
-    state?: string;
-    zipCode?: string;
-  };
-  parkHours?: string;
+    street?: string
+    city?: string
+    state?: string
+    zipCode?: string
+  }
+  parkHours?: string
   socialMedia?: {
-    facebook?: string;
-    instagram?: string;
-  };
-  donationUrl?: string;
-  contactEmail?: string;
+    facebook?: string
+    instagram?: string
+  }
+  donationUrl?: string
+  contactEmail?: string
   metaDefaults?: {
-    siteTitle?: string;
+    siteTitle?: string
     ogImage?: {
       asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      alt?: string;
-      _type: "image";
-    };
-  };
-};
+        _ref: string
+        _type: "reference"
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      _type: "image"
+    }
+  }
+}
 
 export type SanityImagePaletteSwatch = {
-  _type: "sanity.imagePaletteSwatch";
-  background?: string;
-  foreground?: string;
-  population?: number;
-  title?: string;
-};
+  _type: "sanity.imagePaletteSwatch"
+  background?: string
+  foreground?: string
+  population?: number
+  title?: string
+}
 
 export type SanityImagePalette = {
-  _type: "sanity.imagePalette";
-  darkMuted?: SanityImagePaletteSwatch;
-  lightVibrant?: SanityImagePaletteSwatch;
-  darkVibrant?: SanityImagePaletteSwatch;
-  vibrant?: SanityImagePaletteSwatch;
-  dominant?: SanityImagePaletteSwatch;
-  lightMuted?: SanityImagePaletteSwatch;
-  muted?: SanityImagePaletteSwatch;
-};
+  _type: "sanity.imagePalette"
+  darkMuted?: SanityImagePaletteSwatch
+  lightVibrant?: SanityImagePaletteSwatch
+  darkVibrant?: SanityImagePaletteSwatch
+  vibrant?: SanityImagePaletteSwatch
+  dominant?: SanityImagePaletteSwatch
+  lightMuted?: SanityImagePaletteSwatch
+  muted?: SanityImagePaletteSwatch
+}
 
 export type SanityImageDimensions = {
-  _type: "sanity.imageDimensions";
-  height?: number;
-  width?: number;
-  aspectRatio?: number;
-};
+  _type: "sanity.imageDimensions"
+  height?: number
+  width?: number
+  aspectRatio?: number
+}
 
 export type SanityImageMetadata = {
-  _type: "sanity.imageMetadata";
-  location?: Geopoint;
-  dimensions?: SanityImageDimensions;
-  palette?: SanityImagePalette;
-  lqip?: string;
-  blurHash?: string;
-  hasAlpha?: boolean;
-  isOpaque?: boolean;
-};
+  _type: "sanity.imageMetadata"
+  location?: Geopoint
+  dimensions?: SanityImageDimensions
+  palette?: SanityImagePalette
+  lqip?: string
+  blurHash?: string
+  hasAlpha?: boolean
+  isOpaque?: boolean
+}
 
 export type SanityFileAsset = {
-  _id: string;
-  _type: "sanity.fileAsset";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  originalFilename?: string;
-  label?: string;
-  title?: string;
-  description?: string;
-  altText?: string;
-  sha1hash?: string;
-  extension?: string;
-  mimeType?: string;
-  size?: number;
-  assetId?: string;
-  uploadId?: string;
-  path?: string;
-  url?: string;
-  source?: SanityAssetSourceData;
-};
+  _id: string
+  _type: "sanity.fileAsset"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  originalFilename?: string
+  label?: string
+  title?: string
+  description?: string
+  altText?: string
+  sha1hash?: string
+  extension?: string
+  mimeType?: string
+  size?: number
+  assetId?: string
+  uploadId?: string
+  path?: string
+  url?: string
+  source?: SanityAssetSourceData
+}
 
 export type SanityAssetSourceData = {
-  _type: "sanity.assetSourceData";
-  name?: string;
-  id?: string;
-  url?: string;
-};
+  _type: "sanity.assetSourceData"
+  name?: string
+  id?: string
+  url?: string
+}
 
 export type SanityImageAsset = {
-  _id: string;
-  _type: "sanity.imageAsset";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  originalFilename?: string;
-  label?: string;
-  title?: string;
-  description?: string;
-  altText?: string;
-  sha1hash?: string;
-  extension?: string;
-  mimeType?: string;
-  size?: number;
-  assetId?: string;
-  uploadId?: string;
-  path?: string;
-  url?: string;
-  metadata?: SanityImageMetadata;
-  source?: SanityAssetSourceData;
-};
+  _id: string
+  _type: "sanity.imageAsset"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  originalFilename?: string
+  label?: string
+  title?: string
+  description?: string
+  altText?: string
+  sha1hash?: string
+  extension?: string
+  mimeType?: string
+  size?: number
+  assetId?: string
+  uploadId?: string
+  path?: string
+  url?: string
+  metadata?: SanityImageMetadata
+  source?: SanityAssetSourceData
+}
 
 export type Geopoint = {
-  _type: "geopoint";
-  lat?: number;
-  lng?: number;
-  alt?: number;
-};
+  _type: "geopoint"
+  lat?: number
+  lng?: number
+  alt?: number
+}
 
-export type AllSanitySchemaTypes = MediaImage | SanityImageCrop | SanityImageHotspot | Partner | Slug | Event | AmenitiesPage | HomePage | Gallery | Quote | SiteSettings | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
-export declare const internalGroqTypeReferenceTo: unique symbol;
+export type AllSanitySchemaTypes =
+  | MediaImage
+  | SanityImageCrop
+  | SanityImageHotspot
+  | Partner
+  | Slug
+  | Event
+  | AmenitiesPage
+  | HomePage
+  | Gallery
+  | Quote
+  | SiteSettings
+  | SanityImagePaletteSwatch
+  | SanityImagePalette
+  | SanityImageDimensions
+  | SanityImageMetadata
+  | SanityFileAsset
+  | SanityAssetSourceData
+  | SanityImageAsset
+  | Geopoint
+export declare const internalGroqTypeReferenceTo: unique symbol
 // Source: ../../packages/sanity-config/src/queries/amenitiesPage.ts
 // Variable: getAmenitiesPageQuery
 // Query: *[_type == "amenitiesPage"][0]{    pageHero{      title,      description,      image{        asset->{          _id,          url,          metadata{            dimensions,            lqip          }        },        alt,        hotspot      }    },    introduction,    amenities[] | order(order asc){      title,      slug,      icon,      description,      details,      image{        asset->{          _id,          url,          metadata{            dimensions,            lqip          }        },        alt,        caption,        hotspot      },      externalLink,      section,      order    }  }
 export type GetAmenitiesPageQueryResult = {
   pageHero: {
-    title: string | null;
-    description: string | null;
+    title: string | null
+    description: string | null
     image: {
       asset: {
-        _id: string;
-        url: string | null;
+        _id: string
+        url: string | null
         metadata: {
-          dimensions: SanityImageDimensions | null;
-          lqip: string | null;
-        } | null;
-      } | null;
-      alt: string | null;
-      hotspot: SanityImageHotspot | null;
-    } | null;
-  } | null;
+          dimensions: SanityImageDimensions | null
+          lqip: string | null
+        } | null
+      } | null
+      alt: string | null
+      hotspot: SanityImageHotspot | null
+    } | null
+  } | null
   introduction: Array<{
     children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "h2" | "h3" | "normal";
-    listItem?: "bullet" | "number";
+      marks?: Array<string>
+      text?: string
+      _type: "span"
+      _key: string
+    }>
+    style?: "h2" | "h3" | "normal"
+    listItem?: "bullet" | "number"
     markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }> | null;
+      href?: string
+      _type: "link"
+      _key: string
+    }>
+    level?: number
+    _type: "block"
+    _key: string
+  }> | null
   amenities: Array<{
-    title: string | null;
-    slug: Slug | null;
-    icon: "dog" | "gazebo" | "monument" | "playground" | "restroom" | "trail" | null;
-    description: string | null;
-    details: Array<string> | null;
+    title: string | null
+    slug: Slug | null
+    icon: "dog" | "gazebo" | "monument" | "playground" | "restroom" | "trail" | null
+    description: string | null
+    details: Array<string> | null
     image: {
       asset: {
-        _id: string;
-        url: string | null;
+        _id: string
+        url: string | null
         metadata: {
-          dimensions: SanityImageDimensions | null;
-          lqip: string | null;
-        } | null;
-      } | null;
-      alt: string | null;
-      caption: string | null;
-      hotspot: SanityImageHotspot | null;
-    } | null;
-    externalLink: string | null;
-    section: "both" | "lower-park" | "upper-park" | null;
-    order: number | null;
-  }> | null;
-} | null;
+          dimensions: SanityImageDimensions | null
+          lqip: string | null
+        } | null
+      } | null
+      alt: string | null
+      caption: string | null
+      hotspot: SanityImageHotspot | null
+    } | null
+    externalLink: string | null
+    section: "both" | "lower-park" | "upper-park" | null
+    order: number | null
+  }> | null
+} | null
 // Variable: getAmenitiesBySectionQuery
 // Query: *[_type == "amenitiesPage"][0]{    "upperParkAmenities": amenities[section == "upper-park" || section == "both"] | order(order asc),    "lowerParkAmenities": amenities[section == "lower-park" || section == "both"] | order(order asc)  }
 export type GetAmenitiesBySectionQueryResult = {
   upperParkAmenities: Array<{
-    title?: string;
-    slug?: Slug;
-    icon?: "dog" | "gazebo" | "monument" | "playground" | "restroom" | "trail";
-    description?: string;
-    details?: Array<string>;
+    title?: string
+    slug?: Slug
+    icon?: "dog" | "gazebo" | "monument" | "playground" | "restroom" | "trail"
+    description?: string
+    details?: Array<string>
     image?: {
       asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      alt?: string;
-      caption?: string;
-      _type: "image";
-    };
-    externalLink?: string;
-    section?: "both" | "lower-park" | "upper-park";
-    order?: number;
-    _key: string;
-  }> | null;
+        _ref: string
+        _type: "reference"
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      caption?: string
+      _type: "image"
+    }
+    externalLink?: string
+    section?: "both" | "lower-park" | "upper-park"
+    order?: number
+    _key: string
+  }> | null
   lowerParkAmenities: Array<{
-    title?: string;
-    slug?: Slug;
-    icon?: "dog" | "gazebo" | "monument" | "playground" | "restroom" | "trail";
-    description?: string;
-    details?: Array<string>;
+    title?: string
+    slug?: Slug
+    icon?: "dog" | "gazebo" | "monument" | "playground" | "restroom" | "trail"
+    description?: string
+    details?: Array<string>
     image?: {
       asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      alt?: string;
-      caption?: string;
-      _type: "image";
-    };
-    externalLink?: string;
-    section?: "both" | "lower-park" | "upper-park";
-    order?: number;
-    _key: string;
-  }> | null;
-} | null;
+        _ref: string
+        _type: "reference"
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      caption?: string
+      _type: "image"
+    }
+    externalLink?: string
+    section?: "both" | "lower-park" | "upper-park"
+    order?: number
+    _key: string
+  }> | null
+} | null
 
 // Source: ../../packages/sanity-config/src/queries/gallery.ts
 // Variable: getGalleriesQuery
 // Query: *[_type == "gallery"] | order(order asc){    _id,    title,    galleryType,    images[]{      image{        asset->{          _id,          url,          metadata{            dimensions,            lqip          }        },        alt,        caption,        hotspot      },      showOnMobile    },    order  }
 export type GetGalleriesQueryResult = Array<{
-  _id: string;
-  title: string | null;
-  galleryType: "about" | "amenities" | "events" | "homepage" | null;
+  _id: string
+  title: string | null
+  galleryType: "about" | "amenities" | "events" | "homepage" | null
   images: Array<{
     image: {
       asset: {
-        _id: string;
-        url: string | null;
+        _id: string
+        url: string | null
         metadata: {
-          dimensions: SanityImageDimensions | null;
-          lqip: string | null;
-        } | null;
-      } | null;
-      alt: string | null;
-      caption: string | null;
-      hotspot: SanityImageHotspot | null;
-    } | null;
-    showOnMobile: boolean | null;
-  }> | null;
-  order: number | null;
-}>;
+          dimensions: SanityImageDimensions | null
+          lqip: string | null
+        } | null
+      } | null
+      alt: string | null
+      caption: string | null
+      hotspot: SanityImageHotspot | null
+    } | null
+    showOnMobile: boolean | null
+  }> | null
+  order: number | null
+}>
 // Variable: getGalleryByTypeQuery
 // Query: *[_type == "gallery" && galleryType == $type] | order(order asc){    _id,    title,    galleryType,    images[]{      image{        asset->{          _id,          url,          metadata{            dimensions,            lqip          }        },        alt,        caption,        hotspot      },      showOnMobile    },    order  }
 export type GetGalleryByTypeQueryResult = Array<{
-  _id: string;
-  title: string | null;
-  galleryType: "about" | "amenities" | "events" | "homepage" | null;
+  _id: string
+  title: string | null
+  galleryType: "about" | "amenities" | "events" | "homepage" | null
   images: Array<{
     image: {
       asset: {
-        _id: string;
-        url: string | null;
+        _id: string
+        url: string | null
         metadata: {
-          dimensions: SanityImageDimensions | null;
-          lqip: string | null;
-        } | null;
-      } | null;
-      alt: string | null;
-      caption: string | null;
-      hotspot: SanityImageHotspot | null;
-    } | null;
-    showOnMobile: boolean | null;
-  }> | null;
-  order: number | null;
-}>;
+          dimensions: SanityImageDimensions | null
+          lqip: string | null
+        } | null
+      } | null
+      alt: string | null
+      caption: string | null
+      hotspot: SanityImageHotspot | null
+    } | null
+    showOnMobile: boolean | null
+  }> | null
+  order: number | null
+}>
 // Variable: getGalleryByIdQuery
 // Query: *[_type == "gallery" && _id == $id][0]{    _id,    title,    galleryType,    images[]{      image{        asset->{          _id,          url,          metadata{            dimensions,            lqip          }        },        alt,        caption,        hotspot      },      showOnMobile    },    order  }
 export type GetGalleryByIdQueryResult = {
-  _id: string;
-  title: string | null;
-  galleryType: "about" | "amenities" | "events" | "homepage" | null;
+  _id: string
+  title: string | null
+  galleryType: "about" | "amenities" | "events" | "homepage" | null
   images: Array<{
     image: {
       asset: {
-        _id: string;
-        url: string | null;
+        _id: string
+        url: string | null
         metadata: {
-          dimensions: SanityImageDimensions | null;
-          lqip: string | null;
-        } | null;
-      } | null;
-      alt: string | null;
-      caption: string | null;
-      hotspot: SanityImageHotspot | null;
-    } | null;
-    showOnMobile: boolean | null;
-  }> | null;
-  order: number | null;
-} | null;
+          dimensions: SanityImageDimensions | null
+          lqip: string | null
+        } | null
+      } | null
+      alt: string | null
+      caption: string | null
+      hotspot: SanityImageHotspot | null
+    } | null
+    showOnMobile: boolean | null
+  }> | null
+  order: number | null
+} | null
 
 // Source: ../../packages/sanity-config/src/queries/homePage.ts
 // Variable: getHomePageQuery
 // Query: *[_type == "homePage"][0]{    hero{      heading,      subheading,      heroImage{        asset->{          _id,          url,          metadata{            dimensions,            lqip          }        },        alt,        caption,        hotspot      },      ctaButton    },    visionPillars[] | order(order asc){      title,      icon,      description,      order    },    "partners": featuredPartners[]->{      _id,      name,      slug,      logo{        asset->{          _id,          url,          metadata{            dimensions,            lqip          }        },        alt      },      description,      websiteUrl,      order    } | order(order asc),    "quote": featuredQuote->{      _id,      quoteText,      attribution,      backgroundImage{        asset->{          _id,          url,          metadata{            dimensions,            lqip          }        },        alt,        caption,        hotspot      }    },    "gallery": homepageGallery->{      _id,      title,      images[]{        image{          asset->{            _id,            url,            metadata{              dimensions,              lqip            }          },          alt,          caption,          hotspot        },        showOnMobile      }    }  }
 export type GetHomePageQueryResult = {
   hero: {
-    heading: string | null;
-    subheading: string | null;
+    heading: string | null
+    subheading: string | null
     heroImage: {
       asset: {
-        _id: string;
-        url: string | null;
+        _id: string
+        url: string | null
         metadata: {
-          dimensions: SanityImageDimensions | null;
-          lqip: string | null;
-        } | null;
-      } | null;
-      alt: string | null;
-      caption: string | null;
-      hotspot: SanityImageHotspot | null;
-    } | null;
+          dimensions: SanityImageDimensions | null
+          lqip: string | null
+        } | null
+      } | null
+      alt: string | null
+      caption: string | null
+      hotspot: SanityImageHotspot | null
+    } | null
     ctaButton: {
-      text?: string;
-      link?: string;
-    } | null;
-  } | null;
+      text?: string
+      link?: string
+    } | null
+  } | null
   visionPillars: Array<{
-    title: string | null;
-    icon: "book-open-text" | "heart-handshake" | "leafy-green" | "trees" | null;
-    description: string | null;
-    order: number | null;
-  }> | null;
+    title: string | null
+    icon: "book-open-text" | "heart-handshake" | "leafy-green" | "trees" | null
+    description: string | null
+    order: number | null
+  }> | null
   partners: Array<{
-    _id: string;
-    name: string | null;
-    slug: Slug | null;
+    _id: string
+    name: string | null
+    slug: Slug | null
     logo: {
       asset: {
-        _id: string;
-        url: string | null;
+        _id: string
+        url: string | null
         metadata: {
-          dimensions: SanityImageDimensions | null;
-          lqip: string | null;
-        } | null;
-      } | null;
-      alt: string | null;
-    } | null;
-    description: string | null;
-    websiteUrl: string | null;
-    order: number | null;
-  }> | null;
+          dimensions: SanityImageDimensions | null
+          lqip: string | null
+        } | null
+      } | null
+      alt: string | null
+    } | null
+    description: string | null
+    websiteUrl: string | null
+    order: number | null
+  }> | null
   quote: {
-    _id: string;
-    quoteText: string | null;
-    attribution: string | null;
+    _id: string
+    quoteText: string | null
+    attribution: string | null
     backgroundImage: {
       asset: {
-        _id: string;
-        url: string | null;
+        _id: string
+        url: string | null
         metadata: {
-          dimensions: SanityImageDimensions | null;
-          lqip: string | null;
-        } | null;
-      } | null;
-      alt: string | null;
-      caption: string | null;
-      hotspot: SanityImageHotspot | null;
-    } | null;
-  } | null;
+          dimensions: SanityImageDimensions | null
+          lqip: string | null
+        } | null
+      } | null
+      alt: string | null
+      caption: string | null
+      hotspot: SanityImageHotspot | null
+    } | null
+  } | null
   gallery: {
-    _id: string;
-    title: string | null;
+    _id: string
+    title: string | null
     images: Array<{
       image: {
         asset: {
-          _id: string;
-          url: string | null;
+          _id: string
+          url: string | null
           metadata: {
-            dimensions: SanityImageDimensions | null;
-            lqip: string | null;
-          } | null;
-        } | null;
-        alt: string | null;
-        caption: string | null;
-        hotspot: SanityImageHotspot | null;
-      } | null;
-      showOnMobile: boolean | null;
-    }> | null;
-  } | null;
-} | null;
+            dimensions: SanityImageDimensions | null
+            lqip: string | null
+          } | null
+        } | null
+        alt: string | null
+        caption: string | null
+        hotspot: SanityImageHotspot | null
+      } | null
+      showOnMobile: boolean | null
+    }> | null
+  } | null
+} | null
 
 // Source: ../../packages/sanity-config/src/queries/partners.ts
 // Variable: getPartnersQuery
 // Query: *[_type == "partner"] | order(order asc){    _id,    name,    slug,    logo{      asset->{        _id,        url,        metadata{          dimensions,          lqip        }      },      alt    },    description,    websiteUrl,    featured,    order  }
 export type GetPartnersQueryResult = Array<{
-  _id: string;
-  name: string | null;
-  slug: Slug | null;
+  _id: string
+  name: string | null
+  slug: Slug | null
   logo: {
     asset: {
-      _id: string;
-      url: string | null;
+      _id: string
+      url: string | null
       metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-      } | null;
-    } | null;
-    alt: string | null;
-  } | null;
-  description: string | null;
-  websiteUrl: string | null;
-  featured: boolean | null;
-  order: number | null;
-}>;
+        dimensions: SanityImageDimensions | null
+        lqip: string | null
+      } | null
+    } | null
+    alt: string | null
+  } | null
+  description: string | null
+  websiteUrl: string | null
+  featured: boolean | null
+  order: number | null
+}>
 // Variable: getFeaturedPartnersQuery
 // Query: *[_type == "partner" && featured == true] | order(order asc){    _id,    name,    slug,    logo{      asset->{        _id,        url,        metadata{          dimensions,          lqip        }      },      alt    },    description,    websiteUrl,    order  }
 export type GetFeaturedPartnersQueryResult = Array<{
-  _id: string;
-  name: string | null;
-  slug: Slug | null;
+  _id: string
+  name: string | null
+  slug: Slug | null
   logo: {
     asset: {
-      _id: string;
-      url: string | null;
+      _id: string
+      url: string | null
       metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-      } | null;
-    } | null;
-    alt: string | null;
-  } | null;
-  description: string | null;
-  websiteUrl: string | null;
-  order: number | null;
-}>;
+        dimensions: SanityImageDimensions | null
+        lqip: string | null
+      } | null
+    } | null
+    alt: string | null
+  } | null
+  description: string | null
+  websiteUrl: string | null
+  order: number | null
+}>
 // Variable: getPartnerBySlugQuery
 // Query: *[_type == "partner" && slug.current == $slug][0]{    _id,    name,    slug,    logo{      asset->{        _id,        url,        metadata{          dimensions,          lqip        }      },      alt    },    description,    websiteUrl,    featured,    order  }
 export type GetPartnerBySlugQueryResult = {
-  _id: string;
-  name: string | null;
-  slug: Slug | null;
+  _id: string
+  name: string | null
+  slug: Slug | null
   logo: {
     asset: {
-      _id: string;
-      url: string | null;
+      _id: string
+      url: string | null
       metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-      } | null;
-    } | null;
-    alt: string | null;
-  } | null;
-  description: string | null;
-  websiteUrl: string | null;
-  featured: boolean | null;
-  order: number | null;
-} | null;
+        dimensions: SanityImageDimensions | null
+        lqip: string | null
+      } | null
+    } | null
+    alt: string | null
+  } | null
+  description: string | null
+  websiteUrl: string | null
+  featured: boolean | null
+  order: number | null
+} | null
 
 // Source: ../../packages/sanity-config/src/queries/quotes.ts
 // Variable: getQuotesQuery
 // Query: *[_type == "quote"] | order(_createdAt desc){    _id,    quoteText,    attribution,    backgroundImage{      asset->{        _id,        url,        metadata{          dimensions,          lqip        }      },      alt,      caption,      hotspot    },    featured,    category  }
 export type GetQuotesQueryResult = Array<{
-  _id: string;
-  quoteText: string | null;
-  attribution: string | null;
+  _id: string
+  quoteText: string | null
+  attribution: string | null
   backgroundImage: {
     asset: {
-      _id: string;
-      url: string | null;
+      _id: string
+      url: string | null
       metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-      } | null;
-    } | null;
-    alt: string | null;
-    caption: string | null;
-    hotspot: SanityImageHotspot | null;
-  } | null;
-  featured: boolean | null;
-  category: "community" | "conservation" | "history" | "nature" | null;
-}>;
+        dimensions: SanityImageDimensions | null
+        lqip: string | null
+      } | null
+    } | null
+    alt: string | null
+    caption: string | null
+    hotspot: SanityImageHotspot | null
+  } | null
+  featured: boolean | null
+  category: "community" | "conservation" | "history" | "nature" | null
+}>
 // Variable: getFeaturedQuoteQuery
 // Query: *[_type == "quote" && featured == true][0]{    _id,    quoteText,    attribution,    backgroundImage{      asset->{        _id,        url,        metadata{          dimensions,          lqip        }      },      alt,      caption,      hotspot    },    category  }
 export type GetFeaturedQuoteQueryResult = {
-  _id: string;
-  quoteText: string | null;
-  attribution: string | null;
+  _id: string
+  quoteText: string | null
+  attribution: string | null
   backgroundImage: {
     asset: {
-      _id: string;
-      url: string | null;
+      _id: string
+      url: string | null
       metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-      } | null;
-    } | null;
-    alt: string | null;
-    caption: string | null;
-    hotspot: SanityImageHotspot | null;
-  } | null;
-  category: "community" | "conservation" | "history" | "nature" | null;
-} | null;
+        dimensions: SanityImageDimensions | null
+        lqip: string | null
+      } | null
+    } | null
+    alt: string | null
+    caption: string | null
+    hotspot: SanityImageHotspot | null
+  } | null
+  category: "community" | "conservation" | "history" | "nature" | null
+} | null
 // Variable: getQuotesByCategoryQuery
 // Query: *[_type == "quote" && category == $category] | order(_createdAt desc){    _id,    quoteText,    attribution,    backgroundImage{      asset->{        _id,        url,        metadata{          dimensions,          lqip        }      },      alt,      caption,      hotspot    },    featured  }
 export type GetQuotesByCategoryQueryResult = Array<{
-  _id: string;
-  quoteText: string | null;
-  attribution: string | null;
+  _id: string
+  quoteText: string | null
+  attribution: string | null
   backgroundImage: {
     asset: {
-      _id: string;
-      url: string | null;
+      _id: string
+      url: string | null
       metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-      } | null;
-    } | null;
-    alt: string | null;
-    caption: string | null;
-    hotspot: SanityImageHotspot | null;
-  } | null;
-  featured: boolean | null;
-}>;
+        dimensions: SanityImageDimensions | null
+        lqip: string | null
+      } | null
+    } | null
+    alt: string | null
+    caption: string | null
+    hotspot: SanityImageHotspot | null
+  } | null
+  featured: boolean | null
+}>
 
 // Source: ../../packages/sanity-config/src/queries/siteSettings.ts
 // Variable: getSiteSettingsQuery
 // Query: *[_type == "siteSettings"][0]{    organizationName,    alternativeName,    description,    parkAddress,    parkHours,    socialMedia,    donationUrl,    contactEmail,    metaDefaults{      siteTitle,      ogImage{        asset->{          _id,          url,          metadata{            dimensions,            lqip          }        },        alt      }    }  }
 export type GetSiteSettingsQueryResult = {
-  organizationName: string | null;
-  alternativeName: string | null;
-  description: string | null;
+  organizationName: string | null
+  alternativeName: string | null
+  description: string | null
   parkAddress: {
-    street?: string;
-    city?: string;
-    state?: string;
-    zipCode?: string;
-  } | null;
-  parkHours: string | null;
+    street?: string
+    city?: string
+    state?: string
+    zipCode?: string
+  } | null
+  parkHours: string | null
   socialMedia: {
-    facebook?: string;
-    instagram?: string;
-  } | null;
-  donationUrl: string | null;
-  contactEmail: string | null;
+    facebook?: string
+    instagram?: string
+  } | null
+  donationUrl: string | null
+  contactEmail: string | null
   metaDefaults: {
-    siteTitle: string | null;
+    siteTitle: string | null
     ogImage: {
       asset: {
-        _id: string;
-        url: string | null;
+        _id: string
+        url: string | null
         metadata: {
-          dimensions: SanityImageDimensions | null;
-          lqip: string | null;
-        } | null;
-      } | null;
-      alt: string | null;
-    } | null;
-  } | null;
-} | null;
+          dimensions: SanityImageDimensions | null
+          lqip: string | null
+        } | null
+      } | null
+      alt: string | null
+    } | null
+  } | null
+} | null
 
 // Query TypeMap
-import "@sanity/client";
+import "@sanity/client"
 declare module "@sanity/client" {
   interface SanityQueries {
-    "\n  *[_type == \"amenitiesPage\"][0]{\n    pageHero{\n      title,\n      description,\n      image{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt,\n        hotspot\n      }\n    },\n    introduction,\n    amenities[] | order(order asc){\n      title,\n      slug,\n      icon,\n      description,\n      details,\n      image{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt,\n        caption,\n        hotspot\n      },\n      externalLink,\n      section,\n      order\n    }\n  }\n": GetAmenitiesPageQueryResult;
-    "\n  *[_type == \"amenitiesPage\"][0]{\n    \"upperParkAmenities\": amenities[section == \"upper-park\" || section == \"both\"] | order(order asc),\n    \"lowerParkAmenities\": amenities[section == \"lower-park\" || section == \"both\"] | order(order asc)\n  }\n": GetAmenitiesBySectionQueryResult;
-    "\n  *[_type == \"gallery\"] | order(order asc){\n    _id,\n    title,\n    galleryType,\n    images[]{\n      image{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt,\n        caption,\n        hotspot\n      },\n      showOnMobile\n    },\n    order\n  }\n": GetGalleriesQueryResult;
-    "\n  *[_type == \"gallery\" && galleryType == $type] | order(order asc){\n    _id,\n    title,\n    galleryType,\n    images[]{\n      image{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt,\n        caption,\n        hotspot\n      },\n      showOnMobile\n    },\n    order\n  }\n": GetGalleryByTypeQueryResult;
-    "\n  *[_type == \"gallery\" && _id == $id][0]{\n    _id,\n    title,\n    galleryType,\n    images[]{\n      image{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt,\n        caption,\n        hotspot\n      },\n      showOnMobile\n    },\n    order\n  }\n": GetGalleryByIdQueryResult;
-    "\n  *[_type == \"homePage\"][0]{\n    hero{\n      heading,\n      subheading,\n      heroImage{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt,\n        caption,\n        hotspot\n      },\n      ctaButton\n    },\n    visionPillars[] | order(order asc){\n      title,\n      icon,\n      description,\n      order\n    },\n    \"partners\": featuredPartners[]->{\n      _id,\n      name,\n      slug,\n      logo{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt\n      },\n      description,\n      websiteUrl,\n      order\n    } | order(order asc),\n    \"quote\": featuredQuote->{\n      _id,\n      quoteText,\n      attribution,\n      backgroundImage{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt,\n        caption,\n        hotspot\n      }\n    },\n    \"gallery\": homepageGallery->{\n      _id,\n      title,\n      images[]{\n        image{\n          asset->{\n            _id,\n            url,\n            metadata{\n              dimensions,\n              lqip\n            }\n          },\n          alt,\n          caption,\n          hotspot\n        },\n        showOnMobile\n      }\n    }\n  }\n": GetHomePageQueryResult;
-    "\n  *[_type == \"partner\"] | order(order asc){\n    _id,\n    name,\n    slug,\n    logo{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt\n    },\n    description,\n    websiteUrl,\n    featured,\n    order\n  }\n": GetPartnersQueryResult;
-    "\n  *[_type == \"partner\" && featured == true] | order(order asc){\n    _id,\n    name,\n    slug,\n    logo{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt\n    },\n    description,\n    websiteUrl,\n    order\n  }\n": GetFeaturedPartnersQueryResult;
-    "\n  *[_type == \"partner\" && slug.current == $slug][0]{\n    _id,\n    name,\n    slug,\n    logo{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt\n    },\n    description,\n    websiteUrl,\n    featured,\n    order\n  }\n": GetPartnerBySlugQueryResult;
-    "\n  *[_type == \"quote\"] | order(_createdAt desc){\n    _id,\n    quoteText,\n    attribution,\n    backgroundImage{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt,\n      caption,\n      hotspot\n    },\n    featured,\n    category\n  }\n": GetQuotesQueryResult;
-    "\n  *[_type == \"quote\" && featured == true][0]{\n    _id,\n    quoteText,\n    attribution,\n    backgroundImage{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt,\n      caption,\n      hotspot\n    },\n    category\n  }\n": GetFeaturedQuoteQueryResult;
-    "\n  *[_type == \"quote\" && category == $category] | order(_createdAt desc){\n    _id,\n    quoteText,\n    attribution,\n    backgroundImage{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt,\n      caption,\n      hotspot\n    },\n    featured\n  }\n": GetQuotesByCategoryQueryResult;
-    "\n  *[_type == \"siteSettings\"][0]{\n    organizationName,\n    alternativeName,\n    description,\n    parkAddress,\n    parkHours,\n    socialMedia,\n    donationUrl,\n    contactEmail,\n    metaDefaults{\n      siteTitle,\n      ogImage{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt\n      }\n    }\n  }\n": GetSiteSettingsQueryResult;
+    '\n  *[_type == "amenitiesPage"][0]{\n    pageHero{\n      title,\n      description,\n      image{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt,\n        hotspot\n      }\n    },\n    introduction,\n    amenities[] | order(order asc){\n      title,\n      slug,\n      icon,\n      description,\n      details,\n      image{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt,\n        caption,\n        hotspot\n      },\n      externalLink,\n      section,\n      order\n    }\n  }\n': GetAmenitiesPageQueryResult
+    '\n  *[_type == "amenitiesPage"][0]{\n    "upperParkAmenities": amenities[section == "upper-park" || section == "both"] | order(order asc),\n    "lowerParkAmenities": amenities[section == "lower-park" || section == "both"] | order(order asc)\n  }\n': GetAmenitiesBySectionQueryResult
+    '\n  *[_type == "gallery"] | order(order asc){\n    _id,\n    title,\n    galleryType,\n    images[]{\n      image{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt,\n        caption,\n        hotspot\n      },\n      showOnMobile\n    },\n    order\n  }\n': GetGalleriesQueryResult
+    '\n  *[_type == "gallery" && galleryType == $type] | order(order asc){\n    _id,\n    title,\n    galleryType,\n    images[]{\n      image{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt,\n        caption,\n        hotspot\n      },\n      showOnMobile\n    },\n    order\n  }\n': GetGalleryByTypeQueryResult
+    '\n  *[_type == "gallery" && _id == $id][0]{\n    _id,\n    title,\n    galleryType,\n    images[]{\n      image{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt,\n        caption,\n        hotspot\n      },\n      showOnMobile\n    },\n    order\n  }\n': GetGalleryByIdQueryResult
+    '\n  *[_type == "homePage"][0]{\n    hero{\n      heading,\n      subheading,\n      heroImage{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt,\n        caption,\n        hotspot\n      },\n      ctaButton\n    },\n    visionPillars[] | order(order asc){\n      title,\n      icon,\n      description,\n      order\n    },\n    "partners": featuredPartners[]->{\n      _id,\n      name,\n      slug,\n      logo{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt\n      },\n      description,\n      websiteUrl,\n      order\n    } | order(order asc),\n    "quote": featuredQuote->{\n      _id,\n      quoteText,\n      attribution,\n      backgroundImage{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt,\n        caption,\n        hotspot\n      }\n    },\n    "gallery": homepageGallery->{\n      _id,\n      title,\n      images[]{\n        image{\n          asset->{\n            _id,\n            url,\n            metadata{\n              dimensions,\n              lqip\n            }\n          },\n          alt,\n          caption,\n          hotspot\n        },\n        showOnMobile\n      }\n    }\n  }\n': GetHomePageQueryResult
+    '\n  *[_type == "partner"] | order(order asc){\n    _id,\n    name,\n    slug,\n    logo{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt\n    },\n    description,\n    websiteUrl,\n    featured,\n    order\n  }\n': GetPartnersQueryResult
+    '\n  *[_type == "partner" && featured == true] | order(order asc){\n    _id,\n    name,\n    slug,\n    logo{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt\n    },\n    description,\n    websiteUrl,\n    order\n  }\n': GetFeaturedPartnersQueryResult
+    '\n  *[_type == "partner" && slug.current == $slug][0]{\n    _id,\n    name,\n    slug,\n    logo{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt\n    },\n    description,\n    websiteUrl,\n    featured,\n    order\n  }\n': GetPartnerBySlugQueryResult
+    '\n  *[_type == "quote"] | order(_createdAt desc){\n    _id,\n    quoteText,\n    attribution,\n    backgroundImage{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt,\n      caption,\n      hotspot\n    },\n    featured,\n    category\n  }\n': GetQuotesQueryResult
+    '\n  *[_type == "quote" && featured == true][0]{\n    _id,\n    quoteText,\n    attribution,\n    backgroundImage{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt,\n      caption,\n      hotspot\n    },\n    category\n  }\n': GetFeaturedQuoteQueryResult
+    '\n  *[_type == "quote" && category == $category] | order(_createdAt desc){\n    _id,\n    quoteText,\n    attribution,\n    backgroundImage{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt,\n      caption,\n      hotspot\n    },\n    featured\n  }\n': GetQuotesByCategoryQueryResult
+    '\n  *[_type == "siteSettings"][0]{\n    organizationName,\n    alternativeName,\n    description,\n    parkAddress,\n    parkHours,\n    socialMedia,\n    donationUrl,\n    contactEmail,\n    metaDefaults{\n      siteTitle,\n      ogImage{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt\n      }\n    }\n  }\n': GetSiteSettingsQueryResult
   }
 }

@@ -1,4 +1,4 @@
-import { defineQuery } from 'groq'
+import { defineQuery } from "groq"
 
 export const getHomePageQuery = defineQuery(`
   *[_type == "homePage"][0]{

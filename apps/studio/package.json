@@ -10,6 +10,7 @@
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
     "lint": "eslint .",
+    "format": "prettier --write .",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist .sanity"
   },
