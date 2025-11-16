@@ -1,6 +1,5 @@
 import AmenityCard from "@/components/AmenityCard/amenity-card";
 import GetInvolved from "@/components/GetInvolved/get-involved";
-import InfoCard from "@/components/InfoCard/info-card";
 import PageHero from "@/components/PageHero/page-hero";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import SupportOption from "@/components/SupportOption/support-option";

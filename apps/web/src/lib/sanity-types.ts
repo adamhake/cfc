@@ -1,6 +1,8 @@
 // TypeScript types for Sanity content
 // These match the schemas defined in @chimborazo/sanity-config
 
+import type { PortableTextBlock } from '@portabletext/react'
+
 export interface SanityImage {
   asset: {
     _id: string
@@ -47,7 +49,7 @@ export interface SanityEvent {
   date: string
   time: string
   location: string
-  body?: any[] // Portable text blocks
+  body?: PortableTextBlock[]
   featured?: boolean
   publishedAt?: string
 }
