@@ -12,5 +12,8 @@ count.txt
 todos.json
 .worktrees/
 
+# Turborepo cache
+.turbo
+
 # Local Netlify folder
 .netlify
