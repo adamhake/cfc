@@ -25,18 +25,9 @@ export default defineType({
         defineField({
           name: "image",
           title: "Hero Image",
-          type: "image",
-          options: {
-            hotspot: true,
-          },
-          fields: [
-            defineField({
-              name: "alt",
-              title: "Alternative text",
-              type: "string",
-              validation: (rule) => rule.required(),
-            }),
-          ],
+          type: "reference",
+          to: [{ type: "mediaImage" }],
+          description: "Select an image from the media library to use as the hero image",
         }),
       ],
       validation: (rule) => rule.required(),
@@ -143,23 +134,9 @@ export default defineType({
             defineField({
               name: "image",
               title: "Image",
-              type: "image",
-              options: {
-                hotspot: true,
-              },
-              fields: [
-                defineField({
-                  name: "alt",
-                  title: "Alternative text",
-                  type: "string",
-                  validation: (rule) => rule.required(),
-                }),
-                defineField({
-                  name: "caption",
-                  title: "Caption",
-                  type: "string",
-                }),
-              ],
+              type: "reference",
+              to: [{ type: "mediaImage" }],
+              description: "Select an image from the media library",
             }),
             defineField({
               name: "externalLink",
@@ -198,7 +175,7 @@ export default defineType({
               title: "title",
               subtitle: "section",
               order: "order",
-              media: "image",
+              media: "image.image",
             },
             prepare({ title, subtitle, order, media }) {
               return {
