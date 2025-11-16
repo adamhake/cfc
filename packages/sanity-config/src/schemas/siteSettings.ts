@@ -134,4 +134,12 @@ export default defineType({
       ],
     }),
   ],
+  preview: {
+    prepare() {
+      return {
+        title: "Site Settings",
+        subtitle: "Global site configuration",
+      }
+    },
+  },
 })
