@@ -1,307 +1,301 @@
-Welcome to your new TanStack app!
+# Chimborazo Park Conservancy - Turborepo Monorepo
 
-# Getting Started
+This is the monorepo for the Chimborazo Park Conservancy website and Sanity CMS integration.
 
-To run this application:
+## 📁 Project Structure
 
+```
+chimborazo-park-conservancy/
+├── apps/
+│   ├── web/           # Main website (TanStack Start + React)
+│   └── studio/        # Sanity Studio CMS
+├── packages/
+│   └── sanity-config/ # Shared Sanity schemas, queries, and types
+├── turbo.json         # Turborepo configuration
+└── package.json       # Root package.json with workspaces
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js >= 22.0.0** (enforced via `.nvmrc` and `engines` field)
+- **pnpm >= 8.0.0** (package manager)
+- A Sanity account (sign up at [sanity.io](https://sanity.io))
+
+**Note:** If you use `nvm`, run `nvm use` in the project root to automatically switch to Node 22.
+
+### Initial Setup
+
+1. **Clone the repository** (if you haven't already)
+
+2. **Install pnpm** (if not already installed)
+   ```bash
+   npm install -g pnpm
+   ```
+
+3. **Install dependencies**
+   ```bash
+   pnpm install
+   ```
+
+3. **Set up Sanity Project**
+   - Create a new project at [sanity.io/manage](https://sanity.io/manage)
+   - Note your Project ID and Dataset name (usually "production")
+   - Create an API token with Editor permissions at:
+     `https://sanity.io/manage/project/[YOUR_PROJECT_ID]/api`
+
+4. **Configure environment variables**
+
+   **For the web app** (`apps/web/.env`):
+   ```bash
+   # Copy the example file
+   cp apps/web/.env.example apps/web/.env
+   ```
+
+   Then edit `apps/web/.env` and add:
+   ```
+   VITE_SANITY_PROJECT_ID=your_project_id_here
+   VITE_SANITY_DATASET=production
+   VITE_SANITY_API_VERSION=2024-01-01
+   SANITY_API_TOKEN=your_api_token_here
+   ```
+
+   **For the Studio** (`apps/studio/.env`):
+   ```bash
+   # Copy the example file
+   cp apps/studio/.env.example apps/studio/.env
+   ```
+
+   Then edit `apps/studio/.env` and add:
+   ```
+   SANITY_STUDIO_PROJECT_ID=your_project_id_here
+   SANITY_STUDIO_DATASET=production
+   SANITY_STUDIO_PREVIEW_URL=http://localhost:3000
+   ```
+
+## 💻 Development
+
+### Run everything in dev mode
 ```bash
-npm install
-npm run start
+pnpm run dev
 ```
 
-# Building For Production
+This will start:
+- **Web app** on http://localhost:3000
+- **Sanity Studio** on http://localhost:3333
 
-To build this application for production:
+### Run individual apps
 
+**Web app only:**
 ```bash
-npm run build
+pnpm --filter @chimborazo/web dev
+# or
+cd apps/web && pnpm run dev
 ```
 
-## Testing
-
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
-
+**Sanity Studio only:**
 ```bash
-npm run test
+pnpm --filter @chimborazo/studio dev
+# or
+cd apps/studio && pnpm run dev
 ```
 
-## Styling
+## 🏗️ Building
 
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
-
-## Linting & Formatting
-
-This project uses [Biome](https://biomejs.dev/) for linting and formatting. The following scripts are available:
-
+### Build all apps
 ```bash
-npm run lint
-npm run format
-npm run check
+pnpm run build
 ```
 
-## T3Env
-
-- You can use T3Env to add type safety to your environment variables.
-- Add Environment variables to the `src/env.mjs` file.
-- Use the environment variables in your code.
-
-### Usage
-
-```ts
-import { env } from "@/env";
-
-console.log(env.VITE_APP_TITLE);
-```
-
-## Routing
-
-This project uses [TanStack Router](https://tanstack.com/router). The initial setup is a file based router. Which means that the routes are managed as files in `src/routes`.
-
-### Adding A Route
-
-To add a new route to your application just add another a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from "@tanstack/react-router";
-```
-
-Then anywhere in your JSX you can use it like so:
-
-```tsx
-<Link to="/about">About</Link>
-```
-
-This will create a link that will navigate to the `/about` route.
-
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
-
-### Using A Layout
-
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you use the `<Outlet />` component.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { Outlet, createRootRoute } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-
-import { Link } from "@tanstack/react-router";
-
-export const Route = createRootRoute({
-  component: () => (
-    <>
-      <header>
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-        </nav>
-      </header>
-      <Outlet />
-      <TanStackRouterDevtools />
-    </>
-  ),
-});
-```
-
-The `<TanStackRouterDevtools />` component is not required so you can remove it if you don't want it in your layout.
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-const peopleRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/people",
-  loader: async () => {
-    const response = await fetch("https://swapi.dev/api/people");
-    return response.json() as Promise<{
-      results: {
-        name: string;
-      }[];
-    }>;
-  },
-  component: () => {
-    const data = peopleRoute.useLoaderData();
-    return (
-      <ul>
-        {data.results.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    );
-  },
-});
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-### React-Query
-
-React-Query is an excellent addition or alternative to route loading and integrating it into you application is a breeze.
-
-First add your dependencies:
-
+### Build individual apps
 ```bash
-npm install @tanstack/react-query @tanstack/react-query-devtools
+pnpm --filter @chimborazo/web build
+pnpm --filter @chimborazo/studio build
 ```
 
-Next we'll need to create a query client and provider. We recommend putting those in `main.tsx`.
+## 🧪 Testing & Quality
 
-```tsx
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+### Run tests
+```bash
+pnpm run test
+```
 
-// ...
+### Linting
+```bash
+pnpm run lint
+```
 
-const queryClient = new QueryClient();
+### Type checking
+```bash
+pnpm run type-check
+```
 
-// ...
+### Code formatting
+```bash
+pnpm run format
+```
 
-if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement);
+## 📦 Packages
 
-  root.render(
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>,
-  );
+### `@chimborazo/web`
+The main website built with:
+- **TanStack Start** - Full-stack React framework with SSR
+- **TanStack Router** - File-based routing
+- **TanStack Query** - Data fetching and caching
+- **Tailwind CSS v4** - Utility-first styling
+- **Sanity Client** - CMS integration
+
+**Key files:**
+- `apps/web/src/lib/sanity.ts` - Sanity client configuration
+- `apps/web/src/env.ts` - Environment variable validation
+- `apps/web/netlify.toml` - Netlify deployment config
+
+### `@chimborazo/studio`
+Sanity Studio for content management.
+
+**Features:**
+- Event management with portable text editor
+- Media library with categorization
+- Live preview integration (Presentation tool)
+- Custom branding
+
+**Key files:**
+- `apps/studio/sanity.config.ts` - Studio configuration
+- `apps/studio/netlify.toml` - Netlify deployment config
+
+### `@chimborazo/sanity-config`
+Shared package containing:
+- **Schemas** - Sanity document schemas (event, mediaImage)
+- **Queries** - GROQ queries for fetching data
+- **Client utilities** - Sanity client creation and image URL builders
+- **TypeScript types** - Generated types for type-safe CMS integration
+
+**Usage in web app:**
+```typescript
+import { sanityClient, urlForImage } from '@/lib/sanity'
+import { allEventsQuery, eventBySlugQuery } from '@chimborazo/sanity-config'
+
+// Fetch all events
+const events = await sanityClient.fetch(allEventsQuery)
+
+// Get image URL with transformations
+const imageUrl = urlForImage(event.heroImage)
+  .width(800)
+  .height(600)
+  .url()
+```
+
+## 🚢 Deployment
+
+### Web App (Netlify)
+
+1. **Connect your repo to Netlify**
+2. **Configure build settings:**
+   - Build command: `pnpm run build --filter=@chimborazo/web`
+   - Publish directory: `apps/web/dist/client`
+   - Functions directory: `apps/web/.netlify/functions`
+
+3. **Add environment variables** in Netlify Dashboard:
+   - `VITE_SANITY_PROJECT_ID`
+   - `VITE_SANITY_DATASET`
+   - `VITE_SANITY_API_VERSION`
+   - `SANITY_API_TOKEN`
+
+4. **Deploy!** 🎉
+
+### Sanity Studio (Netlify)
+
+1. **Create a new Netlify site** for the Studio
+2. **Configure build settings:**
+   - Build command: `pnpm run build --filter=@chimborazo/studio`
+   - Publish directory: `apps/studio/dist`
+
+3. **Add environment variables:**
+   - `SANITY_STUDIO_PROJECT_ID`
+   - `SANITY_STUDIO_DATASET`
+   - `SANITY_STUDIO_PREVIEW_URL` (your production web app URL)
+
+4. **Set custom domain** (e.g., `studio.chimborazopark.org`)
+
+5. **Add CORS origin** in Sanity project settings:
+   - Go to [sanity.io/manage](https://sanity.io/manage)
+   - Navigate to your project > API > CORS Origins
+   - Add your Studio URL (e.g., `https://studio.chimborazopark.org`)
+
+## 🗂️ Content Schemas
+
+### Event
+```typescript
+{
+  title: string
+  slug: slug
+  description: text
+  heroImage: image { alt, caption }
+  date: date
+  time: string
+  location: string
+  body: portableText[] // Rich text content
+  featured: boolean
+  publishedAt: datetime
 }
 ```
 
-You can also add TanStack Query Devtools to the root route (optional).
-
-```tsx
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-const rootRoute = createRootRoute({
-  component: () => (
-    <>
-      <Outlet />
-      <ReactQueryDevtools buttonPosition="top-right" />
-      <TanStackRouterDevtools />
-    </>
-  ),
-});
-```
-
-Now you can use `useQuery` to fetch your data.
-
-```tsx
-import { useQuery } from "@tanstack/react-query";
-
-import "./App.css";
-
-function App() {
-  const { data } = useQuery({
-    queryKey: ["people"],
-    queryFn: () =>
-      fetch("https://swapi.dev/api/people")
-        .then((res) => res.json())
-        .then((data) => data.results as { name: string }[]),
-    initialData: [],
-  });
-
-  return (
-    <div>
-      <ul>
-        {data.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    </div>
-  );
+### Media Image
+```typescript
+{
+  title: string
+  image: image { alt, caption, metadata }
+  category: 'park-views' | 'events' | 'nature' | 'community' | 'history'
+  featured: boolean
+  uploadedAt: datetime
 }
-
-export default App;
 ```
 
-You can find out everything you need to know on how to use React-Query in the [React-Query documentation](https://tanstack.com/query/latest/docs/framework/react/overview).
+## 🔧 Troubleshooting
 
-## State Management
-
-Another common requirement for React applications is state management. There are many options for state management in React. TanStack Store provides a great starting point for your project.
-
-First you need to add TanStack Store as a dependency:
-
+### Build errors
 ```bash
-npm install @tanstack/store
+# Clean all build artifacts and reinstall
+pnpm run clean
+rm -rf node_modules pnpm-lock.yaml
+pnpm install
 ```
 
-Now let's create a simple counter in the `src/App.tsx` file as a demonstration.
-
-```tsx
-import { useStore } from "@tanstack/react-store";
-import { Store } from "@tanstack/store";
-import "./App.css";
-
-const countStore = new Store(0);
-
-function App() {
-  const count = useStore(countStore);
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>Increment - {count}</button>
-    </div>
-  );
-}
-
-export default App;
+### Type errors in shared package
+```bash
+# Rebuild the sanity-config package
+pnpm --filter @chimborazo/sanity-config build
 ```
 
-One of the many nice features of TanStack Store is the ability to derive state from other state. That derived state will update when the base state updates.
+### Sanity Studio won't start
+- Ensure `SANITY_STUDIO_PROJECT_ID` is set correctly
+- Check that your Sanity project exists at [sanity.io/manage](https://sanity.io/manage)
+- Verify CORS origins are configured
 
-Let's check this out by doubling the count using derived state.
+## 📚 Additional Resources
 
-```tsx
-import { useStore } from "@tanstack/react-store";
-import { Store, Derived } from "@tanstack/store";
-import "./App.css";
+- [TanStack Start Documentation](https://tanstack.com/start/latest)
+- [Sanity Documentation](https://www.sanity.io/docs)
+- [Turborepo Documentation](https://turbo.build/repo/docs)
+- [Netlify Documentation](https://docs.netlify.com/)
 
-const countStore = new Store(0);
+## 🎯 Next Steps
 
-const doubledStore = new Derived({
-  fn: () => countStore.state * 2,
-  deps: [countStore],
-});
-doubledStore.mount();
+The monorepo infrastructure is set up! Here's what remains:
 
-function App() {
-  const count = useStore(countStore);
-  const doubledCount = useStore(doubledStore);
+1. **Migrate existing content to Sanity**
+   - Events from `apps/web/src/data/events.ts`
+   - Media from Netlify Blobs
 
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>Increment - {count}</button>
-      <div>Doubled - {doubledCount}</div>
-    </div>
-  );
-}
+2. **Update web app to fetch from Sanity**
+   - Replace static data with Sanity queries
+   - Update components to render Sanity data
 
-export default App;
-```
+3. **Set up live preview** (Presentation tool)
+4. **Configure webhooks** for instant cache invalidation
+5. **Deploy both apps** to Netlify
 
-We use the `Derived` class to create a new store that is derived from another store. The `Derived` class has a `mount` method that will start the derived store updating.
+## 📝 License
 
-Once we've created the derived store we can use it in the `App` component just like we would any other store using the `useStore` hook.
-
-You can find out everything you need to know on how to use TanStack Store in the [TanStack Store documentation](https://tanstack.com/store/latest).
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
+This project is for the Chimborazo Park Conservancy, a 501(c)(3) non-profit organization.
