@@ -1,9 +1,9 @@
-import { defineConfig } from "sanity"
-import { structureTool } from "sanity/structure"
-import { visionTool } from "@sanity/vision"
-import { presentationTool } from "sanity/presentation"
 import { schemas } from "@chimborazo/sanity-config"
+import { visionTool } from "@sanity/vision"
+import { defineConfig } from "sanity"
+import { presentationTool } from "sanity/presentation"
 import type { StructureResolver } from "sanity/structure"
+import { structureTool } from "sanity/structure"
 
 // Get environment variables
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID || ""

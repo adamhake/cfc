@@ -40,7 +40,7 @@ export default function GetInvolved({
     <div className="px-4 lg:px-0">
       <div className="mx-auto max-w-6xl">
         <motion.div
-          className="overflow-hidden rounded-3xl bg-white shadow-md dark:bg-transparent dark:border dark:border-accent-600/20"
+          className="overflow-hidden rounded-3xl bg-white shadow-md dark:border dark:border-accent-600/20 dark:bg-transparent"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -107,7 +107,7 @@ export default function GetInvolved({
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Follow us on Facebook (opens in new window)"
-                    className="rounded-lg bg-white p-3 shadow-sm transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:bg-transparent dark:border dark:border-accent-600/30"
+                    className="rounded-lg bg-white p-3 shadow-sm transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:border dark:border-accent-600/30 dark:bg-transparent"
                   >
                     <svg
                       role="img"
@@ -125,7 +125,7 @@ export default function GetInvolved({
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Follow us on Instagram (opens in new window)"
-                    className="rounded-lg bg-white p-3 shadow-sm transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:bg-transparent dark:border dark:border-accent-600/30"
+                    className="rounded-lg bg-white p-3 shadow-sm transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:border dark:border-accent-600/30 dark:bg-transparent"
                   >
                     <svg
                       role="img"

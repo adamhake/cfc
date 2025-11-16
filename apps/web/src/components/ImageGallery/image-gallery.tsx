@@ -91,10 +91,13 @@ export default function ImageGallery({
     setSelectedImage((prev) => (prev !== null && prev > 0 ? prev - 1 : prev));
   }, []);
 
-  const handleNextImage = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    setSelectedImage((prev) => (prev !== null && prev < images.length - 1 ? prev + 1 : prev));
-  }, [images.length]);
+  const handleNextImage = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      setSelectedImage((prev) => (prev !== null && prev < images.length - 1 ? prev + 1 : prev));
+    },
+    [images.length],
+  );
 
   // Memoize column classes for performance
   const columnClass = useMemo(() => {
@@ -177,93 +180,173 @@ export default function ImageGallery({
     // Masonry layout using CSS columns
     return (
       <>
-      <div
-        className={`${masonryColumnClass} ${gapClasses[gap]}`}
-        role="list"
-        aria-label="Photo gallery"
-      >
-        {images.map((image, index) => (
-          <div
-            key={`${image.src}-${index}`}
-            className={`mb-${gap === "sm" ? "2" : gap === "md" ? "4" : "6"} break-inside-avoid ${image.showOnMobile === false ? "hidden sm:block" : ""}`}
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
-            role="listitem"
+        <div
+          className={`${masonryColumnClass} ${gapClasses[gap]}`}
+          role="list"
+          aria-label="Photo gallery"
+        >
+          {images.map((image, index) => (
+            <div
+              key={`${image.src}-${index}`}
+              className={`mb-${gap === "sm" ? "2" : gap === "md" ? "4" : "6"} break-inside-avoid ${image.showOnMobile === false ? "hidden sm:block" : ""}`}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              role="listitem"
+            >
+              <button
+                className="group relative w-full cursor-pointer overflow-hidden rounded-2xl shadow-sm transition-shadow hover:shadow-xl focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:outline-none"
+                onClick={() => handleImageClick(index)}
+                aria-label={`View ${image.alt}${image.caption ? `: ${image.caption}` : ""}`}
+                type="button"
+              >
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  width={image.width}
+                  height={image.height}
+                  className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
+                  loading="lazy"
+                />
+                {showCaptions && captionPosition === "hover" && image.caption && (
+                  <div
+                    className={`absolute inset-0 flex items-end bg-gradient-to-t from-primary-900/90 via-primary-900/50 to-transparent p-4 transition-opacity duration-300 dark:from-grey-900/90 dark:via-grey-900/50 ${
+                      hoveredIndex === index ? "opacity-100" : "opacity-0"
+                    }`}
+                  >
+                    <p className="font-body text-sm text-white md:text-base">{image.caption}</p>
+                  </div>
+                )}
+                {showCaptions && captionPosition === "below" && image.caption && (
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent p-4 pt-12">
+                    <p className="font-body text-sm font-medium text-white drop-shadow-lg md:text-base">
+                      {image.caption}
+                    </p>
+                  </div>
+                )}
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {/* Lightbox Modal */}
+        {selectedImage !== null && (
+          <motion.div
+            ref={modalRef}
+            className="fixed inset-0 z-50 flex h-full min-h-screen w-full min-w-full flex-col overflow-hidden bg-black/95"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={handleCloseModal}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Image viewer"
           >
             <button
-              className="group relative w-full cursor-pointer overflow-hidden rounded-2xl shadow-sm transition-shadow hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-              onClick={() => handleImageClick(index)}
-              aria-label={`View ${image.alt}${image.caption ? `: ${image.caption}` : ""}`}
+              ref={closeButtonRef}
+              className="absolute top-4 right-4 z-10 rounded-full bg-white/10 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:ring-2 focus:ring-white focus:outline-none"
+              onClick={handleCloseModal}
+              aria-label="Close image viewer"
               type="button"
             >
-              <Image
-                src={image.src}
-                alt={image.alt}
-                width={image.width}
-                height={image.height}
-                className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
-                loading="lazy"
-              />
-              {showCaptions && captionPosition === "hover" && image.caption && (
-                <div
-                  className={`absolute inset-0 flex items-end bg-gradient-to-t from-primary-900/90 via-primary-900/50 to-transparent p-4 transition-opacity duration-300 dark:from-grey-900/90 dark:via-grey-900/50 ${
-                    hoveredIndex === index ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  <p className="font-body text-sm text-white md:text-base">{image.caption}</p>
-                </div>
-              )}
-              {showCaptions && captionPosition === "below" && image.caption && (
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent p-4 pt-12">
-                  <p className="font-body text-sm font-medium text-white drop-shadow-lg md:text-base">
-                    {image.caption}
-                  </p>
-                </div>
-              )}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
             </button>
-          </div>
-        ))}
-      </div>
-
-      {/* Lightbox Modal */}
-      {selectedImage !== null && (
-        <motion.div
-          ref={modalRef}
-          className="fixed inset-0 z-50 flex h-full min-h-screen w-full min-w-full flex-col overflow-hidden bg-black/95"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={handleCloseModal}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Image viewer"
-        >
-          <button
-            ref={closeButtonRef}
-            className="absolute right-4 top-4 z-10 rounded-full bg-white/10 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white"
-            onClick={handleCloseModal}
-            aria-label="Close image viewer"
-            type="button"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+            <div className="flex h-full flex-1 items-center justify-center p-4 pb-20 md:pb-4">
+              <div
+                className="relative flex flex-col items-center gap-4 md:max-h-[90vh] md:flex-row"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Previous button - hidden on mobile, shown on desktop */}
+                {selectedImage > 0 && (
+                  <button
+                    className="hidden rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:ring-2 focus:ring-white focus:outline-none md:block"
+                    onClick={handlePrevImage}
+                    aria-label="Previous image"
+                    type="button"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 19l-7-7 7-7"
+                      />
+                    </svg>
+                  </button>
+                )}
+                {/* Image container */}
+                <div className="relative max-w-7xl">
+                  <Image
+                    src={images[selectedImage].src}
+                    alt={images[selectedImage].alt}
+                    width={images[selectedImage].width}
+                    height={images[selectedImage].height}
+                    className="max-h-[calc(100vh-180px)] w-auto rounded-lg md:max-h-[90vh]"
+                    loading="eager"
+                  />
+                  {images[selectedImage].caption && (
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-6 pt-16">
+                      <p className="font-body text-base text-white md:text-lg">
+                        {images[selectedImage].caption}
+                      </p>
+                    </div>
+                  )}
+                </div>
+                {/* Next button - hidden on mobile, shown on desktop */}
+                {selectedImage < images.length - 1 && (
+                  <button
+                    className="hidden rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:ring-2 focus:ring-white focus:outline-none md:block"
+                    onClick={handleNextImage}
+                    aria-label="Next image"
+                    type="button"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </button>
+                )}
+              </div>
+            </div>
+            {/* Mobile navigation buttons - positioned at bottom */}
+            <div
+              className="fixed inset-x-0 bottom-0 flex justify-center gap-4 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-6 pb-8 md:hidden"
+              onClick={(e) => e.stopPropagation()}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-          <div className="flex h-full flex-1 items-center justify-center p-4 pb-20 md:pb-4">
-            <div className="relative flex flex-col items-center gap-4 md:max-h-[90vh] md:flex-row" onClick={(e) => e.stopPropagation()}>
-            {/* Previous button - hidden on mobile, shown on desktop */}
-            {selectedImage > 0 && (
               <button
-                className="hidden rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white md:block"
+                className={`rounded-full bg-white/10 p-4 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:ring-2 focus:ring-white focus:outline-none ${selectedImage === 0 ? "cursor-not-allowed opacity-50" : ""}`}
                 onClick={handlePrevImage}
                 aria-label="Previous image"
                 type="button"
+                disabled={selectedImage === 0}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -272,35 +355,20 @@ export default function ImageGallery({
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
                 </svg>
               </button>
-            )}
-            {/* Image container */}
-            <div className="relative max-w-7xl">
-              <Image
-                src={images[selectedImage].src}
-                alt={images[selectedImage].alt}
-                width={images[selectedImage].width}
-                height={images[selectedImage].height}
-                className="max-h-[calc(100vh-180px)] w-auto rounded-lg md:max-h-[90vh]"
-                loading="eager"
-              />
-              {images[selectedImage].caption && (
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-6 pt-16">
-                  <p className="font-body text-base text-white md:text-lg">
-                    {images[selectedImage].caption}
-                  </p>
-                </div>
-              )}
-            </div>
-            {/* Next button - hidden on mobile, shown on desktop */}
-            {selectedImage < images.length - 1 && (
               <button
-                className="hidden rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white md:block"
+                className={`rounded-full bg-white/10 p-4 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:ring-2 focus:ring-white focus:outline-none ${selectedImage === images.length - 1 ? "cursor-not-allowed opacity-50" : ""}`}
                 onClick={handleNextImage}
                 aria-label="Next image"
                 type="button"
+                disabled={selectedImage === images.length - 1}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -309,52 +377,18 @@ export default function ImageGallery({
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </button>
-            )}
             </div>
-          </div>
-          {/* Mobile navigation buttons - positioned at bottom */}
-          <div className="fixed inset-x-0 bottom-0 flex justify-center gap-4 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-6 pb-8 md:hidden" onClick={(e) => e.stopPropagation()}>
-            <button
-              className={`rounded-full bg-white/10 p-4 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white ${selectedImage === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-              onClick={handlePrevImage}
-              aria-label="Previous image"
-              type="button"
-              disabled={selectedImage === 0}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <button
-              className={`rounded-full bg-white/10 p-4 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white ${selectedImage === images.length - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-              onClick={handleNextImage}
-              aria-label="Next image"
-              type="button"
-              disabled={selectedImage === images.length - 1}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-        </motion.div>
-      )}
-    </>
+          </motion.div>
+        )}
+      </>
     );
   }
 
@@ -441,7 +475,9 @@ export default function ImageGallery({
             )}
           </div>
           {showCaptions && captionPosition === "below" && image.caption && (
-            <p className="mt-2 font-body text-sm text-neutral-700 dark:text-neutral-300">{image.caption}</p>
+            <p className="mt-2 font-body text-sm text-neutral-700 dark:text-neutral-300">
+              {image.caption}
+            </p>
           )}
         </motion.div>
       ))}

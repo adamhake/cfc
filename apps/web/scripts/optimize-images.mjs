@@ -34,7 +34,9 @@ async function optimizeImage(filename, inputPath) {
     const metadata = await image.metadata();
     const originalSize = statSync(inputPath).size;
 
-    console.log(`  Original: ${Math.round(originalSize / 1024)}KB (${metadata.width}x${metadata.height})`);
+    console.log(
+      `  Original: ${Math.round(originalSize / 1024)}KB (${metadata.width}x${metadata.height})`,
+    );
 
     // Create optimized directory if it doesn't exist
     if (!existsSync(optimizedDir)) {
@@ -45,14 +47,14 @@ async function optimizeImage(filename, inputPath) {
     const originalWidth = metadata.width;
     const outputPath = join(optimizedDir, filename);
 
-    await sharp(inputPath)
-      .webp({ quality, effort: 6, smartSubsample: true })
-      .toFile(outputPath);
+    await sharp(inputPath).webp({ quality, effort: 6, smartSubsample: true }).toFile(outputPath);
 
     const newSize = statSync(outputPath).size;
     const savings = Math.round(((originalSize - newSize) / originalSize) * 100);
 
-    console.log(`  Compressed: ${Math.round(newSize / 1024)}KB (${savings > 0 ? 'saved' : 'increased'} ${Math.abs(savings)}%)`);
+    console.log(
+      `  Compressed: ${Math.round(newSize / 1024)}KB (${savings > 0 ? "saved" : "increased"} ${Math.abs(savings)}%)`,
+    );
 
     // Generate responsive variants
     for (const width of widths) {

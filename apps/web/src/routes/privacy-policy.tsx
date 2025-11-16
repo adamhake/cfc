@@ -78,7 +78,7 @@ function PrivacyPolicy() {
         imageHeight={1262}
       />
       <Container className="px-4 py-16 md:py-24">
-        <div className="prose prose-grey dark:prose-invert max-w-4xl">
+        <div className="prose-grey prose max-w-4xl dark:prose-invert">
           <p className="font-body text-grey-700 dark:text-grey-300">
             <strong>Effective Date:</strong>{" "}
             {new Date().toLocaleDateString("en-US", {

@@ -26,8 +26,7 @@ export const Route = createFileRoute("/api/draft")({
           status: 307,
           headers: {
             Location: redirectUrl,
-            "Set-Cookie":
-              "sanity-preview=true; Path=/; HttpOnly; SameSite=Lax; Max-Age=3600",
+            "Set-Cookie": "sanity-preview=true; Path=/; HttpOnly; SameSite=Lax; Max-Age=3600",
           },
         });
       },

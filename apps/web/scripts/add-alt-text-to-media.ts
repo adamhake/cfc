@@ -219,11 +219,7 @@ async function updateMediaImage(
     try {
       // Build image URL from Sanity, always requesting JPEG format
       // This ensures consistent format for the AI vision API
-      const imageUrl = builder
-        .image(doc.image)
-        .width(1024)
-        .format("jpg")
-        .url();
+      const imageUrl = builder.image(doc.image).width(1024).format("jpg").url();
 
       console.log(`  🔗 Image URL: ${imageUrl.substring(0, 60)}...`);
       aiResult = await analyzeImageWithAI(imageUrl, doc.title, doc.category || "park-views");

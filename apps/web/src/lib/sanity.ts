@@ -1,5 +1,5 @@
-import { createSanityClient, urlForImage as urlForImageBase } from '@chimborazo/sanity-config'
-import { env } from '@/env'
+import { createSanityClient, urlForImage as urlForImageBase } from "@chimborazo/sanity-config";
+import { env } from "@/env";
 
 // Production client (uses CDN, published content only)
 export const sanityClient = createSanityClient({
@@ -7,12 +7,12 @@ export const sanityClient = createSanityClient({
   dataset: env.VITE_SANITY_DATASET,
   apiVersion: env.VITE_SANITY_API_VERSION,
   useCdn: true,
-  perspective: 'published',
-})
+  perspective: "published",
+});
 
 // Preview client (no CDN, includes drafts) - for draft/preview mode
 // Lazy-loaded to avoid accessing server-side env vars on client
-let _sanityPreviewClient: ReturnType<typeof createSanityClient> | null = null
+let _sanityPreviewClient: ReturnType<typeof createSanityClient> | null = null;
 export const sanityPreviewClient = () => {
   if (!_sanityPreviewClient) {
     _sanityPreviewClient = createSanityClient({
@@ -20,22 +20,22 @@ export const sanityPreviewClient = () => {
       dataset: env.VITE_SANITY_DATASET,
       apiVersion: env.VITE_SANITY_API_VERSION,
       useCdn: false,
-      perspective: 'previewDrafts',
+      perspective: "previewDrafts",
       token: env.SANITY_API_TOKEN, // Server-side only
-    })
+    });
   }
-  return _sanityPreviewClient
-}
+  return _sanityPreviewClient;
+};
 
 // Image URL builder helper
 export function urlForImage(source: Parameters<typeof urlForImageBase>[0]) {
   return urlForImageBase(source, {
     projectId: env.VITE_SANITY_PROJECT_ID,
     dataset: env.VITE_SANITY_DATASET,
-  })
+  });
 }
 
 // Helper to determine which client to use
 export function getSanityClient(preview = false) {
-  return preview ? sanityPreviewClient() : sanityClient
+  return preview ? sanityPreviewClient() : sanityClient;
 }

@@ -115,7 +115,7 @@ function RouteComponent() {
             <div className="flex items-center gap-3">
               <MapPin className="h-5 w-5 shrink-0 stroke-primary-600 dark:stroke-primary-400" />
               <div>
-                <div className="mb-0.5 font-display text-sm font-semibold uppercase tracking-wide text-grey-600 dark:text-grey-400">
+                <div className="mb-0.5 font-display text-sm font-semibold tracking-wide text-grey-600 uppercase dark:text-grey-400">
                   Location
                 </div>
                 <div className="font-body text-lg text-grey-900 dark:text-grey-100">
@@ -123,11 +123,14 @@ function RouteComponent() {
                 </div>
               </div>
             </div>
-            <div className="hidden h-12 w-px bg-grey-300 md:block dark:bg-primary-600" aria-hidden="true"></div>
+            <div
+              className="hidden h-12 w-px bg-grey-300 md:block dark:bg-primary-600"
+              aria-hidden="true"
+            ></div>
             <div className="flex items-center gap-3">
               <Clock className="h-5 w-5 shrink-0 stroke-primary-600 dark:stroke-primary-400" />
               <div>
-                <div className="mb-0.5 font-display text-sm font-semibold uppercase tracking-wide text-grey-600 dark:text-grey-400">
+                <div className="mb-0.5 font-display text-sm font-semibold tracking-wide text-grey-600 uppercase dark:text-grey-400">
                   Hours
                 </div>
                 <div className="font-body text-lg text-grey-900 dark:text-grey-100">
