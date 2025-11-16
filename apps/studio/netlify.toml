@@ -1,0 +1,13 @@
+[build]
+  # Build from monorepo root using Turborepo
+  command = "cd ../.. && pnpm run build --filter=@chimborazo/studio"
+  publish = "apps/studio/dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# SPA redirect for Studio routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
