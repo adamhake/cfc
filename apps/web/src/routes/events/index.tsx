@@ -1,7 +1,7 @@
 import Container from "@/components/Container/container";
 import Event from "@/components/Event/event";
 import PageHero from "@/components/PageHero/page-hero";
-import { events as staticEvents } from "@/data/events";
+import { events as staticEvents, type Event as StaticEvent } from "@/data/events";
 import { sanityClient } from "@/lib/sanity";
 import type { SanityEvent } from "@/lib/sanity-types";
 import { allEventsQuery } from "@chimborazo/sanity-config";
@@ -99,7 +99,7 @@ function Events() {
   const eventsToDisplay = sanityEvents && sanityEvents.length > 0 ? sanityEvents : staticEvents
 
   // Convert Sanity events to the format expected by the Event component
-  const formattedEvents = eventsToDisplay.map((event: any) => {
+  const formattedEvents = eventsToDisplay.map((event: SanityEvent | StaticEvent) => {
     // Check if it's a Sanity event or static event
     if ('_id' in event) {
       // Sanity event

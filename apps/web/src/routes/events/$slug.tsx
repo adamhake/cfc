@@ -3,7 +3,7 @@ import Container from "@/components/Container/container";
 import EventStatusChip from "@/components/EventStatusChip/event-status-chip";
 import { Markdown } from "@/components/Markdown/markdown";
 import { PortableText } from "@/components/PortableText/portable-text";
-import { events as staticEvents } from "@/data/events";
+import { events as staticEvents, type Event as StaticEvent } from "@/data/events";
 import { sanityClient, urlForImage } from "@/lib/sanity";
 import type { SanityEvent } from "@/lib/sanity-types";
 import { formatDateString } from "@/utils/time";
@@ -74,11 +74,11 @@ export const Route = createFileRoute("/events/$slug")({
     const imageUrl =
       isSanityEvent && "heroImage" in event
         ? (event as SanityEvent).heroImage.asset.url
-        : `https://chimboparkconservancy.org/${(event as any).image.src}`;
+        : `https://chimboparkconservancy.org/${(event as StaticEvent).image.src}`;
 
     // Get slug based on event type
     const eventSlug =
-      isSanityEvent && "slug" in event ? (event as SanityEvent).slug.current : (event as any).slug;
+      isSanityEvent && "slug" in event ? (event as SanityEvent).slug.current : (event as StaticEvent).slug;
 
     const eventUrl = `https://chimboparkconservancy.org/events/${eventSlug}`;
 
@@ -124,18 +124,18 @@ export const Route = createFileRoute("/events/$slug")({
           content: isSanityEvent
             ? (event as SanityEvent).heroImage.asset.metadata?.dimensions?.width.toString() ||
               "1200"
-            : (event as any).image.width.toString(),
+            : (event as StaticEvent).image.width.toString(),
         },
         {
           property: "og:image:height",
           content: isSanityEvent
             ? (event as SanityEvent).heroImage.asset.metadata?.dimensions?.height.toString() ||
               "800"
-            : (event as any).image.height.toString(),
+            : (event as StaticEvent).image.height.toString(),
         },
         {
           property: "og:image:alt",
-          content: isSanityEvent ? (event as SanityEvent).heroImage.alt : (event as any).image.alt,
+          content: isSanityEvent ? (event as SanityEvent).heroImage.alt : (event as StaticEvent).image.alt,
         },
         {
           property: "article:published_time",
@@ -155,7 +155,7 @@ export const Route = createFileRoute("/events/$slug")({
         },
         {
           name: "twitter:image:alt",
-          content: isSanityEvent ? (event as SanityEvent).heroImage.alt : (event as any).image.alt,
+          content: isSanityEvent ? (event as SanityEvent).heroImage.alt : (event as StaticEvent).image.alt,
         },
       ],
       links: [
@@ -184,7 +184,7 @@ function EventPage() {
           width: (event as SanityEvent).heroImage.asset.metadata?.dimensions?.width || 1920,
           height: (event as SanityEvent).heroImage.asset.metadata?.dimensions?.height || 1080,
         }
-      : (event as any).image;
+      : (event as StaticEvent).image;
 
   return (
     <div className="min-h-screen">

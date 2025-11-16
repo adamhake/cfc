@@ -31,7 +31,12 @@
       "mcp__sanity__list_projects",
       "mcp__sanity__get_project_studios",
       "mcp__sanity__list_datasets",
-      "mcp__sanity__list_workspace_schemas"
+      "mcp__sanity__list_workspace_schemas",
+      "mcp__netlify__netlify-project-services-reader",
+      "mcp__netlify__netlify-project-services-updater",
+      "mcp__netlify__netlify-deploy-services-reader",
+      "Bash(pnpm lint:*)",
+      "Bash(pnpm --filter @chimborazo/web lint:*)"
     ],
     "deny": [],
     "ask": []
