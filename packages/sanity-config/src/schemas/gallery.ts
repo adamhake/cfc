@@ -39,23 +39,9 @@ export default defineType({
             defineField({
               name: "image",
               title: "Image",
-              type: "image",
-              options: {
-                hotspot: true,
-              },
-              fields: [
-                defineField({
-                  name: "alt",
-                  title: "Alternative text",
-                  type: "string",
-                  validation: (rule) => rule.required(),
-                }),
-                defineField({
-                  name: "caption",
-                  title: "Caption",
-                  type: "string",
-                }),
-              ],
+              type: "reference",
+              to: [{ type: "mediaImage" }],
+              description: "Select an image from the media library",
               validation: (rule) => rule.required(),
             }),
             defineField({
@@ -68,14 +54,15 @@ export default defineType({
           ],
           preview: {
             select: {
-              title: "image.caption",
-              subtitle: "image.alt",
-              media: "image",
+              title: "image.title",
+              subtitle: "image.category",
+              media: "image.image",
+              showOnMobile: "showOnMobile",
             },
-            prepare({ title, subtitle, media }) {
+            prepare({ title, subtitle, media, showOnMobile }) {
               return {
                 title: title || "Untitled",
-                subtitle: subtitle || "No alt text",
+                subtitle: `${subtitle || "Uncategorized"}${!showOnMobile ? " (hidden on mobile)" : ""}`,
                 media,
               }
             },
@@ -97,7 +84,7 @@ export default defineType({
     select: {
       title: "title",
       subtitle: "galleryType",
-      media: "images.0.image",
+      media: "images.0.image.image",
     },
     prepare({ title, subtitle, media }) {
       return {
