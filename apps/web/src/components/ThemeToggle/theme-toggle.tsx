@@ -1,7 +1,7 @@
 import { useTheme } from "@/hooks/useTheme";
 import { motion } from "framer-motion";
 import { Monitor, Moon, Sun } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 export interface ThemeToggleProps {
   /**
@@ -27,12 +27,14 @@ export function ThemeToggle({
   className = "",
 }: ThemeToggleProps) {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
 
-  // Avoid hydration mismatch by only rendering after mount
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // Use useSyncExternalStore to detect client-side rendering
+  // This avoids hydration mismatches without triggering the setState-in-effect rule
+  const mounted = useSyncExternalStore(
+    () => () => {}, // subscribe (no-op since this never changes)
+    () => true, // getSnapshot (client)
+    () => false // getServerSnapshot (server)
+  );
 
   const handleToggle = () => {
     const nextTheme = theme === "light" ? "dark" : theme === "dark" ? "system" : "light";
