@@ -1,4 +1,4 @@
-import { defineQuery } from 'groq'
+import { defineQuery } from "groq"
 
 export const getGalleriesQuery = defineQuery(`
   *[_type == "gallery"] | order(order asc){

@@ -1,15 +1,15 @@
 // Existing queries
-export * from './events'
-export * from './media'
+export * from "./events"
+export * from "./media"
 
 // Site Settings
-export * from './siteSettings'
+export * from "./siteSettings"
 
 // Pages
-export * from './homePage'
-export * from './amenitiesPage'
+export * from "./homePage"
+export * from "./amenitiesPage"
 
 // Content
-export * from './partners'
-export * from './quotes'
-export * from './gallery'
+export * from "./partners"
+export * from "./quotes"
+export * from "./gallery"

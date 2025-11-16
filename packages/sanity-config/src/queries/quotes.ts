@@ -1,4 +1,4 @@
-import { defineQuery } from 'groq'
+import { defineQuery } from "groq"
 
 export const getQuotesQuery = defineQuery(`
   *[_type == "quote"] | order(_createdAt desc){

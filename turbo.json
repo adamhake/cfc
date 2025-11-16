@@ -18,6 +18,9 @@
     "lint": {
       "dependsOn": ["^build"]
     },
+    "format": {
+      "cache": false
+    },
     "type-check": {
       "dependsOn": ["^build"]
     },
