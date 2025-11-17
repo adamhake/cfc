@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Image } from "@unpic/react";
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 
@@ -41,6 +41,7 @@ export default function ImageGallery({
 }: ImageGalleryProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
+  const [captionHovered, setCaptionHovered] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -67,8 +68,10 @@ export default function ImageGallery({
       if (e.key === "Escape") {
         setSelectedImage(null);
       } else if (e.key === "ArrowLeft" && selectedImage > 0) {
+        setCaptionHovered(false);
         setSelectedImage(selectedImage - 1);
       } else if (e.key === "ArrowRight" && selectedImage < images.length - 1) {
+        setCaptionHovered(false);
         setSelectedImage(selectedImage + 1);
       }
     };
@@ -88,12 +91,14 @@ export default function ImageGallery({
 
   const handlePrevImage = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
+    setCaptionHovered(false);
     setSelectedImage((prev) => (prev !== null && prev > 0 ? prev - 1 : prev));
   }, []);
 
   const handleNextImage = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
+      setCaptionHovered(false);
       setSelectedImage((prev) => (prev !== null && prev < images.length - 1 ? prev + 1 : prev));
     },
     [images.length],
@@ -213,12 +218,14 @@ export default function ImageGallery({
                       hoveredIndex === index ? "opacity-100" : "opacity-0"
                     }`}
                   >
-                    <p className="font-body text-sm text-white md:text-base">{image.caption}</p>
+                    <p className="line-clamp-3 font-body text-sm text-white md:text-base">
+                      {image.caption}
+                    </p>
                   </div>
                 )}
                 {showCaptions && captionPosition === "below" && image.caption && (
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent p-4 pt-12">
-                    <p className="font-body text-sm font-medium text-white drop-shadow-lg md:text-base">
+                    <p className="line-clamp-2 font-body text-sm font-medium text-white drop-shadow-lg md:text-base">
                       {image.caption}
                     </p>
                   </div>
@@ -232,7 +239,11 @@ export default function ImageGallery({
         {selectedImage !== null && (
           <motion.div
             ref={modalRef}
-            className="fixed inset-0 z-50 flex h-full min-h-screen w-full min-w-full flex-col overflow-hidden bg-black/95"
+            className="fixed top-0 right-0 bottom-0 left-0 z-50 flex h-full min-h-[100dvh] w-full flex-col overflow-hidden bg-black/95"
+            style={{
+              paddingTop: "env(safe-area-inset-top)",
+              paddingBottom: "env(safe-area-inset-bottom)",
+            }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -271,7 +282,7 @@ export default function ImageGallery({
                 {/* Previous button - hidden on mobile, shown on desktop */}
                 {selectedImage > 0 && (
                   <button
-                    className="hidden rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:ring-2 focus:ring-white focus:outline-none md:block"
+                    className="hidden rounded-full bg-green-700/80 p-3 text-white backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:outline-none md:block"
                     onClick={handlePrevImage}
                     aria-label="Previous image"
                     type="button"
@@ -293,18 +304,76 @@ export default function ImageGallery({
                   </button>
                 )}
                 {/* Image container */}
-                <div className="relative max-w-7xl">
-                  <Image
-                    src={images[selectedImage].src}
-                    alt={images[selectedImage].alt}
-                    width={images[selectedImage].width}
-                    height={images[selectedImage].height}
-                    className="max-h-[calc(100vh-180px)] w-auto rounded-lg md:max-h-[90vh]"
-                    loading="eager"
-                  />
+                <div className="flex max-w-7xl flex-col items-center gap-4 md:gap-0">
+                  <div className="relative inline-block">
+                    <img
+                      src={images[selectedImage].src}
+                      alt={images[selectedImage].alt}
+                      className="h-auto max-h-[calc(100vh-24rem)] w-auto max-w-[85vw] rounded-lg md:max-h-[calc(90vh-16rem)] md:max-w-5xl"
+                      loading="eager"
+                    />
+                    {/* Desktop: Hotspot indicator and caption overlay */}
+                    {images[selectedImage].caption && (
+                      <>
+                        {/* Hotspot circle with info icon */}
+                        <motion.div
+                          className="absolute bottom-4 left-4 hidden h-10 w-10 cursor-help items-center justify-center rounded-full bg-green-700/80 backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-green-700 md:flex"
+                          onMouseEnter={() => setCaptionHovered(true)}
+                          onMouseLeave={() => setCaptionHovered(false)}
+                          aria-label="Show caption"
+                          animate={{
+                            scale: [1, 1.1, 1],
+                            opacity: [0.8, 1, 0.8],
+                          }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                          }}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 text-white"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                          </svg>
+                        </motion.div>
+                        {/* Caption overlay - shown on hotspot hover */}
+                        <AnimatePresence>
+                          {captionHovered && (
+                            <motion.div
+                              className="absolute inset-0 hidden rounded-lg bg-gradient-to-t from-black via-black/85 to-transparent p-6 pt-16 md:flex md:items-end"
+                              onMouseEnter={() => setCaptionHovered(true)}
+                              onMouseLeave={() => setCaptionHovered(false)}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: 10 }}
+                              transition={{
+                                duration: 0.3,
+                                ease: "easeOut",
+                              }}
+                            >
+                              <p className="font-body text-base leading-relaxed text-white drop-shadow-lg md:text-lg">
+                                {images[selectedImage].caption}
+                              </p>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </>
+                    )}
+                  </div>
+                  {/* Mobile: Caption below image */}
                   {images[selectedImage].caption && (
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-6 pt-16">
-                      <p className="font-body text-base text-white md:text-lg">
+                    <div className="max-h-32 w-full max-w-2xl overflow-y-auto rounded-lg bg-black/40 p-4 backdrop-blur-sm md:hidden">
+                      <p className="font-body text-sm leading-relaxed text-white">
                         {images[selectedImage].caption}
                       </p>
                     </div>
@@ -313,7 +382,7 @@ export default function ImageGallery({
                 {/* Next button - hidden on mobile, shown on desktop */}
                 {selectedImage < images.length - 1 && (
                   <button
-                    className="hidden rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:ring-2 focus:ring-white focus:outline-none md:block"
+                    className="hidden rounded-full bg-green-700/80 p-3 text-white backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:outline-none md:block"
                     onClick={handleNextImage}
                     aria-label="Next image"
                     type="button"
@@ -342,7 +411,7 @@ export default function ImageGallery({
               onClick={(e) => e.stopPropagation()}
             >
               <button
-                className={`rounded-full bg-white/10 p-4 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:ring-2 focus:ring-white focus:outline-none ${selectedImage === 0 ? "cursor-not-allowed opacity-50" : ""}`}
+                className={`rounded-full bg-green-700/80 p-4 text-white backdrop-blur-sm transition-all duration-300 hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:outline-none ${selectedImage === 0 ? "cursor-not-allowed opacity-50" : ""}`}
                 onClick={handlePrevImage}
                 aria-label="Previous image"
                 type="button"
@@ -364,7 +433,7 @@ export default function ImageGallery({
                 </svg>
               </button>
               <button
-                className={`rounded-full bg-white/10 p-4 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:ring-2 focus:ring-white focus:outline-none ${selectedImage === images.length - 1 ? "cursor-not-allowed opacity-50" : ""}`}
+                className={`rounded-full bg-green-700/80 p-4 text-white backdrop-blur-sm transition-all duration-300 hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:outline-none ${selectedImage === images.length - 1 ? "cursor-not-allowed opacity-50" : ""}`}
                 onClick={handleNextImage}
                 aria-label="Next image"
                 type="button"
@@ -424,12 +493,14 @@ export default function ImageGallery({
                     hoveredIndex === index ? "opacity-100" : "opacity-0"
                   }`}
                 >
-                  <p className="font-body text-sm text-white md:text-base">{image.caption}</p>
+                  <p className="line-clamp-3 font-body text-sm text-white md:text-base">
+                    {image.caption}
+                  </p>
                 </div>
               )}
             </div>
             {showCaptions && captionPosition === "below" && image.caption && (
-              <p className="mt-2 font-body text-sm text-neutral-700 dark:text-neutral-300">
+              <p className="mt-2 line-clamp-2 font-body text-sm text-neutral-700 dark:text-neutral-300">
                 {image.caption}
               </p>
             )}
@@ -470,12 +541,14 @@ export default function ImageGallery({
                   hoveredIndex === index ? "opacity-100" : "opacity-0"
                 }`}
               >
-                <p className="font-body text-sm text-white md:text-base">{image.caption}</p>
+                <p className="line-clamp-3 font-body text-sm text-white md:text-base">
+                  {image.caption}
+                </p>
               </div>
             )}
           </div>
           {showCaptions && captionPosition === "below" && image.caption && (
-            <p className="mt-2 font-body text-sm text-neutral-700 dark:text-neutral-300">
+            <p className="mt-2 line-clamp-2 font-body text-sm text-neutral-700 dark:text-neutral-300">
               {image.caption}
             </p>
           )}

@@ -1,13 +1,14 @@
 import { createSanityClient, urlForImage as urlForImageBase } from "@chimborazo/sanity-config";
 import { env } from "@/env";
 
-// Production client (uses CDN, published content only)
+// Production client (uses CDN, excludes drafts via query filters)
+// Using "raw" perspective with draft filters in queries to show all non-draft content
 export const sanityClient = createSanityClient({
   projectId: env.VITE_SANITY_PROJECT_ID,
   dataset: env.VITE_SANITY_DATASET,
   apiVersion: env.VITE_SANITY_API_VERSION,
   useCdn: true,
-  perspective: "published",
+  perspective: "raw",
 });
 
 // Preview client (no CDN, includes drafts) - for draft/preview mode

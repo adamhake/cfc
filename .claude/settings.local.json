@@ -50,7 +50,8 @@
       "Bash(pnpm --filter @chimborazo/sanity-config build:*)",
       "mcp__sanity__get_context",
       "mcp__sanity__query_documents",
-      "mcp__sanity__create_document"
+      "mcp__sanity__create_document",
+      "mcp__sanity__publish_document"
     ],
     "deny": [],
     "ask": []

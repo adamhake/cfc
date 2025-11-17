@@ -4,7 +4,7 @@ import Container from "@/components/Container/container";
 import Event from "@/components/Event/event";
 import EventStatusChip from "@/components/EventStatusChip/event-status-chip";
 import GetInvolved from "@/components/GetInvolved/get-involved";
-import HeroSoftGradientDivider from "@/components/Hero/hero-soft-gradient-divider";
+import Hero from "@/components/Hero/hero";
 import ImageCard from "@/components/ImageCard/image-card";
 import ImageCarousel from "@/components/ImageCarousel/image-carousel";
 import ImageGallery from "@/components/ImageGallery/image-gallery";
@@ -369,7 +369,7 @@ function ComponentPlayground() {
                 Soft gradient layers with a subtle wave divider for organic, natural flow
               </p>
               <div className="overflow-hidden rounded-2xl border border-grey-200 dark:border-grey-700">
-                <HeroSoftGradientDivider />
+                <Hero />
               </div>
             </div>
 
