@@ -47,7 +47,10 @@
       "Bash(pnpm --filter @chimborazo/web type-check:*)",
       "Bash(pnpm --filter @chimborazo/web format:*)",
       "Bash(pnpm --filter @chimborazo/web build:*)",
-      "Bash(pnpm --filter @chimborazo/sanity-config build:*)"
+      "Bash(pnpm --filter @chimborazo/sanity-config build:*)",
+      "mcp__sanity__get_context",
+      "mcp__sanity__query_documents",
+      "mcp__sanity__create_document"
     ],
     "deny": [],
     "ask": []

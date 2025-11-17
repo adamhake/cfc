@@ -24,12 +24,6 @@ export const getHomePageQuery = defineQuery(`
       },
       ctaButton
     },
-    visionPillars[] | order(order asc){
-      title,
-      icon,
-      description,
-      order
-    },
     "partners": featuredPartners[]->{
       _id,
       name,
