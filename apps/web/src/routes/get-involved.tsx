@@ -383,7 +383,7 @@ function GetInvolvedPage() {
                   Stay up to date with daily park happenings, event photos, and community stories on
                   social media.
                 </p>
-                <div className="flex gap-4">
+                <div className="flex flex-col gap-4 sm:flex-row">
                   <a
                     href={
                       siteSettings?.socialMedia?.facebook ||
