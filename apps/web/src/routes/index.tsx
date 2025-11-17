@@ -56,89 +56,8 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-// Donation buttons
-// Partner Callout
-//  - Church Hill Rotary Club
-//  - Church Hill Association
-//  - The Park homepage section
-
-// const tickerImgs = [
-// 	"/volunteers.webp",
-// 	"/roundhouse_evening.webp",
-// 	"/chimbo_sign.webp",
-// 	"/grove_cleanup.webp",
-// 	"/sign_cleanup.webp",
-// ];
-
 function Home() {
   const homePageData = Route.useLoaderData();
-
-  const galleryImages = [
-    {
-      src: "/chimbo_arial.webp",
-      alt: "Aerial view of Chimborazo Park",
-      caption: "42 acres of natural beauty",
-      width: 1600,
-      height: 1200,
-      showOnMobile: true,
-    },
-    {
-      src: "/chimbo_sign.webp",
-      alt: "Historic Chimborazo Park sign",
-      caption: "Welcome to Chimborazo Park",
-      width: 1200,
-      height: 1600,
-      showOnMobile: false,
-    },
-    {
-      src: "/oaks.webp",
-      alt: "Historic oak trees",
-      caption: "Majestic century-old oaks",
-      width: 1600,
-      height: 1200,
-      showOnMobile: false,
-    },
-    {
-      src: "/rock_sunset.webp",
-      alt: "Sunset view from the park",
-      caption: "Stunning Richmond skyline views",
-      width: 2000,
-      height: 1262,
-      showOnMobile: false,
-    },
-    {
-      src: "/roundhouse_evening.webp",
-      alt: "Historic Round House at evening",
-      caption: "The park's iconic Round House",
-      width: 2000,
-      height: 1333,
-      showOnMobile: false,
-    },
-    {
-      src: "/bike_sunset.webp",
-      alt: "Cycling at sunset",
-      caption: "Scenic trails and recreation",
-      width: 2000,
-      height: 1262,
-      showOnMobile: false,
-    },
-    {
-      src: "/chimob_gaz.webp",
-      alt: "Park gazebo",
-      caption: "Historic gathering spaces",
-      width: 1600,
-      height: 1200,
-      showOnMobile: false,
-    },
-    {
-      src: "/grove_cleanup.webp",
-      alt: "Grove cleanup",
-      caption: "Active community spaces",
-      width: 1600,
-      height: 1200,
-      showOnMobile: false,
-    },
-  ];
 
   // Prepare hero data from Sanity or use defaults
   const heroData = homePageData?.hero?.heroImage?.image?.asset?.url
@@ -157,12 +76,12 @@ function Home() {
   // Prepare gallery data from Sanity or use defaults
   const galleryData =
     homePageData?.gallery?.images
-      ?.filter((img) => img?.image?.asset?.url) // Filter out any images without assets
+      ?.filter((img) => img?.image?.image?.asset?.url) // Filter out any images without assets
       .map((img) => ({
-        ...img.image,
-        alt: img.image.alt || "",
+        ...img.image.image,
+        alt: img.image.image.alt || "",
         showOnMobile: img.showOnMobile ?? true,
-      })) || galleryImages;
+      })) || [];
 
   return (
     <div className="space-y-24 pb-24 text-grey-900 lg:px-0 dark:text-grey-100">
