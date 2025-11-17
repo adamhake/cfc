@@ -8,6 +8,7 @@ import Quote from "@/components/Quote/quote";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import Vision from "@/components/Vision/vision";
 import { events } from "@/data/events";
+import { queryKeys } from "@/lib/query-keys";
 import { sanityClient } from "@/lib/sanity";
 import type { SanityHomePage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
@@ -18,7 +19,7 @@ import { Image } from "@unpic/react";
 
 // Query options for TanStack Query
 const homePageQueryOptions = queryOptions({
-  queryKey: ["homePage"],
+  queryKey: queryKeys.homePage(),
   queryFn: async (): Promise<SanityHomePage | null> => {
     try {
       return await sanityClient.fetch(getHomePageQuery);
@@ -27,8 +28,9 @@ const homePageQueryOptions = queryOptions({
       return null;
     }
   },
-  staleTime: 60 * 60 * 1000, // 60 minutes
-  gcTime: 10 * 60 * 1000, // 10 minutes
+  // Curated content changes infrequently - cache for 30 minutes
+  staleTime: 30 * 60 * 1000, // 30 minutes
+  gcTime: 60 * 60 * 1000, // 1 hour (must be >= staleTime)
 });
 
 export const Route = createFileRoute("/")({

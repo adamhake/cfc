@@ -110,7 +110,28 @@ let clientThemeManager: ThemeStateManager | null = null;
 let clientPaletteManager: PaletteStateManager | null = null;
 
 export function getContext() {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        // Prevent refetch immediately after SSR hydration
+        // This eliminates duplicate API calls on page load
+        staleTime: 60 * 1000, // 1 minute
+
+        // Keep data in cache longer than staleTime
+        // Allows serving stale data while refetching in background
+        gcTime: 5 * 60 * 1000, // 5 minutes
+
+        // Reduce aggressive refetching behavior
+        // Routes can override these defaults as needed
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+
+        // Retry failed queries once with exponential backoff
+        retry: 1,
+        retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      },
+    },
+  });
 
   // On the client, reuse the same managers to maintain state
   // On the server, create new instances per request

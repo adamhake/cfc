@@ -13,7 +13,6 @@ export const getRouter = () => {
   const router = createRouter({
     routeTree,
     scrollRestoration: true,
-    defaultStaleTime: Infinity,
     context: { ...rqContext },
     defaultPreload: "intent",
     Wrap: (props: { children: React.ReactNode }) => {

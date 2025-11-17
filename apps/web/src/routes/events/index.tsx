@@ -2,6 +2,7 @@ import Container from "@/components/Container/container";
 import Event from "@/components/Event/event";
 import PageHero from "@/components/PageHero/page-hero";
 import { events as staticEvents, type Event as StaticEvent } from "@/data/events";
+import { queryKeys } from "@/lib/query-keys";
 import { sanityClient } from "@/lib/sanity";
 import type { SanityEvent } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
@@ -11,7 +12,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 // Query options for TanStack Query
 const eventsQueryOptions = queryOptions({
-  queryKey: ["events", "all"],
+  queryKey: queryKeys.events.all(),
   queryFn: async (): Promise<SanityEvent[]> => {
     try {
       return await sanityClient.fetch(allEventsQuery);
@@ -21,8 +22,9 @@ const eventsQueryOptions = queryOptions({
       return [];
     }
   },
+  // Events list changes occasionally - cache for 5 minutes
   staleTime: 5 * 60 * 1000, // 5 minutes
-  gcTime: 10 * 60 * 1000, // 10 minutes
+  gcTime: 15 * 60 * 1000, // 15 minutes
 });
 
 export const Route = createFileRoute("/events/")({
