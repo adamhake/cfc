@@ -54,65 +54,6 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: "visionPillars",
-      title: "Vision Pillars",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            defineField({
-              name: "title",
-              title: "Title",
-              type: "string",
-              validation: (rule) => rule.required(),
-            }),
-            defineField({
-              name: "icon",
-              title: "Icon",
-              type: "string",
-              options: {
-                list: [
-                  { title: "Leafy Green", value: "leafy-green" },
-                  { title: "Trees", value: "trees" },
-                  { title: "Heart Handshake", value: "heart-handshake" },
-                  { title: "Book Open Text", value: "book-open-text" },
-                ],
-                layout: "dropdown",
-              },
-              validation: (rule) => rule.required(),
-            }),
-            defineField({
-              name: "description",
-              title: "Description",
-              type: "text",
-              validation: (rule) => rule.required().max(300),
-            }),
-            defineField({
-              name: "order",
-              title: "Display Order",
-              type: "number",
-              validation: (rule) => rule.required().min(0),
-            }),
-          ],
-          preview: {
-            select: {
-              title: "title",
-              subtitle: "icon",
-              order: "order",
-            },
-            prepare({ title, subtitle, order }) {
-              return {
-                title: `${order + 1}. ${title}`,
-                subtitle: subtitle,
-              }
-            },
-          },
-        },
-      ],
-      validation: (rule) => rule.required().min(1).max(6),
-    }),
-    defineField({
       name: "featuredPartners",
       title: "Featured Partners",
       type: "array",
