@@ -18,6 +18,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as EventsIndexRouteImport } from './routes/events/index'
 import { Route as EventsSlugRouteImport } from './routes/events/$slug'
 import { Route as ApiDraftRouteImport } from './routes/api/draft'
+import { Route as ApiWebhooksSanityRouteImport } from './routes/api/webhooks/sanity'
 
 const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
   id: '/privacy-policy',
@@ -64,6 +65,11 @@ const ApiDraftRoute = ApiDraftRouteImport.update({
   path: '/api/draft',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiWebhooksSanityRoute = ApiWebhooksSanityRouteImport.update({
+  id: '/api/webhooks/sanity',
+  path: '/api/webhooks/sanity',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/api/draft': typeof ApiDraftRoute
   '/events/$slug': typeof EventsSlugRoute
   '/events': typeof EventsIndexRoute
+  '/api/webhooks/sanity': typeof ApiWebhooksSanityRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByTo {
   '/api/draft': typeof ApiDraftRoute
   '/events/$slug': typeof EventsSlugRoute
   '/events': typeof EventsIndexRoute
+  '/api/webhooks/sanity': typeof ApiWebhooksSanityRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -98,6 +106,7 @@ export interface FileRoutesById {
   '/api/draft': typeof ApiDraftRoute
   '/events/$slug': typeof EventsSlugRoute
   '/events/': typeof EventsIndexRoute
+  '/api/webhooks/sanity': typeof ApiWebhooksSanityRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/api/draft'
     | '/events/$slug'
     | '/events'
+    | '/api/webhooks/sanity'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/api/draft'
     | '/events/$slug'
     | '/events'
+    | '/api/webhooks/sanity'
   id:
     | '__root__'
     | '/'
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/api/draft'
     | '/events/$slug'
     | '/events/'
+    | '/api/webhooks/sanity'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -145,6 +157,7 @@ export interface RootRouteChildren {
   ApiDraftRoute: typeof ApiDraftRoute
   EventsSlugRoute: typeof EventsSlugRoute
   EventsIndexRoute: typeof EventsIndexRoute
+  ApiWebhooksSanityRoute: typeof ApiWebhooksSanityRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -212,6 +225,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiDraftRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/webhooks/sanity': {
+      id: '/api/webhooks/sanity'
+      path: '/api/webhooks/sanity'
+      fullPath: '/api/webhooks/sanity'
+      preLoaderRoute: typeof ApiWebhooksSanityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -225,6 +245,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiDraftRoute: ApiDraftRoute,
   EventsSlugRoute: EventsSlugRoute,
   EventsIndexRoute: EventsIndexRoute,
+  ApiWebhooksSanityRoute: ApiWebhooksSanityRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -13,17 +13,16 @@ const config = defineConfig({
     }),
     tanstackStart({
       sitemap: {
-        enabled: false,
-        host: process.env.SERVER_URL || "https://chimborazoparkconservancy.org",
-      },
-      prerender: {
         enabled: true,
+        host: process.env.SERVER_URL || "https://chimborazoparkconservancy.org",
       },
     }),
     netlify({
       edgeSSR: true,
     }),
-    webfontDownload(),
+    webfontDownload([
+      "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Vollkorn+SC:wght@400;600;700;900&display=swap",
+    ]),
     tailwindcss(),
     viteReact(),
   ],
