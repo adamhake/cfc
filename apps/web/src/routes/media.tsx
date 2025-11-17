@@ -120,7 +120,7 @@ function Media() {
               variant="masonry"
               columns={{ default: 1, sm: 2, md: 3, lg: 3 }}
               showCaptions={true}
-              captionPosition="below"
+              captionPosition="hover"
               gap="lg"
             />
             {hasMore && (

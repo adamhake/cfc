@@ -1,19 +1,42 @@
 import Container from "@/components/Container/container";
 import Event from "@/components/Event/event";
 import GetInvolved from "@/components/GetInvolved/get-involved";
-import HeroSoftGradientDivider from "@/components/Hero/hero-soft-gradient-divider";
+import Hero from "@/components/Hero/hero";
 import ImageGallery from "@/components/ImageGallery/image-gallery";
 import Partners from "@/components/Partners/partners";
 import Quote from "@/components/Quote/quote";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import Vision from "@/components/Vision/vision";
 import { events } from "@/data/events";
+import { sanityClient } from "@/lib/sanity";
+import type { SanityHomePage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
+import { getHomePageQuery } from "@chimborazo/sanity-config";
+import { queryOptions } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Image } from "@unpic/react";
 
+// Query options for TanStack Query
+const homePageQueryOptions = queryOptions({
+  queryKey: ["homePage"],
+  queryFn: async (): Promise<SanityHomePage | null> => {
+    try {
+      return await sanityClient.fetch(getHomePageQuery);
+    } catch (error) {
+      console.warn("Failed to fetch homepage from Sanity:", error);
+      return null;
+    }
+  },
+  staleTime: 60 * 60 * 1000, // 60 minutes
+  gcTime: 10 * 60 * 1000, // 10 minutes
+});
+
 export const Route = createFileRoute("/")({
   component: Home,
+  loader: async ({ context }) => {
+    // Prefetch homepage data on the server
+    return context.queryClient.ensureQueryData(homePageQueryOptions);
+  },
   head: () => ({
     meta: generateMetaTags({
       title: "Home",
@@ -46,6 +69,8 @@ export const Route = createFileRoute("/")({
 // ];
 
 function Home() {
+  const homePageData = Route.useLoaderData();
+
   const galleryImages = [
     {
       src: "/chimbo_arial.webp",
@@ -113,9 +138,36 @@ function Home() {
     },
   ];
 
+  // Prepare hero data from Sanity or use defaults
+  const heroData = homePageData?.hero?.heroImage?.image?.asset?.url
+    ? {
+        heading: homePageData.hero.heading,
+        subheading: homePageData.hero.subheading,
+        imageSrc: homePageData.hero.heroImage.image.asset.url,
+        imageAlt: homePageData.hero.heroImage.image.alt,
+        imageWidth: homePageData.hero.heroImage.image.asset.metadata?.dimensions?.width,
+        imageHeight: homePageData.hero.heroImage.image.asset.metadata?.dimensions?.height,
+        ctaText: homePageData.hero.ctaButton?.text,
+        ctaLink: homePageData.hero.ctaButton?.link,
+      }
+    : undefined;
+
+  // Prepare gallery data from Sanity or use defaults
+  const galleryData =
+    homePageData?.gallery?.images
+      ?.filter((img) => img?.image?.asset?.url) // Filter out any images without assets
+      .map((img) => ({
+        src: img.image.asset.url,
+        alt: img.image.alt || "",
+        caption: img.image.caption || "",
+        width: img.image.asset.metadata?.dimensions?.width || 1600,
+        height: img.image.asset.metadata?.dimensions?.height || 1200,
+        showOnMobile: img.showOnMobile ?? true,
+      })) || galleryImages;
+
   return (
     <div className="space-y-24 pb-24 text-grey-900 lg:px-0 dark:text-grey-100">
-      <HeroSoftGradientDivider />
+      <Hero {...heroData} />
 
       {/* Intro + Gallery */}
       <div className="px-4 text-grey-900 lg:px-0">
@@ -132,7 +184,7 @@ function Home() {
           </p>
           <div className="mt-12">
             <ImageGallery
-              images={galleryImages}
+              images={galleryData}
               variant="masonry"
               showCaptions={true}
               captionPosition="hover"
@@ -314,13 +366,41 @@ function Home() {
             preserving and enhancing Chimborazo Park for the entire community.
           </p>
           <div className="mt-12">
-            <Partners />
+            <Partners
+              partners={homePageData?.partners
+                ?.filter((partner) => partner?.logo?.asset?.url) // Filter out partners without logos
+                ?.map((partner) => ({
+                  name: partner.name,
+                  url: partner.websiteUrl,
+                  logo: {
+                    src: partner.logo.asset.url,
+                    alt: partner.logo.alt || partner.name,
+                    width: partner.logo.asset.metadata?.dimensions?.width || 275,
+                    height: partner.logo.asset.metadata?.dimensions?.height || 84,
+                  },
+                  description: partner.description,
+                }))}
+            />
           </div>
         </Container>
       </div>
 
       {/* Quote */}
-      <Quote />
+      <Quote
+        quoteText={homePageData?.quote?.quoteText}
+        attribution={homePageData?.quote?.attribution}
+        backgroundImage={
+          homePageData?.quote?.backgroundImage?.asset?.url
+            ? {
+                src: homePageData.quote.backgroundImage.asset.url,
+                alt: homePageData.quote.backgroundImage.alt || "Quote background",
+                width: homePageData.quote.backgroundImage.asset.metadata?.dimensions?.width || 1600,
+                height:
+                  homePageData.quote.backgroundImage.asset.metadata?.dimensions?.height || 1200,
+              }
+            : undefined
+        }
+      />
     </div>
   );
 }
