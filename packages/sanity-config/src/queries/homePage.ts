@@ -84,6 +84,30 @@ export const getHomePageQuery = defineQuery(`
         },
         showOnMobile
       }
+    },
+    "parkGallery": parkGallery->{
+      _id,
+      title,
+      images[]{
+        image->{
+          _id,
+          title,
+          image{
+            asset->{
+              _id,
+              url,
+              metadata{
+                dimensions,
+                lqip
+              }
+            },
+            alt,
+            caption,
+            hotspot
+          }
+        },
+        showOnMobile
+      }
     }
   }
 `)

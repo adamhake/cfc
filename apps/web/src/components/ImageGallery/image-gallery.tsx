@@ -255,7 +255,7 @@ export default function ImageGallery({
                   )}
                   {showCaptions && captionPosition === "hover" && props.caption && (
                     <div
-                      className={`absolute inset-0 flex items-end bg-gradient-to-t from-primary-900/90 via-primary-900/50 to-transparent p-4 transition-opacity duration-300 dark:from-grey-900/90 dark:via-grey-900/50 ${
+                      className={`absolute inset-0 flex items-end bg-black/85 p-4 backdrop-blur-sm transition-opacity duration-300 ${
                         hoveredIndex === index ? "opacity-100" : "opacity-0"
                       }`}
                     >
@@ -265,7 +265,7 @@ export default function ImageGallery({
                     </div>
                   )}
                   {showCaptions && captionPosition === "below" && props.caption && (
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent p-4 pt-12">
+                    <div className="absolute inset-x-0 bottom-0 bg-black/85 p-4 backdrop-blur-sm">
                       <p className="line-clamp-2 font-body text-sm font-medium text-white drop-shadow-lg md:text-base">
                         {props.caption}
                       </p>
@@ -403,7 +403,7 @@ export default function ImageGallery({
                         <AnimatePresence>
                           {captionHovered && (
                             <motion.div
-                              className="absolute inset-0 hidden rounded-lg bg-gradient-to-t from-black via-black/85 to-transparent p-6 pt-16 md:flex md:items-end"
+                              className="absolute inset-0 hidden rounded-lg bg-black/85 p-6 backdrop-blur-sm md:flex md:items-end"
                               onMouseEnter={() => setCaptionHovered(true)}
                               onMouseLeave={() => setCaptionHovered(false)}
                               initial={{ opacity: 0, y: 10 }}
@@ -414,7 +414,7 @@ export default function ImageGallery({
                                 ease: "easeOut",
                               }}
                             >
-                              <p className="font-body text-base leading-relaxed text-white drop-shadow-lg md:text-lg">
+                              <p className="max-h-full overflow-y-auto pb-6 font-body text-base leading-relaxed text-white drop-shadow-lg md:text-lg">
                                 {getImageProps(images[selectedImage]).caption}
                               </p>
                             </motion.div>
@@ -553,7 +553,7 @@ export default function ImageGallery({
                 )}
                 {showCaptions && captionPosition === "hover" && props.caption && (
                   <div
-                    className={`absolute inset-0 flex items-end bg-gradient-to-t from-primary-900/90 via-primary-900/50 to-transparent p-4 transition-opacity duration-300 dark:from-grey-900/90 dark:via-grey-900/50 ${
+                    className={`absolute inset-0 flex items-end bg-black/85 p-4 backdrop-blur-sm transition-opacity duration-300 ${
                       hoveredIndex === index ? "opacity-100" : "opacity-0"
                     }`}
                   >
@@ -613,7 +613,7 @@ export default function ImageGallery({
               )}
               {showCaptions && captionPosition === "hover" && props.caption && (
                 <div
-                  className={`absolute inset-0 flex items-end bg-gradient-to-t from-primary-900/90 via-primary-900/50 to-transparent p-4 transition-opacity duration-300 dark:from-grey-900/90 dark:via-grey-900/50 ${
+                  className={`absolute inset-0 flex items-end bg-black/85 p-4 backdrop-blur-sm transition-opacity duration-300 ${
                     hoveredIndex === index ? "opacity-100" : "opacity-0"
                   }`}
                 >
