@@ -17,7 +17,6 @@ export default function HeroSoftGradientDivider() {
         className="absolute inset-0 h-full w-full object-cover"
         loading="eager"
         fetchpriority="high"
-        layout="fullWidth"
         breakpoints={[320, 640, 1280, 1920, 2000]}
       />
 

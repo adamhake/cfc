@@ -1,13 +1,14 @@
+import { Button } from "@/components/Button/button";
 import Container from "@/components/Container/container";
-import PageHero from "@/components/PageHero/page-hero";
 import ImageGallery, { type GalleryImage } from "@/components/ImageGallery/image-gallery";
+import PageHero from "@/components/PageHero/page-hero";
 import { sanityClient } from "@/lib/sanity";
 import type { SanityMediaImage } from "@/lib/sanity-types";
+import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { allMediaImagesQuery } from "@chimborazo/sanity-config";
-import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Button } from "@/components/Button/button";
 
 // Query options for TanStack Query
 const mediaQueryOptions = queryOptions({
@@ -31,64 +32,16 @@ export const Route = createFileRoute("/media")({
     return context.queryClient.ensureQueryData(mediaQueryOptions);
   },
   head: () => ({
-    meta: [
-      {
-        title: "Media Gallery | Chimborazo Park Conservancy",
-      },
-      {
-        name: "description",
-        content:
-          "Browse photos of Chimborazo Park, our community events, volunteer activities, and the ongoing restoration of this historic Richmond landmark.",
-      },
-      {
-        property: "og:title",
-        content: "Media Gallery | Chimborazo Park Conservancy",
-      },
-      {
-        property: "og:description",
-        content:
-          "Photos of Chimborazo Park, community events, volunteer activities, and historic restoration efforts in Church Hill, Richmond, VA.",
-      },
-      {
-        property: "og:type",
-        content: "website",
-      },
-      {
-        property: "og:url",
-        content: "https://chimboparkconservancy.org/media",
-      },
-      {
-        property: "og:image",
-        content: "https://chimboparkconservancy.org/bike_sunset.webp",
-      },
-      {
-        property: "og:image:width",
-        content: "2000",
-      },
-      {
-        property: "og:image:height",
-        content: "1262",
-      },
-      {
-        name: "twitter:title",
-        content: "Media Gallery | Chimborazo Park Conservancy",
-      },
-      {
-        name: "twitter:description",
-        content:
-          "Photos of Chimborazo Park, community events, and volunteer activities in Church Hill, Richmond, VA.",
-      },
-      {
-        name: "twitter:image",
-        content: "https://chimboparkconservancy.org/bike_sunset.webp",
-      },
-    ],
-    links: [
-      {
-        rel: "canonical",
-        href: "https://chimboparkconservancy.org/media",
-      },
-    ],
+    meta: generateMetaTags({
+      title: "Media Gallery",
+      description:
+        "Browse photos of Chimborazo Park, our community events, volunteer activities, and the ongoing restoration of this historic Richmond landmark.",
+      type: "website",
+      url: `${SITE_CONFIG.url}/media`,
+    }),
+    links: generateLinkTags({
+      canonical: `${SITE_CONFIG.url}/media`,
+    }),
   }),
 });
 

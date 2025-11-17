@@ -8,76 +8,26 @@ import Quote from "@/components/Quote/quote";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import Vision from "@/components/Vision/vision";
 import { events } from "@/data/events";
+import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Image } from "@unpic/react";
 
 export const Route = createFileRoute("/")({
   component: Home,
   head: () => ({
-    meta: [
-      {
-        title: "Home | Chimborazo Park Conservancy",
-      },
-      {
-        name: "description",
-        content:
-          "The Chimborazo Park Conservancy preserves and enhances this Church Hill landmark through community stewardship. Join us in restoring Richmond's historic park.",
-      },
-      {
-        property: "og:title",
-        content: "Chimborazo Park Conservancy | Preserving Richmond's Historic Park",
-      },
-      {
-        property: "og:description",
-        content:
-          "A 501(c)(3) non-profit dedicated to preserving and enhancing Chimborazo Park through restoration, recreation, connection, and preservation of this Church Hill landmark.",
-      },
-      {
-        property: "og:type",
-        content: "website",
-      },
-      {
-        property: "og:url",
-        content: "https://chimboparkconservancy.org",
-      },
-      {
-        property: "og:image",
-        content: "https://chimboparkconservancy.org/bike_sunset.webp",
-      },
-      {
-        property: "og:image:width",
-        content: "2000",
-      },
-      {
-        property: "og:image:height",
-        content: "1262",
-      },
-      {
-        name: "twitter:title",
-        content: "Chimborazo Park Conservancy | Preserving Richmond's Historic Park",
-      },
-      {
-        name: "twitter:description",
-        content:
-          "A 501(c)(3) non-profit dedicated to preserving and enhancing Chimborazo Park through restoration, recreation, connection, and preservation.",
-      },
-      {
-        name: "twitter:image",
-        content: "https://chimboparkconservancy.org/bike_sunset.webp",
-      },
-    ],
-    links: [
-      {
-        rel: "canonical",
-        href: "https://chimboparkconservancy.org",
-      },
-      {
-        rel: "preload",
-        as: "image",
-        href: "/bike_sunset.webp",
-        fetchPriority: "high",
-      },
-    ],
+    meta: generateMetaTags({
+      title: "Home",
+      description:
+        "The Chimborazo Park Conservancy preserves and enhances this Church Hill landmark through community stewardship. Join us in restoring Richmond's historic park.",
+      type: "website",
+      url: SITE_CONFIG.url,
+      image: SITE_CONFIG.defaultImage,
+    }),
+    links: generateLinkTags({
+      canonical: SITE_CONFIG.url,
+      preloadImage: "/bike_sunset.webp",
+      preloadImagePriority: "high",
+    }),
   }),
 });
 
@@ -154,8 +104,8 @@ function Home() {
       showOnMobile: false,
     },
     {
-      src: "/recreation.webp",
-      alt: "Recreation activities in the park",
+      src: "/grove_cleanup.webp",
+      alt: "Grove cleanup",
       caption: "Active community spaces",
       width: 1600,
       height: 1200,

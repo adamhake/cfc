@@ -11,6 +11,9 @@ export {
   gallerySchema,
 } from "./schemas"
 
+// Export components
+export { MediaImageReferenceInput } from "./components/MediaImageReferenceInput"
+
 // Export queries
 export * from "./queries"
 

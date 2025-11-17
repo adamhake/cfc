@@ -3,6 +3,7 @@ import GetInvolved from "@/components/GetInvolved/get-involved";
 import PageHero from "@/components/PageHero/page-hero";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import SupportOption from "@/components/SupportOption/support-option";
+import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Building2,
@@ -19,64 +20,16 @@ import {
 export const Route = createFileRoute("/amenities")({
   component: RouteComponent,
   head: () => ({
-    meta: [
-      {
-        title: "Park Amenities | Chimborazo Park Conservancy",
-      },
-      {
-        name: "description",
-        content:
-          "Discover Chimborazo Park's amenities including the historic Round House, gazebo, dog park, woodland trails, and Statue of Liberty. Open dawn to dusk at 3215 E. Broad Street.",
-      },
-      {
-        property: "og:title",
-        content: "Park Amenities | Chimborazo Park Conservancy",
-      },
-      {
-        property: "og:description",
-        content:
-          "Discover Chimborazo Park's amenities including the historic Round House, gazebo, dog park, woodland trails, and Statue of Liberty. Open dawn to dusk at 3215 E. Broad Street.",
-      },
-      {
-        property: "og:type",
-        content: "website",
-      },
-      {
-        property: "og:url",
-        content: "https://chimboparkconservancy.org/amenities",
-      },
-      {
-        property: "og:image",
-        content: "https://chimboparkconservancy.org/bike_sunset.webp",
-      },
-      {
-        property: "og:image:width",
-        content: "2000",
-      },
-      {
-        property: "og:image:height",
-        content: "1262",
-      },
-      {
-        name: "twitter:title",
-        content: "Park Amenities | Chimborazo Park Conservancy",
-      },
-      {
-        name: "twitter:description",
-        content:
-          "Discover Chimborazo Park's amenities including the historic Round House, gazebo, dog park, woodland trails, and Statue of Liberty.",
-      },
-      {
-        name: "twitter:image",
-        content: "https://chimboparkconservancy.org/bike_sunset.webp",
-      },
-    ],
-    links: [
-      {
-        rel: "canonical",
-        href: "https://chimboparkconservancy.org/amenities",
-      },
-    ],
+    meta: generateMetaTags({
+      title: "Park Amenities",
+      description:
+        "Discover Chimborazo Park's amenities including the historic Round House, gazebo, dog park, woodland trails, and Statue of Liberty. Open dawn to dusk at 3215 E. Broad Street.",
+      type: "website",
+      url: `${SITE_CONFIG.url}/amenities`,
+    }),
+    links: generateLinkTags({
+      canonical: `${SITE_CONFIG.url}/amenities`,
+    }),
   }),
 });
 

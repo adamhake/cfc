@@ -44,7 +44,6 @@ export default function PageHero({
         className="absolute inset-0 h-full w-full object-cover"
         loading={priority ? "eager" : "lazy"}
         fetchpriority={priority ? "high" : undefined}
-        layout="fullWidth"
         breakpoints={[320, 640, 1280, 1920]}
       />
       <div
