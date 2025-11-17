@@ -1,28 +1,34 @@
 import Container from "@/components/Container/container";
 import PageHero from "@/components/PageHero/page-hero";
 import ImageGallery, { type GalleryImage } from "@/components/ImageGallery/image-gallery";
-import { getMediaImages } from "@/data/media-server";
+import { sanityClient } from "@/lib/sanity";
+import type { SanityMediaImage } from "@/lib/sanity-types";
+import { allMediaImagesQuery } from "@chimborazo/sanity-config";
 import { createFileRoute } from "@tanstack/react-router";
+import { queryOptions } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "@/components/Button/button";
 
+// Query options for TanStack Query
+const mediaQueryOptions = queryOptions({
+  queryKey: ["media", "all"],
+  queryFn: async (): Promise<SanityMediaImage[]> => {
+    try {
+      return await sanityClient.fetch(allMediaImagesQuery);
+    } catch (error) {
+      console.warn("Failed to fetch media from Sanity:", error);
+      return [];
+    }
+  },
+  staleTime: 5 * 60 * 1000, // 5 minutes
+  gcTime: 10 * 60 * 1000, // 10 minutes
+});
+
 export const Route = createFileRoute("/media")({
   component: Media,
-  loader: async () => {
-    try {
-      console.log("[media loader] Fetching media images...");
-      const images = await getMediaImages();
-      console.log(`[media loader] Received ${images.length} images`);
-
-      return { images, error: null };
-    } catch (error) {
-      console.error("[media loader] Error loading media:", error);
-      // Return error details for debugging
-      return {
-        images: [],
-        error: error instanceof Error ? error.message : String(error),
-      };
-    }
+  loader: async ({ context }) => {
+    // Prefetch media data on the server
+    return context.queryClient.ensureQueryData(mediaQueryOptions);
   },
   head: () => ({
     meta: [
@@ -89,21 +95,17 @@ export const Route = createFileRoute("/media")({
 const INITIAL_IMAGE_COUNT = 9;
 
 function Media() {
-  const loaderData = Route.useLoaderData();
-  const { images, error } = loaderData;
+  const sanityImages = Route.useLoaderData();
   const [visibleCount, setVisibleCount] = useState(INITIAL_IMAGE_COUNT);
 
-  // Convert MediaImage format to GalleryImage format
-  const galleryImages: GalleryImage[] = (images || [])
+  // Convert SanityMediaImage format to GalleryImage format
+  const galleryImages: GalleryImage[] = (sanityImages || [])
     .filter((img) => {
-      // Ensure all required properties exist and are valid numbers
+      // Ensure all required properties exist and are valid
       const isValid =
-        img &&
-        img.src &&
-        typeof img.width === "number" &&
-        typeof img.height === "number" &&
-        img.width > 0 &&
-        img.height > 0;
+        img?.image?.asset?.url &&
+        img?.image?.asset?.metadata?.dimensions?.width &&
+        img?.image?.asset?.metadata?.dimensions?.height;
 
       if (!isValid) {
         console.warn("[Media] Filtering out invalid image:", img);
@@ -112,11 +114,11 @@ function Media() {
       return isValid;
     })
     .map((img) => ({
-      src: img.src,
-      width: img.width,
-      height: img.height,
-      alt: img.alt || "Park image",
-      caption: img.caption,
+      src: img.image.asset.url,
+      width: img.image.asset.metadata!.dimensions!.width,
+      height: img.image.asset.metadata!.dimensions!.height,
+      alt: img.image.alt || img.title || "Park image",
+      caption: img.image.caption,
     }));
 
   const visibleImages = galleryImages.slice(0, visibleCount);
@@ -137,18 +139,7 @@ function Media() {
         imageHeight={1262}
       />
       <Container maxWidth="6xl" spacing="md" className="px-4 py-16 md:py-24">
-        {error ? (
-          <div className="border-red-200 bg-red-50/30 dark:border-red-700/30 dark:bg-red-900/20 mx-auto max-w-2xl rounded-2xl border p-12 text-center">
-            <div className="mb-4 text-6xl">⚠️</div>
-            <h2 className="mb-3 font-display text-2xl font-semibold text-grey-900 dark:text-grey-100">
-              Error Loading Images
-            </h2>
-            <p className="font-body text-lg text-grey-700 dark:text-grey-300">{error}</p>
-            <p className="mt-4 font-body text-sm text-grey-600 dark:text-grey-400">
-              Check the browser console for more details.
-            </p>
-          </div>
-        ) : images.length === 0 ? (
+        {sanityImages.length === 0 ? (
           <div className="mx-auto max-w-2xl rounded-2xl border border-primary-200 bg-primary-50/30 p-12 text-center dark:border-primary-700/30 dark:bg-primary-900/20">
             <div className="mb-4 text-6xl">📷</div>
             <h2 className="mb-3 font-display text-2xl font-semibold text-grey-900 dark:text-grey-100">

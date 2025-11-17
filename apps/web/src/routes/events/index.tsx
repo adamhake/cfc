@@ -93,7 +93,7 @@ export const Route = createFileRoute("/events/")({
 });
 
 function Events() {
-  const { data: sanityEvents } = Route.useLoaderData();
+  const sanityEvents = Route.useLoaderData();
 
   // Use Sanity events if available, otherwise fall back to static events
   const eventsToDisplay = sanityEvents && sanityEvents.length > 0 ? sanityEvents : staticEvents;
