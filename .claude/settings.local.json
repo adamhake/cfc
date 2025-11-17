@@ -39,7 +39,11 @@
       "Bash(pnpm --filter @chimborazo/web lint:*)",
       "Bash(pnpm --filter @chimborazo/studio format:*)",
       "Bash(pnpm --filter @chimborazo/sanity-config format:*)",
-      "Bash(pnpm format:*)"
+      "Bash(pnpm format:*)",
+      "Bash(pnpm type-check:*)",
+      "Bash(pnpm tsc:*)",
+      "Bash(pnpm --filter @chimborazo/web remove:*)",
+      "Bash(pnpm --filter @chimborazo/web add:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,5 +1,5 @@
 import { events } from "@/data/events";
-import IconLogo from "@/IconLogo/icon-logo";
+import IconLogo from "@/components/IconLogo/icon-logo";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useClickAway } from "@uidotdev/usehooks";
 import { AnimatePresence, motion } from "framer-motion";

@@ -7,7 +7,3 @@
 
 [build.environment]
   NODE_VERSION = "22"
-
-[[edge_functions]]
-  path = "/media-img/*"
-  function = "media-image"
