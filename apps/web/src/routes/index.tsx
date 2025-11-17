@@ -5,6 +5,7 @@ import Hero from "@/components/Hero/hero";
 import ImageGallery from "@/components/ImageGallery/image-gallery";
 import Partners from "@/components/Partners/partners";
 import Quote from "@/components/Quote/quote";
+import RotatingImages from "@/components/RotatingImages/rotating-images";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import Vision from "@/components/Vision/vision";
 import { events } from "@/data/events";
@@ -82,6 +83,12 @@ function Home() {
         alt: img.image.image.alt || "",
         showOnMobile: img.showOnMobile ?? true,
       })) || [];
+
+  // Prepare park gallery data for rotating images
+  const parkGalleryData =
+    homePageData?.parkGallery?.images
+      ?.filter((img) => img?.image?.image?.asset?.url) // Filter out any images without assets
+      .map((img) => img.image.image) || [];
 
   return (
     <div className="space-y-24 pb-24 text-grey-900 lg:px-0 dark:text-grey-100">
@@ -177,18 +184,33 @@ function Home() {
                 </p>
               </div>
 
-              {/* Historic image */}
-              <div className="overflow-hidden rounded-2xl">
-                <Image
-                  src="/chimbo_prom.webp"
-                  alt="Historic view of Chimborazo Park promenade"
-                  width={1600}
-                  height={1200}
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                  layout="constrained"
+              {/* Historic images - rotating gallery */}
+              {parkGalleryData.length > 0 ? (
+                <RotatingImages
+                  images={parkGalleryData}
+                  className="h-full overflow-hidden rounded-2xl"
+                  imageClassName="h-full w-full object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  maxWidth={1920}
+                  interval={5000}
+                  showCaptions={true}
+                  captionStyle="hotspot"
+                  scrollableCaptions={true}
+                  maxCaptionHeight={150}
                 />
-              </div>
+              ) : (
+                <div className="overflow-hidden rounded-2xl">
+                  <Image
+                    src="/chimbo_prom.webp"
+                    alt="Historic view of Chimborazo Park promenade"
+                    width={1600}
+                    height={1200}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                    layout="constrained"
+                  />
+                </div>
+              )}
             </div>
 
             {/* Continued text */}

@@ -91,7 +91,7 @@ export interface SanityQuote {
 }
 
 export interface SanityGalleryImage {
-  image: SanityImage;
+  image: SanityMediaImage;
   showOnMobile: boolean;
 }
 
@@ -115,6 +115,7 @@ export interface SanityHomePage {
   partners?: SanityPartner[];
   quote?: SanityQuote;
   gallery?: SanityGallery;
+  parkGallery?: SanityGallery;
 }
 
 export interface SanitySiteSettings {
