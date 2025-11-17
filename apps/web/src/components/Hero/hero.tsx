@@ -49,7 +49,7 @@ export default function HeroSoftGradientDivider({
       {/* Content */}
       <div className="absolute inset-0 z-10 flex items-center justify-center px-4 sm:items-end sm:px-6 lg:px-8">
         <div className="relative mb-8 w-full max-w-6xl space-y-6 sm:mb-12 lg:mb-24">
-          <h1 className="font-display text-3xl text-primary-50 lg:text-5xl dark:text-grey-50">
+          <h1 className="font-display text-5xl text-primary-50 md:text-6xl dark:text-grey-50">
             {heading}
           </h1>
           <p className="font-body text-base font-medium text-primary-100 md:text-lg lg:max-w-2xl dark:text-grey-100">

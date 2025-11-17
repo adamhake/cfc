@@ -1,3 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/Button/button";
 import Container from "@/components/Container/container";
 import EventStatusChip from "@/components/EventStatusChip/event-status-chip";
@@ -17,8 +18,7 @@ import {
 import { formatDateString } from "@/utils/time";
 import { eventBySlugQuery } from "@chimborazo/sanity-config";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, Calendar, Clock, MapPin } from "lucide-react";
 
 // Pre-load all markdown files using glob import
@@ -190,30 +190,15 @@ function EventPage() {
           <div className="absolute inset-0 z-10 flex items-end justify-center px-4 pt-20 pb-16 lg:items-center lg:py-8">
             <div className="mx-auto w-full max-w-6xl">
               <div className="text-center">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="mb-6"
-                >
+                <div className="mb-6">
                   <EventStatusChip isPast={isPast} />
-                </motion.div>
-                <motion.h1
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                  className="font-display text-4xl text-primary-50 md:text-5xl lg:text-6xl dark:text-grey-50"
-                >
+                </div>
+                <h1 className="font-display text-4xl text-primary-50 md:text-5xl lg:text-6xl dark:text-grey-50">
                   {event.title}
-                </motion.h1>
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="mt-6 font-body text-lg text-primary-100 md:text-xl dark:text-grey-200"
-                >
+                </h1>
+                <p className="mt-6 font-body text-lg text-primary-100 md:text-xl dark:text-grey-200">
                   {event.description}
-                </motion.p>
+                </p>
               </div>
             </div>
           </div>
@@ -255,12 +240,7 @@ function EventPage() {
         <Container spacing="md" className="px-4 py-12 md:px-0 md:py-16">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
             {/* Main Content */}
-            <motion.main
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="lg:col-span-8"
-            >
+            <main className="lg:col-span-8">
               {isSanityEvent && "body" in event && (event as SanityEvent).body ? (
                 <PortableText value={(event as SanityEvent).body!} />
               ) : markdownContent ? (
@@ -275,15 +255,10 @@ function EventPage() {
                   </p>
                 </div>
               )}
-            </motion.main>
+            </main>
 
             {/* Sidebar */}
-            <motion.aside
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="lg:col-span-4"
-            >
+            <aside className="lg:col-span-4">
               <div className="sticky top-24 space-y-6">
                 {/* Event Details Card */}
                 <div className="overflow-hidden rounded-2xl border border-accent-200 bg-white shadow-sm dark:border-accent-700/30 dark:bg-grey-800">
@@ -354,7 +329,7 @@ function EventPage() {
                   </Link>
                 </div>
               </div>
-            </motion.aside>
+            </aside>
           </div>
         </Container>
       </div>
