@@ -65,18 +65,22 @@ export const getHomePageQuery = defineQuery(`
       _id,
       title,
       images[]{
-        image{
-          asset->{
-            _id,
-            url,
-            metadata{
-              dimensions,
-              lqip
-            }
-          },
-          alt,
-          caption,
-          hotspot
+        image->{
+          _id,
+          title,
+          image{
+            asset->{
+              _id,
+              url,
+              metadata{
+                dimensions,
+                lqip
+              }
+            },
+            alt,
+            caption,
+            hotspot
+          }
         },
         showOnMobile
       }
