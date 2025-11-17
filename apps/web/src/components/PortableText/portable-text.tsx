@@ -1,6 +1,6 @@
 import { PortableText as BasePortableText } from "@portabletext/react";
 import type { PortableTextBlock, PortableTextComponents } from "@portabletext/react";
-import { urlForImage } from "@/lib/sanity";
+import { SanityImage } from "@/components/SanityImage";
 
 // Custom components for rendering portable text blocks
 const components: PortableTextComponents = {
@@ -81,15 +81,15 @@ const components: PortableTextComponents = {
     image: ({ value }) => {
       if (!value?.asset) return null;
 
-      const imageUrl = urlForImage(value).width(1200).height(800).fit("max").auto("format").url();
-
       return (
         <figure className="my-8">
-          <img
-            src={imageUrl}
+          <SanityImage
+            image={value}
             alt={value.alt || ""}
             className="rounded-lg shadow-lg"
-            loading="lazy"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+            maxWidth={1200}
+            fit="max"
           />
           {value.caption && (
             <figcaption className="mt-2 text-center font-body text-sm text-grey-600 italic dark:text-grey-400">

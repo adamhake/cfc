@@ -107,7 +107,7 @@ function RouteComponent() {
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             <AmenityCard
               title="Chimborazo Round House"
-              icon={<Building2 className="h-6 w-6 stroke-green-700 dark:stroke-green-400" />}
+              icon={<Building2 className="h-6 w-6 stroke-primary-700 dark:stroke-primary-400" />}
               description="A historic gem overlooking southeast Richmond, the Round House has welcomed visitors for over a century."
               details={[
                 "Originally constructed in 1905",
@@ -127,7 +127,7 @@ function RouteComponent() {
 
             <AmenityCard
               title="Picnic Gazebo"
-              icon={<Tent className="h-6 w-6 stroke-green-700 dark:stroke-green-400" />}
+              icon={<Tent className="h-6 w-6 stroke-primary-700 dark:stroke-primary-400" />}
               description="Located just behind the bluff's edge, our gazebo provides the perfect setting for gatherings large and small."
               details={[
                 "Ideal for family reunions and picnics",
@@ -163,7 +163,7 @@ function RouteComponent() {
 
             <AmenityCard
               title="Restroom Facilities"
-              icon={<Building2 className="h-6 w-6 stroke-green-700 dark:stroke-green-400" />}
+              icon={<Building2 className="h-6 w-6 stroke-primary-700 dark:stroke-primary-400" />}
               description="Conveniently located facilities are available year-round in the upper park area."
               details={[
                 "Two port-a-potty units available",
@@ -187,7 +187,7 @@ function RouteComponent() {
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             <AmenityCard
               title="Bark Park"
-              icon={<Dog className="h-6 w-6 stroke-green-700 dark:stroke-green-400" />}
+              icon={<Dog className="h-6 w-6 stroke-primary-700 dark:stroke-primary-400" />}
               description="Two dedicated off-leash areas where dogs of all sizes can run, socialize, and play safely."
               details={[
                 "Separate areas for large and small dogs",
@@ -203,7 +203,7 @@ function RouteComponent() {
 
             <AmenityCard
               title="Woodland Trails"
-              icon={<TreePine className="h-6 w-6 stroke-green-700 dark:stroke-green-400" />}
+              icon={<TreePine className="h-6 w-6 stroke-primary-700 dark:stroke-primary-400" />}
               description="Explore a network of paths winding through natural woodland, connecting historic routes and scenic spots."
               details={[
                 "Improved trails and natural social paths",

@@ -8,6 +8,9 @@
  */
 
 export const queryKeys = {
+  // Site settings
+  siteSettings: () => ["siteSettings"] as const,
+
   // Homepage content
   homePage: () => ["homePage"] as const,
 
@@ -27,20 +30,26 @@ export const queryKeys = {
  * Helper to invalidate all events queries
  * Usage: queryClient.invalidateQueries({ queryKey: queryKeys.events.all() })
  */
-export const invalidateEvents = (queryClient: { invalidateQueries: (opts: { queryKey: readonly string[] }) => void }) => {
+export const invalidateEvents = (queryClient: {
+  invalidateQueries: (opts: { queryKey: readonly string[] }) => void;
+}) => {
   queryClient.invalidateQueries({ queryKey: ["events"] as const });
 };
 
 /**
  * Helper to invalidate all media queries
  */
-export const invalidateMedia = (queryClient: { invalidateQueries: (opts: { queryKey: readonly string[] }) => void }) => {
+export const invalidateMedia = (queryClient: {
+  invalidateQueries: (opts: { queryKey: readonly string[] }) => void;
+}) => {
   queryClient.invalidateQueries({ queryKey: ["media"] as const });
 };
 
 /**
  * Helper to invalidate homepage
  */
-export const invalidateHomePage = (queryClient: { invalidateQueries: (opts: { queryKey: readonly string[] }) => void }) => {
+export const invalidateHomePage = (queryClient: {
+  invalidateQueries: (opts: { queryKey: readonly string[] }) => void;
+}) => {
   queryClient.invalidateQueries({ queryKey: queryKeys.homePage() });
 };

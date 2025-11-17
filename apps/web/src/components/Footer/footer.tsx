@@ -1,8 +1,11 @@
+import { FacebookIcon } from "@/components/FacebookIcon/facebook-icon";
+import { InstagramIcon } from "@/components/InstagramIcon/instagram-icon";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { Link } from "@tanstack/react-router";
-import { Facebook, Instagram } from "lucide-react";
 import { ThemeToggle } from "../ThemeToggle/theme-toggle";
 
 export default function Footer() {
+  const { data: siteSettings } = useSiteSettings();
   return (
     <footer className="relative bg-grey-50 pt-24 pb-8 text-grey-800 dark:bg-primary-900 dark:text-grey-100">
       {/* Curved divider at top */}
@@ -15,7 +18,7 @@ export default function Footer() {
         >
           <path
             d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60 L1200,120 L0,120 Z"
-            className="fill-grey-50 dark:fill-green-900"
+            className="fill-grey-50 dark:fill-primary-900"
           />
           <path
             d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60"
@@ -86,22 +89,28 @@ export default function Footer() {
             </h3>
             <div className="flex gap-3">
               <a
-                href="https://www.facebook.com/friendsofchimborazopark"
+                href={
+                  siteSettings?.socialMedia?.facebook ||
+                  "https://www.facebook.com/friendsofchimborazopark"
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-grey-600 transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-400 dark:hover:text-accent-400"
                 aria-label="Follow us on Facebook"
               >
-                <Facebook className="h-6 w-6" strokeWidth={1.5} />
+                <FacebookIcon className="h-6 w-6 fill-grey-600 transition hover:fill-accent-700 dark:fill-grey-400 dark:hover:fill-accent-400" />
               </a>
               <a
-                href="https://www.instagram.com/friendsofchimborazopark/"
+                href={
+                  siteSettings?.socialMedia?.instagram ||
+                  "https://www.instagram.com/friendsofchimborazopark/"
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-grey-600 transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-400 dark:hover:text-accent-400"
                 aria-label="Follow us on Instagram"
               >
-                <Instagram className="h-6 w-6" strokeWidth={1.5} />
+                <InstagramIcon className="h-6 w-6 fill-grey-600 transition hover:fill-accent-700 dark:fill-grey-400 dark:hover:fill-accent-400" />
               </a>
             </div>
             <div className="space-y-2 pt-4">

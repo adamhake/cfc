@@ -3,9 +3,10 @@ import Container from "@/components/Container/container";
 import EventStatusChip from "@/components/EventStatusChip/event-status-chip";
 import { Markdown } from "@/components/Markdown/markdown";
 import { PortableText } from "@/components/PortableText/portable-text";
+import { SanityImage } from "@/components/SanityImage";
 import { events as staticEvents, type Event as StaticEvent } from "@/data/events";
 import { queryKeys } from "@/lib/query-keys";
-import { sanityClient, urlForImage } from "@/lib/sanity";
+import { sanityClient } from "@/lib/sanity";
 import type { SanityEvent } from "@/lib/sanity-types";
 import {
   generateEventStructuredData,
@@ -142,19 +143,10 @@ function EventPage() {
     url: eventUrl,
   });
 
-  // Get image data based on event type
-  const imageData =
-    isSanityEvent && "heroImage" in event
-      ? {
-          src: urlForImage((event as SanityEvent).heroImage)
-            .width(1920)
-            .height(1080)
-            .url(),
-          alt: (event as SanityEvent).heroImage.alt,
-          width: (event as SanityEvent).heroImage.asset.metadata?.dimensions?.width || 1920,
-          height: (event as SanityEvent).heroImage.asset.metadata?.dimensions?.height || 1080,
-        }
-      : (event as StaticEvent).image;
+  // Get hero image - for Sanity events, we'll use SanityImage component
+  const sanityHeroImage =
+    isSanityEvent && "heroImage" in event ? (event as SanityEvent).heroImage : null;
+  const staticImageData = !isSanityEvent ? (event as StaticEvent).image : null;
 
   return (
     <>
@@ -171,15 +163,26 @@ function EventPage() {
           role="banner"
           aria-label="Event header"
         >
-          <img
-            src={imageData.src}
-            alt={imageData.alt}
-            width={imageData.width}
-            height={imageData.height}
-            className="absolute inset-0 h-full w-full object-cover"
-            loading="eager"
-            fetchPriority="high"
-          />
+          {sanityHeroImage ? (
+            <SanityImage
+              image={sanityHeroImage}
+              alt={sanityHeroImage.alt}
+              className="absolute inset-0 h-full w-full object-cover"
+              priority={true}
+              sizes="100vw"
+              maxWidth={1920}
+            />
+          ) : staticImageData ? (
+            <img
+              src={staticImageData.src}
+              alt={staticImageData.alt}
+              width={staticImageData.width}
+              height={staticImageData.height}
+              className="absolute inset-0 h-full w-full object-cover"
+              loading="eager"
+              fetchPriority="high"
+            />
+          ) : null}
           <div
             className="absolute inset-0 bg-gradient-to-r from-primary-900/75 to-primary-800/55 dark:from-primary-950/85 dark:to-primary-900/65"
             aria-hidden="true"
@@ -226,7 +229,7 @@ function EventPage() {
             >
               <path
                 d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60 L1200,120 L0,120 Z"
-                className="fill-grey-50 dark:fill-green-900"
+                className="fill-grey-50 dark:fill-primary-900"
               />
               <path
                 d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60"
