@@ -37,7 +37,7 @@ export default function PageHero({
     small: "h-[45vh]",
     medium: "h-[60vh]",
     large: "h-[65vh]",
-    event: "min-h-[70vh] lg:min-h-[55vh]",
+    event: "min-h-[85vh] lg:min-h-[65vh]",
   };
 
   const alignmentClasses = {
