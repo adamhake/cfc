@@ -2,6 +2,7 @@ import { FacebookIcon } from "@/components/FacebookIcon/facebook-icon";
 import IconLogo from "@/components/IconLogo/icon-logo";
 import { InstagramIcon } from "@/components/InstagramIcon/instagram-icon";
 import { events } from "@/data/events";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useClickAway } from "@uidotdev/usehooks";
@@ -19,6 +20,7 @@ export default function Header() {
   const currentPath = routerState.location.pathname;
   const currentHash = routerState.location.hash;
   const { data: siteSettings } = useSiteSettings();
+  const prefersReducedMotion = useReducedMotion();
 
   const ref = useClickAway<HTMLElement>(() => {
     // Only close on click-away for desktop menu
@@ -155,23 +157,30 @@ export default function Header() {
         </div>
 
         {/* Dropdown menu - Desktop only */}
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {menuOpen && (
             <motion.div
               key="mainMenu"
-              initial={{ maxHeight: 0, opacity: 0 }}
-              animate={{ maxHeight: 500, opacity: 1 }}
-              exit={{ maxHeight: 0, opacity: 0 }}
-              transition={{ duration: 0.2, ease: "easeInOut" }}
-              style={{ overflow: "hidden" }}
+              initial={prefersReducedMotion ? {} : { opacity: 0, y: -8 }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                transition: {
+                  duration: prefersReducedMotion ? 0 : 0.2,
+                  ease: [0.16, 1, 0.3, 1], // Smooth ease-out
+                },
+              }}
+              exit={{
+                opacity: 0,
+                y: -4,
+                transition: {
+                  duration: prefersReducedMotion ? 0 : 0.15,
+                  ease: [0.4, 0, 1, 1], // Ease-in for exit (snappier)
+                },
+              }}
               className="hidden md:block"
             >
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.1, duration: 0.2 }}
-                className="mt-4 flex w-full justify-between gap-12 border-t border-accent-600/20 p-6 pt-8 transition dark:border-accent-500/20"
-              >
+              <div className="mt-4 flex w-full justify-between gap-12 border-t border-accent-600/20 p-6 pt-8 transition dark:border-accent-500/20">
                 <nav className="flex-1 border-r border-accent-600/20 pr-12 dark:border-accent-500/20">
                   <ul className="space-y-4">
                     <li>
@@ -275,7 +284,7 @@ export default function Header() {
                   </h3>
                   <EventCardCondensed {...events[0]} />
                 </div>
-              </motion.div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -286,10 +295,10 @@ export default function Header() {
         {menuOpen && (
           <motion.div
             ref={mobileMenuRef}
-            initial={{ opacity: 0 }}
+            initial={prefersReducedMotion ? {} : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            exit={prefersReducedMotion ? {} : { opacity: 0 }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.15 }}
             className="fixed inset-0 z-50 overflow-y-auto bg-grey-50 md:hidden dark:bg-grey-900"
             role="dialog"
             aria-modal="true"
@@ -333,9 +342,9 @@ export default function Header() {
               <nav className="flex-1">
                 <motion.ul className="space-y-6">
                   <motion.li
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 }}
+                    transition={{ delay: prefersReducedMotion ? 0 : 0.01 }}
                   >
                     <Link
                       to="/"
@@ -346,9 +355,9 @@ export default function Header() {
                     </Link>
                   </motion.li>
                   <motion.li
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.15 }}
+                    transition={{ delay: prefersReducedMotion ? 0 : 0.02 }}
                   >
                     <Link
                       to="/amenities"
@@ -359,9 +368,9 @@ export default function Header() {
                     </Link>
                   </motion.li>
                   <motion.li
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.2 }}
+                    transition={{ delay: prefersReducedMotion ? 0 : 0.03 }}
                   >
                     <Link
                       to="/events"
@@ -372,9 +381,9 @@ export default function Header() {
                     </Link>
                   </motion.li>
                   <motion.li
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.25 }}
+                    transition={{ delay: prefersReducedMotion ? 0 : 0.04 }}
                   >
                     <Link
                       to="/get-involved"
@@ -385,9 +394,9 @@ export default function Header() {
                     </Link>
                   </motion.li>
                   <motion.li
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 }}
+                    transition={{ delay: prefersReducedMotion ? 0 : 0.05 }}
                   >
                     <Link
                       to="/media"

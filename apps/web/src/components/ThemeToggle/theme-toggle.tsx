@@ -1,3 +1,4 @@
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useTheme } from "@/hooks/useTheme";
 import { motion } from "framer-motion";
 import { Monitor, Moon, Sun } from "lucide-react";
@@ -27,6 +28,7 @@ export function ThemeToggle({
   className = "",
 }: ThemeToggleProps) {
   const { theme, setTheme } = useTheme();
+  const prefersReducedMotion = useReducedMotion();
 
   // Use useSyncExternalStore to detect client-side rendering
   // This avoids hydration mismatches without triggering the setState-in-effect rule
@@ -106,9 +108,9 @@ export function ThemeToggle({
       >
         <motion.span
           key={theme}
-          initial={{ rotate: -90, opacity: 0 }}
+          initial={prefersReducedMotion ? {} : { rotate: -90, opacity: 0 }}
           animate={{ rotate: 0, opacity: 1 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
         >
           {getIcon()}
         </motion.span>
@@ -126,9 +128,9 @@ export function ThemeToggle({
     >
       <motion.span
         key={theme}
-        initial={{ rotate: -90, opacity: 0 }}
+        initial={prefersReducedMotion ? {} : { rotate: -90, opacity: 0 }}
         animate={{ rotate: 0, opacity: 1 }}
-        transition={{ duration: 0.2 }}
+        transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
       >
         {getIcon()}
       </motion.span>

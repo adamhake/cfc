@@ -1,5 +1,4 @@
 import { Image } from "@unpic/react";
-import { motion } from "framer-motion";
 import { Button } from "../Button/button";
 
 interface ImageCardProps {
@@ -45,13 +44,7 @@ export default function ImageCard({
 
   if (variant === "overlay") {
     return (
-      <motion.div
-        className="group relative overflow-hidden rounded-2xl shadow-lg transition-shadow duration-300 hover:shadow-xl"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.4 }}
-      >
+      <div className="group relative overflow-hidden rounded-2xl shadow-lg transition-shadow duration-300 hover:shadow-xl">
         <div className={`relative ${getAspectClass()}`}>
           <Image
             src={image.src}
@@ -80,19 +73,13 @@ export default function ImageCard({
             </div>
           )}
         </div>
-      </motion.div>
+      </div>
     );
   }
 
   if (variant === "caption-below") {
     return (
-      <motion.div
-        className="overflow-hidden rounded-2xl border border-accent-600/20 bg-white shadow-lg transition-shadow duration-300 hover:shadow-xl dark:border-accent-500/20 dark:bg-grey-800"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.4 }}
-      >
+      <div className="overflow-hidden rounded-2xl border border-accent-600/20 bg-white shadow-lg transition-shadow duration-300 hover:shadow-xl dark:border-accent-500/20 dark:bg-grey-800">
         <div className={`relative overflow-hidden ${getAspectClass()}`}>
           <Image
             src={image.src}
@@ -122,19 +109,13 @@ export default function ImageCard({
             </Button>
           )}
         </div>
-      </motion.div>
+      </div>
     );
   }
 
   // Side-by-side variant
   return (
-    <motion.div
-      className="overflow-hidden rounded-2xl border border-accent-600/20 bg-white shadow-lg transition-shadow duration-300 hover:shadow-xl dark:border-accent-500/20 dark:bg-grey-800"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.4 }}
-    >
+    <div className="overflow-hidden rounded-2xl border border-accent-600/20 bg-white shadow-lg transition-shadow duration-300 hover:shadow-xl dark:border-accent-500/20 dark:bg-grey-800">
       <div
         className={`flex flex-col md:flex-row ${imagePosition === "right" ? "md:flex-row-reverse" : ""}`}
       >
@@ -170,6 +151,6 @@ export default function ImageCard({
           )}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

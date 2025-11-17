@@ -1,4 +1,5 @@
 import { usePalette } from "@/hooks/usePalette";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { PALETTE_METADATA, type PaletteMode } from "@/utils/palette";
 import { useClickAway } from "@uidotdev/usehooks";
 import { AnimatePresence, motion } from "framer-motion";
@@ -30,6 +31,7 @@ export function PaletteSwitcher({
 }: PaletteSwitcherProps) {
   const { palette, setPalette } = usePalette();
   const [isOpen, setIsOpen] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   const ref = useClickAway<HTMLDivElement>(() => {
     setIsOpen(false);
@@ -62,10 +64,14 @@ export function PaletteSwitcher({
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.15 }}
+              initial={
+                prefersReducedMotion
+                  ? {}
+                  : { opacity: 0, scale: 0.95, transformOrigin: "top right" }
+              }
+              animate={{ opacity: 1, scale: 1 }}
+              exit={prefersReducedMotion ? {} : { opacity: 0, scale: 0.95 }}
+              transition={{ duration: prefersReducedMotion ? 0 : 0.15, ease: [0, 0, 0.2, 1] }}
               className="absolute top-full right-0 z-50 mt-2 w-72 rounded-xl border border-grey-200 bg-white p-3 shadow-lg dark:border-grey-700 dark:bg-grey-800"
             >
               <div className="mb-2 px-2 font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
@@ -145,10 +151,12 @@ export function PaletteSwitcher({
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.15 }}
+            initial={
+              prefersReducedMotion ? {} : { opacity: 0, scale: 0.95, transformOrigin: "top right" }
+            }
+            animate={{ opacity: 1, scale: 1 }}
+            exit={prefersReducedMotion ? {} : { opacity: 0, scale: 0.95 }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.15, ease: [0, 0, 0.2, 1] }}
             className="absolute top-full right-0 z-50 mt-2 w-80 rounded-xl border border-grey-200 bg-white p-4 shadow-lg dark:border-grey-700 dark:bg-grey-800"
           >
             <div className="mb-3 px-2 font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
