@@ -3,8 +3,8 @@ import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
-import viteTsConfigPaths from "vite-tsconfig-paths";
 import webfontDownload from "vite-plugin-webfont-dl";
+import viteTsConfigPaths from "vite-tsconfig-paths";
 
 const config = defineConfig({
   plugins: [
@@ -13,11 +13,7 @@ const config = defineConfig({
     }),
     tanstackStart({ sitemap: { enabled: true } }),
     netlify({
-      // Enable Netlify platform features in dev
-      platform: {
-        blobs: true,
-        functions: true,
-      },
+      edgeSSR: true,
     }),
     webfontDownload(),
     tailwindcss(),
