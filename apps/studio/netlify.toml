@@ -1,6 +1,6 @@
 [build]
     # Build from monorepo root using Turborepo
-    base = "../.."
+    base = "apps/studio"
     command = "pnpm run build --filter=@chimborazo/studio"
     publish = "apps/studio/dist"
 
