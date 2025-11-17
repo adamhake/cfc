@@ -159,11 +159,8 @@ function Home() {
     homePageData?.gallery?.images
       ?.filter((img) => img?.image?.asset?.url) // Filter out any images without assets
       .map((img) => ({
-        src: img.image.asset.url,
+        ...img.image,
         alt: img.image.alt || "",
-        caption: img.image.caption || "",
-        width: img.image.asset.metadata?.dimensions?.width || 1600,
-        height: img.image.asset.metadata?.dimensions?.height || 1200,
         showOnMobile: img.showOnMobile ?? true,
       })) || galleryImages;
 
@@ -375,10 +372,8 @@ function Home() {
                   name: partner.name,
                   url: partner.websiteUrl,
                   logo: {
-                    src: partner.logo.asset.url,
+                    ...partner.logo,
                     alt: partner.logo.alt || partner.name,
-                    width: partner.logo.asset.metadata?.dimensions?.width || 275,
-                    height: partner.logo.asset.metadata?.dimensions?.height || 84,
                   },
                   description: partner.description,
                 }))}

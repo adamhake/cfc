@@ -1,6 +1,6 @@
 import { Button } from "@/components/Button/button";
 import Container from "@/components/Container/container";
-import ImageGallery, { type GalleryImage } from "@/components/ImageGallery/image-gallery";
+import ImageGallery, { type SanityGalleryImage } from "@/components/ImageGallery/image-gallery";
 import PageHero from "@/components/PageHero/page-hero";
 import { queryKeys } from "@/lib/query-keys";
 import { sanityClient } from "@/lib/sanity";
@@ -53,8 +53,8 @@ function Media() {
   const sanityImages = Route.useLoaderData();
   const [visibleCount, setVisibleCount] = useState(INITIAL_IMAGE_COUNT);
 
-  // Convert SanityMediaImage format to GalleryImage format
-  const galleryImages: GalleryImage[] = (sanityImages || [])
+  // Convert SanityMediaImage format to SanityGalleryImage format
+  const galleryImages: SanityGalleryImage[] = (sanityImages || [])
     .filter((img) => {
       // Ensure all required properties exist and are valid
       const isValid =
@@ -69,11 +69,8 @@ function Media() {
       return isValid;
     })
     .map((img) => ({
-      src: img.image.asset.url,
-      width: img.image.asset.metadata!.dimensions!.width,
-      height: img.image.asset.metadata!.dimensions!.height,
+      ...img.image,
       alt: img.image.alt || img.title || "Park image",
-      caption: img.image.caption,
     }));
 
   const visibleImages = galleryImages.slice(0, visibleCount);

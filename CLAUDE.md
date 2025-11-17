@@ -131,6 +131,46 @@ Components are organized in feature folders with co-located stories in `apps/web
 - Shared schemas and queries in `packages/sanity-config/src/`
 - Legacy static data files in `apps/web/src/data/` (migrating to Sanity)
 
+#### Image Optimization
+
+The project uses a **hybrid image optimization strategy**:
+
+**For Sanity CMS Images** (Recommended):
+- Use `SanityImage` component (`apps/web/src/components/SanityImage/sanity-image.tsx`)
+- Automatically leverages Sanity's image CDN with:
+  - Responsive srcset generation
+  - Automatic WebP/AVIF format conversion via `.auto("format")`
+  - Blur placeholder (LQIP) support
+  - Hotspot and crop support
+  - Prevents layout shift with aspect ratio
+  - Loading priority control for LCP optimization
+- Example:
+  ```tsx
+  import { SanityImage } from "@/components/SanityImage"
+
+  <SanityImage
+    image={sanityImageObject}
+    alt="Event poster"
+    sizes="(max-width: 768px) 100vw, 50vw"
+    priority={true}
+    maxWidth={1920}
+  />
+  ```
+
+**For Static Images** (in `/public`):
+- Use `@unpic/react` Image component for static assets
+- Provides responsive srcset and CDN-agnostic optimization
+- Keep for partner logos, legacy images, and non-CMS assets
+
+**ImageGallery Component**:
+- Supports both `SanityGalleryImage` and legacy `GalleryImage` formats
+- Automatically detects type and renders appropriately
+- Gallery grid and modal both optimized for performance
+
+**PortableText Images**:
+- Automatically uses `SanityImage` for embedded images
+- Configured in `apps/web/src/components/PortableText/portable-text.tsx`
+
 #### Development Tools
 
 - **TanStack Devtools**: Unified devtools for Router and Query (configured in `__root.tsx`)

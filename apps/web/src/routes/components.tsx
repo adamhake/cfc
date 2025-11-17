@@ -327,7 +327,9 @@ function ComponentPlayground() {
                 <div className="grid gap-6 lg:grid-cols-2">
                   <AmenityCard
                     title="Playground"
-                    icon={<Building2 className="h-6 w-6 stroke-green-700 dark:stroke-green-400" />}
+                    icon={
+                      <Building2 className="stroke-primray-700 dark:stroke-primray-400 h-6 w-6" />
+                    }
                     description="Modern playground equipment for children of all ages with accessible features."
                     details={["Swings and slides", "Climbing structures", "Accessible equipment"]}
                     link={{
@@ -338,13 +340,13 @@ function ComponentPlayground() {
 
                   <div className="space-y-4">
                     <InfoCard
-                      icon={<Dog className="h-6 w-6 stroke-green-700 dark:stroke-green-400" />}
+                      icon={<Dog className="h-6 w-6 stroke-primary-700 dark:stroke-primary-400" />}
                       title="Dog-Friendly Areas"
                       content="Designated areas for pets with waste stations and water fountains."
                     />
 
                     <SupportOption
-                      icon={<Heart className="h-6 w-6 stroke-white dark:stroke-green-200" />}
+                      icon={<Heart className="h-6 w-6 stroke-white dark:stroke-primary-200" />}
                       title="Volunteer Opportunities"
                       description="Join our community events and help maintain the park's beauty."
                     />

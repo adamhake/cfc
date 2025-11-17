@@ -1,6 +1,7 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { SanityImage, type SanityImageObject } from "@/components/SanityImage";
 import { Image } from "@unpic/react";
-import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export interface GalleryImage {
   src: string;
@@ -11,8 +12,12 @@ export interface GalleryImage {
   showOnMobile?: boolean;
 }
 
+export interface SanityGalleryImage extends SanityImageObject {
+  showOnMobile?: boolean;
+}
+
 interface ImageGalleryProps {
-  images: GalleryImage[];
+  images: GalleryImage[] | SanityGalleryImage[];
   variant?: "grid" | "masonry" | "staggered";
   columns?: {
     default?: number;
@@ -23,6 +28,31 @@ interface ImageGalleryProps {
   showCaptions?: boolean;
   captionPosition?: "hover" | "below";
   gap?: "sm" | "md" | "lg";
+}
+
+// Type guard to check if image is a Sanity image
+function isSanityImage(image: GalleryImage | SanityGalleryImage): image is SanityGalleryImage {
+  return "asset" in image && image.asset !== undefined;
+}
+
+// Helper to get image properties regardless of type
+function getImageProps(image: GalleryImage | SanityGalleryImage) {
+  if (isSanityImage(image)) {
+    return {
+      alt: image.alt || "",
+      caption: image.caption,
+      width: image.asset.metadata?.dimensions?.width || 0,
+      height: image.asset.metadata?.dimensions?.height || 0,
+      showOnMobile: image.showOnMobile,
+    };
+  }
+  return {
+    alt: image.alt,
+    caption: image.caption,
+    width: image.width,
+    height: image.height,
+    showOnMobile: image.showOnMobile,
+  };
 }
 
 const gapClasses = {
@@ -190,49 +220,61 @@ export default function ImageGallery({
           role="list"
           aria-label="Photo gallery"
         >
-          {images.map((image, index) => (
-            <div
-              key={`${image.src}-${index}`}
-              className={`mb-${gap === "sm" ? "2" : gap === "md" ? "4" : "6"} break-inside-avoid ${image.showOnMobile === false ? "hidden sm:block" : ""}`}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              role="listitem"
-            >
-              <button
-                className="group relative w-full cursor-pointer overflow-hidden rounded-2xl shadow-sm transition-shadow hover:shadow-xl focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:outline-none"
-                onClick={() => handleImageClick(index)}
-                aria-label={`View ${image.alt}${image.caption ? `: ${image.caption}` : ""}`}
-                type="button"
+          {images.map((image, index) => {
+            const props = getImageProps(image);
+            return (
+              <div
+                key={`${index}`}
+                className={`mb-${gap === "sm" ? "2" : gap === "md" ? "4" : "6"} break-inside-avoid ${props.showOnMobile === false ? "hidden sm:block" : ""}`}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                role="listitem"
               >
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  width={image.width}
-                  height={image.height}
-                  className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
-                  loading="lazy"
-                />
-                {showCaptions && captionPosition === "hover" && image.caption && (
-                  <div
-                    className={`absolute inset-0 flex items-end bg-gradient-to-t from-primary-900/90 via-primary-900/50 to-transparent p-4 transition-opacity duration-300 dark:from-grey-900/90 dark:via-grey-900/50 ${
-                      hoveredIndex === index ? "opacity-100" : "opacity-0"
-                    }`}
-                  >
-                    <p className="line-clamp-3 font-body text-sm text-white md:text-base">
-                      {image.caption}
-                    </p>
-                  </div>
-                )}
-                {showCaptions && captionPosition === "below" && image.caption && (
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent p-4 pt-12">
-                    <p className="line-clamp-2 font-body text-sm font-medium text-white drop-shadow-lg md:text-base">
-                      {image.caption}
-                    </p>
-                  </div>
-                )}
-              </button>
-            </div>
-          ))}
+                <button
+                  className="group relative w-full cursor-pointer overflow-hidden rounded-2xl shadow-sm transition-shadow hover:shadow-xl focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:outline-none"
+                  onClick={() => handleImageClick(index)}
+                  aria-label={`View ${props.alt}${props.caption ? `: ${props.caption}` : ""}`}
+                  type="button"
+                >
+                  {isSanityImage(image) ? (
+                    <SanityImage
+                      image={image}
+                      alt={props.alt}
+                      className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  ) : (
+                    <Image
+                      src={image.src}
+                      alt={props.alt}
+                      width={props.width}
+                      height={props.height}
+                      className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  )}
+                  {showCaptions && captionPosition === "hover" && props.caption && (
+                    <div
+                      className={`absolute inset-0 flex items-end bg-gradient-to-t from-primary-900/90 via-primary-900/50 to-transparent p-4 transition-opacity duration-300 dark:from-grey-900/90 dark:via-grey-900/50 ${
+                        hoveredIndex === index ? "opacity-100" : "opacity-0"
+                      }`}
+                    >
+                      <p className="line-clamp-3 font-body text-sm text-white md:text-base">
+                        {props.caption}
+                      </p>
+                    </div>
+                  )}
+                  {showCaptions && captionPosition === "below" && props.caption && (
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent p-4 pt-12">
+                      <p className="line-clamp-2 font-body text-sm font-medium text-white drop-shadow-lg md:text-base">
+                        {props.caption}
+                      </p>
+                    </div>
+                  )}
+                </button>
+              </div>
+            );
+          })}
         </div>
 
         {/* Lightbox Modal */}
@@ -282,7 +324,7 @@ export default function ImageGallery({
                 {/* Previous button - hidden on mobile, shown on desktop */}
                 {selectedImage > 0 && (
                   <button
-                    className="hidden rounded-full bg-green-700/80 p-3 text-white backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:outline-none md:block"
+                    className="hidden rounded-full bg-primary-700/80 p-3 text-white backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:outline-none md:block"
                     onClick={handlePrevImage}
                     aria-label="Previous image"
                     type="button"
@@ -306,18 +348,29 @@ export default function ImageGallery({
                 {/* Image container */}
                 <div className="flex max-w-7xl flex-col items-center gap-4 md:gap-0">
                   <div className="relative inline-block">
-                    <img
-                      src={images[selectedImage].src}
-                      alt={images[selectedImage].alt}
-                      className="h-auto max-h-[calc(100vh-24rem)] w-auto max-w-[85vw] rounded-lg md:max-h-[calc(90vh-16rem)] md:max-w-5xl"
-                      loading="eager"
-                    />
+                    {isSanityImage(images[selectedImage]) ? (
+                      <SanityImage
+                        image={images[selectedImage]}
+                        alt={getImageProps(images[selectedImage]).alt}
+                        className="h-auto max-h-[calc(100vh-24rem)] w-auto max-w-[85vw] rounded-lg md:max-h-[calc(90vh-16rem)] md:max-w-5xl"
+                        priority={true}
+                        sizes="(max-width: 768px) 85vw, (max-width: 1280px) 80vw, 1280px"
+                        maxWidth={1920}
+                      />
+                    ) : (
+                      <img
+                        src={images[selectedImage].src}
+                        alt={images[selectedImage].alt}
+                        className="h-auto max-h-[calc(100vh-24rem)] w-auto max-w-[85vw] rounded-lg md:max-h-[calc(90vh-16rem)] md:max-w-5xl"
+                        loading="eager"
+                      />
+                    )}
                     {/* Desktop: Hotspot indicator and caption overlay */}
-                    {images[selectedImage].caption && (
+                    {getImageProps(images[selectedImage]).caption && (
                       <>
                         {/* Hotspot circle with info icon */}
                         <motion.div
-                          className="absolute bottom-4 left-4 hidden h-10 w-10 cursor-help items-center justify-center rounded-full bg-green-700/80 backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-green-700 md:flex"
+                          className="absolute bottom-4 left-4 hidden h-10 w-10 cursor-help items-center justify-center rounded-full bg-primary-700/80 backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-primary-700 md:flex"
                           onMouseEnter={() => setCaptionHovered(true)}
                           onMouseLeave={() => setCaptionHovered(false)}
                           aria-label="Show caption"
@@ -362,7 +415,7 @@ export default function ImageGallery({
                               }}
                             >
                               <p className="font-body text-base leading-relaxed text-white drop-shadow-lg md:text-lg">
-                                {images[selectedImage].caption}
+                                {getImageProps(images[selectedImage]).caption}
                               </p>
                             </motion.div>
                           )}
@@ -371,10 +424,10 @@ export default function ImageGallery({
                     )}
                   </div>
                   {/* Mobile: Caption below image */}
-                  {images[selectedImage].caption && (
+                  {getImageProps(images[selectedImage]).caption && (
                     <div className="max-h-32 w-full max-w-2xl overflow-y-auto rounded-lg bg-black/40 p-4 backdrop-blur-sm md:hidden">
                       <p className="font-body text-sm leading-relaxed text-white">
-                        {images[selectedImage].caption}
+                        {getImageProps(images[selectedImage]).caption}
                       </p>
                     </div>
                   )}
@@ -382,7 +435,7 @@ export default function ImageGallery({
                 {/* Next button - hidden on mobile, shown on desktop */}
                 {selectedImage < images.length - 1 && (
                   <button
-                    className="hidden rounded-full bg-green-700/80 p-3 text-white backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:outline-none md:block"
+                    className="hidden rounded-full bg-primary-700/80 p-3 text-white backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:outline-none md:block"
                     onClick={handleNextImage}
                     aria-label="Next image"
                     type="button"
@@ -411,7 +464,7 @@ export default function ImageGallery({
               onClick={(e) => e.stopPropagation()}
             >
               <button
-                className={`rounded-full bg-green-700/80 p-4 text-white backdrop-blur-sm transition-all duration-300 hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:outline-none ${selectedImage === 0 ? "cursor-not-allowed opacity-50" : ""}`}
+                className={`rounded-full bg-primary-700/80 p-4 text-white backdrop-blur-sm transition-all duration-300 hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:outline-none ${selectedImage === 0 ? "cursor-not-allowed opacity-50" : ""}`}
                 onClick={handlePrevImage}
                 aria-label="Previous image"
                 type="button"
@@ -433,7 +486,7 @@ export default function ImageGallery({
                 </svg>
               </button>
               <button
-                className={`rounded-full bg-green-700/80 p-4 text-white backdrop-blur-sm transition-all duration-300 hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:outline-none ${selectedImage === images.length - 1 ? "cursor-not-allowed opacity-50" : ""}`}
+                className={`rounded-full bg-primary-700/80 p-4 text-white backdrop-blur-sm transition-all duration-300 hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:outline-none ${selectedImage === images.length - 1 ? "cursor-not-allowed opacity-50" : ""}`}
                 onClick={handleNextImage}
                 aria-label="Next image"
                 type="button"
@@ -470,42 +523,54 @@ export default function ImageGallery({
         initial="hidden"
         animate="visible"
       >
-        {images.map((image, index) => (
-          <motion.div
-            key={index}
-            className={`${index % 3 === 1 ? "mt-0 md:mt-8" : ""} ${image.showOnMobile === false ? "hidden sm:block" : ""}`}
-            variants={itemVariants}
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
-          >
-            <div className="group relative overflow-hidden rounded-2xl">
-              <Image
-                src={image.src}
-                alt={image.alt}
-                width={image.width}
-                height={image.height}
-                className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
-                loading="lazy"
-              />
-              {showCaptions && captionPosition === "hover" && image.caption && (
-                <div
-                  className={`absolute inset-0 flex items-end bg-gradient-to-t from-primary-900/90 via-primary-900/50 to-transparent p-4 transition-opacity duration-300 dark:from-grey-900/90 dark:via-grey-900/50 ${
-                    hoveredIndex === index ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  <p className="line-clamp-3 font-body text-sm text-white md:text-base">
-                    {image.caption}
-                  </p>
-                </div>
+        {images.map((image, index) => {
+          const props = getImageProps(image);
+          return (
+            <motion.div
+              key={index}
+              className={`${index % 3 === 1 ? "mt-0 md:mt-8" : ""} ${props.showOnMobile === false ? "hidden sm:block" : ""}`}
+              variants={itemVariants}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
+              <div className="group relative overflow-hidden rounded-2xl">
+                {isSanityImage(image) ? (
+                  <SanityImage
+                    image={image}
+                    alt={props.alt}
+                    className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
+                ) : (
+                  <Image
+                    src={image.src}
+                    alt={props.alt}
+                    width={props.width}
+                    height={props.height}
+                    className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                )}
+                {showCaptions && captionPosition === "hover" && props.caption && (
+                  <div
+                    className={`absolute inset-0 flex items-end bg-gradient-to-t from-primary-900/90 via-primary-900/50 to-transparent p-4 transition-opacity duration-300 dark:from-grey-900/90 dark:via-grey-900/50 ${
+                      hoveredIndex === index ? "opacity-100" : "opacity-0"
+                    }`}
+                  >
+                    <p className="line-clamp-3 font-body text-sm text-white md:text-base">
+                      {props.caption}
+                    </p>
+                  </div>
+                )}
+              </div>
+              {showCaptions && captionPosition === "below" && props.caption && (
+                <p className="mt-2 line-clamp-2 font-body text-sm text-neutral-700 dark:text-neutral-300">
+                  {props.caption}
+                </p>
               )}
-            </div>
-            {showCaptions && captionPosition === "below" && image.caption && (
-              <p className="mt-2 line-clamp-2 font-body text-sm text-neutral-700 dark:text-neutral-300">
-                {image.caption}
-              </p>
-            )}
-          </motion.div>
-        ))}
+            </motion.div>
+          );
+        })}
       </motion.div>
     );
   }
@@ -518,42 +583,54 @@ export default function ImageGallery({
       initial="hidden"
       animate="visible"
     >
-      {images.map((image, index) => (
-        <motion.div
-          key={index}
-          className={image.showOnMobile === false ? "hidden sm:block" : ""}
-          variants={itemVariants}
-          onMouseEnter={() => setHoveredIndex(index)}
-          onMouseLeave={() => setHoveredIndex(null)}
-        >
-          <div className="group relative overflow-hidden rounded-2xl">
-            <Image
-              src={image.src}
-              alt={image.alt}
-              width={image.width}
-              height={image.height}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-              loading="lazy"
-            />
-            {showCaptions && captionPosition === "hover" && image.caption && (
-              <div
-                className={`absolute inset-0 flex items-end bg-gradient-to-t from-primary-900/90 via-primary-900/50 to-transparent p-4 transition-opacity duration-300 dark:from-grey-900/90 dark:via-grey-900/50 ${
-                  hoveredIndex === index ? "opacity-100" : "opacity-0"
-                }`}
-              >
-                <p className="line-clamp-3 font-body text-sm text-white md:text-base">
-                  {image.caption}
-                </p>
-              </div>
+      {images.map((image, index) => {
+        const props = getImageProps(image);
+        return (
+          <motion.div
+            key={index}
+            className={props.showOnMobile === false ? "hidden sm:block" : ""}
+            variants={itemVariants}
+            onMouseEnter={() => setHoveredIndex(index)}
+            onMouseLeave={() => setHoveredIndex(null)}
+          >
+            <div className="group relative overflow-hidden rounded-2xl">
+              {isSanityImage(image) ? (
+                <SanityImage
+                  image={image}
+                  alt={props.alt}
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
+              ) : (
+                <Image
+                  src={image.src}
+                  alt={props.alt}
+                  width={props.width}
+                  height={props.height}
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  loading="lazy"
+                />
+              )}
+              {showCaptions && captionPosition === "hover" && props.caption && (
+                <div
+                  className={`absolute inset-0 flex items-end bg-gradient-to-t from-primary-900/90 via-primary-900/50 to-transparent p-4 transition-opacity duration-300 dark:from-grey-900/90 dark:via-grey-900/50 ${
+                    hoveredIndex === index ? "opacity-100" : "opacity-0"
+                  }`}
+                >
+                  <p className="line-clamp-3 font-body text-sm text-white md:text-base">
+                    {props.caption}
+                  </p>
+                </div>
+              )}
+            </div>
+            {showCaptions && captionPosition === "below" && props.caption && (
+              <p className="mt-2 line-clamp-2 font-body text-sm text-neutral-700 dark:text-neutral-300">
+                {props.caption}
+              </p>
             )}
-          </div>
-          {showCaptions && captionPosition === "below" && image.caption && (
-            <p className="mt-2 line-clamp-2 font-body text-sm text-neutral-700 dark:text-neutral-300">
-              {image.caption}
-            </p>
-          )}
-        </motion.div>
-      ))}
+          </motion.div>
+        );
+      })}
     </motion.div>
   );
 }

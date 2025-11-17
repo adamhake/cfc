@@ -1,4 +1,8 @@
 - Evaluate if unpic is still needed with sanity
-- remove farmer motion text animation
+- remove framer motion text animation
 - donate form page
 - newsletter signup page
+- get involved page and cta button
+- Homepage "the park" image
+- partner logo background image darkmode, need to be lighter
+- performance optimizations

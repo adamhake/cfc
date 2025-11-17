@@ -54,7 +54,8 @@
       "mcp__sanity__publish_document",
       "Bash(pnpm tsr:*)",
       "WebFetch(domain:tanstack.com)",
-      "WebFetch(domain:www.sanity.io)"
+      "WebFetch(domain:www.sanity.io)",
+      "mcp__sanity__get_schema"
     ],
     "deny": [],
     "ask": []
