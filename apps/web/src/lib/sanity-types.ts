@@ -68,3 +68,51 @@ export interface SanityMediaImage {
 export interface EventSlug {
   slug: string;
 }
+
+export interface SanityPartner {
+  _id: string;
+  _type: "partner";
+  name: string;
+  slug: {
+    current: string;
+  };
+  logo: SanityImage;
+  description?: string;
+  websiteUrl?: string;
+  order: number;
+}
+
+export interface SanityQuote {
+  _id: string;
+  _type: "quote";
+  quoteText: string;
+  attribution: string;
+  backgroundImage: SanityImage;
+}
+
+export interface SanityGalleryImage {
+  image: SanityImage;
+  showOnMobile: boolean;
+}
+
+export interface SanityGallery {
+  _id: string;
+  _type: "gallery";
+  title: string;
+  images: SanityGalleryImage[];
+}
+
+export interface SanityHomePage {
+  hero: {
+    heading: string;
+    subheading: string;
+    heroImage: SanityMediaImage;
+    ctaButton: {
+      text: string;
+      link: string;
+    };
+  };
+  partners?: SanityPartner[];
+  quote?: SanityQuote;
+  gallery?: SanityGallery;
+}

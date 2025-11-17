@@ -11,7 +11,12 @@ const config = defineConfig({
     viteTsConfigPaths({
       projects: ["./tsconfig.json"],
     }),
-    tanstackStart({ sitemap: { enabled: true } }),
+    tanstackStart({
+      sitemap: { enabled: true },
+      prerender: {
+        enabled: true,
+      },
+    }),
     netlify({
       edgeSSR: true,
     }),

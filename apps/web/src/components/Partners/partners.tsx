@@ -1,8 +1,24 @@
 import { Image } from "@unpic/react";
 import { ExternalLink } from "lucide-react";
 
-export default function Partners() {
-  const partners = [
+interface Partner {
+  name: string;
+  url?: string;
+  logo: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+  };
+  description?: string;
+}
+
+interface PartnersProps {
+  partners?: Partner[];
+}
+
+export default function Partners({ partners: partnersProp }: PartnersProps) {
+  const defaultPartners = [
     {
       name: "Church Hill Rotary Club",
       url: "https://www.churchhillrotary.org/",
@@ -28,6 +44,8 @@ export default function Partners() {
         "A civic association working to preserve the historic character and quality of life in the Church Hill neighborhood.",
     },
   ];
+
+  const partners = partnersProp || defaultPartners;
 
   return (
     <div className="px-4 lg:px-0">
