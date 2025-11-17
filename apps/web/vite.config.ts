@@ -13,7 +13,7 @@ const config = defineConfig({
     }),
     tanstackStart({
       sitemap: {
-        enabled: true,
+        enabled: false,
         host: process.env.SERVER_URL || "https://chimborazoparkconservancy.org",
       },
       prerender: {
