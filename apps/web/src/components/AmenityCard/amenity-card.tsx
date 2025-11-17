@@ -1,3 +1,5 @@
+import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image";
+import { Image } from "@unpic/react";
 import { cloneElement, isValidElement } from "react";
 
 interface AmenityCardProps {
@@ -13,6 +15,7 @@ interface AmenityCardProps {
     src: string;
     alt: string;
   };
+  sanityImage?: SanityImageObject;
 }
 
 export default function AmenityCard({
@@ -22,6 +25,7 @@ export default function AmenityCard({
   details,
   link,
   image,
+  sanityImage,
 }: AmenityCardProps) {
   // Apply consistent icon styling
   const styledIcon = isValidElement(icon)
@@ -30,17 +34,34 @@ export default function AmenityCard({
       } as React.HTMLAttributes<HTMLElement>)
     : icon;
 
+  const hasImage = sanityImage || image;
+
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-accent-600/20 bg-gradient-to-br from-grey-50 to-grey-50/80 shadow-sm transition-all duration-300 hover:shadow-md dark:border-accent-500/20 dark:from-primary-900 dark:to-primary-900/80">
       {/* Subtle accent gradient overlay on hover */}
       <div className="absolute top-0 right-0 h-32 w-32 bg-gradient-to-br from-accent-600/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-accent-500/10"></div>
 
-      {image && (
-        <div className="relative h-48 w-full overflow-hidden bg-grey-200 dark:bg-primary-700">
-          {/* Image placeholder - replace with actual images */}
-          <div className="flex h-full items-center justify-center text-grey-400 dark:text-primary-500">
-            <span className="font-body text-sm">Image: {image.alt}</span>
-          </div>
+      {hasImage && (
+        <div className="relative h-64 w-full overflow-hidden bg-grey-200 dark:bg-primary-700">
+          {sanityImage ? (
+            <SanityImage
+              image={sanityImage}
+              alt={sanityImage.alt || title}
+              className="h-full w-full object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              maxWidth={800}
+            />
+          ) : image ? (
+            <Image
+              src={image.src}
+              alt={image.alt}
+              width={800}
+              height={400}
+              className="h-full w-full object-cover"
+              loading="lazy"
+              layout="constrained"
+            />
+          ) : null}
         </div>
       )}
       <div className="relative p-6 lg:p-8">

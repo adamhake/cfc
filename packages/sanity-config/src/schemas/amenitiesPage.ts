@@ -96,7 +96,7 @@ export default defineType({
               title: "Slug",
               type: "slug",
               options: {
-                source: "title",
+                source: (_doc: any, options: any) => options.parent?.title,
                 maxLength: 96,
               },
               validation: (rule) => rule.required(),
@@ -107,12 +107,18 @@ export default defineType({
               type: "string",
               options: {
                 list: [
-                  { title: "Playground", value: "playground" },
-                  { title: "Gazebo", value: "gazebo" },
-                  { title: "Monument", value: "monument" },
+                  { title: "Building / Round House", value: "building" },
+                  { title: "Gazebo / Picnic Area", value: "gazebo" },
+                  { title: "Monument / Statue", value: "monument" },
                   { title: "Restroom", value: "restroom" },
-                  { title: "Dog", value: "dog" },
-                  { title: "Trail", value: "trail" },
+                  { title: "Dog Park", value: "dog" },
+                  { title: "Trail / Path", value: "trail" },
+                  { title: "Trees / Woodland", value: "trees" },
+                  { title: "Bench / Seating", value: "bench" },
+                  { title: "Parking", value: "parking" },
+                  { title: "Playground", value: "playground" },
+                  { title: "Fountain / Water Feature", value: "fountain" },
+                  { title: "Garden / Flowers", value: "garden" },
                 ],
                 layout: "dropdown",
               },
@@ -149,6 +155,13 @@ export default defineType({
                 }),
             }),
             defineField({
+              name: "linkText",
+              title: "Link Text",
+              type: "string",
+              description: "Display text for the external link (e.g., 'Reserve the Round House')",
+              hidden: ({ parent }) => !parent?.externalLink,
+            }),
+            defineField({
               name: "section",
               title: "Park Section",
               type: "string",
@@ -162,25 +175,24 @@ export default defineType({
               },
               validation: (rule) => rule.required(),
             }),
-            defineField({
-              name: "order",
-              title: "Display Order",
-              type: "number",
-              description: "Order within its section",
-              validation: (rule) => rule.required().min(0),
-            }),
           ],
           preview: {
             select: {
               title: "title",
-              subtitle: "section",
-              order: "order",
+              section: "section",
               media: "image.image",
             },
-            prepare({ title, subtitle, order, media }) {
+            prepare({ title, section, media }) {
+              const sectionLabels: Record<string, string> = {
+                "upper-park": "Upper",
+                "lower-park": "Lower",
+                both: "Both",
+              };
+              const sectionLabel = sectionLabels[section as string] || section;
+
               return {
-                title: `${order + 1}. ${title}`,
-                subtitle: subtitle,
+                title: title,
+                subtitle: `${sectionLabel} Park`,
                 media,
               }
             },
