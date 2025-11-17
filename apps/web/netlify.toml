@@ -2,7 +2,7 @@
   # Build from monorepo root using Turborepo
   base = "apps/web"
   command = "pnpm run build --filter=@chimborazo/web"
-  publish = "apps/web/dist/client"
+  publish = "dist/client"
 
 [build.environment]
   NODE_VERSION = "22"
