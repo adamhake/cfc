@@ -58,6 +58,13 @@ export const mediaImageSchema = defineType({
       description: "Show in featured gallery sections",
     }),
     defineField({
+      name: "hideFromMediaPage",
+      title: "Hide from Media Page",
+      type: "boolean",
+      initialValue: false,
+      description: "Hide this image from the public media gallery (use for reference images only)",
+    }),
+    defineField({
       name: "uploadedAt",
       title: "Uploaded at",
       type: "datetime",

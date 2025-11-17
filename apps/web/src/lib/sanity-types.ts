@@ -139,3 +139,23 @@ export interface SanitySiteSettings {
     ogImage?: SanityImage;
   };
 }
+
+export interface SanityAmenitiesPage {
+  pageHero: {
+    title: string;
+    description?: string;
+    image?: SanityMediaImage;
+  };
+  introduction?: PortableTextBlock[];
+  amenities?: Array<{
+    title: string;
+    slug: { current: string };
+    icon: string;
+    description: string;
+    details?: string[];
+    image?: SanityMediaImage;
+    externalLink?: string;
+    linkText?: string;
+    section: "upper-park" | "lower-park" | "both";
+  }>;
+}

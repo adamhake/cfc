@@ -14,6 +14,9 @@ export const queryKeys = {
   // Homepage content
   homePage: () => ["homePage"] as const,
 
+  // Amenities page
+  amenitiesPage: () => ["amenitiesPage"] as const,
+
   // Events
   events: {
     all: () => ["events", "all"] as const,

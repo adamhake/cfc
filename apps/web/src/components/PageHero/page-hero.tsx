@@ -1,13 +1,15 @@
+import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image";
 import { Image } from "@unpic/react";
 import { ReactNode } from "react";
 
 interface PageHeroProps {
   title: string;
   subtitle?: string;
-  imageSrc: string;
-  imageAlt: string;
-  imageWidth: number;
-  imageHeight: number;
+  imageSrc?: string;
+  imageAlt?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  sanityImage?: SanityImageObject;
   children?: ReactNode;
   height?: "small" | "medium" | "large";
   priority?: boolean;
@@ -20,6 +22,7 @@ export default function PageHero({
   imageAlt,
   imageWidth,
   imageHeight,
+  sanityImage,
   children,
   height = "medium",
   priority = false,
@@ -36,16 +39,27 @@ export default function PageHero({
       role="banner"
       aria-label="Page header"
     >
-      <Image
-        src={imageSrc}
-        alt={imageAlt}
-        width={imageWidth}
-        height={imageHeight}
-        className="absolute inset-0 h-full w-full object-cover"
-        loading={priority ? "eager" : "lazy"}
-        fetchpriority={priority ? "high" : undefined}
-        breakpoints={[320, 640, 1280, 1920]}
-      />
+      {sanityImage ? (
+        <SanityImage
+          image={sanityImage}
+          alt={imageAlt || sanityImage.alt || ""}
+          className="absolute inset-0 h-full w-full object-cover"
+          sizes="100vw"
+          priority={priority}
+          maxWidth={1920}
+        />
+      ) : (
+        <Image
+          src={imageSrc!}
+          alt={imageAlt!}
+          width={imageWidth!}
+          height={imageHeight!}
+          className="absolute inset-0 h-full w-full object-cover"
+          loading={priority ? "eager" : "lazy"}
+          fetchpriority={priority ? "high" : undefined}
+          breakpoints={[320, 640, 1280, 1920]}
+        />
+      )}
       <div
         className="absolute inset-0 bg-gradient-to-r from-primary-900/70 to-primary-800/50"
         aria-hidden="true"

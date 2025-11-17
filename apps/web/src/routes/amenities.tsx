@@ -3,23 +3,75 @@ import GetInvolved from "@/components/GetInvolved/get-involved";
 import PageHero from "@/components/PageHero/page-hero";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import SupportOption from "@/components/SupportOption/support-option";
+import { queryKeys } from "@/lib/query-keys";
+import { sanityClient } from "@/lib/sanity";
+import type { SanityAmenitiesPage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
+import { getAmenitiesPageQuery } from "@chimborazo/sanity-config";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Building2,
+  Car,
   Clock,
   Dog,
+  Droplet,
   Flag,
+  Flower2,
   Heart,
   MapPin,
   ShoppingBasket,
+  Sofa,
   Toilet,
+  TreeDeciduous,
   TreePine,
   Trees,
 } from "lucide-react";
 
+// Icon mapping based on schema icon values
+const iconMap = {
+  building: Building2,
+  gazebo: ShoppingBasket,
+  monument: Flag,
+  restroom: Toilet,
+  dog: Dog,
+  trail: TreePine,
+  trees: Trees,
+  bench: Sofa,
+  parking: Car,
+  playground: TreeDeciduous,
+  fountain: Droplet,
+  garden: Flower2,
+} as const;
+
+// Helper to get icon component from string
+const getIconComponent = (iconName: string) => {
+  const IconComponent = iconMap[iconName as keyof typeof iconMap];
+  return IconComponent ? <IconComponent /> : <Building2 />;
+};
+
+// Query options for TanStack Query
+const amenitiesPageQueryOptions = queryOptions({
+  queryKey: queryKeys.amenitiesPage(),
+  queryFn: async (): Promise<SanityAmenitiesPage | null> => {
+    try {
+      return await sanityClient.fetch(getAmenitiesPageQuery);
+    } catch (error) {
+      console.warn("Failed to fetch amenities page from Sanity:", error);
+      return null;
+    }
+  },
+  // Page content changes infrequently - cache for 30 minutes
+  staleTime: 30 * 60 * 1000, // 30 minutes
+  gcTime: 60 * 60 * 1000, // 1 hour (must be >= staleTime)
+});
+
 export const Route = createFileRoute("/amenities")({
   component: RouteComponent,
+  loader: async ({ context }) => {
+    // Prefetch amenities page data on the server
+    await context.queryClient.ensureQueryData(amenitiesPageQueryOptions);
+  },
   head: () => ({
     meta: generateMetaTags({
       title: "Park Amenities",
@@ -35,17 +87,38 @@ export const Route = createFileRoute("/amenities")({
 });
 
 function RouteComponent() {
+  const { data: amenitiesPageData } = useQuery(amenitiesPageQueryOptions);
+
+  // Prepare hero data from Sanity or use defaults
+  const heroData = amenitiesPageData?.pageHero?.image?.image
+    ? {
+        title: amenitiesPageData.pageHero.title,
+        subtitle: amenitiesPageData.pageHero.description,
+        sanityImage: amenitiesPageData.pageHero.image.image,
+      }
+    : {
+        title: "Park Amenities",
+        subtitle: "Explore the spaces, trails, and landmarks that make Chimborazo special",
+        imageSrc: "/bike_sunset.webp",
+        imageAlt: "Chimborazo Park landscape",
+        imageWidth: 2000,
+        imageHeight: 1262,
+      };
+
+  // Filter amenities by section
+  const upperParkAmenities =
+    amenitiesPageData?.amenities?.filter(
+      (amenity) => amenity.section === "upper-park" || amenity.section === "both",
+    ) || [];
+
+  const lowerParkAmenities =
+    amenitiesPageData?.amenities?.filter(
+      (amenity) => amenity.section === "lower-park" || amenity.section === "both",
+    ) || [];
+
   return (
     <div>
-      <PageHero
-        title="Park Amenities"
-        subtitle="Explore the spaces, trails, and landmarks that make Chimborazo special"
-        imageSrc="/bike_sunset.webp"
-        imageAlt="Chimborazo Park landscape"
-        imageWidth={2000}
-        imageHeight={1262}
-        height="large"
-      />
+      <PageHero {...heroData} height="large" priority={true} />
 
       {/* Main Content */}
       <div className="mx-auto max-w-6xl space-y-24 px-4 py-16 pb-24">
@@ -106,72 +179,24 @@ function RouteComponent() {
           </p>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            <AmenityCard
-              title="Chimborazo Round House"
-              icon={<Building2 />}
-              description="A historic gem overlooking southeast Richmond, the Round House has welcomed visitors for over a century."
-              details={[
-                "Originally constructed in 1905",
-                "Redesigned as a Park House in 1915",
-                "Available to rent for private events",
-                "Stunning panoramic views included",
-              ]}
-              link={{
-                text: "Reserve the Round House",
-                url: "https://www.rva.gov/parks-recreation/scheduling-events-and-fees",
-              }}
-              image={{
-                src: "/placeholder-roundhouse.webp",
-                alt: "Historic Chimborazo Round House",
-              }}
-            />
-
-            <AmenityCard
-              title="Picnic Gazebo"
-              icon={<ShoppingBasket />}
-              description="Located just behind the bluff's edge, our gazebo provides the perfect setting for gatherings large and small."
-              details={[
-                "Ideal for family reunions and picnics",
-                "Shaded seating area",
-                "Spectacular overlook views",
-                "Available through Parks and Recreation",
-              ]}
-              link={{
-                text: "Learn about gazebo rental",
-                url: "https://www.rva.gov/parks-recreation/scheduling-events-and-fees",
-              }}
-              image={{
-                src: "/placeholder-gazebo.webp",
-                alt: "Chimborazo Park gazebo overlooking the city",
-              }}
-            />
-
-            <AmenityCard
-              title="Statue of Liberty Replica"
-              icon={<Flag />}
-              description="A unique piece of Cold War history stands proudly in the park—one of only 200 replicas placed nationwide."
-              details={[
-                "Donated by the Robert E. Lee Council Boy Scouts in 1951",
-                "Part of the 'Strengthen the Arm of Liberty' campaign",
-                "Eight-foot replica of the iconic statue",
-                "Commemorates early Cold War era patriotism",
-              ]}
-              image={{
-                src: "/placeholder-liberty.webp",
-                alt: "Statue of Liberty replica at Chimborazo Park",
-              }}
-            />
-
-            <AmenityCard
-              title="Restroom Facilities"
-              icon={<Toilet />}
-              description="Conveniently located facilities are available year-round in the upper park area."
-              details={[
-                "Two port-a-potty units available",
-                "Located behind the Gazebo and Statue of Liberty",
-                "Accessible to all park visitors",
-              ]}
-            />
+            {upperParkAmenities.map((amenity) => (
+              <AmenityCard
+                key={amenity.slug.current}
+                title={amenity.title}
+                icon={getIconComponent(amenity.icon)}
+                description={amenity.description}
+                details={amenity.details}
+                link={
+                  amenity.externalLink
+                    ? {
+                        text: amenity.linkText || "Learn more",
+                        url: amenity.externalLink,
+                      }
+                    : undefined
+                }
+                sanityImage={amenity.image?.image}
+              />
+            ))}
           </div>
         </div>
 
@@ -186,37 +211,24 @@ function RouteComponent() {
           </p>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            <AmenityCard
-              title="Bark Park"
-              icon={<Dog />}
-              description="Two dedicated off-leash areas where dogs of all sizes can run, socialize, and play safely."
-              details={[
-                "Separate areas for large and small dogs",
-                "Water typically available at both sections",
-                "Convenient parking nearby",
-                "Shaded seating for pet owners",
-              ]}
-              image={{
-                src: "/placeholder-barkpark.webp",
-                alt: "Chimborazo Park dog park",
-              }}
-            />
-
-            <AmenityCard
-              title="Woodland Trails"
-              icon={<TreePine />}
-              description="Explore a network of paths winding through natural woodland, connecting historic routes and scenic spots."
-              details={[
-                "Improved trails and natural social paths",
-                "Runs from Government Road stairs to Gilly's Creek",
-                "Historic cobbled service roads",
-                "Shaded forest canopy for year-round hiking",
-              ]}
-              image={{
-                src: "/placeholder-trails.webp",
-                alt: "Woodland trails at Chimborazo Park",
-              }}
-            />
+            {lowerParkAmenities.map((amenity) => (
+              <AmenityCard
+                key={amenity.slug.current}
+                title={amenity.title}
+                icon={getIconComponent(amenity.icon)}
+                description={amenity.description}
+                details={amenity.details}
+                link={
+                  amenity.externalLink
+                    ? {
+                        text: amenity.linkText || "Learn more",
+                        url: amenity.externalLink,
+                      }
+                    : undefined
+                }
+                sanityImage={amenity.image?.image}
+              />
+            ))}
           </div>
         </div>
 

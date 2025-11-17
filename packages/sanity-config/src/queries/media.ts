@@ -27,21 +27,21 @@ export const mediaImageFields = `
 
 // Get all media images
 export const allMediaImagesQuery = `
-  *[_type == "mediaImage" && !(_id in path("drafts.**"))] | order(uploadedAt desc) {
+  *[_type == "mediaImage" && !(_id in path("drafts.**")) && hideFromMediaPage != true] | order(uploadedAt desc) {
     ${mediaImageFields}
   }
 `
 
 // Get media images by category
 export const mediaImagesByCategoryQuery = `
-  *[_type == "mediaImage" && !(_id in path("drafts.**")) && category == $category] | order(uploadedAt desc) {
+  *[_type == "mediaImage" && !(_id in path("drafts.**")) && hideFromMediaPage != true && category == $category] | order(uploadedAt desc) {
     ${mediaImageFields}
   }
 `
 
 // Get featured media images
 export const featuredMediaImagesQuery = `
-  *[_type == "mediaImage" && !(_id in path("drafts.**")) && featured == true] | order(uploadedAt desc) {
+  *[_type == "mediaImage" && !(_id in path("drafts.**")) && hideFromMediaPage != true && featured == true] | order(uploadedAt desc) {
     ${mediaImageFields}
   }
 `
