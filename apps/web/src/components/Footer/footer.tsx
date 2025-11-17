@@ -67,8 +67,7 @@ export default function Footer() {
                 Events
               </Link>
               <Link
-                to="/"
-                hash="get-involved"
+                to="/get-involved"
                 className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
               >
                 Get Involved

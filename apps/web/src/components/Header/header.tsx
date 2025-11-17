@@ -215,13 +215,12 @@ export default function Header() {
                     </li>
                     <li>
                       <Link
-                        to="/"
-                        hash="get-involved"
+                        to="/get-involved"
                         onClick={() => setMenuOpen(false)}
                         className="group inline-block font-body text-lg font-medium text-grey-800 transition focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-100"
                       >
                         <span
-                          className={`border-b-2 transition group-hover:border-accent-600 dark:group-hover:border-accent-400 ${currentPath === "/" && currentHash === "#get-involved" ? "border-accent-600 dark:border-accent-400" : "border-transparent"}`}
+                          className={`border-b-2 transition group-hover:border-accent-600 dark:group-hover:border-accent-400 ${currentPath === "/get-involved" ? "border-accent-600 dark:border-accent-400" : "border-transparent"}`}
                         >
                           Get Involved
                         </span>
@@ -378,10 +377,9 @@ export default function Header() {
                     transition={{ delay: 0.25 }}
                   >
                     <Link
-                      to="/"
-                      hash="get-involved"
+                      to="/get-involved"
                       onClick={() => setMenuOpen(false)}
-                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/" && currentHash === "#get-involved" ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
+                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/get-involved" ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
                     >
                       Get Involved
                     </Link>
