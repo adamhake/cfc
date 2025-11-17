@@ -187,8 +187,8 @@ export default defineType({
                 "upper-park": "Upper",
                 "lower-park": "Lower",
                 both: "Both",
-              };
-              const sectionLabel = sectionLabels[section as string] || section;
+              }
+              const sectionLabel = sectionLabels[section as string] || section
 
               return {
                 title: title,

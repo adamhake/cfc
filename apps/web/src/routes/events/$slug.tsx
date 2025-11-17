@@ -165,7 +165,7 @@ function EventPage() {
           imageAlt={staticImageData?.alt || sanityHeroImage?.alt}
           imageWidth={staticImageData?.width}
           imageHeight={staticImageData?.height}
-          height="medium"
+          height="event"
           priority={true}
           alignment="bottom-mobile-center-desktop"
           titleSize="large"
