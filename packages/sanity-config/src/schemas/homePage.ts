@@ -74,6 +74,13 @@ export default defineType({
       to: [{ type: "gallery" }],
       description: "Select the image gallery to display on the homepage",
     }),
+    defineField({
+      name: "parkGallery",
+      title: "Park Section Gallery",
+      type: "reference",
+      to: [{ type: "gallery" }],
+      description: "Select the rotating image gallery to display in 'The Park' section",
+    }),
   ],
   preview: {
     prepare() {
