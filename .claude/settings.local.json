@@ -43,7 +43,11 @@
       "Bash(pnpm type-check:*)",
       "Bash(pnpm tsc:*)",
       "Bash(pnpm --filter @chimborazo/web remove:*)",
-      "Bash(pnpm --filter @chimborazo/web add:*)"
+      "Bash(pnpm --filter @chimborazo/web add:*)",
+      "Bash(pnpm --filter @chimborazo/web type-check:*)",
+      "Bash(pnpm --filter @chimborazo/web format:*)",
+      "Bash(pnpm --filter @chimborazo/web build:*)",
+      "Bash(pnpm --filter @chimborazo/sanity-config build:*)"
     ],
     "deny": [],
     "ask": []

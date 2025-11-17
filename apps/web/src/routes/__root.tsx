@@ -3,6 +3,7 @@ import Footer from "@/components/Footer/footer";
 import Header from "@/components/Header/header";
 import { NotFound } from "@/components/NotFound/not-found";
 import type { PaletteMode } from "@/utils/palette";
+import { generateOrganizationStructuredData, SITE_CONFIG } from "@/utils/seo";
 import type { ResolvedTheme, ThemeMode } from "@/utils/theme";
 import type { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
@@ -38,23 +39,22 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
       {
         name: "theme-color",
-        content: "#166534",
+        content: SITE_CONFIG.themeColor,
       },
       {
-        title: "Chimborazo Park Conservancy",
+        title: SITE_CONFIG.name,
       },
       {
         name: "description",
-        content:
-          "A 501(c)(3) non-profit dedicated to preserving and enhancing Chimborazo Park in Richmond, VA's Church Hill neighborhood through community stewardship.",
+        content: SITE_CONFIG.description,
       },
       {
         property: "og:site_name",
-        content: "Chimborazo Park Conservancy",
+        content: SITE_CONFIG.name,
       },
       {
         property: "og:locale",
-        content: "en_US",
+        content: SITE_CONFIG.locale,
       },
       {
         name: "twitter:card",
@@ -108,30 +108,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "NGO",
-    name: "Chimborazo Park Conservancy",
-    alternateName: "Friends of Chimborazo Park",
-    url: "https://chimboparkconservancy.org",
-    logo: "https://chimboparkconservancy.org/logo512.png",
-    description:
-      "A 501(c)(3) non-profit organization dedicated to preserving and enhancing Chimborazo Park in Richmond, Virginia's Church Hill neighborhood through community stewardship.",
-    foundingDate: "2023",
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Richmond",
-      addressRegion: "VA",
-      addressCountry: "US",
-    },
-    areaServed: {
-      "@type": "Place",
-      name: "Church Hill, Richmond, Virginia",
-    },
-    sameAs: [
-      // Add social media URLs here when available
-    ],
-  };
+  const structuredData = generateOrganizationStructuredData();
 
   return (
     <html lang="en" suppressHydrationWarning>

@@ -43,7 +43,7 @@ export default function Partners() {
             >
               <div className="relative space-y-6">
                 {/* Logo */}
-                <div className="flex items-center justify-center rounded-xl bg-white p-6 shadow-sm transition-transform duration-300 group-hover:scale-105 dark:bg-grey-800">
+                <div className="flex items-center justify-center rounded-xl bg-white p-6 shadow-sm transition-transform duration-300 group-hover:scale-105 dark:border dark:border-olive-500/50 dark:bg-transparent">
                   <Image
                     width={partner.logo.width}
                     height={partner.logo.height}

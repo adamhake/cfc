@@ -4,9 +4,10 @@ import PageHero from "@/components/PageHero/page-hero";
 import { events as staticEvents, type Event as StaticEvent } from "@/data/events";
 import { sanityClient } from "@/lib/sanity";
 import type { SanityEvent } from "@/lib/sanity-types";
+import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { allEventsQuery } from "@chimborazo/sanity-config";
-import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
 
 // Query options for TanStack Query
 const eventsQueryOptions = queryOptions({
@@ -31,64 +32,22 @@ export const Route = createFileRoute("/events/")({
     return context.queryClient.ensureQueryData(eventsQueryOptions);
   },
   head: () => ({
-    meta: [
-      {
-        title: "Events | Chimborazo Park Conservancy",
+    meta: generateMetaTags({
+      title: "Events",
+      description:
+        "Join us for park clean-ups, tree plantings, educational presentations, and community gatherings. Discover upcoming and past events at Chimborazo Park.",
+      type: "website",
+      url: `${SITE_CONFIG.url}/events`,
+      image: {
+        url: `${SITE_CONFIG.url}/volunteers.webp`,
+        width: 2000,
+        height: 1333,
+        alt: "Community volunteers at Chimborazo Park",
       },
-      {
-        name: "description",
-        content:
-          "Join us for park clean-ups, tree plantings, educational presentations, and community gatherings. Discover upcoming and past events at Chimborazo Park.",
-      },
-      {
-        property: "og:title",
-        content: "Events | Chimborazo Park Conservancy",
-      },
-      {
-        property: "og:description",
-        content:
-          "Join us for park clean-ups, tree plantings, educational presentations, and community gatherings. Discover upcoming and past events at Chimborazo Park.",
-      },
-      {
-        property: "og:type",
-        content: "website",
-      },
-      {
-        property: "og:url",
-        content: "https://chimboparkconservancy.org/events",
-      },
-      {
-        property: "og:image",
-        content: "https://chimboparkconservancy.org/volunteers.webp",
-      },
-      {
-        property: "og:image:width",
-        content: "2000",
-      },
-      {
-        property: "og:image:height",
-        content: "1333",
-      },
-      {
-        name: "twitter:title",
-        content: "Events | Chimborazo Park Conservancy",
-      },
-      {
-        name: "twitter:description",
-        content:
-          "Join us for park clean-ups, tree plantings, educational presentations, and community gatherings.",
-      },
-      {
-        name: "twitter:image",
-        content: "https://chimboparkconservancy.org/volunteers.webp",
-      },
-    ],
-    links: [
-      {
-        rel: "canonical",
-        href: "https://chimboparkconservancy.org/events",
-      },
-    ],
+    }),
+    links: generateLinkTags({
+      canonical: `${SITE_CONFIG.url}/events`,
+    }),
   }),
 });
 

@@ -1,68 +1,22 @@
 import Container from "@/components/Container/container";
 import PageHero from "@/components/PageHero/page-hero";
+import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/privacy-policy")({
   component: PrivacyPolicy,
   head: () => ({
-    meta: [
-      {
-        title: "Privacy Policy | Chimborazo Park Conservancy",
-      },
-      {
-        name: "description",
-        content:
-          "Privacy policy for Friends of Chimborazo Park, detailing how we collect, use, and protect your personal information.",
-      },
-      {
-        property: "og:title",
-        content: "Privacy Policy | Chimborazo Park Conservancy",
-      },
-      {
-        property: "og:description",
-        content:
-          "Privacy policy for Friends of Chimborazo Park, detailing how we collect, use, and protect your personal information.",
-      },
-      {
-        property: "og:type",
-        content: "website",
-      },
-      {
-        property: "og:url",
-        content: "https://chimboparkconservancy.org/privacy-policy",
-      },
-      {
-        property: "og:image",
-        content: "https://chimboparkconservancy.org/bike_sunset.webp",
-      },
-      {
-        property: "og:image:width",
-        content: "2000",
-      },
-      {
-        property: "og:image:height",
-        content: "1262",
-      },
-      {
-        name: "twitter:title",
-        content: "Privacy Policy | Chimborazo Park Conservancy",
-      },
-      {
-        name: "twitter:description",
-        content:
-          "Privacy policy for Friends of Chimborazo Park, detailing how we collect, use, and protect your personal information.",
-      },
-      {
-        name: "twitter:image",
-        content: "https://chimboparkconservancy.org/bike_sunset.webp",
-      },
-    ],
-    links: [
-      {
-        rel: "canonical",
-        href: "https://chimboparkconservancy.org/privacy-policy",
-      },
-    ],
+    meta: generateMetaTags({
+      title: "Privacy Policy",
+      description:
+        "Our commitment to protecting your privacy and personal information. Learn how we collect, use, and safeguard your data.",
+      type: "website",
+      url: `${SITE_CONFIG.url}/privacy-policy`,
+      noIndex: true, // Don't index legal pages
+    }),
+    links: generateLinkTags({
+      canonical: `${SITE_CONFIG.url}/privacy-policy`,
+    }),
   }),
 });
 

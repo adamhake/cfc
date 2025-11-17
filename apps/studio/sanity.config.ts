@@ -84,7 +84,7 @@ export default defineConfig({
       const baseUrl = process.env.SANITY_STUDIO_PREVIEW_URL || "http://localhost:3000"
 
       if (document._type === "event") {
-        return `${baseUrl}/events/${document.slug?.current}`
+        return `${baseUrl}/events/${(document.slug as { current?: string })?.current}`
       }
 
       return prev

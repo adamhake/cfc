@@ -1,68 +1,21 @@
 import Container from "@/components/Container/container";
 import PageHero from "@/components/PageHero/page-hero";
+import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/donate")({
   component: Donate,
   head: () => ({
-    meta: [
-      {
-        title: "Donate | Chimborazo Park Conservancy",
-      },
-      {
-        name: "description",
-        content:
-          "Donate to Chimborazo Park Conservancy to support our ongoing restoration efforts and community events.",
-      },
-      {
-        property: "og:title",
-        content: "Donate | Chimborazo Park Conservancy",
-      },
-      {
-        property: "og:description",
-        content:
-          "Donate to Chimborazo Park Conservancy to support our ongoing restoration efforts and community events.",
-      },
-      {
-        property: "og:type",
-        content: "website",
-      },
-      {
-        property: "og:url",
-        content: "https://chimboparkconservancy.org/donate",
-      },
-      {
-        property: "og:image",
-        content: "https://chimboparkconservancy.org/bike_sunset.webp",
-      },
-      {
-        property: "og:image:width",
-        content: "2000",
-      },
-      {
-        property: "og:image:height",
-        content: "1262",
-      },
-      {
-        name: "twitter:title",
-        content: "Donate | Chimborazo Park Conservancy",
-      },
-      {
-        name: "twitter:description",
-        content:
-          "Donate to Chimborazo Park Conservancy to support our ongoing restoration efforts and community events.",
-      },
-      {
-        name: "twitter:image",
-        content: "https://chimboparkconservancy.org/bike_sunset.webp",
-      },
-    ],
-    links: [
-      {
-        rel: "canonical",
-        href: "https://chimboparkconservancy.org/donate",
-      },
-    ],
+    meta: generateMetaTags({
+      title: "Donate",
+      description:
+        "Support Chimborazo Park through your generous donation. Help us restore and enhance this historic Richmond landmark for generations to come.",
+      type: "website",
+      url: `${SITE_CONFIG.url}/donate`,
+    }),
+    links: generateLinkTags({
+      canonical: `${SITE_CONFIG.url}/donate`,
+    }),
   }),
 });
 
