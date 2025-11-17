@@ -144,8 +144,7 @@ export function NotFound() {
           <Button
             variant="outline"
             as="a"
-            onClick={(e) => {
-              e.preventDefault();
+            onClick={() => {
               window.history.back();
             }}
           >

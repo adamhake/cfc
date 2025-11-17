@@ -171,7 +171,7 @@ export default function ImageGallery({
       y: 0,
       transition: {
         duration: 0.4,
-        ease: "easeOut",
+        ease: [0, 0, 0.2, 1] as const,
       },
     },
   };

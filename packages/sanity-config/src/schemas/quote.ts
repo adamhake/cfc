@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity"
+import { MediaImageReferenceInput } from "../components/MediaImageReferenceInput"
 
 export default defineType({
   name: "quote",
@@ -22,24 +23,13 @@ export default defineType({
     defineField({
       name: "backgroundImage",
       title: "Background Image",
-      type: "image",
-      description: "Background image for the quote section",
-      options: {
-        hotspot: true,
+      type: "reference",
+      description: "Reference to a Media Image for the quote background",
+      to: [{ type: "mediaImage" }],
+      components: {
+        input: MediaImageReferenceInput,
       },
-      fields: [
-        defineField({
-          name: "alt",
-          title: "Alternative text",
-          type: "string",
-          validation: (rule) => rule.required(),
-        }),
-        defineField({
-          name: "caption",
-          title: "Caption",
-          type: "string",
-        }),
-      ],
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: "featured",
