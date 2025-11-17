@@ -11,8 +11,11 @@ interface PageHeroProps {
   imageHeight?: number;
   sanityImage?: SanityImageObject;
   children?: ReactNode;
-  height?: "small" | "medium" | "large";
+  height?: "small" | "medium" | "large" | "event";
   priority?: boolean;
+  alignment?: "center" | "bottom-mobile-center-desktop";
+  contentSpacing?: string;
+  titleSize?: "standard" | "large";
 }
 
 export default function PageHero({
@@ -26,11 +29,27 @@ export default function PageHero({
   children,
   height = "medium",
   priority = false,
+  alignment = "center",
+  contentSpacing,
+  titleSize = "standard",
 }: PageHeroProps) {
   const heightClasses = {
     small: "h-[45vh]",
     medium: "h-[60vh]",
     large: "h-[65vh]",
+    event: "min-h-[70vh] lg:min-h-[55vh]",
+  };
+
+  const alignmentClasses = {
+    center: "items-center",
+    "bottom-mobile-center-desktop": "items-end lg:items-center",
+  };
+
+  const paddingClasses = contentSpacing || "px-4";
+
+  const titleSizeClasses = {
+    standard: "text-5xl md:text-6xl",
+    large: "text-4xl md:text-5xl lg:text-6xl",
   };
 
   return (
@@ -61,18 +80,26 @@ export default function PageHero({
         />
       )}
       <div
-        className="absolute inset-0 bg-gradient-to-r from-primary-900/70 to-primary-800/50"
+        className="absolute inset-0 bg-gradient-to-r from-primary-900/70 to-primary-800/50 dark:from-primary-950/85 dark:to-primary-900/65"
         aria-hidden="true"
       ></div>
-      <div className="absolute inset-0 z-10 flex items-center justify-center">
-        <div className="mx-auto w-full max-w-6xl px-4">
+      <div
+        className={`absolute inset-0 z-10 flex ${alignmentClasses[alignment]} justify-center ${paddingClasses} pt-20 pb-16 lg:py-8`}
+      >
+        <div className="mx-auto w-full max-w-6xl">
           <div className="text-center">
-            <h1 className="font-display text-5xl text-primary-50 md:text-6xl">{title}</h1>
+            {children}
+            <h1
+              className={`font-display text-primary-50 ${titleSizeClasses[titleSize]} dark:text-grey-50`}
+            >
+              {title}
+            </h1>
             {subtitle && (
-              <p className="mt-4 font-body text-xl text-primary-100 md:text-2xl">{subtitle}</p>
+              <p className="mt-6 font-body text-lg text-primary-100 md:text-xl dark:text-grey-200">
+                {subtitle}
+              </p>
             )}
           </div>
-          {children}
         </div>
       </div>
 

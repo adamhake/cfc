@@ -1,10 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/Button/button";
 import Container from "@/components/Container/container";
 import EventStatusChip from "@/components/EventStatusChip/event-status-chip";
 import { Markdown } from "@/components/Markdown/markdown";
+import PageHero from "@/components/PageHero/page-hero";
 import { PortableText } from "@/components/PortableText/portable-text";
-import { SanityImage } from "@/components/SanityImage";
 import { events as staticEvents, type Event as StaticEvent } from "@/data/events";
 import { queryKeys } from "@/lib/query-keys";
 import { sanityClient } from "@/lib/sanity";
@@ -18,7 +17,7 @@ import {
 import { formatDateString } from "@/utils/time";
 import { eventBySlugQuery } from "@chimborazo/sanity-config";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, Calendar, Clock, MapPin } from "lucide-react";
 
 // Pre-load all markdown files using glob import
@@ -158,72 +157,23 @@ function EventPage() {
 
       <div className="min-h-screen">
         {/* Hero Section */}
-        <header
-          className="relative min-h-[70vh] w-full overflow-hidden lg:min-h-[55vh]"
-          role="banner"
-          aria-label="Event header"
+        <PageHero
+          title={event.title}
+          subtitle={event.description}
+          sanityImage={sanityHeroImage ?? undefined}
+          imageSrc={staticImageData?.src}
+          imageAlt={staticImageData?.alt || sanityHeroImage?.alt}
+          imageWidth={staticImageData?.width}
+          imageHeight={staticImageData?.height}
+          height="medium"
+          priority={true}
+          alignment="bottom-mobile-center-desktop"
+          titleSize="large"
         >
-          {sanityHeroImage ? (
-            <SanityImage
-              image={sanityHeroImage}
-              alt={sanityHeroImage.alt}
-              className="absolute inset-0 h-full w-full object-cover"
-              priority={true}
-              sizes="100vw"
-              maxWidth={1920}
-            />
-          ) : staticImageData ? (
-            <img
-              src={staticImageData.src}
-              alt={staticImageData.alt}
-              width={staticImageData.width}
-              height={staticImageData.height}
-              className="absolute inset-0 h-full w-full object-cover"
-              loading="eager"
-              fetchPriority="high"
-            />
-          ) : null}
-          <div
-            className="absolute inset-0 bg-gradient-to-r from-primary-900/75 to-primary-800/55 dark:from-primary-950/85 dark:to-primary-900/65"
-            aria-hidden="true"
-          ></div>
-          <div className="absolute inset-0 z-10 flex items-end justify-center px-4 pt-20 pb-16 lg:items-center lg:py-8">
-            <div className="mx-auto w-full max-w-6xl">
-              <div className="text-center">
-                <div className="mb-6">
-                  <EventStatusChip isPast={isPast} />
-                </div>
-                <h1 className="font-display text-4xl text-primary-50 md:text-5xl lg:text-6xl dark:text-grey-50">
-                  {event.title}
-                </h1>
-                <p className="mt-6 font-body text-lg text-primary-100 md:text-xl dark:text-grey-200">
-                  {event.description}
-                </p>
-              </div>
-            </div>
+          <div className="mb-6 lg:mt-16">
+            <EventStatusChip isPast={isPast} />
           </div>
-
-          {/* Organic wave divider */}
-          <div className="absolute bottom-[-1px] left-0 w-full overflow-hidden leading-[0]">
-            <svg
-              viewBox="0 0 1200 120"
-              preserveAspectRatio="none"
-              className="relative block h-16 w-full lg:h-24"
-              xmlns="http://www.w3.org/2000/svg"
-              style={{ display: "block" }}
-            >
-              <path
-                d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60 L1200,120 L0,120 Z"
-                className="fill-grey-50 dark:fill-primary-900"
-              />
-              <path
-                d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60"
-                className="fill-none stroke-accent-600 dark:stroke-accent-500"
-                strokeWidth="7"
-              />
-            </svg>
-          </div>
-        </header>
+        </PageHero>
 
         {/* Back Button */}
         <Container spacing="md" className="px-4 pt-8 md:px-0">
