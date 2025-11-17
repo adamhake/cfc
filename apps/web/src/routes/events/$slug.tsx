@@ -4,6 +4,7 @@ import EventStatusChip from "@/components/EventStatusChip/event-status-chip";
 import { Markdown } from "@/components/Markdown/markdown";
 import { PortableText } from "@/components/PortableText/portable-text";
 import { events as staticEvents, type Event as StaticEvent } from "@/data/events";
+import { queryKeys } from "@/lib/query-keys";
 import { sanityClient, urlForImage } from "@/lib/sanity";
 import type { SanityEvent } from "@/lib/sanity-types";
 import {
@@ -14,6 +15,7 @@ import {
 } from "@/utils/seo";
 import { formatDateString } from "@/utils/time";
 import { eventBySlugQuery } from "@chimborazo/sanity-config";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowLeft, Calendar, Clock, MapPin } from "lucide-react";
@@ -24,101 +26,76 @@ const markdownFiles = import.meta.glob<{ default: string }>("../../data/events/*
   import: "default",
 });
 
+// Query options for fetching event by slug with caching
+const eventBySlugQueryOptions = (slug: string) =>
+  queryOptions({
+    queryKey: queryKeys.events.detail(slug),
+    queryFn: async () => {
+      // Try to fetch from Sanity first
+      let sanityEvent: SanityEvent | null = null;
+      try {
+        sanityEvent = await sanityClient.fetch(eventBySlugQuery, { slug });
+      } catch (error) {
+        console.warn("Failed to fetch event from Sanity:", error);
+      }
+
+      // If we have a Sanity event, use it
+      if (sanityEvent) {
+        return {
+          event: sanityEvent,
+          isSanityEvent: true,
+          markdownContent: null,
+        };
+      }
+
+      // Otherwise fall back to static events
+      const staticEvent = staticEvents.find((e) => e.slug === slug);
+      if (!staticEvent) {
+        throw notFound();
+      }
+
+      let markdownContent: string | null = null;
+      if (staticEvent.markdownFile) {
+        try {
+          // Load markdown file from pre-loaded glob
+          const markdownPath = `../../data/events/${staticEvent.markdownFile}`;
+          const loadMarkdown = markdownFiles[markdownPath];
+          if (loadMarkdown) {
+            const module = await loadMarkdown();
+            markdownContent = typeof module === "string" ? module : module.default;
+          }
+        } catch (error) {
+          console.warn(`Failed to load markdown file: ${staticEvent.markdownFile}`, error);
+        }
+      }
+
+      return {
+        event: staticEvent,
+        isSanityEvent: false,
+        markdownContent,
+      };
+    },
+    // Event content rarely changes after publish - cache for 10 minutes
+    staleTime: 10 * 60 * 1000, // 10 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes
+  });
+
 export const Route = createFileRoute("/events/$slug")({
   component: EventPage,
-  loader: async ({ params }) => {
-    // Try to fetch from Sanity first
-    let sanityEvent: SanityEvent | null = null;
-    try {
-      sanityEvent = await sanityClient.fetch(eventBySlugQuery, { slug: params.slug });
-    } catch (error) {
-      console.warn("Failed to fetch event from Sanity:", error);
-    }
-
-    // If we have a Sanity event, use it
-    if (sanityEvent) {
-      return {
-        event: sanityEvent,
-        isSanityEvent: true,
-        markdownContent: null,
-      };
-    }
-
-    // Otherwise fall back to static events
-    const staticEvent = staticEvents.find((e) => e.slug === params.slug);
-    if (!staticEvent) {
-      throw notFound();
-    }
-
-    let markdownContent: string | null = null;
-    if (staticEvent.markdownFile) {
-      try {
-        // Load markdown file from pre-loaded glob
-        const markdownPath = `../../data/events/${staticEvent.markdownFile}`;
-        const loadMarkdown = markdownFiles[markdownPath];
-        if (loadMarkdown) {
-          const module = await loadMarkdown();
-          markdownContent = typeof module === "string" ? module : module.default;
-        }
-      } catch (error) {
-        console.warn(`Failed to load markdown file: ${staticEvent.markdownFile}`, error);
-      }
-    }
-
-    return {
-      event: staticEvent,
-      isSanityEvent: false,
-      markdownContent,
-    };
+  loader: async ({ params, context }) => {
+    // Use TanStack Query for caching
+    await context.queryClient.ensureQueryData(eventBySlugQueryOptions(params.slug));
   },
-  head: ({ loaderData }) => {
-    if (!loaderData?.event) return { meta: [] };
-
-    const { event, isSanityEvent } = loaderData;
-
-    // Extract event data based on type
-    const imageUrl = isSanityEvent
-      ? (event as SanityEvent).heroImage.asset.url
-      : `${SITE_CONFIG.url}/${(event as StaticEvent).image.src}`;
-
-    const imageWidth = isSanityEvent
-      ? (event as SanityEvent).heroImage.asset.metadata?.dimensions?.width || 1200
-      : (event as StaticEvent).image.width;
-
-    const imageHeight = isSanityEvent
-      ? (event as SanityEvent).heroImage.asset.metadata?.dimensions?.height || 800
-      : (event as StaticEvent).image.height;
-
-    const imageAlt = isSanityEvent
-      ? (event as SanityEvent).heroImage.alt
-      : (event as StaticEvent).image.alt;
-
-    const eventSlug = isSanityEvent
-      ? (event as SanityEvent).slug.current
-      : (event as StaticEvent).slug;
-
-    const eventUrl = `${SITE_CONFIG.url}/events/${eventSlug}`;
-
-    // Format date for description
-    const formattedDate = new Date(event.date).toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
+  head: ({ params }) => {
+    // Generate basic meta tags - detailed ones are in component's structured data
+    const eventUrl = `${SITE_CONFIG.url}/events/${params.slug}`;
 
     return {
       meta: generateMetaTags({
-        title: event.title,
-        description: `${event.description} Join us on ${formattedDate} at ${event.time} at ${event.location}.`,
+        title: "Event Details",
+        description: "Join us for this Chimborazo Park event. Check out the details and RSVP.",
         type: "article",
         url: eventUrl,
-        image: {
-          url: imageUrl,
-          width: imageWidth,
-          height: imageHeight,
-          alt: imageAlt,
-        },
-        publishedTime: event.date,
       }),
       links: generateLinkTags({
         canonical: eventUrl,
@@ -126,8 +103,11 @@ export const Route = createFileRoute("/events/$slug")({
     };
   },
 });
+
 function EventPage() {
-  const { event, isSanityEvent, markdownContent } = Route.useLoaderData();
+  const { slug } = Route.useParams();
+  const { data } = useSuspenseQuery(eventBySlugQueryOptions(slug));
+  const { event, isSanityEvent, markdownContent } = data;
 
   const isPast = new Date(event.date) < new Date();
 

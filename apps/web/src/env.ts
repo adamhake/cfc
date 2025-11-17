@@ -5,6 +5,9 @@ export const env = createEnv({
   server: {
     SERVER_URL: z.string().url().optional(),
     SANITY_API_TOKEN: z.string().optional(),
+    SANITY_WEBHOOK_SECRET: z.string().optional(),
+    NETLIFY_AUTH_TOKEN: z.string().optional(),
+    NETLIFY_SITE_ID: z.string().optional(),
   },
 
   /**
@@ -28,6 +31,9 @@ export const env = createEnv({
     // Server-side variables from process.env
     SERVER_URL: process.env.SERVER_URL,
     SANITY_API_TOKEN: process.env.SANITY_API_TOKEN,
+    SANITY_WEBHOOK_SECRET: process.env.SANITY_WEBHOOK_SECRET,
+    NETLIFY_AUTH_TOKEN: process.env.NETLIFY_AUTH_TOKEN,
+    NETLIFY_SITE_ID: process.env.NETLIFY_SITE_ID,
     // Client-side variables from import.meta.env
     VITE_APP_TITLE: import.meta.env.VITE_APP_TITLE,
     VITE_SANITY_PROJECT_ID: import.meta.env.VITE_SANITY_PROJECT_ID,

@@ -1,0 +1,4 @@
+- Evaluate if unpic is still needed with sanity
+- remove farmer motion text animation
+- donate form page
+- newsletter signup page

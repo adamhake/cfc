@@ -2,6 +2,7 @@ import { Button } from "@/components/Button/button";
 import Container from "@/components/Container/container";
 import ImageGallery, { type GalleryImage } from "@/components/ImageGallery/image-gallery";
 import PageHero from "@/components/PageHero/page-hero";
+import { queryKeys } from "@/lib/query-keys";
 import { sanityClient } from "@/lib/sanity";
 import type { SanityMediaImage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
@@ -12,7 +13,7 @@ import { useState } from "react";
 
 // Query options for TanStack Query
 const mediaQueryOptions = queryOptions({
-  queryKey: ["media", "all"],
+  queryKey: queryKeys.media.all(),
   queryFn: async (): Promise<SanityMediaImage[]> => {
     try {
       return await sanityClient.fetch(allMediaImagesQuery);
@@ -21,8 +22,9 @@ const mediaQueryOptions = queryOptions({
       return [];
     }
   },
-  staleTime: 5 * 60 * 1000, // 5 minutes
-  gcTime: 10 * 60 * 1000, // 10 minutes
+  // Media images are mostly static after upload - cache for 15 minutes
+  staleTime: 15 * 60 * 1000, // 15 minutes
+  gcTime: 60 * 60 * 1000, // 1 hour
 });
 
 export const Route = createFileRoute("/media")({
