@@ -327,9 +327,7 @@ function ComponentPlayground() {
                 <div className="grid gap-6 lg:grid-cols-2">
                   <AmenityCard
                     title="Playground"
-                    icon={
-                      <Building2 className="stroke-primray-700 dark:stroke-primray-400 h-6 w-6" />
-                    }
+                    icon={<Building2 />}
                     description="Modern playground equipment for children of all ages with accessible features."
                     details={["Swings and slides", "Climbing structures", "Accessible equipment"]}
                     link={{

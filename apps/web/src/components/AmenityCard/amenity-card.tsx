@@ -1,6 +1,8 @@
+import { cloneElement, isValidElement } from "react";
+
 interface AmenityCardProps {
   title: string;
-  icon: React.ReactNode;
+  icon: React.ReactElement;
   description: string;
   details?: string[];
   link?: {
@@ -21,6 +23,13 @@ export default function AmenityCard({
   link,
   image,
 }: AmenityCardProps) {
+  // Apply consistent icon styling
+  const styledIcon = isValidElement(icon)
+    ? cloneElement(icon, {
+        className: "h-6 w-6 stroke-primary-700 dark:stroke-primary-400",
+      } as React.HTMLAttributes<HTMLElement>)
+    : icon;
+
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-accent-600/20 bg-gradient-to-br from-grey-50 to-grey-50/80 shadow-sm transition-all duration-300 hover:shadow-md dark:border-accent-500/20 dark:from-primary-900 dark:to-primary-900/80">
       {/* Subtle accent gradient overlay on hover */}
@@ -42,7 +51,7 @@ export default function AmenityCard({
             role="img"
             aria-label={`${title} icon`}
           >
-            {icon}
+            {styledIcon}
           </div>
           <h3 className="font-display text-2xl text-grey-900 dark:text-grey-100">{title}</h3>
         </div>
