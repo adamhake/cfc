@@ -12,7 +12,10 @@ const config = defineConfig({
       projects: ["./tsconfig.json"],
     }),
     tanstackStart({
-      sitemap: { enabled: true },
+      sitemap: {
+        enabled: true,
+        host: process.env.SERVER_URL || "https://chimborazoparkconservancy.org",
+      },
       prerender: {
         enabled: true,
       },

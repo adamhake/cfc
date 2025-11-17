@@ -1,7 +1,0 @@
-
-> @chimborazo/web@ build /Users/adamhake/chimbo-park-conservancy/apps/web
-> vite build
-
-vite v7.2.2 building client environment for production...
-transforming...
- ELIFECYCLE  Command failed.
