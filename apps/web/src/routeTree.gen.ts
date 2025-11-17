@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as MediaRouteImport } from './routes/media'
+import { Route as GetInvolvedRouteImport } from './routes/get-involved'
 import { Route as DonateRouteImport } from './routes/donate'
 import { Route as ComponentsRouteImport } from './routes/components'
 import { Route as AmenitiesRouteImport } from './routes/amenities'
@@ -28,6 +29,11 @@ const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
 const MediaRoute = MediaRouteImport.update({
   id: '/media',
   path: '/media',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GetInvolvedRoute = GetInvolvedRouteImport.update({
+  id: '/get-involved',
+  path: '/get-involved',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DonateRoute = DonateRouteImport.update({
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/amenities': typeof AmenitiesRoute
   '/components': typeof ComponentsRoute
   '/donate': typeof DonateRoute
+  '/get-involved': typeof GetInvolvedRoute
   '/media': typeof MediaRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/api/draft': typeof ApiDraftRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/amenities': typeof AmenitiesRoute
   '/components': typeof ComponentsRoute
   '/donate': typeof DonateRoute
+  '/get-involved': typeof GetInvolvedRoute
   '/media': typeof MediaRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/api/draft': typeof ApiDraftRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/amenities': typeof AmenitiesRoute
   '/components': typeof ComponentsRoute
   '/donate': typeof DonateRoute
+  '/get-involved': typeof GetInvolvedRoute
   '/media': typeof MediaRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/api/draft': typeof ApiDraftRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/amenities'
     | '/components'
     | '/donate'
+    | '/get-involved'
     | '/media'
     | '/privacy-policy'
     | '/api/draft'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/amenities'
     | '/components'
     | '/donate'
+    | '/get-involved'
     | '/media'
     | '/privacy-policy'
     | '/api/draft'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/amenities'
     | '/components'
     | '/donate'
+    | '/get-involved'
     | '/media'
     | '/privacy-policy'
     | '/api/draft'
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   AmenitiesRoute: typeof AmenitiesRoute
   ComponentsRoute: typeof ComponentsRoute
   DonateRoute: typeof DonateRoute
+  GetInvolvedRoute: typeof GetInvolvedRoute
   MediaRoute: typeof MediaRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   ApiDraftRoute: typeof ApiDraftRoute
@@ -174,6 +187,13 @@ declare module '@tanstack/react-router' {
       path: '/media'
       fullPath: '/media'
       preLoaderRoute: typeof MediaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/get-involved': {
+      id: '/get-involved'
+      path: '/get-involved'
+      fullPath: '/get-involved'
+      preLoaderRoute: typeof GetInvolvedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/donate': {
@@ -240,6 +260,7 @@ const rootRouteChildren: RootRouteChildren = {
   AmenitiesRoute: AmenitiesRoute,
   ComponentsRoute: ComponentsRoute,
   DonateRoute: DonateRoute,
+  GetInvolvedRoute: GetInvolvedRoute,
   MediaRoute: MediaRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   ApiDraftRoute: ApiDraftRoute,
