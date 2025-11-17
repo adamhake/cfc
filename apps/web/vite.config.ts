@@ -35,9 +35,7 @@ const config = defineConfig({
         drop_debugger: true,
       },
     },
-    rollupOptions: {
-      external: ["@netlify/blobs"],
-    },
+    rollupOptions: {},
   },
 });
 
