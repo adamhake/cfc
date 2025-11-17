@@ -213,9 +213,7 @@ function getCacheTagsForDocumentType(docType: string): string[] {
  * Note: Cache tags could be used in the future for granular invalidation
  * if Netlify adds support for cache tags in their API
  */
-async function purgeNetlifyCache(
-  _tags: string[],
-): Promise<{ success: boolean; error?: string }> {
+async function purgeNetlifyCache(): Promise<{ success: boolean; error?: string }> {
   const authToken = process.env.NETLIFY_AUTH_TOKEN;
   const siteId = process.env.NETLIFY_SITE_ID;
 
@@ -228,21 +226,18 @@ async function purgeNetlifyCache(
 
   try {
     // Netlify's cache purge API endpoint
-    const response = await fetch(
-      `https://api.netlify.com/api/v1/sites/${siteId}/purge_cache`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          // Purge specific cache tags or entire site
-          // Note: Netlify's API may vary - adjust based on their current API
-          site_id: siteId,
-        }),
+    const response = await fetch(`https://api.netlify.com/api/v1/sites/${siteId}/purge_cache`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({
+        // Purge specific cache tags or entire site
+        // Note: Netlify's API may vary - adjust based on their current API
+        site_id: siteId,
+      }),
+    });
 
     if (!response.ok) {
       const errorText = await response.text();

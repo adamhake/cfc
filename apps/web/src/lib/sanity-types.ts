@@ -116,3 +116,26 @@ export interface SanityHomePage {
   quote?: SanityQuote;
   gallery?: SanityGallery;
 }
+
+export interface SanitySiteSettings {
+  organizationName: string;
+  alternativeName?: string;
+  description: string;
+  parkAddress?: {
+    street: string;
+    city: string;
+    state: string;
+    zipCode?: string;
+  };
+  parkHours: string;
+  socialMedia?: {
+    facebook?: string;
+    instagram?: string;
+  };
+  donationUrl: string;
+  contactEmail?: string;
+  metaDefaults?: {
+    siteTitle?: string;
+    ogImage?: SanityImage;
+  };
+}

@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
 import { Image } from "@unpic/react";
+import { ReactNode } from "react";
 
 interface PageHeroProps {
   title: string;
@@ -74,7 +74,7 @@ export default function PageHero({
           {/* Flowing natural curve */}
           <path
             d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60 L1200,120 L0,120 Z"
-            className="fill-grey-50 dark:fill-green-900"
+            className="fill-grey-50 dark:fill-primary-900"
           />
           {/* Accent color stroke following the curve */}
           <path

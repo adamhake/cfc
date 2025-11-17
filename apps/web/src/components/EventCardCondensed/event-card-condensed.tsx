@@ -25,7 +25,7 @@ export default function EventCardCondensed({
           alt={image.alt}
           width={image.width}
           height={image.height}
-          className="absolute inset-0 h-full w-full object-cover transition-transform group-hover:scale-105"
+          className="absolute inset-0 h-full w-full object-cover"
           loading="lazy"
         />
         <div className="absolute inset-0 bg-primary-900/60"></div>
