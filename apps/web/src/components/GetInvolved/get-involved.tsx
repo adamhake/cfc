@@ -1,5 +1,6 @@
 import { FacebookIcon } from "@/components/FacebookIcon/facebook-icon";
 import { InstagramIcon } from "@/components/InstagramIcon/instagram-icon";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -23,11 +24,9 @@ export default function GetInvolved({
 }: GetInvolvedProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { data: siteSettings } = useSiteSettings();
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    // Check if user prefers reduced motion
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
     // Only cycle images if user hasn't requested reduced motion
     if (prefersReducedMotion) {
       return;
@@ -38,18 +37,12 @@ export default function GetInvolved({
     }, 5000); // Change image every 5 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <div className="px-4 lg:px-0">
       <div className="mx-auto max-w-6xl">
-        <motion.div
-          className="overflow-hidden rounded-3xl bg-white shadow-md dark:border dark:border-accent-600/20 dark:bg-transparent"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
+        <div className="overflow-hidden rounded-3xl bg-white shadow-md dark:border dark:border-accent-600/20 dark:bg-transparent">
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Image side with cycling images */}
             <div className="relative h-64 lg:h-auto">
@@ -134,7 +127,7 @@ export default function GetInvolved({
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
