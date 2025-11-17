@@ -30,9 +30,9 @@ export default function Footer() {
 
       <div className="mx-auto max-w-6xl px-4">
         {/* Main footer content */}
-        <div className="grid gap-12 md:grid-cols-3">
+        <div className="grid grid-cols-2 gap-12 md:grid-cols-3">
           {/* About section */}
-          <div className="space-y-4">
+          <div className="col-span-2 space-y-4 md:col-span-1">
             <h3 className="font-display text-lg font-semibold text-primary-800 dark:text-primary-400">
               Chimborazo Park Conservancy
             </h3>
