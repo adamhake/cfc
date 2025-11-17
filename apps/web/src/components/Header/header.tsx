@@ -1,7 +1,7 @@
-import { events } from "@/data/events";
-import IconLogo from "@/components/IconLogo/icon-logo";
 import { FacebookIcon } from "@/components/FacebookIcon/facebook-icon";
+import IconLogo from "@/components/IconLogo/icon-logo";
 import { InstagramIcon } from "@/components/InstagramIcon/instagram-icon";
+import { events } from "@/data/events";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useClickAway } from "@uidotdev/usehooks";
@@ -147,7 +147,7 @@ export default function Header() {
             as="a"
             variant="accent"
             size="small"
-            zeffy-form-link="https://www.zeffy.com/embed/donation-form/general-donation-125?modal=true"
+            href="/donate"
             className="hidden text-center md:block md:w-28"
           >
             Donate
@@ -432,12 +432,7 @@ export default function Header() {
 
               {/* Footer CTA */}
               <div className="mt-6">
-                <Button
-                  as="a"
-                  variant="accent"
-                  zeffy-form-link="https://www.zeffy.com/embed/donation-form/general-donation-125?modal=true"
-                  className="block w-full text-center"
-                >
+                <Button as="a" variant="accent" href="/donate" className="block w-full text-center">
                   Donate
                 </Button>
               </div>
