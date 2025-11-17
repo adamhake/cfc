@@ -52,7 +52,7 @@ export default function HeroSoftGradientDivider({
           <h1 className="font-display text-4xl text-primary-50 md:text-6xl dark:text-grey-50">
             {heading}
           </h1>
-          <p className="font-body text-base font-medium text-primary-100 md:text-lg lg:max-w-2xl dark:text-grey-100">
+          <p className="font-body text-base font-medium text-primary-100 md:max-w-2xl md:text-lg dark:text-grey-100">
             {subheading}
           </p>
           <div className="pb-4">
