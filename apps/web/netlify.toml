@@ -1,14 +1,11 @@
 [build]
   # Build from monorepo root using Turborepo
+  base = "apps/web"
   command = "pnpm run build --filter=@chimborazo/web"
   publish = "apps/web/dist/client"
 
 [build.environment]
   NODE_VERSION = "22"
-
-[functions]
-  directory = "apps/web/netlify/functions"
-  node_bundler = "esbuild"
 
 [[edge_functions]]
   path = "/media-img/*"
