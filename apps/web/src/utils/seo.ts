@@ -11,14 +11,14 @@
 export const SITE_CONFIG = {
   name: "Chimborazo Park Conservancy",
   alternateName: "Friends of Chimborazo Park",
-  url: "https://chimboparkconservancy.org",
+  url: "https://chimborazoparkconservancy.org",
   description:
     "A 501(c)(3) non-profit dedicated to preserving and enhancing Chimborazo Park in Richmond, VA's Church Hill neighborhood through community stewardship.",
   locale: "en_US",
   themeColor: "#166534",
   twitterHandle: undefined, // Add when available
   defaultImage: {
-    url: "https://chimboparkconservancy.org/bike_sunset.webp",
+    url: "https://chimborazoparkconservancy.org/bike_sunset.webp",
     width: 2000,
     height: 1262,
     alt: "Chimborazo Park at sunset",

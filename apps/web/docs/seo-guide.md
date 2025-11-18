@@ -30,7 +30,7 @@ import { SITE_CONFIG } from "@/utils/seo";
 // Available properties:
 SITE_CONFIG.name; // "Chimborazo Park Conservancy"
 SITE_CONFIG.alternateName; // "Friends of Chimborazo Park"
-SITE_CONFIG.url; // "https://chimboparkconservancy.org"
+SITE_CONFIG.url; // "https://chimborazoparkconservancy.org/"
 SITE_CONFIG.description; // Default site description
 SITE_CONFIG.locale; // "en_US"
 SITE_CONFIG.themeColor; // "#166534"
@@ -201,7 +201,7 @@ import { generateArticleStructuredData } from "@/utils/seo";
 const structuredData = generateArticleStructuredData({
   headline: "Park Restoration Project Complete",
   description: "After months of work...",
-  image: "https://chimboparkconservancy.org/restoration.webp",
+  image: "https://chimborazoparkconservancy.org/restoration.webp",
   datePublished: "2025-01-15T10:00:00Z",
   dateModified: "2025-01-16T14:30:00Z",
   author: {
@@ -223,7 +223,7 @@ url: `${SITE_CONFIG.url}/events/${slug}`;
 **Bad:**
 
 ```typescript
-url: `https://chimboparkconservancy.org/events/${slug}`; // Hardcoded
+url: `https://chimborazoparkconservancy.org/events/${slug}`; // Hardcoded
 ```
 
 ### 2. Provide Custom Descriptions
