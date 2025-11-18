@@ -45,4 +45,4 @@ St. John's Church Parish Hall is wheelchair accessible. If you need additional a
 
 ## Questions?
 
-Email us at info@chimboparkconservancy.org
+Email us at info@chimborazoparkconservancy.org
