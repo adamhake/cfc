@@ -58,7 +58,7 @@ This event is part of Richmond Tree Week, an annual celebration of our urban for
 
 ## Registration
 
-While walk-ups are welcome, pre-registration helps us plan for adequate supplies and refreshments. Register at cbf.org or email info@chimboparkconservancy.org
+While walk-ups are welcome, pre-registration helps us plan for adequate supplies and refreshments. Register at cbf.org or email info@chimborazoparkconservancy.org
 
 ## Weather Policy
 
@@ -66,4 +66,4 @@ Event will proceed rain or shine unless severe weather threatens. Check your ema
 
 ## Questions?
 
-Contact the Chesapeake Bay Foundation at (804) XXX-XXXX or Chimborazo Park Conservancy at info@chimboparkconservancy.org
+Contact the Chesapeake Bay Foundation at (804) XXX-XXXX or Chimborazo Park Conservancy at info@chimborazoparkconservancy.org

@@ -239,10 +239,10 @@ function PrivacyPolicy() {
                 <p className="mt-2 text-grey-700 dark:text-grey-300">
                   Email:{" "}
                   <a
-                    href="mailto:info@chimboparkconservancy.org"
+                    href="mailto:info@chimborazoparkconservancy.org"
                     className="text-accent-700 transition hover:text-accent-800 dark:text-accent-400 dark:hover:text-accent-300"
                   >
-                    info@chimboparkconservancy.org
+                    info@chimborazoparkconservancy.org
                   </a>
                 </p>
                 <p className="mt-1 text-grey-700 dark:text-grey-300">

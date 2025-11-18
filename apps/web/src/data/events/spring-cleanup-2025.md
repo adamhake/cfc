@@ -28,4 +28,4 @@ Street parking is available around the park. Please be mindful of neighborhood p
 
 ## Questions?
 
-Contact us at info@chimboparkconservancy.org if you have any questions about the event.
+Contact us at info@chimborazoparkconservancy.org if you have any questions about the event.
