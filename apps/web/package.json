@@ -41,11 +41,11 @@
     "@tanstack/react-form": "^1.25.0",
     "@tanstack/react-query": "^5.90.10",
     "@tanstack/react-query-devtools": "^5.90.2",
-    "@tanstack/react-router": "^1.136.11",
-    "@tanstack/react-router-devtools": "^1.136.11",
-    "@tanstack/react-router-ssr-query": "^1.136.11",
-    "@tanstack/react-start": "^1.136.11",
-    "@tanstack/router-plugin": "^1.136.11",
+    "@tanstack/react-router": "^1.136.18",
+    "@tanstack/react-router-devtools": "^1.136.18",
+    "@tanstack/react-router-ssr-query": "^1.136.18",
+    "@tanstack/react-start": "^1.137.0",
+    "@tanstack/router-plugin": "^1.136.18",
     "@uidotdev/usehooks": "^2.4.1",
     "@unpic/react": "^1.0.1",
     "clsx": "^2.1.1",
@@ -65,7 +65,7 @@
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.70.0",
     "@eslint/js": "^9.39.1",
-    "@portabletext/block-tools": "^4.0.2",
+    "@portabletext/block-tools": "^4.1.0",
     "@sanity/schema": "^4.16.0",
     "@sanity/webhook": "^4.0.4",
     "@storybook/addon-a11y": "^10.0.8",
@@ -91,9 +91,9 @@
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.47.0",
-    "vite": "^7.2.2",
+    "vite": "^7.2.4",
     "vite-plugin-webfont-dl": "^3.11.1",
-    "vitest": "^4.0.10",
+    "vitest": "^4.0.12",
     "web-vitals": "^5.1.0"
   }
 }
