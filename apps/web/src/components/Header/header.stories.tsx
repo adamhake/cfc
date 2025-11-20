@@ -7,7 +7,7 @@ import {
   createRouter,
   RouterProvider,
 } from "@tanstack/react-router";
-import Footer from "./footer";
+import Header from "./header";
 
 // Mock QueryClient
 const queryClient = new QueryClient({
@@ -19,16 +19,21 @@ const queryClient = new QueryClient({
 });
 
 const meta = {
-  title: "Components/Layout/Footer",
-  component: Footer,
+  title: "Components/Layout/Header",
+  component: Header,
   parameters: {
     layout: "fullscreen",
   },
   tags: ["autodocs"],
   decorators: [
     (Story) => {
+      // Create a fresh router for each story
       const rootRoute = createRootRoute({
-        component: () => <Story />,
+        component: () => (
+          <div className="min-h-screen bg-grey-50 dark:bg-primary-900">
+            <Story />
+          </div>
+        ),
       });
 
       const indexRoute = createRoute({
@@ -62,9 +67,45 @@ const meta = {
       );
     },
   ],
-} satisfies Meta<typeof Footer>;
+} satisfies Meta<typeof Header>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * Default header on desktop viewport
+ */
 export const Default: Story = {};
+
+/**
+ * Header on mobile viewport (375px) - shows hamburger menu
+ */
+export const Mobile: Story = {
+  parameters: {
+    viewport: {
+      defaultViewport: "mobile",
+    },
+  },
+};
+
+/**
+ * Header on tablet viewport (768px)
+ */
+export const Tablet: Story = {
+  parameters: {
+    viewport: {
+      defaultViewport: "tablet",
+    },
+  },
+};
+
+/**
+ * Header on wide desktop viewport (1920px)
+ */
+export const WideDesktop: Story = {
+  parameters: {
+    viewport: {
+      defaultViewport: "wide",
+    },
+  },
+};

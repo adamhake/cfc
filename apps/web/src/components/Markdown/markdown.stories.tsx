@@ -2,12 +2,12 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Markdown } from "./markdown";
 
 const meta = {
-    title: "Components/Markdown",
-    component: Markdown,
-    parameters: {
-        layout: "padded",
-    },
-    tags: ["autodocs"],
+  title: "Components/Content/Markdown",
+  component: Markdown,
+  parameters: {
+    layout: "padded",
+  },
+  tags: ["autodocs"],
 } satisfies Meta<typeof Markdown>;
 
 export default meta;
@@ -47,7 +47,7 @@ Horizontal rule above.
 `;
 
 export const Default: Story = {
-    args: {
-        content: sampleMarkdown,
-    },
+  args: {
+    content: sampleMarkdown,
+  },
 };

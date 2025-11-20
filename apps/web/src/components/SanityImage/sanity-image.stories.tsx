@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SanityImage } from "./sanity-image";
 
 const meta = {
-  title: "Components/SanityImage",
+  title: "Components/Media/SanityImage",
   component: SanityImage,
   parameters: {
     layout: "centered",
