@@ -19,3 +19,4 @@ todos.json
 .netlify
 
 storybook-static
+*.tsbuildinfo
