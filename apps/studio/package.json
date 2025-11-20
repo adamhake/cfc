@@ -15,10 +15,10 @@
     "clean": "rm -rf dist .sanity"
   },
   "dependencies": {
-    "@sanity/vision": "^4.15.0",
+    "@sanity/vision": "^4.16.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "sanity": "^4.15.0",
+    "sanity": "^4.16.0",
     "sanity-plugin-media": "^4.0.0",
     "styled-components": "^6.1.19"
   },
