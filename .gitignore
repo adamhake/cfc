@@ -17,3 +17,5 @@ todos.json
 
 # Local Netlify folder
 .netlify
+
+storybook-static

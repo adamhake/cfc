@@ -23,7 +23,7 @@ export function NotFound() {
     {
       title: "Get Involved",
       description: "Volunteer, donate, or become a member to support the park",
-      href: "/#get-involved",
+      href: "/get-involved",
       icon: (
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
