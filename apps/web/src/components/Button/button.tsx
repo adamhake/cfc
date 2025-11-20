@@ -1,21 +1,90 @@
 import { cn } from "@/utils/cn";
 import type React from "react";
 
+/**
+ * Button component props
+ */
 export interface ButtonProps {
+  /**
+   * Visual style variant of the button
+   * @default "primary"
+   */
   variant?: "primary" | "secondary" | "outline" | "accent";
+
+  /**
+   * Size of the button
+   * @default "standard"
+   */
   size?: "standard" | "small";
+
+  /**
+   * Button content
+   */
   children: React.ReactNode;
+
+  /**
+   * Click handler function
+   */
   onClick?: () => void;
+
+  /**
+   * Whether the button is disabled
+   * @default false
+   */
   disabled?: boolean;
+
+  /**
+   * HTML button type attribute
+   * @default "button"
+   */
   type?: "button" | "submit" | "reset";
+
+  /**
+   * Additional CSS classes
+   */
   className?: string;
+
+  /**
+   * Render as button or anchor tag
+   * @default "button"
+   */
   as?: "button" | "a";
+
+  /**
+   * URL when rendered as anchor (requires as="a")
+   */
   href?: string;
+
+  /**
+   * Target attribute for anchor tags
+   */
   target?: string;
+
+  /**
+   * Rel attribute for anchor tags
+   */
   rel?: string;
-  [key: string]: unknown; // Allow additional props like zeffy-form-link
+
+  /**
+   * Allow additional props like zeffy-form-link
+   */
+  [key: string]: unknown;
 }
 
+/**
+ * A versatile button component that supports multiple variants, sizes, and can render as either a button or anchor tag.
+ *
+ * @example
+ * ```tsx
+ * <Button variant="primary" onClick={() => console.log('clicked')}>
+ *   Click me
+ * </Button>
+ *
+ * <Button variant="accent" as="a" href="/donate">
+ *   Donate Now
+ * </Button>
+ * ```
+ */
 export const Button: React.FC<ButtonProps> = ({
   variant = "primary",
   size = "standard",
