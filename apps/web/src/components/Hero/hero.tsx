@@ -24,7 +24,7 @@ export default function HeroSoftGradientDivider({
   imageWidth = 2000,
   imageHeight = 1262,
   ctaText = "Get Involved",
-  ctaLink = "#get-involved",
+  ctaLink = "/get-involved",
 }: HeroProps) {
   return (
     <div className="relative h-[75vh] w-full overflow-visible lg:h-[80vh]">
