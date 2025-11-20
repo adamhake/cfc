@@ -13,6 +13,22 @@ import { Button } from "../Button/button";
 import EventCardCondensed from "../EventCardCondensed/event-card-condensed";
 import { ThemeToggle } from "../ThemeToggle/theme-toggle";
 
+/**
+ * Site header with navigation, logo, social links, and mobile menu.
+ *
+ * Features:
+ * - Responsive navigation that collapses to hamburger menu on mobile
+ * - Theme toggle for dark/light mode
+ * - Social media links (Facebook, Instagram)
+ * - Upcoming event display in mobile menu
+ * - Smooth animations with reduced motion support
+ * - Active route highlighting
+ *
+ * @example
+ * ```tsx
+ * <Header />
+ * ```
+ */
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);

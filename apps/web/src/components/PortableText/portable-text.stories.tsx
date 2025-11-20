@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PortableText } from "./portable-text";
 
 const meta = {
-  title: "Components/PortableText",
+  title: "Components/Content/PortableText",
   component: PortableText,
   parameters: {
     layout: "padded",
