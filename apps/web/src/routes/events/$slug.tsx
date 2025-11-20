@@ -272,7 +272,7 @@ function EventPage() {
                   <p className="mb-4 font-body text-sm text-grey-700 dark:text-grey-300">
                     Get updates on upcoming events and volunteer opportunities.
                   </p>
-                  <Link to="/" hash="get-involved">
+                  <Link to="/get-involved">
                     <Button variant="outline" size="small" className="w-full">
                       Subscribe to Updates
                     </Button>
