@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from "sanity"
+import type { SlugSourceContext } from "sanity"
 
 export default defineType({
   name: "amenitiesPage",
@@ -96,7 +97,10 @@ export default defineType({
               title: "Slug",
               type: "slug",
               options: {
-                source: (_doc: any, options: any) => options.parent?.title,
+                source: (_doc: unknown, context: SlugSourceContext) => {
+                  const parent = context.parent as { title?: string } | undefined
+                  return parent?.title || ""
+                },
                 maxLength: 96,
               },
               validation: (rule) => rule.required(),

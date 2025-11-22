@@ -1,51 +1,51 @@
-import { useCallback, useState } from "react";
-import { useToast } from "@sanity/ui";
-import { useDocumentOperation } from "sanity";
-import { SparklesIcon } from "@sanity/icons";
-import type { DocumentActionComponent } from "sanity";
-import type { ImageMetadata } from "../utils/aiMetadataGenerator";
+import { SparklesIcon } from "@sanity/icons"
+import { useToast } from "@sanity/ui"
+import { useCallback, useState } from "react"
+import type { DocumentActionComponent } from "sanity"
+import { useDocumentOperation } from "sanity"
+import type { ImageMetadata } from "../utils/aiMetadataGenerator"
 
 interface MediaImageAsset {
-  _ref: string;
-  _type: string;
+  _ref: string
+  _type: string
 }
 
 interface MediaImageDocument {
-  _id: string;
-  _type: string;
+  _id: string
+  _type: string
   image?: {
-    asset?: MediaImageAsset;
-    alt?: string;
-    caption?: string;
-  };
-  title?: string;
-  category?: string;
+    asset?: MediaImageAsset
+    alt?: string
+    caption?: string
+  }
+  title?: string
+  category?: string
 }
 
 export const generateMetadataAction: DocumentActionComponent = (props) => {
-  const { type, draft, published, onComplete } = props;
-  const { patch } = useDocumentOperation(props.id, props.type);
-  const toast = useToast();
-  const [isGenerating, setIsGenerating] = useState(false);
+  const { type, draft, published, onComplete } = props
+  const { patch } = useDocumentOperation(props.id, props.type)
+  const toast = useToast()
+  const [isGenerating, setIsGenerating] = useState(false)
 
   // Only show this action for mediaImage documents
   if (type !== "mediaImage") {
-    return null;
+    return null
   }
 
   // Get the current document (draft or published)
-  const doc = (draft || published) as MediaImageDocument | null;
+  const doc = (draft || published) as MediaImageDocument | null
 
   // Check if an image has been uploaded
-  const hasImage = Boolean(doc?.image?.asset?._ref);
+  const hasImage = Boolean(doc?.image?.asset?._ref)
 
   const handleGenerate = useCallback(async () => {
     if (!doc?.image?.asset?._ref) {
-      onComplete();
-      return;
+      onComplete()
+      return
     }
 
-    setIsGenerating(true);
+    setIsGenerating(true)
 
     try {
       // Show loading toast
@@ -53,30 +53,30 @@ export const generateMetadataAction: DocumentActionComponent = (props) => {
         status: "info",
         title: "Generating metadata...",
         description: "Claude is analyzing your image",
-      });
+      })
 
       // Construct the image URL from the asset reference
       // Format: https://cdn.sanity.io/images/{projectId}/{dataset}/{assetId}-{width}x{height}.{format}
-      const assetId = doc.image.asset._ref;
-      const projectId = process.env.SANITY_STUDIO_PROJECT_ID || "pntpob7k";
-      const dataset = process.env.SANITY_STUDIO_DATASET || "production";
+      const assetId = doc.image.asset._ref
+      const projectId = process.env.SANITY_STUDIO_PROJECT_ID || "pntpob7k"
+      const dataset = process.env.SANITY_STUDIO_DATASET || "production"
 
       // Extract the asset details from the reference
       // Format: image-{assetId}-{width}x{height}-{format}
-      const assetParts = assetId.replace("image-", "").split("-");
-      const hash = assetParts[0];
-      const dimensions = assetParts[1];
-      const format = assetParts[2];
+      const assetParts = assetId.replace("image-", "").split("-")
+      const hash = assetParts[0]
+      const dimensions = assetParts[1]
+      const format = assetParts[2]
 
-      const imageUrl = `https://cdn.sanity.io/images/${projectId}/${dataset}/${hash}-${dimensions}.${format}`;
+      const imageUrl = `https://cdn.sanity.io/images/${projectId}/${dataset}/${hash}-${dimensions}.${format}`
 
       // Call the TanStack Start server function to generate metadata
       // This keeps the Anthropic API key secure on the server
       const apiUrl =
-        process.env.SANITY_STUDIO_API_URL || "http://localhost:3000/api/generate-metadata";
+        process.env.SANITY_STUDIO_API_URL || "http://localhost:3000/api/generate-metadata"
 
-      console.log("Calling API at:", apiUrl);
-      console.log("Image URL:", imageUrl);
+      console.log("Calling API at:", apiUrl)
+      console.log("Image URL:", imageUrl)
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -84,27 +84,23 @@ export const generateMetadataAction: DocumentActionComponent = (props) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ imageUrl }),
-      });
+      })
 
-      console.log("Response status:", response.status);
-      console.log("Response ok:", response.ok);
+      console.log("Response status:", response.status)
+      console.log("Response ok:", response.ok)
 
       if (!response.ok) {
-        let errorData;
+        let errorData: { error?: string } | undefined
         try {
-          errorData = await response.json();
-        } catch (e) {
-          throw new Error(
-            `Server error: ${response.status} ${response.statusText}`
-          );
+          errorData = (await response.json()) as { error?: string }
+        } catch {
+          throw new Error(`Server error: ${response.status} ${response.statusText}`)
         }
-        throw new Error(
-          errorData.error || `Server error: ${response.statusText}`
-        );
+        throw new Error(errorData?.error || `Server error: ${response.statusText}`)
       }
 
-      const metadata = (await response.json()) as ImageMetadata;
-      console.log("Received metadata:", metadata);
+      const metadata = (await response.json()) as ImageMetadata
+      console.log("Received metadata:", metadata)
 
       // Patch the document with the generated metadata
       patch.execute([
@@ -112,36 +108,36 @@ export const generateMetadataAction: DocumentActionComponent = (props) => {
         { set: { "image.alt": metadata.alt } },
         { set: { "image.caption": metadata.caption } },
         { set: { category: metadata.category } },
-      ]);
+      ])
 
       // Show success toast
       toast.push({
         status: "success",
         title: "Metadata generated!",
         description: `Title, alt text, caption, and category have been updated.`,
-      });
+      })
     } catch (error) {
       // Show error toast
-      console.error("Error generating metadata:", error);
+      console.error("Error generating metadata:", error)
 
-      let errorMessage = "Unknown error occurred";
+      let errorMessage = "Unknown error occurred"
       if (error instanceof TypeError && error.message.includes("fetch")) {
         errorMessage =
-          "Network error: Cannot reach the API server. Make sure the web app dev server is running on port 3000. Check console for details.";
+          "Network error: Cannot reach the API server. Make sure the web app dev server is running on port 3000. Check console for details."
       } else if (error instanceof Error) {
-        errorMessage = error.message;
+        errorMessage = error.message
       }
 
       toast.push({
         status: "error",
         title: "Failed to generate metadata",
         description: errorMessage,
-      });
+      })
     } finally {
-      setIsGenerating(false);
-      onComplete();
+      setIsGenerating(false)
+      onComplete()
     }
-  }, [doc, patch, toast, onComplete]);
+  }, [doc, patch, toast, onComplete])
 
   return {
     label: "Generate Metadata",
@@ -151,5 +147,5 @@ export const generateMetadataAction: DocumentActionComponent = (props) => {
       ? "Generate AI-powered title, alt text, caption, and category"
       : "Upload an image first to generate metadata",
     onHandle: handleGenerate,
-  };
-};
+  }
+}
