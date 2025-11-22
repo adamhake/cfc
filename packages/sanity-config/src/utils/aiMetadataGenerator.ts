@@ -10,8 +10,8 @@
  */
 
 export interface ImageMetadata {
-  title: string;
-  alt: string;
-  caption: string;
-  category: "park-views" | "events" | "nature" | "community" | "history";
+  title: string
+  alt: string
+  caption: string
+  category: "park-views" | "events" | "nature" | "community" | "history"
 }

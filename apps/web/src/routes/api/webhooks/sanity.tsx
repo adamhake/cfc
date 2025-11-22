@@ -107,7 +107,7 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
           }
 
           // Parse the webhook payload
-          const payload: SanityWebhookPayload = JSON.parse(body);
+          const payload = JSON.parse(body) as SanityWebhookPayload;
 
           console.log(`[Sanity Webhook] Received event for ${payload._type}:`, {
             id: payload._id,

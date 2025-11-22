@@ -1,1 +1,1 @@
-export { generateMetadataAction } from "./generateMetadata";
+export { generateMetadataAction } from "./generateMetadata"

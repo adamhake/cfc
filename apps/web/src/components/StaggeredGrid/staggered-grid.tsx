@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 /**
  * StaggeredGrid - Organic grid layout with offset items
@@ -37,7 +37,7 @@ export default function StaggeredGrid({
   gap = "md",
   stagger = "medium",
 }: StaggeredGridProps) {
-  const items = Array.isArray(children) ? children : [children];
+  const items = (Array.isArray(children) ? children : [children]) as ReactNode[];
   const pattern = staggerPatterns[stagger];
 
   return (
