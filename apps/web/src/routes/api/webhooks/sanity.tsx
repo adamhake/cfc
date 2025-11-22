@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { isValidSignature, SIGNATURE_HEADER_NAME } from "@sanity/webhook";
+import { createFileRoute } from "@tanstack/react-router";
 
 /**
  * Sanity webhook endpoint for on-demand Netlify cache invalidation
@@ -119,7 +119,7 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
           const cacheTags = getCacheTagsForDocumentType(payload._type);
 
           // Purge Netlify cache
-          const purgeResult = await purgeNetlifyCache(cacheTags);
+          const purgeResult = await purgeNetlifyCache();
 
           if (!purgeResult.success) {
             console.error("[Sanity Webhook] Failed to purge cache:", purgeResult.error);

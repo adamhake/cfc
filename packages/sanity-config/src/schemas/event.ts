@@ -1,15 +1,35 @@
 import { defineField, defineType } from "sanity"
+import { CalendarIcon, ImageIcon, CogIcon } from "@sanity/icons"
 
 export const eventSchema = defineType({
   name: "event",
   title: "Event",
   type: "document",
+  groups: [
+    {
+      name: "editorial",
+      title: "Editorial",
+      icon: CalendarIcon,
+      default: true,
+    },
+    {
+      name: "media",
+      title: "Media",
+      icon: ImageIcon,
+    },
+    {
+      name: "settings",
+      title: "Settings",
+      icon: CogIcon,
+    },
+  ],
   fields: [
     defineField({
       name: "title",
       title: "Title",
       type: "string",
       validation: (Rule) => Rule.required(),
+      group: "editorial",
     }),
     defineField({
       name: "slug",
@@ -20,6 +40,7 @@ export const eventSchema = defineType({
         maxLength: 96,
       },
       validation: (Rule) => Rule.required(),
+      group: "settings",
     }),
     defineField({
       name: "description",
@@ -28,6 +49,7 @@ export const eventSchema = defineType({
       rows: 3,
       validation: (Rule) => Rule.required().max(300),
       description: "Brief summary shown in event listings",
+      group: "editorial",
     }),
     defineField({
       name: "heroImage",
@@ -50,12 +72,14 @@ export const eventSchema = defineType({
         },
       ],
       validation: (Rule) => Rule.required(),
+      group: "media",
     }),
     defineField({
       name: "date",
       title: "Event Date",
       type: "date",
       validation: (Rule) => Rule.required(),
+      group: "editorial",
     }),
     defineField({
       name: "time",
@@ -63,12 +87,14 @@ export const eventSchema = defineType({
       type: "string",
       placeholder: "9am - 12pm",
       validation: (Rule) => Rule.required(),
+      group: "editorial",
     }),
     defineField({
       name: "location",
       title: "Location",
       type: "string",
       validation: (Rule) => Rule.required(),
+      group: "editorial",
     }),
     defineField({
       name: "body",
@@ -133,6 +159,7 @@ export const eventSchema = defineType({
         },
       ],
       description: "Extended event information (replaces markdown files)",
+      group: "editorial",
     }),
     defineField({
       name: "featured",
@@ -140,12 +167,14 @@ export const eventSchema = defineType({
       type: "boolean",
       initialValue: false,
       description: "Show this event prominently on the homepage",
+      group: "settings",
     }),
     defineField({
       name: "publishedAt",
       title: "Published at",
       type: "datetime",
       initialValue: () => new Date().toISOString(),
+      group: "settings",
     }),
   ],
   preview: {
