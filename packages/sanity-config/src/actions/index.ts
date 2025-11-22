@@ -1,0 +1,1 @@
+export { generateMetadataAction } from "./generateMetadata";

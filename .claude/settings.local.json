@@ -55,7 +55,8 @@
       "Bash(pnpm tsr:*)",
       "WebFetch(domain:tanstack.com)",
       "WebFetch(domain:www.sanity.io)",
-      "mcp__sanity__get_schema"
+      "mcp__sanity__get_schema",
+      "WebFetch(domain:storybook.js.org)"
     ],
     "deny": [],
     "ask": []

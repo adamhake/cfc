@@ -35,12 +35,14 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.70.1",
     "@sanity/client": "^6.24.2",
+    "@sanity/icons": "^3.7.4",
     "@sanity/image-url": "^1.1.0",
-    "@sanity/types": "^4.15.0",
+    "@sanity/types": "^4.18.0",
     "@sanity/ui": "^2.10.9",
     "groq": "^4.15.0",
-    "sanity": "^4.15.0"
+    "sanity": "^4.18.0"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
@@ -49,7 +51,7 @@
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "@types/node": "^24.10.1",
-    "@types/react": "^19.2.5",
+    "@types/react": "^19.2.6",
     "eslint": "^9.39.1",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3",
