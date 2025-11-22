@@ -18,6 +18,7 @@ import { Route as AmenitiesRouteImport } from './routes/amenities'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EventsIndexRouteImport } from './routes/events/index'
 import { Route as EventsSlugRouteImport } from './routes/events/$slug'
+import { Route as ApiGenerateMetadataRouteImport } from './routes/api/generate-metadata'
 import { Route as ApiDraftRouteImport } from './routes/api/draft'
 import { Route as ApiWebhooksSanityRouteImport } from './routes/api/webhooks/sanity'
 
@@ -66,6 +67,11 @@ const EventsSlugRoute = EventsSlugRouteImport.update({
   path: '/events/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiGenerateMetadataRoute = ApiGenerateMetadataRouteImport.update({
+  id: '/api/generate-metadata',
+  path: '/api/generate-metadata',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiDraftRoute = ApiDraftRouteImport.update({
   id: '/api/draft',
   path: '/api/draft',
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/media': typeof MediaRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/api/draft': typeof ApiDraftRoute
+  '/api/generate-metadata': typeof ApiGenerateMetadataRoute
   '/events/$slug': typeof EventsSlugRoute
   '/events': typeof EventsIndexRoute
   '/api/webhooks/sanity': typeof ApiWebhooksSanityRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/media': typeof MediaRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/api/draft': typeof ApiDraftRoute
+  '/api/generate-metadata': typeof ApiGenerateMetadataRoute
   '/events/$slug': typeof EventsSlugRoute
   '/events': typeof EventsIndexRoute
   '/api/webhooks/sanity': typeof ApiWebhooksSanityRoute
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/media': typeof MediaRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/api/draft': typeof ApiDraftRoute
+  '/api/generate-metadata': typeof ApiGenerateMetadataRoute
   '/events/$slug': typeof EventsSlugRoute
   '/events/': typeof EventsIndexRoute
   '/api/webhooks/sanity': typeof ApiWebhooksSanityRoute
@@ -128,6 +137,7 @@ export interface FileRouteTypes {
     | '/media'
     | '/privacy-policy'
     | '/api/draft'
+    | '/api/generate-metadata'
     | '/events/$slug'
     | '/events'
     | '/api/webhooks/sanity'
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/media'
     | '/privacy-policy'
     | '/api/draft'
+    | '/api/generate-metadata'
     | '/events/$slug'
     | '/events'
     | '/api/webhooks/sanity'
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/media'
     | '/privacy-policy'
     | '/api/draft'
+    | '/api/generate-metadata'
     | '/events/$slug'
     | '/events/'
     | '/api/webhooks/sanity'
@@ -168,6 +180,7 @@ export interface RootRouteChildren {
   MediaRoute: typeof MediaRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   ApiDraftRoute: typeof ApiDraftRoute
+  ApiGenerateMetadataRoute: typeof ApiGenerateMetadataRoute
   EventsSlugRoute: typeof EventsSlugRoute
   EventsIndexRoute: typeof EventsIndexRoute
   ApiWebhooksSanityRoute: typeof ApiWebhooksSanityRoute
@@ -238,6 +251,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/generate-metadata': {
+      id: '/api/generate-metadata'
+      path: '/api/generate-metadata'
+      fullPath: '/api/generate-metadata'
+      preLoaderRoute: typeof ApiGenerateMetadataRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/draft': {
       id: '/api/draft'
       path: '/api/draft'
@@ -264,6 +284,7 @@ const rootRouteChildren: RootRouteChildren = {
   MediaRoute: MediaRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   ApiDraftRoute: ApiDraftRoute,
+  ApiGenerateMetadataRoute: ApiGenerateMetadataRoute,
   EventsSlugRoute: EventsSlugRoute,
   EventsIndexRoute: EventsIndexRoute,
   ApiWebhooksSanityRoute: ApiWebhooksSanityRoute,

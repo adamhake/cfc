@@ -1,10 +1,11 @@
-import { schemas } from "@chimborazo/sanity-config"
+import { schemas, generateMetadataAction } from "@chimborazo/sanity-config"
 import { visionTool } from "@sanity/vision"
 import { defineConfig } from "sanity"
-import { media } from "sanity-plugin-media"
 import { presentationTool } from "sanity/presentation"
 import type { StructureResolver } from "sanity/structure"
 import { structureTool } from "sanity/structure"
+import { CogIcon, HomeIcon, InfoOutlineIcon } from "@sanity/icons"
+import { StudioLogo } from "./components/StudioLogo"
 
 // Get environment variables
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID || ""
@@ -24,7 +25,7 @@ const structure: StructureResolver = (S) =>
             .items([
               S.listItem()
                 .title("Site Settings")
-                .icon(() => "⚙️")
+                .icon(CogIcon)
                 .child(S.document().schemaType("siteSettings").documentId("siteSettings")),
             ])
         ),
@@ -38,11 +39,11 @@ const structure: StructureResolver = (S) =>
             .items([
               S.listItem()
                 .title("Homepage")
-                .icon(() => "🏠")
+                .icon(HomeIcon)
                 .child(S.document().schemaType("homePage").documentId("homePage")),
               S.listItem()
                 .title("Amenities Page")
-                .icon(() => "🌳")
+                .icon(InfoOutlineIcon)
                 .child(S.document().schemaType("amenitiesPage").documentId("amenitiesPage")),
             ])
         ),
@@ -61,10 +62,15 @@ export default defineConfig({
   projectId,
   dataset,
 
+  studio: {
+    components: {
+      logo: StudioLogo,
+    },
+  },
+
   plugins: [
     structureTool({ structure }),
     visionTool(),
-    media(),
     presentationTool({
       previewUrl: {
         origin: process.env.SANITY_STUDIO_PREVIEW_URL || "http://localhost:3000",
@@ -89,6 +95,14 @@ export default defineConfig({
         return `${baseUrl}/events/${(document.slug as { current?: string })?.current}`
       }
 
+      return prev
+    },
+    // Add custom document actions
+    actions: (prev, context) => {
+      // Add the AI metadata generation action for mediaImage documents
+      if (context.schemaType === "mediaImage") {
+        return [...prev, generateMetadataAction]
+      }
       return prev
     },
   },
