@@ -42,7 +42,7 @@ export const Route = createFileRoute("/api/generate-metadata")({
           {
             status: 200,
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
       },
 
@@ -58,16 +58,13 @@ export const Route = createFileRoute("/api/generate-metadata")({
 
           if (!imageUrl) {
             console.error("imageUrl is missing from request body");
-            return new Response(
-              JSON.stringify({ error: "imageUrl is required" }),
-              {
-                status: 400,
-                headers: {
-                  "Content-Type": "application/json",
-                  "Access-Control-Allow-Origin": "*",
-                },
-              }
-            );
+            return new Response(JSON.stringify({ error: "imageUrl is required" }), {
+              status: 400,
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+              },
+            });
           }
 
           // Get API key from environment variables
@@ -77,8 +74,7 @@ export const Route = createFileRoute("/api/generate-metadata")({
             console.error("ANTHROPIC_API_KEY environment variable is not set");
             return new Response(
               JSON.stringify({
-                error:
-                  "API key not configured. Please set ANTHROPIC_API_KEY environment variable.",
+                error: "API key not configured. Please set ANTHROPIC_API_KEY environment variable.",
               }),
               {
                 status: 500,
@@ -86,7 +82,7 @@ export const Route = createFileRoute("/api/generate-metadata")({
                   "Content-Type": "application/json",
                   "Access-Control-Allow-Origin": "*",
                 },
-              }
+              },
             );
           }
 
@@ -101,27 +97,17 @@ export const Route = createFileRoute("/api/generate-metadata")({
           console.log("Fetching image from:", imageUrl);
           const imageResponse = await fetch(imageUrl);
           if (!imageResponse.ok) {
-            console.error(
-              "Failed to fetch image:",
-              imageResponse.status,
-              imageResponse.statusText
-            );
-            throw new Error(
-              `Failed to fetch image: ${imageResponse.statusText}`
-            );
+            console.error("Failed to fetch image:", imageResponse.status, imageResponse.statusText);
+            throw new Error(`Failed to fetch image: ${imageResponse.statusText}`);
           }
 
           console.log("Image fetched successfully, converting to base64");
           const imageBuffer = await imageResponse.arrayBuffer();
           const base64Image = Buffer.from(imageBuffer).toString("base64");
-          console.log(
-            "Base64 conversion complete, image size:",
-            base64Image.length
-          );
+          console.log("Base64 conversion complete, image size:", base64Image.length);
 
           // Determine the media type from the URL or response
-          const contentType =
-            imageResponse.headers.get("content-type") || "image/jpeg";
+          const contentType = imageResponse.headers.get("content-type") || "image/jpeg";
           const mediaType = contentType.includes("png")
             ? "image/png"
             : contentType.includes("webp")
@@ -178,9 +164,7 @@ Return ONLY valid JSON with no additional text, in this exact format:
 
           // Extract the text content from the response
           console.log("Claude API call successful, parsing response");
-          const textContent = message.content.find(
-            (block) => block.type === "text"
-          );
+          const textContent = message.content.find((block) => block.type === "text");
           if (!textContent || textContent.type !== "text") {
             console.error("No text response from Claude");
             throw new Error("No text response from Claude");
@@ -197,18 +181,9 @@ Return ONLY valid JSON with no additional text, in this exact format:
           console.log("Parsed metadata:", metadata);
 
           // Validate the category
-          const validCategories = [
-            "park-views",
-            "events",
-            "nature",
-            "community",
-            "history",
-          ];
+          const validCategories = ["park-views", "events", "nature", "community", "history"];
           if (!validCategories.includes(metadata.category)) {
-            console.log(
-              "Invalid category, defaulting to park-views:",
-              metadata.category
-            );
+            console.log("Invalid category, defaulting to park-views:", metadata.category);
             // Default to park-views if invalid category
             metadata.category = "park-views";
           }
@@ -227,8 +202,7 @@ Return ONLY valid JSON with no additional text, in this exact format:
         } catch (error) {
           console.error("Error generating metadata:", error);
 
-          const errorMessage =
-            error instanceof Error ? error.message : "Unknown error occurred";
+          const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
 
           return new Response(
             JSON.stringify({
@@ -240,7 +214,7 @@ Return ONLY valid JSON with no additional text, in this exact format:
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*",
               },
-            }
+            },
           );
         }
       },

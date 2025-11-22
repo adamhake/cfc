@@ -167,7 +167,7 @@ Return ONLY a JSON object with this exact format:
       jsonText = jsonMatch[1];
     }
 
-    const result = JSON.parse(jsonText);
+    const result = JSON.parse(jsonText) as { alt?: string; caption?: string };
 
     if (!result.alt || !result.caption) {
       throw new Error("Invalid response format from AI");
