@@ -88,19 +88,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         rel: "manifest",
         href: "/manifest.json",
       },
-      {
-        rel: "preconnect",
-        href: "https://fonts.googleapis.com",
-      },
-      {
-        rel: "preconnect",
-        href: "https://fonts.gstatic.com",
-        crossOrigin: "anonymous",
-      },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Vollkorn+SC:wght@400;600;700;900&display=swap",
-      },
     ],
   }),
 
