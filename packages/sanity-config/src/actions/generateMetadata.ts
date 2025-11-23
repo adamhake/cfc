@@ -58,8 +58,13 @@ export const generateMetadataAction: DocumentActionComponent = (props) => {
       // Construct the image URL from the asset reference
       // Format: https://cdn.sanity.io/images/{projectId}/{dataset}/{assetId}-{width}x{height}.{format}
       const assetId = doc.image.asset._ref
-      const projectId = process.env.SANITY_STUDIO_PROJECT_ID || "pntpob7k"
-      const dataset = process.env.SANITY_STUDIO_DATASET || "production"
+      // These env vars are validated at build time via T3 Env in apps/studio/src/env.ts
+      const projectId = process.env.SANITY_STUDIO_PROJECT_ID
+      const dataset = process.env.SANITY_STUDIO_DATASET
+
+      if (!projectId) {
+        throw new Error("SANITY_STUDIO_PROJECT_ID is not configured")
+      }
 
       // Extract the asset details from the reference
       // Format: image-{assetId}-{width}x{height}-{format}
@@ -72,6 +77,7 @@ export const generateMetadataAction: DocumentActionComponent = (props) => {
 
       // Call the TanStack Start server function to generate metadata
       // This keeps the Anthropic API key secure on the server
+      // SANITY_STUDIO_API_URL is validated at build time via T3 Env with a default value
       const apiUrl =
         process.env.SANITY_STUDIO_API_URL || "http://localhost:3000/api/generate-metadata"
 

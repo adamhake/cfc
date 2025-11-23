@@ -47,18 +47,24 @@ chimborazo-park-conservancy/
 
 4. **Configure environment variables**
 
+   This project uses [T3 Env](https://env.t3.gg/) for type-safe environment variable validation. Each workspace has its own `.env.example` file showing required variables.
+
    **For the web app** (`apps/web/.env`):
    ```bash
    # Copy the example file
    cp apps/web/.env.example apps/web/.env
    ```
 
-   Then edit `apps/web/.env` and add:
-   ```
+   Then edit `apps/web/.env` with your values:
+   ```bash
+   # Required - Sanity CMS Configuration
    VITE_SANITY_PROJECT_ID=your_project_id_here
    VITE_SANITY_DATASET=production
    VITE_SANITY_API_VERSION=2024-01-01
+
+   # Optional - Server-side only (not exposed to browser)
    SANITY_API_TOKEN=your_api_token_here
+   ANTHROPIC_API_KEY=your_anthropic_key_here
    ```
 
    **For the Studio** (`apps/studio/.env`):
@@ -67,12 +73,23 @@ chimborazo-park-conservancy/
    cp apps/studio/.env.example apps/studio/.env
    ```
 
-   Then edit `apps/studio/.env` and add:
-   ```
+   Then edit `apps/studio/.env` with your values:
+   ```bash
+   # Required - Sanity CMS Configuration
    SANITY_STUDIO_PROJECT_ID=your_project_id_here
    SANITY_STUDIO_DATASET=production
+   SANITY_STUDIO_API_VERSION=2024-01-01
+
+   # Optional - defaults provided
    SANITY_STUDIO_PREVIEW_URL=http://localhost:3000
+   SANITY_STUDIO_API_URL=http://localhost:3000/api/generate-metadata
    ```
+
+   **Environment Variable Validation:**
+   - All environment variables are validated at build/startup time using Zod schemas
+   - Type errors will occur if required variables are missing or invalid
+   - See `apps/web/src/env.ts` and `apps/studio/src/env.ts` for validation schemas
+   - Shared Sanity schemas are defined in `packages/sanity-config/src/env-schema.ts`
 
 ## 💻 Development
 
@@ -145,11 +162,16 @@ The main website built with:
 - **TanStack Query** - Data fetching and caching
 - **Tailwind CSS v4** - Utility-first styling
 - **Sanity Client** - CMS integration
+- **T3 Env** - Type-safe environment variable validation
 
 **Key files:**
 - `apps/web/src/lib/sanity.ts` - Sanity client configuration
-- `apps/web/src/env.ts` - Environment variable validation
+- `apps/web/src/env.ts` - Environment variable validation with T3 Env
 - `apps/web/netlify.toml` - Netlify deployment config
+
+**Environment variables:**
+- **Client-side** (VITE_ prefix): `VITE_SANITY_PROJECT_ID`, `VITE_SANITY_DATASET`, `VITE_SANITY_API_VERSION`
+- **Server-side only**: `SANITY_API_TOKEN`, `ANTHROPIC_API_KEY`, `NETLIFY_AUTH_TOKEN`, etc.
 
 ### `@chimborazo/studio`
 Sanity Studio for content management.
@@ -158,11 +180,17 @@ Sanity Studio for content management.
 - Event management with portable text editor
 - Media library with categorization
 - Live preview integration (Presentation tool)
+- AI-powered image metadata generation
 - Custom branding
+- T3 Env for environment variable validation
 
 **Key files:**
 - `apps/studio/sanity.config.ts` - Studio configuration
+- `apps/studio/src/env.ts` - Environment variable validation with T3 Env
 - `apps/studio/netlify.toml` - Netlify deployment config
+
+**Environment variables:**
+- All use `SANITY_STUDIO_*` prefix: `SANITY_STUDIO_PROJECT_ID`, `SANITY_STUDIO_DATASET`, `SANITY_STUDIO_PREVIEW_URL`, etc.
 
 ### `@chimborazo/sanity-config`
 Shared package containing:
@@ -170,6 +198,7 @@ Shared package containing:
 - **Queries** - GROQ queries for fetching data
 - **Client utilities** - Sanity client creation and image URL builders
 - **TypeScript types** - Generated types for type-safe CMS integration
+- **Environment schemas** - Shared Zod schemas for Sanity env vars (used by both web and studio)
 
 **Usage in web app:**
 ```typescript
@@ -197,10 +226,20 @@ const imageUrl = urlForImage(event.heroImage)
    - Functions directory: `apps/web/.netlify/functions`
 
 3. **Add environment variables** in Netlify Dashboard:
-   - `VITE_SANITY_PROJECT_ID`
-   - `VITE_SANITY_DATASET`
-   - `VITE_SANITY_API_VERSION`
-   - `SANITY_API_TOKEN`
+
+   **Required:**
+   - `VITE_SANITY_PROJECT_ID` - Your Sanity project ID
+   - `VITE_SANITY_DATASET` - Dataset name (usually "production")
+   - `VITE_SANITY_API_VERSION` - API version (e.g., "2024-01-01")
+
+   **Optional (server-side only):**
+   - `SANITY_API_TOKEN` - For mutations and preview mode
+   - `ANTHROPIC_API_KEY` - For AI metadata generation
+   - `NETLIFY_AUTH_TOKEN` - For cache purging
+   - `NETLIFY_SITE_ID` - For cache purging
+   - `SANITY_WEBHOOK_SECRET` - For webhook validation
+
+   > **Note:** All env vars are validated using T3 Env. Missing required vars will cause build failures with clear error messages.
 
 4. **Deploy!** 🎉
 
@@ -212,9 +251,17 @@ const imageUrl = urlForImage(event.heroImage)
    - Publish directory: `apps/studio/dist`
 
 3. **Add environment variables:**
-   - `SANITY_STUDIO_PROJECT_ID`
-   - `SANITY_STUDIO_DATASET`
-   - `SANITY_STUDIO_PREVIEW_URL` (your production web app URL)
+
+   **Required:**
+   - `SANITY_STUDIO_PROJECT_ID` - Your Sanity project ID
+   - `SANITY_STUDIO_DATASET` - Dataset name (usually "production")
+   - `SANITY_STUDIO_API_VERSION` - API version (e.g., "2024-01-01")
+
+   **Optional (with defaults):**
+   - `SANITY_STUDIO_PREVIEW_URL` - Your production web app URL (default: http://localhost:3000)
+   - `SANITY_STUDIO_API_URL` - API endpoint for AI metadata (default: http://localhost:3000/api/generate-metadata)
+
+   > **Note:** All env vars are validated using T3 Env. The Studio will fail to build if required vars are missing.
 
 4. **Set custom domain** (e.g., `studio.chimborazopark.org`)
 
@@ -269,9 +316,22 @@ pnpm --filter @chimborazo/sanity-config build
 ```
 
 ### Sanity Studio won't start
-- Ensure `SANITY_STUDIO_PROJECT_ID` is set correctly
+- Ensure `SANITY_STUDIO_PROJECT_ID` is set correctly in `.env`
 - Check that your Sanity project exists at [sanity.io/manage](https://sanity.io/manage)
 - Verify CORS origins are configured
+- Check for T3 Env validation errors in the console
+
+### Environment variable errors
+```bash
+# T3 Env will show clear errors if variables are missing or invalid
+# Example: "VITE_SANITY_PROJECT_ID is required but was not set"
+
+# Check your .env files match the .env.example templates
+# Validation schemas are in:
+# - apps/web/src/env.ts
+# - apps/studio/src/env.ts
+# - packages/sanity-config/src/env-schema.ts
+```
 
 ## 📚 Additional Resources
 
@@ -279,6 +339,7 @@ pnpm --filter @chimborazo/sanity-config build
 - [Sanity Documentation](https://www.sanity.io/docs)
 - [Turborepo Documentation](https://turbo.build/repo/docs)
 - [Netlify Documentation](https://docs.netlify.com/)
+- [T3 Env Documentation](https://env.t3.gg/) - Type-safe environment variable validation
 
 ## 🎯 Next Steps
 
