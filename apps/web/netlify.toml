@@ -8,15 +8,3 @@
 [build.environment]
   NODE_VERSION = "22"
   PNPM_FLAGS = "--frozen-lockfile --prefer-offline"
-
-# Cache node_modules and Turborepo cache for faster rebuilds
-[[plugins]]
-  package = "@netlify/plugin-cache"
-
-  [plugins.inputs]
-    paths = [
-      "node_modules",
-      "apps/web/node_modules",
-      "apps/web/.turbo",
-      ".turbo"
-    ]
