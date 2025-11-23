@@ -27,7 +27,7 @@ export default function HeroSoftGradientDivider({
   ctaLink = "/get-involved",
 }: HeroProps) {
   return (
-    <div className="relative h-[75vh] w-full overflow-visible lg:h-[80vh]">
+    <div className="relative min-h-[440px] w-full overflow-visible sm:min-h-[520px] lg:min-h-[650px]">
       {/* Hero Image */}
       <Image
         src={imageSrc}

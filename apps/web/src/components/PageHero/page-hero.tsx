@@ -1,4 +1,5 @@
 import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image";
+import { cn } from "@/utils/cn";
 import { Image } from "@unpic/react";
 import { ReactNode } from "react";
 
@@ -11,7 +12,7 @@ interface PageHeroProps {
   imageHeight?: number;
   sanityImage?: SanityImageObject;
   children?: ReactNode;
-  height?: "small" | "medium" | "large" | "event";
+  height?: "auto" | "small" | "medium" | "large" | "event";
   priority?: boolean;
   alignment?: "center" | "bottom-mobile-center-desktop";
   contentSpacing?: string;
@@ -34,11 +35,14 @@ export default function PageHero({
   titleSize = "standard",
 }: PageHeroProps) {
   const heightClasses = {
-    small: "h-[45vh]",
-    medium: "h-[60vh]",
-    large: "h-[65vh]",
-    event: "min-h-[85vh] lg:min-h-[65vh]",
+    auto: "min-h-[340px] sm:min-h-[420px]",
+    small: "min-h-[380px] sm:min-h-[460px]",
+    medium: "min-h-[440px] sm:min-h-[520px]",
+    large: "min-h-[520px] sm:min-h-[600px]",
+    event: "min-h-[620px] sm:min-h-[700px]",
   };
+
+  const selectedHeight = (heightClasses[height] ? height : "medium") as keyof typeof heightClasses;
 
   const alignmentClasses = {
     center: "items-center",
@@ -52,12 +56,16 @@ export default function PageHero({
     large: "text-4xl md:text-5xl lg:text-6xl",
   };
 
+  const classes = cn("relative w-full overflow-visible", {
+    "min-h-[340px] sm:min-h-[420px]": selectedHeight == "auto",
+    "min-h-[380px] sm:min-h-[460px]": selectedHeight == "small",
+    "min-h-[440px] sm:min-h-[520px]": selectedHeight == "medium",
+    "min-h-[520px] sm:min-h-[600px]": selectedHeight == "large",
+    "min-h-[620px] sm:min-h-[700px]": selectedHeight == "event",
+  });
+
   return (
-    <header
-      className={`relative ${heightClasses[height]} w-full overflow-visible`}
-      role="banner"
-      aria-label="Page header"
-    >
+    <header className={classes} role="banner" aria-label="Page header">
       {sanityImage ? (
         <SanityImage
           image={sanityImage}
@@ -84,13 +92,20 @@ export default function PageHero({
         aria-hidden="true"
       ></div>
       <div
-        className={`absolute inset-0 z-10 flex ${alignmentClasses[alignment]} justify-center ${paddingClasses} pt-20 pb-16 lg:py-8`}
+        className={cn(
+          "absolute inset-0 z-10 flex justify-center pt-20 pb-16 lg:py-8",
+          alignmentClasses[alignment],
+          paddingClasses,
+        )}
       >
-        <div className="mx-auto w-full max-w-6xl">
+        <div className="mx-auto flex w-full max-w-6xl justify-center">
           <div className="text-center">
             {children}
             <h1
-              className={`font-display text-primary-50 ${titleSizeClasses[titleSize]} dark:text-grey-50`}
+              className={cn(
+                "font-display text-primary-50 dark:text-grey-50",
+                titleSizeClasses[titleSize],
+              )}
             >
               {title}
             </h1>

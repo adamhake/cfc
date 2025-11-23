@@ -6,6 +6,7 @@ interface ContainerProps {
   spacing?: "none" | "sm" | "md" | "lg" | "xl";
   as?: "div" | "section" | "article" | "main";
   className?: string;
+  gutter?: "default" | "none";
 }
 
 export default function Container({
@@ -14,6 +15,7 @@ export default function Container({
   spacing = "md",
   as: Component = "div",
   className = "",
+  gutter = "default",
 }: ContainerProps) {
   const maxWidthClasses = {
     sm: "max-w-sm",
@@ -33,9 +35,14 @@ export default function Container({
     xl: "space-y-12",
   };
 
+  const gutterClasses = {
+    default: "w-full px-4 sm:px-6 lg:px-8",
+    none: "",
+  };
+
   return (
     <Component
-      className={`mx-auto ${maxWidthClasses[maxWidth]} ${spacingClasses[spacing]} ${className}`}
+      className={`mx-auto ${maxWidthClasses[maxWidth]} ${spacingClasses[spacing]} ${gutterClasses[gutter]} ${className}`}
     >
       {children}
     </Component>

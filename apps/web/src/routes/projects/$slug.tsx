@@ -101,7 +101,7 @@ function ProjectPage() {
           title={project.title}
           subtitle={project.description}
           sanityImage={project.heroImage.image}
-          height="event"
+          height="auto"
           priority={true}
           alignment="bottom-mobile-center-desktop"
           titleSize="large"
@@ -112,7 +112,7 @@ function ProjectPage() {
         </PageHero>
 
         {/* Back Button */}
-        <Container spacing="md" className="px-4 pt-8 md:px-0">
+        <Container spacing="md" className="pt-8">
           <Link
             to="/projects"
             className="group inline-flex items-center gap-2 font-body text-sm font-medium text-primary-700 transition-colors hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
@@ -123,7 +123,7 @@ function ProjectPage() {
         </Container>
 
         {/* Main Content */}
-        <Container spacing="md" className="px-4 py-12 md:px-0 md:py-16">
+        <Container spacing="md" className="py-12 md:py-16">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
             {/* Main Content */}
             <main className="lg:col-span-8">
@@ -209,7 +209,7 @@ function ProjectPage() {
               <div className="sticky top-24 space-y-6">
                 {/* Project Details Card */}
                 <div className="overflow-hidden rounded-2xl border border-accent-200 bg-white shadow-sm dark:border-primary-600 dark:bg-primary-950">
-                  <div className="border-b px-6 py-5 dark:border-b-primary-600">
+                  <div className="border-b border-b-accent-200 px-6 py-5 dark:border-b-primary-600">
                     <h2 className="font-display text-xl font-semibold text-grey-900 md:text-2xl dark:text-grey-100">
                       Project Details
                     </h2>

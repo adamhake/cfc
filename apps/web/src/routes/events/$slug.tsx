@@ -165,7 +165,7 @@ function EventPage() {
           imageAlt={staticImageData?.alt || sanityHeroImage?.alt}
           imageWidth={staticImageData?.width}
           imageHeight={staticImageData?.height}
-          height="event"
+          height="auto"
           priority={true}
           alignment="bottom-mobile-center-desktop"
           titleSize="large"
@@ -176,7 +176,7 @@ function EventPage() {
         </PageHero>
 
         {/* Back Button */}
-        <Container spacing="md" className="px-4 pt-8 md:px-0">
+        <Container spacing="md" className="pt-8">
           <Link
             to="/events"
             className="group inline-flex items-center gap-2 font-body text-sm font-medium text-primary-700 transition-colors hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
@@ -187,7 +187,7 @@ function EventPage() {
         </Container>
 
         {/* Main Content */}
-        <Container spacing="md" className="px-4 py-12 md:px-0 md:py-16">
+        <Container spacing="md" className="py-12 md:py-16">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
             {/* Main Content */}
             <main className="lg:col-span-8">

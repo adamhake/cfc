@@ -31,7 +31,7 @@ function PrivacyPolicy() {
         imageWidth={2000}
         imageHeight={1262}
       />
-      <Container className="px-4 py-16 md:py-24">
+      <Container className="py-16 md:py-24">
         <div className="prose-grey prose max-w-4xl dark:prose-invert">
           <p className="font-body text-grey-700 dark:text-grey-300">
             <strong>Effective Date:</strong>{" "}

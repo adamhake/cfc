@@ -89,8 +89,9 @@ function Media() {
         imageAlt="Chimborazo Park landscape"
         imageWidth={2000}
         imageHeight={1262}
+        height="medium"
       />
-      <Container maxWidth="6xl" spacing="md" className="px-4 py-16 md:py-24">
+      <Container maxWidth="6xl" spacing="md" className="py-16 md:py-24">
         {sanityImages.length === 0 ? (
           <div className="mx-auto max-w-2xl rounded-2xl border border-primary-200 bg-primary-50/30 p-12 text-center dark:border-primary-700/30 dark:bg-primary-900/20">
             <div className="mb-4 text-6xl">📷</div>
