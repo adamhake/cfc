@@ -45,7 +45,7 @@ export default function Footer() {
           {/* Quick links */}
           <div className="space-y-4">
             <h3 className="font-display text-lg font-semibold text-primary-800 dark:text-primary-400">
-              Quick Links
+              Navigation
             </h3>
             <nav className="flex flex-col space-y-2">
               <Link
@@ -59,6 +59,12 @@ export default function Footer() {
                 className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
               >
                 Amenities
+              </Link>
+              <Link
+                to="/projects"
+                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
+              >
+                Projects
               </Link>
               <Link
                 to="/events"

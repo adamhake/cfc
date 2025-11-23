@@ -7,6 +7,7 @@ import { structureTool } from "sanity/structure"
 import { CogIcon, HomeIcon, InfoOutlineIcon } from "@sanity/icons"
 import { StudioLogo } from "./components/StudioLogo"
 import { env } from "./src/env"
+import "./studio.css"
 
 // Get environment variables from validated env config
 const projectId = env.SANITY_STUDIO_PROJECT_ID
@@ -46,13 +47,23 @@ const structure: StructureResolver = (S) =>
                 .title("Amenities Page")
                 .icon(InfoOutlineIcon)
                 .child(S.document().schemaType("amenitiesPage").documentId("amenitiesPage")),
+              S.listItem()
+                .title("Events Page")
+                .icon(InfoOutlineIcon)
+                .child(S.document().schemaType("eventsPage").documentId("eventsPage")),
+              S.listItem()
+                .title("Projects Page")
+                .icon(InfoOutlineIcon)
+                .child(S.document().schemaType("projectsPage").documentId("projectsPage")),
             ])
         ),
       S.divider(),
       // Content types (excluding singletons)
       ...S.documentTypeListItems().filter(
         (listItem) =>
-          !["siteSettings", "homePage", "amenitiesPage"].includes(listItem.getId() ?? "")
+          !["siteSettings", "homePage", "amenitiesPage", "eventsPage", "projectsPage"].includes(
+            listItem.getId() ?? ""
+          )
       ),
     ])
 

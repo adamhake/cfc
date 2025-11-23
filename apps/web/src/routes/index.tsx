@@ -4,6 +4,7 @@ import GetInvolved from "@/components/GetInvolved/get-involved";
 import Hero from "@/components/Hero/hero";
 import ImageGallery from "@/components/ImageGallery/image-gallery";
 import Partners from "@/components/Partners/partners";
+import Project from "@/components/Project/project";
 import Quote from "@/components/Quote/quote";
 import RotatingImages from "@/components/RotatingImages/rotating-images";
 import type { SanityImageObject } from "@/components/SanityImage/sanity-image";
@@ -13,10 +14,10 @@ import { events } from "@/data/events";
 import { siteSettingsQueryOptions } from "@/hooks/useSiteSettings";
 import { queryKeys } from "@/lib/query-keys";
 import { sanityClient } from "@/lib/sanity";
-import type { SanityHomePage } from "@/lib/sanity-types";
+import type { SanityHomePage, SanityProject } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
-import { getHomePageQuery } from "@chimborazo/sanity-config";
-import { queryOptions } from "@tanstack/react-query";
+import { getHomePageQuery, featuredProjectsQuery } from "@chimborazo/sanity-config";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Image } from "@unpic/react";
 
@@ -36,13 +37,29 @@ const homePageQueryOptions = queryOptions({
   gcTime: 60 * 60 * 1000, // 1 hour (must be >= staleTime)
 });
 
+const featuredProjectsQueryOptions = queryOptions({
+  queryKey: queryKeys.projects.featured(),
+  queryFn: async (): Promise<SanityProject[]> => {
+    try {
+      return await sanityClient.fetch(featuredProjectsQuery);
+    } catch (error) {
+      console.warn("Failed to fetch featured projects from Sanity:", error);
+      return [];
+    }
+  },
+  // Featured projects change occasionally - cache for 30 minutes
+  staleTime: 30 * 60 * 1000, // 30 minutes
+  gcTime: 60 * 60 * 1000, // 1 hour
+});
+
 export const Route = createFileRoute("/")({
   component: Home,
   loader: async ({ context }) => {
-    // Prefetch homepage data and site settings on the server
+    // Prefetch homepage data, site settings, and featured projects on the server
     const [homePageData] = await Promise.all([
       context.queryClient.ensureQueryData(homePageQueryOptions),
       context.queryClient.ensureQueryData(siteSettingsQueryOptions),
+      context.queryClient.ensureQueryData(featuredProjectsQueryOptions),
     ]);
     return homePageData;
   },
@@ -64,6 +81,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const homePageData = Route.useLoaderData();
+  const { data: featuredProjects } = useSuspenseQuery(featuredProjectsQueryOptions);
 
   // Prepare hero data from Sanity or use defaults
   const heroData = homePageData?.hero?.heroImage?.image?.asset?.url
@@ -156,6 +174,48 @@ function Home() {
           </div>
         </Container>
       </div>
+
+      {/* Featured Projects */}
+      {featuredProjects && featuredProjects.length > 0 && (
+        <div className="px-4 md:px-0">
+          <Container>
+            <SectionHeader title="Projects" size="large" />
+            <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
+              Learn about our current initiatives and how they're transforming Chimborazo Park for
+              the entire community.
+            </p>
+
+            <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
+              {featuredProjects.map((project) => (
+                <Project key={project._id} project={project} />
+              ))}
+            </div>
+
+            {/* View All Projects CTA */}
+            <div className="mt-12 flex justify-center">
+              <Link
+                to="/projects"
+                className="group inline-flex items-center gap-2 rounded-xl border-2 border-accent-600 bg-transparent px-6 py-3 font-body text-base font-semibold text-accent-700 uppercase transition-all hover:bg-accent-600 hover:text-white focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:border-accent-500 dark:text-accent-400 dark:hover:bg-accent-500 dark:hover:text-primary-900"
+              >
+                <span>View All Projects</span>
+                <svg
+                  className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </Link>
+            </div>
+          </Container>
+        </div>
+      )}
 
       {/* The Park */}
       <div className="text-grey-900 lg:px-0 dark:text-grey-100">

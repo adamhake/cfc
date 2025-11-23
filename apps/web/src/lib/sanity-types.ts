@@ -37,6 +37,20 @@ export interface SanityImage {
   };
 }
 
+export interface SanityFile {
+  _type: "fileAttachment";
+  asset: {
+    _id: string;
+    url: string;
+    originalFilename?: string;
+    size?: number;
+    extension?: string;
+    mimeType?: string;
+  };
+  title?: string;
+  description?: string;
+}
+
 export interface SanityEvent {
   _id: string;
   _type: "event";
@@ -54,6 +68,30 @@ export interface SanityEvent {
   publishedAt?: string;
 }
 
+export interface SanityProject {
+  _id: string;
+  _type: "project";
+  title: string;
+  slug: {
+    current: string;
+  };
+  description: string;
+  heroImage: SanityMediaImage;
+  status: "planned" | "active" | "completed";
+  startDate: string;
+  completionDate?: string;
+  goal?: string;
+  location?: string;
+  budget?: string;
+  category?: "restoration" | "recreation" | "connection" | "preservation";
+  body?: PortableTextBlock[];
+  gallery?: SanityImage[];
+  relatedEvents?: SanityEvent[];
+  partners?: SanityPartner[];
+  featured?: boolean;
+  publishedAt?: string;
+}
+
 export interface SanityMediaImage {
   _id: string;
   _type: "mediaImage";
@@ -64,8 +102,12 @@ export interface SanityMediaImage {
   uploadedAt: string;
 }
 
-// Helper type for when we just need the slug
+// Helper types for when we just need the slug
 export interface EventSlug {
+  slug: string;
+}
+
+export interface ProjectSlug {
   slug: string;
 }
 
@@ -161,4 +203,22 @@ export interface SanityAmenitiesPage {
     linkText?: string;
     section: "upper-park" | "lower-park" | "both";
   }>;
+}
+
+export interface SanityEventsPage {
+  pageHero: {
+    title: string;
+    description?: string;
+    image?: SanityMediaImage;
+  };
+  introduction?: PortableTextBlock[];
+}
+
+export interface SanityProjectsPage {
+  pageHero: {
+    title: string;
+    description?: string;
+    image?: SanityMediaImage;
+  };
+  introduction?: PortableTextBlock[];
 }

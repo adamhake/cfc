@@ -1,5 +1,6 @@
 // Existing queries
 export * from "./events"
+export * from "./projects"
 export * from "./media"
 
 // Site Settings
@@ -8,6 +9,8 @@ export * from "./siteSettings"
 // Pages
 export * from "./homePage"
 export * from "./amenitiesPage"
+export * from "./eventsPage"
+export * from "./projectsPage"
 
 // Content
 export * from "./partners"

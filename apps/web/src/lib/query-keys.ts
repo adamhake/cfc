@@ -17,10 +17,23 @@ export const queryKeys = {
   // Amenities page
   amenitiesPage: () => ["amenitiesPage"] as const,
 
+  // Events page
+  eventsPage: () => ["eventsPage"] as const,
+
+  // Projects page
+  projectsPage: () => ["projectsPage"] as const,
+
   // Events
   events: {
     all: () => ["events", "all"] as const,
     detail: (slug: string) => ["event", slug] as const,
+  },
+
+  // Projects
+  projects: {
+    all: () => ["projects", "all"] as const,
+    detail: (slug: string) => ["project", slug] as const,
+    featured: () => ["projects", "featured"] as const,
   },
 
   // Media gallery
@@ -46,6 +59,15 @@ export const invalidateMedia = (queryClient: {
   invalidateQueries: (opts: { queryKey: readonly string[] }) => void;
 }) => {
   queryClient.invalidateQueries({ queryKey: ["media"] as const });
+};
+
+/**
+ * Helper to invalidate all projects queries
+ */
+export const invalidateProjects = (queryClient: {
+  invalidateQueries: (opts: { queryKey: readonly string[] }) => void;
+}) => {
+  queryClient.invalidateQueries({ queryKey: ["projects"] as const });
 };
 
 /**

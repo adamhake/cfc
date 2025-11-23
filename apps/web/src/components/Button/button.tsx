@@ -100,7 +100,7 @@ export const Button: React.FC<ButtonProps> = ({
   ...rest
 }) => {
   const baseStyles =
-    "cursor-pointer rounded-xl border-2 font-body font-semibold tracking-wider uppercase transition-all duration-150";
+    "cursor-pointer rounded-xl border-2 font-body font-semibold tracking-wider uppercase transition-all duration-150 no-underline";
 
   const sizeStyles = {
     standard: "px-6 py-3 text-base",
