@@ -84,6 +84,10 @@ const config = defineConfig({
         safari10: true, // Better Safari compatibility
       },
     },
+    // Enable modulepreload polyfill for better resource loading
+    modulePreload: {
+      polyfill: true,
+    },
     rollupOptions: {
       output: {
         manualChunks: (id) => {
