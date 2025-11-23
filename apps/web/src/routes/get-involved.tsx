@@ -66,10 +66,10 @@ function GetInvolvedPage() {
         imageAlt="Volunteers working together at Chimborazo Park"
         imageWidth={1600}
         imageHeight={1200}
-        height="large"
+        height="medium"
       />
 
-      <div className="px-4 lg:px-0">
+      <div>
         <Container spacing="xl" className="space-y-24 py-16 pb-24">
           {/* Opening Statement */}
           <div className="max-w-4xl space-y-4">

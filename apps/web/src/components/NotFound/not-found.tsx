@@ -68,7 +68,7 @@ export function NotFound() {
   ];
 
   return (
-    <div className="px-4 pt-24 pb-16 lg:px-0">
+    <div className="pt-24 pb-16">
       <Container maxWidth="4xl" spacing="lg">
         {/* Hero Section */}
         <div className="space-y-6 text-center">

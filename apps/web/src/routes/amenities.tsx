@@ -1,4 +1,5 @@
 import AmenityCard from "@/components/AmenityCard/amenity-card";
+import Container from "@/components/Container/container";
 import GetInvolved from "@/components/GetInvolved/get-involved";
 import PageHero from "@/components/PageHero/page-hero";
 import SectionHeader from "@/components/SectionHeader/section-header";
@@ -118,10 +119,10 @@ function RouteComponent() {
 
   return (
     <div>
-      <PageHero {...heroData} height="large" priority={true} />
+      <PageHero {...heroData} height="medium" priority={true} />
 
       {/* Main Content */}
-      <div className="mx-auto max-w-6xl space-y-24 px-4 py-16 pb-24">
+      <Container spacing="none" className="space-y-24 py-16 pb-24">
         {/* Introduction */}
         <div className="max-w-4xl space-y-4">
           <p className="font-body text-lg text-grey-800 md:text-xl dark:text-grey-200">
@@ -273,8 +274,9 @@ function RouteComponent() {
         <GetInvolved
           title="Ready to Get Involved?"
           description="Contact us to learn more about volunteer opportunities, dedications, and donation options. Together, we can ensure Chimborazo Park remains a vibrant community treasure."
+          gutter="none"
         />
-      </div>
+      </Container>
     </div>
   );
 }
