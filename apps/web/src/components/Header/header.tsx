@@ -406,7 +406,7 @@ export default function Header() {
                       onClick={() => setMenuOpen(false)}
                       className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/events" ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
                     >
-                      Porjects
+                      Projects
                     </Link>
                   </motion.li>
                   <motion.li
