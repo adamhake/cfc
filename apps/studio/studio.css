@@ -1,0 +1,43 @@
+/* Custom styles for Sanity Studio Portable Text editor */
+
+/*
+ * Style Lead Paragraph blocks in the editor
+ * Sanity uses data attributes to identify block styles
+ */
+
+/* Target the text within lead paragraph blocks */
+[data-testid="pt-editor"] [data-list-item],
+[data-testid="pt-editor"] > div > div {
+  /* Container for portable text blocks */
+}
+
+/* Lead paragraph text styling - targets the actual text spans */
+[data-testid="pt-editor"] span[data-slate-node="text"] {
+  /* Check parent for lead style - this is applied via parent selector */
+}
+
+/* More specific: Target blocks with lead style via their container */
+.pt-block-lead {
+  font-size: 1.25rem !important;
+  line-height: 1.6 !important;
+}
+
+/* Portable Text Editor block styling */
+div[data-testid="pt-editor"] {
+  /* Normal blocks default */
+}
+
+/* Style specifically for lead text blocks - using CSS variable approach */
+[style*="--styled-block-type: lead"],
+.sanity-block-style-lead {
+  font-size: 1.25rem !important;
+  line-height: 1.6 !important;
+  color: #1f2937;
+}
+
+/* Generic approach - if Sanity exposes the style value as a data attribute or class */
+.pt-text-block-style-lead,
+[data-style="lead"] {
+  font-size: 1.25rem !important;
+  line-height: 1.6 !important;
+}

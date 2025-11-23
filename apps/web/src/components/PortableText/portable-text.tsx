@@ -1,6 +1,7 @@
 import { PortableText as BasePortableText } from "@portabletext/react";
 import type { PortableTextBlock, PortableTextComponents } from "@portabletext/react";
 import { SanityImage } from "@/components/SanityImage";
+import { FileAttachment } from "@/components/FileAttachment/file-attachment";
 
 // Custom components for rendering portable text blocks
 const components: PortableTextComponents = {
@@ -8,6 +9,20 @@ const components: PortableTextComponents = {
     // Paragraphs
     normal: ({ children }) => (
       <p className="mb-4 font-body leading-relaxed text-grey-800 dark:text-grey-200">{children}</p>
+    ),
+
+    // Leading paragraph (slightly larger text)
+    leading: ({ children }) => (
+      <p className="mb-4 font-body text-base leading-relaxed text-grey-800 md:text-lg dark:text-grey-200">
+        {children}
+      </p>
+    ),
+
+    // Leading large paragraph (larger intro text)
+    "leading-lg": ({ children }) => (
+      <p className="mb-4 font-body text-xl leading-relaxed text-grey-800 md:text-2xl dark:text-grey-200">
+        {children}
+      </p>
     ),
 
     // Headings
@@ -97,6 +112,15 @@ const components: PortableTextComponents = {
             </figcaption>
           )}
         </figure>
+      );
+    },
+
+    // File attachments in portable text
+    fileAttachment: ({ value }) => {
+      if (!value?.asset) return null;
+
+      return (
+        <FileAttachment asset={value.asset} title={value.title} description={value.description} />
       );
     },
   },
