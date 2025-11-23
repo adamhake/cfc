@@ -94,10 +94,18 @@ const config = defineConfig({
           // TanStack Start externalizes react, react-dom, and TanStack packages for SSR
           // Only manually chunk non-externalized vendor libraries
           if (id.includes("node_modules")) {
-            if (id.includes("framer-motion") || id.includes("lucide-react") || id.includes("embla-carousel")) {
+            if (
+              id.includes("framer-motion") ||
+              id.includes("lucide-react") ||
+              id.includes("embla-carousel")
+            ) {
               return "ui";
             }
-            if (id.includes("@sanity/client") || id.includes("@sanity/image-url") || id.includes("@portabletext/react")) {
+            if (
+              id.includes("@sanity/client") ||
+              id.includes("@sanity/image-url") ||
+              id.includes("@portabletext/react")
+            ) {
               return "sanity";
             }
           }

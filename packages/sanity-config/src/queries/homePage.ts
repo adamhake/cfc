@@ -47,18 +47,24 @@ export const getHomePageQuery = defineQuery(`
       _id,
       quoteText,
       attribution,
-      backgroundImage{
-        asset->{
-          _id,
-          url,
-          metadata{
-            dimensions,
-            lqip
-          }
-        },
-        alt,
-        caption,
-        hotspot
+      backgroundImage->{
+        _id,
+        title,
+        image{
+          asset->{
+            _id,
+            url,
+            metadata{
+              dimensions,
+              lqip,
+              palette
+            }
+          },
+          alt,
+          caption,
+          hotspot,
+          crop
+        }
       }
     },
     "gallery": homepageGallery->{

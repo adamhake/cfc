@@ -10,21 +10,25 @@ const __dirname = dirname(__filename);
 const publicDir = join(__dirname, "..", "public");
 const optimizedDir = join(publicDir, "optimized");
 
-// Images that need compression (>400KB)
+// Images that need compression (>200KB)
 const priorityImages = [
-  "bike_sunset.webp",
-  "grove_cleanup.webp",
-  "chimbo_sign.webp",
-  "roundhouse_evening.webp",
-  "oaks.webp",
-  "sign_cleanup.webp",
+  "grove_cleanup.webp", // 844KB
+  "chimbo_sign.webp", // 652KB
+  "bike_sunset.webp", // 548KB
+  "roundhouse_evening.webp", // 504KB
+  "oaks.webp", // 488KB
+  "rock_sunset.webp", // 448KB
+  "sign_cleanup_2022.webp", // 384KB
+  "cleanup_2024.webp", // 312KB
+  "volunteers.webp", // 308KB
+  "get_involved.webp", // 280KB
 ];
 
-// Responsive widths to generate
-const widths = [320, 640, 1280, 1920];
+// Responsive widths to generate (optimized for typical display sizes)
+const widths = [640, 1024, 1536];
 
-// Quality setting for compression
-const quality = 80;
+// Quality setting for compression (85 for better quality-to-size ratio)
+const quality = 85;
 
 async function optimizeImage(filename, inputPath) {
   console.log(`\nProcessing: ${filename}`);
@@ -47,7 +51,17 @@ async function optimizeImage(filename, inputPath) {
     const originalWidth = metadata.width;
     const outputPath = join(optimizedDir, filename);
 
-    await sharp(inputPath).webp({ quality, effort: 6, smartSubsample: true }).toFile(outputPath);
+    await sharp(inputPath)
+      .webp({
+        quality,
+        effort: 6,
+        smartSubsample: true,
+        // Use mixed mode for better compression
+        lossless: false,
+        // Enable near-lossless for better quality at slight size cost
+        nearLossless: false,
+      })
+      .toFile(outputPath);
 
     const newSize = statSync(outputPath).size;
     const savings = Math.round(((originalSize - newSize) / originalSize) * 100);

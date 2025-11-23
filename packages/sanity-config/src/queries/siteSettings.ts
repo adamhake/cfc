@@ -23,6 +23,55 @@ export const getSiteSettingsQuery = defineQuery(`
         },
         alt
       }
+    },
+    getInvolvedGallery->{
+      _id,
+      title,
+      images[]{
+        image->{
+          _id,
+          title,
+          image{
+            asset->{
+              _id,
+              url,
+              metadata{
+                dimensions,
+                lqip,
+                palette
+              }
+            },
+            alt,
+            caption,
+            hotspot,
+            crop
+          }
+        }
+      }
+    },
+    featuredQuote->{
+      _id,
+      quoteText,
+      attribution,
+      backgroundImage->{
+        _id,
+        title,
+        image{
+          asset->{
+            _id,
+            url,
+            metadata{
+              dimensions,
+              lqip,
+              palette
+            }
+          },
+          alt,
+          caption,
+          hotspot,
+          crop
+        }
+      }
     }
   }
 `)

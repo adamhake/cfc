@@ -162,13 +162,17 @@ export const Button: React.FC<ButtonProps> = ({
     );
   }
 
+  // Filter out non-DOM props before spreading to button element
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { asChild, ...domProps } = rest;
+
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
       className={combinedClassName}
-      {...rest}
+      {...domProps}
     >
       {children}
     </button>
