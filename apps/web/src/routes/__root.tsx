@@ -63,6 +63,15 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     ],
     links: [
       {
+        rel: "dns-prefetch",
+        href: "https://cdn.sanity.io",
+      },
+      {
+        rel: "preload",
+        href: appCss,
+        as: "style",
+      },
+      {
         rel: "stylesheet",
         href: appCss,
         suppressHydrationWarning: true,
