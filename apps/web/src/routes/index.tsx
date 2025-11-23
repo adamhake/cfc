@@ -114,11 +114,11 @@ function Home() {
       .map((img) => img.image.image) || [];
 
   return (
-    <div className="space-y-24 pb-24 text-grey-900 lg:px-0 dark:text-grey-100">
+    <div className="space-y-24 pb-24 text-grey-900 dark:text-grey-100">
       <Hero {...heroData} />
 
       {/* Intro + Gallery */}
-      <div className="px-4 text-grey-900 lg:px-0">
+      <div className="text-grey-900">
         <Container spacing="md">
           <p className="max-w-4xl font-body text-2xl leading-tight font-medium md:text-3xl dark:text-grey-100">
             The Chimborazo Park Conservancy and Friends of Chimborazo Park preserve and enhance this
@@ -143,7 +143,7 @@ function Home() {
       </div>
 
       {/* Our Vision */}
-      <div className="px-4 lg:px-0">
+      <div>
         <Container spacing="md">
           <SectionHeader title="Our Vision" size="large" />
           <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
@@ -177,7 +177,7 @@ function Home() {
 
       {/* Featured Projects */}
       {featuredProjects && featuredProjects.length > 0 && (
-        <div className="px-4 md:px-0">
+        <div>
           <Container>
             <SectionHeader title="Projects" size="large" />
             <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
@@ -218,8 +218,8 @@ function Home() {
       )}
 
       {/* The Park */}
-      <div className="text-grey-900 lg:px-0 dark:text-grey-100">
-        <Container spacing="md" className="px-4 md:px-0">
+      <div className="text-grey-900 dark:text-grey-100">
+        <Container spacing="md">
           <SectionHeader title="The Park" size="large" />
 
           {/* Enhanced opening with larger text */}
@@ -304,7 +304,7 @@ function Home() {
       </div>
 
       {/* Events */}
-      <div className="px-4 md:px-0">
+      <div>
         <Container>
           <SectionHeader title="Events" size="large" />
           <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
@@ -363,7 +363,7 @@ function Home() {
       </div>
 
       {/* Partners */}
-      <div className="px-4 md:px-0">
+      <div>
         <Container>
           <SectionHeader title="Partners" size="large" />
           <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">

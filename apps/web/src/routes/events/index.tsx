@@ -126,9 +126,9 @@ function Events() {
 
   return (
     <div className="space-y-24 pb-24">
-      <PageHero {...heroData} height="large" priority={true} />
+      <PageHero {...heroData} height="medium" priority={true} />
 
-      <Container spacing="md" className="px-4 md:px-0">
+      <Container spacing="md">
         {pageData?.introduction && pageData.introduction.length > 0 ? (
           <div className="mx-auto max-w-3xl text-center">
             <PortableText value={pageData.introduction} />

@@ -28,8 +28,9 @@ function Donate() {
         imageAlt="Chimborazo Park landscape"
         imageWidth={2000}
         imageHeight={1262}
+        height="medium"
       />
-      <div className="px-4 lg:px-0">
+      <div>
         <Container spacing="xl" className="py-24">
           <div className="space-y-8">
             {/* Opening statement */}

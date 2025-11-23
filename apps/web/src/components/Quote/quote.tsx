@@ -1,3 +1,4 @@
+import Container from "@/components/Container/container";
 import { SanityBackgroundImage } from "@/components/SanityImage/sanity-image";
 import type { SanityImageObject } from "@/components/SanityImage/sanity-image";
 import { QuoteIcon } from "lucide-react";
@@ -24,8 +25,8 @@ export default function Quote({
   const isSanityImage = backgroundImage && "asset" in backgroundImage;
 
   return (
-    <div className="px-4 lg:px-0">
-      <div className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-2xl bg-primary-800 p-8 lg:p-16 dark:bg-primary-900">
+    <Container spacing="none">
+      <div className="relative w-full overflow-hidden rounded-2xl bg-primary-800 p-8 lg:p-16 dark:bg-primary-900">
         {isSanityImage ? (
           <SanityBackgroundImage
             image={backgroundImage as SanityImageObject}
@@ -50,6 +51,6 @@ export default function Quote({
           <p className="font-display lg:text-xl">&mdash; {attribution}</p>
         </div>
       </div>
-    </div>
+    </Container>
   );
 }
