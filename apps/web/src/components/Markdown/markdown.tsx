@@ -47,12 +47,12 @@ export function Markdown({ content }: MarkdownProps) {
           </p>
         ),
         ul: ({ children }) => (
-          <ul className="mb-6 ml-6 list-disc space-y-3 font-body text-base leading-relaxed text-grey-800 marker:text-accent-600 md:text-lg dark:text-grey-200 dark:marker:text-accent-400">
+          <ul className="mb-6 ml-4 list-disc space-y-3 font-body text-base leading-relaxed text-grey-800 marker:text-accent-600 md:text-lg dark:text-grey-200 dark:marker:text-accent-400">
             {children}
           </ul>
         ),
         ol: ({ children }) => (
-          <ol className="mb-6 ml-6 list-decimal space-y-3 font-body text-base leading-relaxed text-grey-800 marker:text-accent-600 md:text-lg dark:text-grey-200 dark:marker:text-accent-400">
+          <ol className="mb-6 ml-4 list-decimal space-y-3 font-body text-base leading-relaxed text-grey-800 marker:text-accent-600 md:text-lg dark:text-grey-200 dark:marker:text-accent-400">
             {children}
           </ol>
         ),
