@@ -6,18 +6,26 @@ export const getGalleriesQuery = defineQuery(`
     title,
     galleryType,
     images[]{
-      image{
-        asset->{
-          _id,
-          url,
-          metadata{
-            dimensions,
-            lqip
-          }
+      image->{
+        _id,
+        title,
+        image{
+          asset->{
+            _id,
+            url,
+            metadata{
+              dimensions,
+              lqip,
+              palette
+            }
+          },
+          alt,
+          caption,
+          hotspot,
+          crop
         },
-        alt,
-        caption,
-        hotspot
+        category,
+        featured
       },
       showOnMobile
     },
@@ -31,18 +39,26 @@ export const getGalleryByTypeQuery = defineQuery(`
     title,
     galleryType,
     images[]{
-      image{
-        asset->{
-          _id,
-          url,
-          metadata{
-            dimensions,
-            lqip
-          }
+      image->{
+        _id,
+        title,
+        image{
+          asset->{
+            _id,
+            url,
+            metadata{
+              dimensions,
+              lqip,
+              palette
+            }
+          },
+          alt,
+          caption,
+          hotspot,
+          crop
         },
-        alt,
-        caption,
-        hotspot
+        category,
+        featured
       },
       showOnMobile
     },
@@ -56,18 +72,26 @@ export const getGalleryByIdQuery = defineQuery(`
     title,
     galleryType,
     images[]{
-      image{
-        asset->{
-          _id,
-          url,
-          metadata{
-            dimensions,
-            lqip
-          }
+      image->{
+        _id,
+        title,
+        image{
+          asset->{
+            _id,
+            url,
+            metadata{
+              dimensions,
+              lqip,
+              palette
+            }
+          },
+          alt,
+          caption,
+          hotspot,
+          crop
         },
-        alt,
-        caption,
-        hotspot
+        category,
+        featured
       },
       showOnMobile
     },

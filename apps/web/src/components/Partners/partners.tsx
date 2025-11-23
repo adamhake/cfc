@@ -40,11 +40,11 @@ export default function Partners({ partners }: PartnersProps) {
               href={partner.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative overflow-hidden rounded-2xl border border-accent-600/20 bg-gradient-to-br from-grey-100/10 to-grey-100/50 p-8 shadow-sm transition-all duration-300 hover:shadow-md lg:p-12 dark:border-accent-500/20 dark:from-primary-900 dark:to-primary-900/80"
+              className="group relative overflow-hidden rounded-2xl border border-accent-600/20 bg-gradient-to-br from-grey-100/10 to-grey-100/50 p-8 shadow-sm transition-all duration-300 hover:shadow-md lg:p-12 dark:border-olive-600 dark:from-primary-900 dark:to-primary-900/80"
             >
               <div className="relative space-y-6">
                 {/* Logo */}
-                <div className="flex items-center justify-center rounded-xl bg-white p-6 shadow-sm transition-transform duration-300 group-hover:scale-105 dark:border dark:border-olive-500/50 dark:bg-transparent">
+                <div className="flex items-center justify-center rounded-xl bg-white p-6 shadow-sm transition-transform duration-300 group-hover:scale-105 dark:border dark:border-olive-500/50 dark:bg-grey-200">
                   {isSanityLogo(partner.logo) ? (
                     <SanityImage
                       image={partner.logo}

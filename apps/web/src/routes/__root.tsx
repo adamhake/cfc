@@ -76,6 +76,25 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         href: appCss,
         suppressHydrationWarning: true,
       },
+      // In development, load fonts from Google Fonts
+      // In production, vite-plugin-webfont-dl will inject local fonts
+      ...(import.meta.env.DEV
+        ? [
+            {
+              rel: "preconnect" as const,
+              href: "https://fonts.googleapis.com",
+            },
+            {
+              rel: "preconnect" as const,
+              href: "https://fonts.gstatic.com",
+              crossOrigin: "anonymous" as const,
+            },
+            {
+              rel: "stylesheet" as const,
+              href: "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Vollkorn+SC:wght@400;600;700;900&display=swap",
+            },
+          ]
+        : []),
       {
         rel: "icon",
         type: "image/png",

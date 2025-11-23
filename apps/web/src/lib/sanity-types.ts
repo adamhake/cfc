@@ -139,6 +139,8 @@ export interface SanitySiteSettings {
     siteTitle?: string;
     ogImage?: SanityImage;
   };
+  getInvolvedGallery?: SanityGallery;
+  featuredQuote?: SanityQuote;
 }
 
 export interface SanityAmenitiesPage {

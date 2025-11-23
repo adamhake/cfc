@@ -243,9 +243,9 @@ export function SanityBackgroundImage({
     ...style,
   };
 
-  // Add LQIP as initial background
+  // Add LQIP as fallback background (appears behind the main image)
   if (lqip) {
-    backgroundStyle.backgroundImage = `url(${lqip}), ${backgroundStyle.backgroundImage}`;
+    backgroundStyle.backgroundImage = `url(${url}), url(${lqip})`;
   }
 
   return (

@@ -133,6 +133,20 @@ export default defineType({
         }),
       ],
     }),
+    defineField({
+      name: "getInvolvedGallery",
+      title: "Get Involved Gallery",
+      type: "reference",
+      to: [{ type: "gallery" }],
+      description: "Gallery to display in the 'Get Involved' section",
+    }),
+    defineField({
+      name: "featuredQuote",
+      title: "Featured Quote",
+      type: "reference",
+      to: [{ type: "quote" }],
+      description: "Quote to display on the homepage",
+    }),
   ],
   preview: {
     prepare() {

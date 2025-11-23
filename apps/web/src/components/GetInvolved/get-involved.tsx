@@ -1,5 +1,6 @@
 import { FacebookIcon } from "@/components/FacebookIcon/facebook-icon";
 import { InstagramIcon } from "@/components/InstagramIcon/instagram-icon";
+import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { AnimatePresence, motion } from "framer-motion";
@@ -11,13 +12,6 @@ interface GetInvolvedProps {
   description?: string;
 }
 
-const images = [
-  { src: "/get_involved.webp", alt: "Volunteers at Chimborazo Park" },
-  { src: "/cleanup_2024.webp", alt: "Community park cleanup event" },
-  { src: "/grove_cleanup.webp", alt: "Tree grove restoration" },
-  { src: "/volunteers.webp", alt: "Park volunteers gathering" },
-];
-
 export default function GetInvolved({
   title = "Get Involved",
   description = "Join our community of volunteers and supporters. Get updates on park projects, upcoming events, and opportunities to make a difference in Chimborazo Park.",
@@ -25,6 +19,17 @@ export default function GetInvolved({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { data: siteSettings } = useSiteSettings();
   const prefersReducedMotion = useReducedMotion();
+
+  // Get images from the gallery in site settings, or use empty array as fallback
+  // Type assertion needed until GROQ types are regenerated
+  const images =
+    (
+      siteSettings as {
+        getInvolvedGallery?: { images?: { image?: { image?: SanityImageObject } }[] };
+      }
+    )?.getInvolvedGallery?.images
+      ?.map((item) => item.image?.image)
+      .filter((img): img is SanityImageObject => img != null) || [];
 
   useEffect(() => {
     // Only cycle images if user hasn't requested reduced motion
@@ -37,28 +42,42 @@ export default function GetInvolved({
     }, 5000); // Change image every 5 seconds
 
     return () => clearInterval(interval);
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, images.length]);
 
   return (
     <div className="px-4 lg:px-0">
       <div className="mx-auto max-w-6xl">
-        <div className="overflow-hidden rounded-3xl bg-white shadow-md dark:border dark:border-accent-600/20 dark:bg-transparent">
+        <div className="overflow-hidden rounded-3xl bg-white shadow-md dark:border dark:border-accent-800 dark:bg-accent-950">
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Image side with cycling images */}
             <div className="relative h-64 lg:h-auto">
-              <AnimatePresence initial={false}>
-                <motion.img
-                  key={currentImageIndex}
-                  src={images[currentImageIndex].src}
-                  alt={images[currentImageIndex].alt}
-                  className="absolute inset-0 h-full w-full object-cover"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.8, ease: "easeInOut" }}
-                />
-              </AnimatePresence>
-              <div className="absolute inset-0 bg-gradient-to-br from-accent-600/20 to-accent-800/25 dark:from-accent-900/20 dark:to-accent-950/30"></div>
+              {images.length > 0 ? (
+                <>
+                  <AnimatePresence initial={false}>
+                    <motion.div
+                      key={currentImageIndex}
+                      className="absolute inset-0"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.8, ease: "easeInOut" }}
+                    >
+                      <SanityImage
+                        image={images[currentImageIndex]}
+                        alt={images[currentImageIndex].alt || ""}
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        className="h-full w-full object-cover"
+                        priority={currentImageIndex === 0}
+                      />
+                    </motion.div>
+                  </AnimatePresence>
+                  <div className="absolute inset-0 bg-gradient-to-br from-accent-600/20 to-accent-800/25 dark:from-accent-900/20 dark:to-accent-950/30"></div>
+                </>
+              ) : (
+                <div className="flex h-full items-center justify-center bg-accent-100 dark:bg-accent-900">
+                  <p className="text-accent-600 dark:text-accent-400">No images available</p>
+                </div>
+              )}
             </div>
 
             {/* Content side */}

@@ -6,9 +6,11 @@ import ImageGallery from "@/components/ImageGallery/image-gallery";
 import Partners from "@/components/Partners/partners";
 import Quote from "@/components/Quote/quote";
 import RotatingImages from "@/components/RotatingImages/rotating-images";
+import type { SanityImageObject } from "@/components/SanityImage/sanity-image";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import Vision from "@/components/Vision/vision";
 import { events } from "@/data/events";
+import { siteSettingsQueryOptions } from "@/hooks/useSiteSettings";
 import { queryKeys } from "@/lib/query-keys";
 import { sanityClient } from "@/lib/sanity";
 import type { SanityHomePage } from "@/lib/sanity-types";
@@ -37,8 +39,12 @@ const homePageQueryOptions = queryOptions({
 export const Route = createFileRoute("/")({
   component: Home,
   loader: async ({ context }) => {
-    // Prefetch homepage data on the server
-    return context.queryClient.ensureQueryData(homePageQueryOptions);
+    // Prefetch homepage data and site settings on the server
+    const [homePageData] = await Promise.all([
+      context.queryClient.ensureQueryData(homePageQueryOptions),
+      context.queryClient.ensureQueryData(siteSettingsQueryOptions),
+    ]);
+    return homePageData;
   },
   head: () => ({
     meta: generateMetaTags({
@@ -51,8 +57,7 @@ export const Route = createFileRoute("/")({
     }),
     links: generateLinkTags({
       canonical: SITE_CONFIG.url,
-      preloadImage: "/bike_sunset.webp",
-      preloadImagePriority: "high",
+      // Note: Hero image is now loaded from Sanity CMS, no static preload needed
     }),
   }),
 });
@@ -328,15 +333,11 @@ function Home() {
         quoteText={homePageData?.quote?.quoteText}
         attribution={homePageData?.quote?.attribution}
         backgroundImage={
-          homePageData?.quote?.backgroundImage?.asset?.url
-            ? {
-                src: homePageData.quote.backgroundImage.asset.url,
-                alt: homePageData.quote.backgroundImage.alt || "Quote background",
-                width: homePageData.quote.backgroundImage.asset.metadata?.dimensions?.width || 1600,
-                height:
-                  homePageData.quote.backgroundImage.asset.metadata?.dimensions?.height || 1200,
-              }
-            : undefined
+          (
+            homePageData?.quote?.backgroundImage as {
+              image?: SanityImageObject;
+            }
+          )?.image
         }
       />
     </div>
