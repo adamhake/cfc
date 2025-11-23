@@ -1,13 +1,20 @@
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
+import {
+  sanityProjectIdSchema,
+  sanityDatasetSchema,
+  sanityApiVersionSchema,
+  sanityApiTokenSchema,
+} from "@chimborazo/sanity-config";
 
 export const env = createEnv({
   server: {
     SERVER_URL: z.string().url().optional(),
-    SANITY_API_TOKEN: z.string().optional(),
+    SANITY_API_TOKEN: sanityApiTokenSchema,
     SANITY_WEBHOOK_SECRET: z.string().optional(),
     NETLIFY_AUTH_TOKEN: z.string().optional(),
     NETLIFY_SITE_ID: z.string().optional(),
+    ANTHROPIC_API_KEY: z.string().optional(),
   },
 
   /**
@@ -18,9 +25,9 @@ export const env = createEnv({
 
   client: {
     VITE_APP_TITLE: z.string().min(1).optional(),
-    VITE_SANITY_PROJECT_ID: z.string().min(1),
-    VITE_SANITY_DATASET: z.string().default("production"),
-    VITE_SANITY_API_VERSION: z.string().default("2024-01-01"),
+    VITE_SANITY_PROJECT_ID: sanityProjectIdSchema,
+    VITE_SANITY_DATASET: sanityDatasetSchema,
+    VITE_SANITY_API_VERSION: sanityApiVersionSchema,
   },
 
   /**
@@ -34,6 +41,7 @@ export const env = createEnv({
     SANITY_WEBHOOK_SECRET: process.env.SANITY_WEBHOOK_SECRET,
     NETLIFY_AUTH_TOKEN: process.env.NETLIFY_AUTH_TOKEN,
     NETLIFY_SITE_ID: process.env.NETLIFY_SITE_ID,
+    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     // Client-side variables from import.meta.env
     VITE_APP_TITLE: import.meta.env.VITE_APP_TITLE,
     VITE_SANITY_PROJECT_ID: import.meta.env.VITE_SANITY_PROJECT_ID,

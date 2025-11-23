@@ -27,6 +27,16 @@ export type * from "./sanity.types"
 export { createSanityClient, createImageUrlBuilder, urlForImage } from "./client"
 export type { SanityConfig } from "./client"
 
+// Export environment schemas
+export {
+  sanityProjectIdSchema,
+  sanityDatasetSchema,
+  sanityApiVersionSchema,
+  sanityApiTokenSchema,
+  sanityConfigSchema,
+} from "./env-schema"
+export type { SanityConfig as SanityEnvConfig, SanityConfigWithToken } from "./env-schema"
+
 // Re-export types from Sanity for convenience
 export type { SanityClient } from "@sanity/client"
 export type { SanityImageSource } from "@sanity/image-url/lib/types/types"
