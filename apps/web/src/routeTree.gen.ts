@@ -16,7 +16,9 @@ import { Route as DonateRouteImport } from './routes/donate'
 import { Route as ComponentsRouteImport } from './routes/components'
 import { Route as AmenitiesRouteImport } from './routes/amenities'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
 import { Route as EventsIndexRouteImport } from './routes/events/index'
+import { Route as ProjectsSlugRouteImport } from './routes/projects/$slug'
 import { Route as EventsSlugRouteImport } from './routes/events/$slug'
 import { Route as ApiGenerateMetadataRouteImport } from './routes/api/generate-metadata'
 import { Route as ApiDraftRouteImport } from './routes/api/draft'
@@ -57,9 +59,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
+  id: '/projects/',
+  path: '/projects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EventsIndexRoute = EventsIndexRouteImport.update({
   id: '/events/',
   path: '/events/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
+  id: '/projects/$slug',
+  path: '/projects/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EventsSlugRoute = EventsSlugRouteImport.update({
@@ -94,7 +106,9 @@ export interface FileRoutesByFullPath {
   '/api/draft': typeof ApiDraftRoute
   '/api/generate-metadata': typeof ApiGenerateMetadataRoute
   '/events/$slug': typeof EventsSlugRoute
+  '/projects/$slug': typeof ProjectsSlugRoute
   '/events': typeof EventsIndexRoute
+  '/projects': typeof ProjectsIndexRoute
   '/api/webhooks/sanity': typeof ApiWebhooksSanityRoute
 }
 export interface FileRoutesByTo {
@@ -108,7 +122,9 @@ export interface FileRoutesByTo {
   '/api/draft': typeof ApiDraftRoute
   '/api/generate-metadata': typeof ApiGenerateMetadataRoute
   '/events/$slug': typeof EventsSlugRoute
+  '/projects/$slug': typeof ProjectsSlugRoute
   '/events': typeof EventsIndexRoute
+  '/projects': typeof ProjectsIndexRoute
   '/api/webhooks/sanity': typeof ApiWebhooksSanityRoute
 }
 export interface FileRoutesById {
@@ -123,7 +139,9 @@ export interface FileRoutesById {
   '/api/draft': typeof ApiDraftRoute
   '/api/generate-metadata': typeof ApiGenerateMetadataRoute
   '/events/$slug': typeof EventsSlugRoute
+  '/projects/$slug': typeof ProjectsSlugRoute
   '/events/': typeof EventsIndexRoute
+  '/projects/': typeof ProjectsIndexRoute
   '/api/webhooks/sanity': typeof ApiWebhooksSanityRoute
 }
 export interface FileRouteTypes {
@@ -139,7 +157,9 @@ export interface FileRouteTypes {
     | '/api/draft'
     | '/api/generate-metadata'
     | '/events/$slug'
+    | '/projects/$slug'
     | '/events'
+    | '/projects'
     | '/api/webhooks/sanity'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -153,7 +173,9 @@ export interface FileRouteTypes {
     | '/api/draft'
     | '/api/generate-metadata'
     | '/events/$slug'
+    | '/projects/$slug'
     | '/events'
+    | '/projects'
     | '/api/webhooks/sanity'
   id:
     | '__root__'
@@ -167,7 +189,9 @@ export interface FileRouteTypes {
     | '/api/draft'
     | '/api/generate-metadata'
     | '/events/$slug'
+    | '/projects/$slug'
     | '/events/'
+    | '/projects/'
     | '/api/webhooks/sanity'
   fileRoutesById: FileRoutesById
 }
@@ -182,7 +206,9 @@ export interface RootRouteChildren {
   ApiDraftRoute: typeof ApiDraftRoute
   ApiGenerateMetadataRoute: typeof ApiGenerateMetadataRoute
   EventsSlugRoute: typeof EventsSlugRoute
+  ProjectsSlugRoute: typeof ProjectsSlugRoute
   EventsIndexRoute: typeof EventsIndexRoute
+  ProjectsIndexRoute: typeof ProjectsIndexRoute
   ApiWebhooksSanityRoute: typeof ApiWebhooksSanityRoute
 }
 
@@ -237,11 +263,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/projects/': {
+      id: '/projects/'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/events/': {
       id: '/events/'
       path: '/events'
       fullPath: '/events'
       preLoaderRoute: typeof EventsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects/$slug': {
+      id: '/projects/$slug'
+      path: '/projects/$slug'
+      fullPath: '/projects/$slug'
+      preLoaderRoute: typeof ProjectsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/events/$slug': {
@@ -286,7 +326,9 @@ const rootRouteChildren: RootRouteChildren = {
   ApiDraftRoute: ApiDraftRoute,
   ApiGenerateMetadataRoute: ApiGenerateMetadataRoute,
   EventsSlugRoute: EventsSlugRoute,
+  ProjectsSlugRoute: ProjectsSlugRoute,
   EventsIndexRoute: EventsIndexRoute,
+  ProjectsIndexRoute: ProjectsIndexRoute,
   ApiWebhooksSanityRoute: ApiWebhooksSanityRoute,
 }
 export const routeTree = rootRouteImport

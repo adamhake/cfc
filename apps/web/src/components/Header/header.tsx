@@ -227,6 +227,19 @@ export default function Header() {
                     </li>
                     <li>
                       <Link
+                        to="/projects"
+                        onClick={() => setMenuOpen(false)}
+                        className="group inline-block font-body text-lg font-medium text-grey-800 transition focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-100"
+                      >
+                        <span
+                          className={`border-b-2 transition group-hover:border-accent-600 dark:group-hover:border-accent-400 ${currentPath === "/projects" ? "border-accent-600 dark:border-accent-400" : "border-transparent"}`}
+                        >
+                          Projects
+                        </span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
                         to="/events"
                         onClick={() => setMenuOpen(false)}
                         className="group inline-block font-body text-lg font-medium text-grey-800 transition focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-100"
@@ -381,6 +394,19 @@ export default function Header() {
                       className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/amenities" ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
                     >
                       Amenities
+                    </Link>
+                  </motion.li>
+                  <motion.li
+                    initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: prefersReducedMotion ? 0 : 0.03 }}
+                  >
+                    <Link
+                      to="/projects"
+                      onClick={() => setMenuOpen(false)}
+                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/events" ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
+                    >
+                      Porjects
                     </Link>
                   </motion.li>
                   <motion.li

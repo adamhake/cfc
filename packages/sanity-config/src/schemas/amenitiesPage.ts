@@ -1,5 +1,6 @@
 import { defineArrayMember, defineField, defineType } from "sanity"
 import type { SlugSourceContext } from "sanity"
+import React from "react"
 
 export default defineType({
   name: "amenitiesPage",
@@ -43,6 +44,26 @@ export default defineType({
           type: "block",
           styles: [
             { title: "Normal", value: "normal" },
+            {
+              title: "Leading",
+              value: "leading",
+              component: ({ children }: { children?: React.ReactNode }) =>
+                React.createElement(
+                  "p",
+                  { style: { fontSize: "1rem", lineHeight: "1.6" } },
+                  children
+                ),
+            },
+            {
+              title: "Leading Large",
+              value: "leading-lg",
+              component: ({ children }: { children?: React.ReactNode }) =>
+                React.createElement(
+                  "p",
+                  { style: { fontSize: "1.25rem", lineHeight: "1.6" } },
+                  children
+                ),
+            },
             { title: "H2", value: "h2" },
             { title: "H3", value: "h3" },
           ],

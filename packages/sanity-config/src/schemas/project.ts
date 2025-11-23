@@ -1,22 +1,27 @@
 import { defineField, defineType } from "sanity"
-import { CalendarIcon, ImageIcon, CogIcon } from "@sanity/icons"
+import { RocketIcon, ImageIcon, CogIcon, LinkIcon } from "@sanity/icons"
 import React from "react"
 
-export const eventSchema = defineType({
-  name: "event",
-  title: "Event",
+export const projectSchema = defineType({
+  name: "project",
+  title: "Project",
   type: "document",
   groups: [
     {
       name: "editorial",
       title: "Editorial",
-      icon: CalendarIcon,
+      icon: RocketIcon,
       default: true,
     },
     {
       name: "media",
       title: "Media",
       icon: ImageIcon,
+    },
+    {
+      name: "relationships",
+      title: "Relationships",
+      icon: LinkIcon,
     },
     {
       name: "settings",
@@ -49,57 +54,88 @@ export const eventSchema = defineType({
       type: "text",
       rows: 3,
       validation: (Rule) => Rule.required().max(300),
-      description: "Brief summary shown in event listings",
+      description: "Brief summary shown in project listings",
       group: "editorial",
     }),
     defineField({
       name: "heroImage",
       title: "Hero Image",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
-      fields: [
-        {
-          name: "alt",
-          type: "string",
-          title: "Alternative text",
-          validation: (Rule) => Rule.required(),
-        },
-        {
-          name: "caption",
-          type: "string",
-          title: "Caption",
-        },
-      ],
+      type: "reference",
+      to: [{ type: "mediaImage" }],
+      description: "Select an image from the media library to use as the hero image",
       validation: (Rule) => Rule.required(),
       group: "media",
     }),
     defineField({
-      name: "date",
-      title: "Event Date",
+      name: "status",
+      title: "Project Status",
+      type: "string",
+      options: {
+        list: [
+          { title: "Planned", value: "planned" },
+          { title: "Active", value: "active" },
+          { title: "Completed", value: "completed" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "planned",
+      validation: (Rule) => Rule.required(),
+      group: "editorial",
+    }),
+    defineField({
+      name: "startDate",
+      title: "Start Date",
       type: "date",
       validation: (Rule) => Rule.required(),
       group: "editorial",
     }),
     defineField({
-      name: "time",
-      title: "Event Time",
-      type: "string",
-      placeholder: "9am - 12pm",
-      validation: (Rule) => Rule.required(),
+      name: "completionDate",
+      title: "Completion Date",
+      type: "date",
+      description: "Optional - leave blank for ongoing projects",
+      group: "editorial",
+    }),
+    defineField({
+      name: "goal",
+      title: "Project Goal",
+      type: "text",
+      rows: 3,
+      description: "What this project aims to achieve",
       group: "editorial",
     }),
     defineField({
       name: "location",
       title: "Location",
       type: "string",
-      validation: (Rule) => Rule.required(),
+      description: "Specific area within the park, if applicable",
+      group: "editorial",
+    }),
+    defineField({
+      name: "budget",
+      title: "Budget",
+      type: "string",
+      description: "Project budget or funding goal (e.g., '$50,000')",
+      group: "editorial",
+    }),
+    defineField({
+      name: "category",
+      title: "Category",
+      type: "string",
+      options: {
+        list: [
+          { title: "Restoration", value: "restoration" },
+          { title: "Recreation", value: "recreation" },
+          { title: "Connection", value: "connection" },
+          { title: "Preservation", value: "preservation" },
+        ],
+      },
+      description: "Aligns with the Conservancy's vision pillars",
       group: "editorial",
     }),
     defineField({
       name: "body",
-      title: "Event Details",
+      title: "Project Details",
       type: "array",
       of: [
         {
@@ -201,15 +237,68 @@ export const eventSchema = defineType({
           ],
         },
       ],
-      description: "Extended event information (replaces markdown files)",
+      description: "Extended project information and updates",
       group: "editorial",
     }),
     defineField({
+      name: "gallery",
+      title: "Project Gallery",
+      type: "array",
+      of: [
+        {
+          type: "image",
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            {
+              name: "alt",
+              type: "string",
+              title: "Alternative text",
+            },
+            {
+              name: "caption",
+              type: "string",
+              title: "Caption",
+            },
+          ],
+        },
+      ],
+      description: "Additional images showcasing the project",
+      group: "media",
+    }),
+    defineField({
+      name: "relatedEvents",
+      title: "Related Events",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "event" }],
+        },
+      ],
+      description: "Events associated with this project",
+      group: "relationships",
+    }),
+    defineField({
+      name: "partners",
+      title: "Project Partners",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "partner" }],
+        },
+      ],
+      description: "Organizations partnering on this project",
+      group: "relationships",
+    }),
+    defineField({
       name: "featured",
-      title: "Featured Event",
+      title: "Featured Project",
       type: "boolean",
       initialValue: false,
-      description: "Show this event prominently on the homepage",
+      description: "Show this project prominently on the homepage",
       group: "settings",
     }),
     defineField({
@@ -223,28 +312,40 @@ export const eventSchema = defineType({
   preview: {
     select: {
       title: "title",
-      date: "date",
+      status: "status",
+      startDate: "startDate",
       media: "heroImage",
     },
     prepare(selection) {
-      const { title, date, media } = selection
+      const { title, status, startDate, media } = selection
+      const statusLabel =
+        status === "planned" ? "Planned" : status === "active" ? "Active" : "Completed"
+      const dateStr = startDate ? new Date(startDate).toLocaleDateString() : "No date"
       return {
         title: title,
-        subtitle: date ? new Date(date).toLocaleDateString() : "No date",
+        subtitle: `${statusLabel} • ${dateStr}`,
         media: media,
       }
     },
   },
   orderings: [
     {
-      title: "Event Date, Newest",
-      name: "dateDesc",
-      by: [{ field: "date", direction: "desc" }],
+      title: "Start Date, Newest",
+      name: "startDateDesc",
+      by: [{ field: "startDate", direction: "desc" }],
     },
     {
-      title: "Event Date, Oldest",
-      name: "dateAsc",
-      by: [{ field: "date", direction: "asc" }],
+      title: "Start Date, Oldest",
+      name: "startDateAsc",
+      by: [{ field: "startDate", direction: "asc" }],
+    },
+    {
+      title: "Status",
+      name: "statusOrder",
+      by: [
+        { field: "status", direction: "asc" },
+        { field: "startDate", direction: "desc" },
+      ],
     },
   ],
 })
