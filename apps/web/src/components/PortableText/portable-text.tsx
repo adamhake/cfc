@@ -1,7 +1,7 @@
-import { PortableText as BasePortableText } from "@portabletext/react";
-import type { PortableTextBlock, PortableTextComponents } from "@portabletext/react";
-import { SanityImage } from "@/components/SanityImage";
 import { FileAttachment } from "@/components/FileAttachment/file-attachment";
+import { SanityImage } from "@/components/SanityImage";
+import type { PortableTextBlock, PortableTextComponents } from "@portabletext/react";
+import { PortableText as BasePortableText } from "@portabletext/react";
 
 // Custom components for rendering portable text blocks
 const components: PortableTextComponents = {
@@ -48,14 +48,14 @@ const components: PortableTextComponents = {
   list: {
     // Bullet lists
     bullet: ({ children }) => (
-      <ul className="mb-4 ml-6 list-disc space-y-2 font-body text-grey-800 dark:text-grey-200">
+      <ul className="mb-4 ml-4 list-disc space-y-2 font-body text-grey-800 dark:text-grey-200">
         {children}
       </ul>
     ),
 
     // Numbered lists
     number: ({ children }) => (
-      <ol className="mb-4 ml-6 list-decimal space-y-2 font-body text-grey-800 dark:text-grey-200">
+      <ol className="mb-4 ml-4 list-decimal space-y-2 font-body text-grey-800 dark:text-grey-200">
         {children}
       </ol>
     ),
