@@ -6,10 +6,11 @@ import type { StructureResolver } from "sanity/structure"
 import { structureTool } from "sanity/structure"
 import { CogIcon, HomeIcon, InfoOutlineIcon } from "@sanity/icons"
 import { StudioLogo } from "./components/StudioLogo"
+import { env } from "./src/env"
 
-// Get environment variables
-const projectId = process.env.SANITY_STUDIO_PROJECT_ID || ""
-const dataset = process.env.SANITY_STUDIO_DATASET || "production"
+// Get environment variables from validated env config
+const projectId = env.SANITY_STUDIO_PROJECT_ID
+const dataset = env.SANITY_STUDIO_DATASET
 
 // Define custom structure for organizing content
 const structure: StructureResolver = (S) =>
@@ -73,7 +74,7 @@ export default defineConfig({
     visionTool(),
     presentationTool({
       previewUrl: {
-        origin: process.env.SANITY_STUDIO_PREVIEW_URL || "http://localhost:3000",
+        origin: env.SANITY_STUDIO_PREVIEW_URL,
         draftMode: {
           enable: "/api/draft",
         },
@@ -89,7 +90,7 @@ export default defineConfig({
     // Customize document behavior
     productionUrl: async (prev, context) => {
       const { document } = context
-      const baseUrl = process.env.SANITY_STUDIO_PREVIEW_URL || "http://localhost:3000"
+      const baseUrl = env.SANITY_STUDIO_PREVIEW_URL
 
       if (document._type === "event") {
         return `${baseUrl}/events/${(document.slug as { current?: string })?.current}`

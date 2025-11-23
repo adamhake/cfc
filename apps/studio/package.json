@@ -18,11 +18,13 @@
     "@anthropic-ai/sdk": "^0.70.1",
     "@sanity/icons": "^3.7.4",
     "@sanity/vision": "^4.18.0",
+    "@t3-oss/env-core": "^0.13.8",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "sanity": "^4.18.0",
     "sanity-plugin-media": "^4.0.0",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.1.19",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@chimborazo/sanity-config": "workspace:*",
