@@ -47,7 +47,7 @@ export default function GetInvolved({
   return (
     <div className="px-4 lg:px-0">
       <div className="mx-auto max-w-6xl">
-        <div className="overflow-hidden rounded-3xl bg-white shadow-md dark:border dark:border-accent-800 dark:bg-accent-950">
+        <div className="overflow-hidden rounded-3xl bg-white shadow-md dark:border dark:border-olive-700 dark:bg-olive-950">
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Image side with cycling images */}
             <div className="relative h-64 lg:h-auto">

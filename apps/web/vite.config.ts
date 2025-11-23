@@ -5,7 +5,6 @@ import viteReact from "@vitejs/plugin-react";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { defineConfig } from "vite";
-import webfontDownload from "vite-plugin-webfont-dl";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 
 const config = defineConfig({
@@ -27,9 +26,6 @@ const config = defineConfig({
     }),
     tailwindcss(),
     viteReact(),
-    webfontDownload([
-      "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Vollkorn+SC:wght@400;600;700;900&display=swap",
-    ]),
     {
       name: "force-exit-after-complete-build",
       apply: "build",
