@@ -103,7 +103,7 @@ export interface SanityImageProps {
   onLoad?: () => void;
 }
 
-const DEFAULT_BREAKPOINTS = [640, 1024, 1536, 1920];
+const DEFAULT_BREAKPOINTS = [640, 1024, 1536];
 const DEFAULT_QUALITY = 80;
 
 /**

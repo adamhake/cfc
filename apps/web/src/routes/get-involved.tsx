@@ -66,7 +66,7 @@ function GetInvolvedPage() {
         imageAlt="Volunteers working together at Chimborazo Park"
         imageWidth={1600}
         imageHeight={1200}
-        height="medium"
+        height="small"
       />
 
       <div>

@@ -242,6 +242,7 @@ export default function ImageGallery({
                       alt={props.alt}
                       className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      maxWidth={800}
                     />
                   ) : (
                     <Image
@@ -540,6 +541,7 @@ export default function ImageGallery({
                     alt={props.alt}
                     className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    maxWidth={800}
                   />
                 ) : (
                   <Image
@@ -600,6 +602,7 @@ export default function ImageGallery({
                   alt={props.alt}
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  maxWidth={800}
                 />
               ) : (
                 <Image
