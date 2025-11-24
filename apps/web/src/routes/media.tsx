@@ -89,7 +89,7 @@ function Media() {
         imageAlt="Chimborazo Park landscape"
         imageWidth={2000}
         imageHeight={1262}
-        height="medium"
+        height="small"
       />
       <Container maxWidth="6xl" spacing="md" className="py-16 md:py-24">
         {sanityImages.length === 0 ? (

@@ -1,9 +1,11 @@
-import { Image } from "@unpic/react";
+import { SanityImage, type SanityImageObject } from "../SanityImage/sanity-image";
 import { Button } from "../Button/button";
 
 interface HeroProps {
   heading?: string;
   subheading?: string;
+  heroImage?: SanityImageObject;
+  // Legacy support for static images
   imageSrc?: string;
   imageAlt?: string;
   imageWidth?: number;
@@ -19,6 +21,7 @@ interface HeroProps {
 export default function HeroSoftGradientDivider({
   heading = "Restoring Chimborazo Park for Our Community",
   subheading = "We're dedicated to preserving and beautifying this historic East End treasure—creating a safe, inclusive greenspace that honors the past and serves future generations.",
+  heroImage,
   imageSrc = "/bike_sunset.webp",
   imageAlt = "Chimborazo Park landscape with historic views of Richmond's Church Hill neighborhood",
   imageWidth = 2000,
@@ -29,16 +32,28 @@ export default function HeroSoftGradientDivider({
   return (
     <div className="relative min-h-[440px] w-full overflow-visible sm:min-h-[520px] lg:min-h-[650px]">
       {/* Hero Image */}
-      <Image
-        src={imageSrc}
-        alt={imageAlt}
-        width={imageWidth}
-        height={imageHeight}
-        className="absolute inset-0 h-full w-full object-cover"
-        loading="eager"
-        fetchpriority="high"
-        breakpoints={[320, 640, 1280, 1920, 2000]}
-      />
+      {heroImage ? (
+        <SanityImage
+          image={heroImage}
+          alt={heroImage.alt || imageAlt}
+          className="absolute inset-0 h-full w-full object-cover"
+          priority={true}
+          sizes="100vw"
+          maxWidth={2000}
+          breakpoints={[640, 1024, 1536, 2000]}
+          quality={85}
+        />
+      ) : (
+        <img
+          src={imageSrc}
+          alt={imageAlt}
+          width={imageWidth}
+          height={imageHeight}
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="eager"
+          fetchPriority="high"
+        />
+      )}
 
       {/* Soft flowing gradient overlays */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary-900/75 via-primary-800/50 to-primary-700/30 dark:from-grey-900/80 dark:via-grey-900/60 dark:to-grey-800/40"></div>

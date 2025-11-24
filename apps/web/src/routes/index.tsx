@@ -88,10 +88,7 @@ function Home() {
     ? {
         heading: homePageData.hero.heading,
         subheading: homePageData.hero.subheading,
-        imageSrc: homePageData.hero.heroImage.image.asset.url,
-        imageAlt: homePageData.hero.heroImage.image.alt,
-        imageWidth: homePageData.hero.heroImage.image.asset.metadata?.dimensions?.width,
-        imageHeight: homePageData.hero.heroImage.image.asset.metadata?.dimensions?.height,
+        heroImage: homePageData.hero.heroImage.image,
         ctaText: homePageData.hero.ctaButton?.text,
         ctaLink: homePageData.hero.ctaButton?.link,
       }
