@@ -1,6 +1,6 @@
 import { Button } from "@/components/Button/button";
+import Chip from "@/components/Chip";
 import Container from "@/components/Container/container";
-import EventStatusChip from "@/components/EventStatusChip/event-status-chip";
 import { Markdown } from "@/components/Markdown/markdown";
 import PageHero from "@/components/PageHero/page-hero";
 import { PortableText } from "@/components/PortableText/portable-text";
@@ -171,7 +171,7 @@ function EventPage() {
           titleSize="large"
         >
           <div className="mb-6 lg:mt-16">
-            <EventStatusChip isPast={isPast} />
+            <Chip label={isPast ? "Past" : "Upcoming"} variant={isPast ? "past" : "upcoming"} />
           </div>
         </PageHero>
 

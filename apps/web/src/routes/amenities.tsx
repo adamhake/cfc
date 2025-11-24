@@ -119,7 +119,7 @@ function RouteComponent() {
 
   return (
     <div>
-      <PageHero {...heroData} height="medium" priority={true} />
+      <PageHero {...heroData} height="small" priority={true} />
 
       {/* Main Content */}
       <Container spacing="none" className="space-y-24 py-16 pb-24">

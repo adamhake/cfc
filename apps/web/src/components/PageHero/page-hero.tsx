@@ -35,11 +35,11 @@ export default function PageHero({
   titleSize = "standard",
 }: PageHeroProps) {
   const heightClasses = {
-    auto: "min-h-[340px] sm:min-h-[420px]",
-    small: "min-h-[380px] sm:min-h-[460px]",
-    medium: "min-h-[440px] sm:min-h-[520px]",
-    large: "min-h-[520px] sm:min-h-[600px]",
-    event: "min-h-[620px] sm:min-h-[700px]",
+    auto: "min-h-[400px] sm:min-h-[480px] md:min-h-[520px]",
+    small: "min-h-[440px] sm:min-h-[500px] md:min-h-[540px]",
+    medium: "min-h-[480px] sm:min-h-[560px] md:min-h-[600px]",
+    large: "min-h-[540px] sm:min-h-[620px] md:min-h-[680px] lg:min-h-[720px]",
+    event: "min-h-[660px] sm:min-h-[740px] md:min-h-[780px]",
   };
 
   const selectedHeight = (heightClasses[height] ? height : "medium") as keyof typeof heightClasses;
@@ -57,11 +57,11 @@ export default function PageHero({
   };
 
   const classes = cn("relative w-full overflow-visible", {
-    "min-h-[340px] sm:min-h-[420px]": selectedHeight == "auto",
-    "min-h-[380px] sm:min-h-[460px]": selectedHeight == "small",
-    "min-h-[440px] sm:min-h-[520px]": selectedHeight == "medium",
-    "min-h-[520px] sm:min-h-[600px]": selectedHeight == "large",
-    "min-h-[620px] sm:min-h-[700px]": selectedHeight == "event",
+    "min-h-[400px] sm:min-h-[480px] md:min-h-[520px]": selectedHeight == "auto",
+    "min-h-[440px] sm:min-h-[500px] md:min-h-[540px]": selectedHeight == "small",
+    "min-h-[480px] sm:min-h-[560px] md:min-h-[600px]": selectedHeight == "medium",
+    "min-h-[540px] sm:min-h-[620px] md:min-h-[680px] lg:min-h-[720px]": selectedHeight == "large",
+    "min-h-[660px] sm:min-h-[740px] md:min-h-[780px]": selectedHeight == "event",
   });
 
   return (
@@ -93,12 +93,12 @@ export default function PageHero({
       ></div>
       <div
         className={cn(
-          "absolute inset-0 z-10 flex justify-center pt-20 pb-16 lg:py-8",
+          "absolute inset-0 z-10 flex justify-center pt-20 pb-24 lg:pt-32 lg:pb-42",
           alignmentClasses[alignment],
           paddingClasses,
         )}
       >
-        <div className="mx-auto flex w-full max-w-6xl justify-center">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-center">
           <div className="text-center">
             {children}
             <h1
@@ -110,7 +110,7 @@ export default function PageHero({
               {title}
             </h1>
             {subtitle && (
-              <p className="mt-6 font-body text-lg text-primary-100 md:text-xl dark:text-grey-200">
+              <p className="mx-auto mt-4 max-w-4xl font-body text-base leading-relaxed text-primary-100 md:mt-6 md:text-lg lg:text-xl dark:text-grey-200">
                 {subtitle}
               </p>
             )}
