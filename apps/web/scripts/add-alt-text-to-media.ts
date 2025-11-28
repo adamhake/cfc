@@ -1,7 +1,7 @@
 #!/usr/bin/env tsx
 import Anthropic from "@anthropic-ai/sdk";
 import { createClient } from "@sanity/client";
-import imageUrlBuilder from "@sanity/image-url";
+import { createImageUrlBuilder } from "@sanity/image-url";
 import dotenv from "dotenv";
 import path from "path";
 import readline from "readline";
@@ -23,7 +23,7 @@ const sanityClient = createClient({
 });
 
 // Create image URL builder
-const builder = imageUrlBuilder(sanityClient);
+const builder = createImageUrlBuilder(sanityClient);
 
 // Create Anthropic client for AI vision
 const anthropic = process.env.ANTHROPIC_API_KEY
