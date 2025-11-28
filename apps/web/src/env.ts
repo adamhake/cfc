@@ -15,6 +15,11 @@ export const env = createEnv({
     NETLIFY_AUTH_TOKEN: z.string().optional(),
     NETLIFY_SITE_ID: z.string().optional(),
     ANTHROPIC_API_KEY: z.string().optional(),
+    // Newsletter signup (Resend Audiences)
+    RESEND_API_KEY: z.string().optional(),
+    RESEND_AUDIENCE_ID: z.string().optional(),
+    TURNSTILE_SECRET_KEY: z.string().optional(),
+    ADMIN_EMAIL: z.string().email().optional().default("info@chimborazopark.org"),
   },
 
   /**
@@ -28,6 +33,8 @@ export const env = createEnv({
     VITE_SANITY_PROJECT_ID: sanityProjectIdSchema,
     VITE_SANITY_DATASET: sanityDatasetSchema,
     VITE_SANITY_API_VERSION: sanityApiVersionSchema,
+    // Newsletter signup
+    VITE_TURNSTILE_SITE_KEY: z.string().optional(),
   },
 
   /**
@@ -42,11 +49,16 @@ export const env = createEnv({
     NETLIFY_AUTH_TOKEN: process.env.NETLIFY_AUTH_TOKEN,
     NETLIFY_SITE_ID: process.env.NETLIFY_SITE_ID,
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
+    RESEND_AUDIENCE_ID: process.env.RESEND_AUDIENCE_ID,
+    TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
+    ADMIN_EMAIL: process.env.ADMIN_EMAIL,
     // Client-side variables from import.meta.env
     VITE_APP_TITLE: import.meta.env.VITE_APP_TITLE,
     VITE_SANITY_PROJECT_ID: import.meta.env.VITE_SANITY_PROJECT_ID,
     VITE_SANITY_DATASET: import.meta.env.VITE_SANITY_DATASET,
     VITE_SANITY_API_VERSION: import.meta.env.VITE_SANITY_API_VERSION,
+    VITE_TURNSTILE_SITE_KEY: import.meta.env.VITE_TURNSTILE_SITE_KEY,
   },
 
   /**
