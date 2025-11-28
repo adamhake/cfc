@@ -43,8 +43,8 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
             status: "active",
             configured: Boolean(
               process.env.SANITY_WEBHOOK_SECRET &&
-                process.env.NETLIFY_AUTH_TOKEN &&
-                process.env.NETLIFY_SITE_ID,
+              process.env.NETLIFY_AUTH_TOKEN &&
+              process.env.NETLIFY_SITE_ID,
             ),
           }),
           {
