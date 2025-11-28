@@ -1,6 +1,7 @@
 import Container from "@/components/Container/container";
 import { FacebookIcon } from "@/components/FacebookIcon/facebook-icon";
 import { InstagramIcon } from "@/components/InstagramIcon/instagram-icon";
+import { NewsletterForm } from "@/components/NewsletterForm";
 import PageHero from "@/components/PageHero/page-hero";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import SupportOption from "@/components/SupportOption/support-option";
@@ -19,7 +20,6 @@ import {
   Users,
   Wrench,
 } from "lucide-react";
-import { useState } from "react";
 import { Button } from "../components/Button/button";
 
 export const Route = createFileRoute("/get-involved")({
@@ -39,15 +39,7 @@ export const Route = createFileRoute("/get-involved")({
 });
 
 function GetInvolvedPage() {
-  const [email, setEmail] = useState("");
   const { data: siteSettings } = useSiteSettings();
-
-  const handleEmailSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // TODO: Implement email signup integration
-    console.log("Email signup:", email);
-    setEmail("");
-  };
 
   // Extract social media handles from URLs
   const facebookHandle =
@@ -340,32 +332,10 @@ function GetInvolvedPage() {
                 <p className="mb-6 font-body text-grey-700 dark:text-grey-300">
                   Get regular updates on park improvements, volunteer days, and community events.
                 </p>
-                <form onSubmit={handleEmailSubmit} className="space-y-3">
-                  <label
-                    htmlFor="newsletter-email"
-                    className="block font-body text-sm font-medium text-grey-800 dark:text-grey-200"
-                  >
-                    Email address
-                  </label>
-                  <div className="flex flex-col gap-3 sm:flex-row">
-                    <input
-                      id="newsletter-email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="your.email@example.com"
-                      required
-                      aria-required="true"
-                      className="flex-1 rounded-xl border border-accent-300 bg-white px-4 py-3 font-body text-grey-900 placeholder-grey-500 shadow-sm transition focus:border-accent-600 focus:ring-2 focus:ring-accent-600/20 focus:outline-none dark:border-accent-600/30 dark:bg-transparent dark:text-grey-100 dark:placeholder-grey-400 dark:focus:border-accent-500 dark:focus:ring-accent-500/20"
-                    />
-                    <Button type="submit" variant="accent" size="small">
-                      Subscribe
-                    </Button>
-                  </div>
-                  <p className="font-body text-xs text-grey-600 dark:text-grey-400">
-                    We respect your privacy. Unsubscribe anytime.
-                  </p>
-                </form>
+                <NewsletterForm
+                  source="get-involved-page"
+                  label="Email address"
+                />
               </div>
 
               {/* Social Media */}

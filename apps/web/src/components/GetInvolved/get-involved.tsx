@@ -1,12 +1,12 @@
 import Container from "@/components/Container/container";
 import { FacebookIcon } from "@/components/FacebookIcon/facebook-icon";
 import { InstagramIcon } from "@/components/InstagramIcon/instagram-icon";
+import { NewsletterForm } from "@/components/NewsletterForm";
 import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Button } from "../Button/button";
 
 interface GetInvolvedProps {
   title?: string;
@@ -92,27 +92,7 @@ export default function GetInvolved({
             </div>
 
             {/* Email signup form */}
-            <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
-              <label
-                htmlFor="email-signup"
-                className="block font-body text-sm font-medium text-grey-800 dark:text-grey-200"
-              >
-                Stay updated
-              </label>
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <input
-                  id="email-signup"
-                  type="email"
-                  placeholder="your.email@example.com"
-                  required
-                  aria-required="true"
-                  className="flex-1 rounded-xl border border-accent-300 bg-white px-4 py-3 font-body text-grey-900 placeholder-grey-500 shadow-sm transition focus:border-accent-600 focus:ring-2 focus:ring-accent-600/20 focus:outline-none dark:border-accent-600/30 dark:bg-transparent dark:text-grey-100 dark:placeholder-grey-400 dark:focus:border-accent-500 dark:focus:ring-accent-500/20"
-                />
-                <Button type="submit" variant="accent" size="small">
-                  Subscribe
-                </Button>
-              </div>
-            </form>
+            <NewsletterForm source="homepage-widget" label="Stay updated" />
 
             {/* Social links */}
             <div className="border-t border-accent-200/50 pt-6 dark:border-accent-700/30">

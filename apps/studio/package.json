@@ -17,6 +17,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.0",
     "@sanity/icons": "^3.7.4",
+    "@sanity/ui": "^2.16.22",
     "@sanity/vision": "^4.19.0",
     "@t3-oss/env-core": "^0.13.8",
     "react": "^19.2.0",
