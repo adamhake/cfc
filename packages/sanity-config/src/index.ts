@@ -39,4 +39,4 @@ export type { SanityConfig as SanityEnvConfig, SanityConfigWithToken } from "./e
 
 // Re-export types from Sanity for convenience
 export type { SanityClient } from "@sanity/client"
-export type { SanityImageSource } from "@sanity/image-url/lib/types/types"
+export type { SanityImageSource } from "@sanity/image-url"
