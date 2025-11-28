@@ -198,7 +198,7 @@ export interface SanityAmenitiesPage {
     icon: string;
     description: string;
     details?: string[];
-    image?: SanityMediaImage;
+    images?: SanityMediaImage[];
     externalLink?: string;
     linkText?: string;
     section: "upper-park" | "lower-park" | "both";

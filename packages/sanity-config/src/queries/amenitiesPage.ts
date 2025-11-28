@@ -27,7 +27,7 @@ export const getAmenitiesPageQuery = defineQuery(`
       icon,
       description,
       details,
-      image->{
+      images[]->{
         image{
           asset->{
             _id,

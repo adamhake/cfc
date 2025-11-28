@@ -16,7 +16,7 @@ import { queryKeys } from "@/lib/query-keys";
 import { sanityClient } from "@/lib/sanity";
 import type { SanityHomePage, SanityProject } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
-import { getHomePageQuery, featuredProjectsQuery } from "@chimborazo/sanity-config";
+import { featuredProjectsQuery, getHomePageQuery } from "@chimborazo/sanity-config";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Image } from "@unpic/react";
@@ -144,8 +144,8 @@ function Home() {
         <Container spacing="md">
           <SectionHeader title="Our Vision" size="large" />
           <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
-            Our mission is rooted in four core pillars that guide everything we do to make
-            Chimborazo Park a cherished landmark for generations to come.
+            Our mission is built on <strong>four core pillars</strong>. Explore each to see how
+            we're working to make Chimborazo Park a cherished landmark for generations to come.
           </p>
           <div className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-14">
             <Vision
@@ -227,7 +227,7 @@ function Home() {
           </p>
 
           {/* Content with subtle background and integrated image */}
-          <div className="mt-10 rounded-3xl bg-primary-50/30 md:p-10 lg:p-12 dark:bg-primary-900/10">
+          <div className="mt-10 rounded-3xl bg-primary-50/30 md:px-4 md:py-8 lg:px-8 lg:py-10 dark:bg-primary-900/10">
             <div className="grid gap-8 md:grid-cols-2 md:gap-10 lg:gap-12">
               {/* Text content */}
               <div className="space-y-6">
@@ -280,12 +280,15 @@ function Home() {
               <p className="text-gray-800 font-body md:text-lg dark:text-grey-200">
                 Today, the park includes scenic trails, a dog park, the historic Round House, a
                 picnic gazebo, and an eight-foot Statue of Liberty replica erected by Boy Scouts in
-                the 1950s. But time and reduced funding have taken their toll—many of the park's
-                original and historic features have fallen into disrepair.
+                the 1950s.
               </p>
 
               {/* Call-out final paragraph */}
-              <div className="rounded-2xl border border-primary-200/50 bg-gradient-to-br from-primary-100/60 to-primary-50/40 p-6 md:p-8 dark:border-primary-700/30 dark:from-primary-900/30 dark:to-primary-800/20">
+              <div className="space-y-6 rounded-2xl border border-primary-200/50 bg-gradient-to-br from-primary-100/60 to-primary-50/40 p-6 md:p-8 dark:border-primary-700/30 dark:from-primary-900/30 dark:to-primary-800/20">
+                <p className="text-gray-800 font-body text-lg leading-relaxed font-medium md:text-xl dark:text-grey-100">
+                  Time and reduced funding have taken their toll—many of the park's original and
+                  historic features have fallen into disrepair.
+                </p>
                 <p className="text-gray-800 font-body text-lg leading-relaxed font-medium md:text-xl dark:text-grey-100">
                   <strong className="font-display text-xl font-semibold text-primary-800 md:text-2xl dark:text-primary-200">
                     We're changing that.
