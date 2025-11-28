@@ -1,6 +1,23 @@
+import type { SanityImageObject } from "@/components/SanityImage/sanity-image";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { TreeDeciduous } from "lucide-react";
 import AmenityCard from "./amenity-card";
+
+const mockImage: SanityImageObject = {
+  asset: {
+    _id: "image-landscape-123",
+    url: "https://cdn.sanity.io/images/projectid/production/landscape-1920x1080.jpg",
+    metadata: {
+      dimensions: {
+        width: 1920,
+        height: 1080,
+        aspectRatio: 1.7778,
+      },
+      lqip: "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAALABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAQFBv/EACQQAAIBAwMDBQAAAAAAAAAAAAECAwAEEQUhMQZBUhMiUWGR/8QAFgEBAQEAAAAAAAAAAAAAAAAAAwAB/8QAGREAAwEBAQAAAAAAAAAAAAAAAAECESEx/9oADAMBAAIRAxEAPwDR6RpGmWMaSLpkKsrY+I/FeU/VGm2em65LBZWscMS8KqDH3XoMOnR7a/t7W3iWKNAPtA+K5X1rpEeoa5I8M6MrKPbu3GB/a7vS0s2H0f/Z",
+    },
+  },
+  alt: "Chimborazo Park scenic view",
+};
 
 const meta = {
   title: "Components/Content/AmenityCard",
@@ -53,9 +70,6 @@ export const WithImage: Story = {
     title: "Scenic View",
     description: "Breathtaking views of the city skyline.",
     icon: <TreeDeciduous />,
-    image: {
-      src: "https://images.unsplash.com/photo-1501854140884-074cf2b2b3af?auto=format&fit=crop&w=1000&q=80",
-      alt: "Scenic view",
-    },
+    images: [mockImage],
   },
 };

@@ -1,6 +1,7 @@
 import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image";
-import { Image } from "@unpic/react";
-import { cloneElement, isValidElement } from "react";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { AnimatePresence, motion } from "framer-motion";
+import { cloneElement, isValidElement, useEffect, useState } from "react";
 
 interface AmenityCardProps {
   title: string;
@@ -11,11 +12,7 @@ interface AmenityCardProps {
     text: string;
     url: string;
   };
-  image?: {
-    src: string;
-    alt: string;
-  };
-  sanityImage?: SanityImageObject;
+  images?: SanityImageObject[];
 }
 
 export default function AmenityCard({
@@ -24,9 +21,10 @@ export default function AmenityCard({
   description,
   details,
   link,
-  image,
-  sanityImage,
+  images = [],
 }: AmenityCardProps) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const prefersReducedMotion = useReducedMotion();
   // Apply consistent icon styling
   const styledIcon = isValidElement(icon)
     ? cloneElement(icon, {
@@ -34,34 +32,44 @@ export default function AmenityCard({
       } as React.HTMLAttributes<HTMLElement>)
     : icon;
 
-  const hasImage = sanityImage || image;
+  useEffect(() => {
+    // Only cycle images if user hasn't requested reduced motion
+    if (prefersReducedMotion) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    }, 4000); // Change image every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [prefersReducedMotion, images.length]);
 
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-accent-600/20 bg-gradient-to-br from-grey-50 to-grey-50/80 shadow-sm transition-all duration-300 hover:shadow-md dark:border-accent-500/20 dark:from-primary-900 dark:to-primary-900/80">
       {/* Subtle accent gradient overlay on hover */}
       <div className="absolute top-0 right-0 h-32 w-32 bg-gradient-to-br from-accent-600/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-accent-500/10"></div>
 
-      {hasImage && (
-        <div className="relative h-64 w-full overflow-hidden bg-grey-200 dark:bg-primary-700">
-          {sanityImage ? (
-            <SanityImage
-              image={sanityImage}
-              alt={sanityImage.alt || title}
-              className="h-full w-full object-cover"
-              sizes="(max-width: 768px) 100vw, 50vw"
-              maxWidth={800}
-            />
-          ) : image ? (
-            <Image
-              src={image.src}
-              alt={image.alt}
-              width={800}
-              height={400}
-              className="h-full w-full object-cover"
-              loading="lazy"
-              layout="constrained"
-            />
-          ) : null}
+      {images.length > 0 && (
+        <div className="relative h-80 w-full overflow-hidden bg-grey-200 dark:bg-primary-700">
+          <AnimatePresence initial={false}>
+            <motion.div
+              key={currentImageIndex}
+              className="absolute inset-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
+            >
+              <SanityImage
+                image={images[currentImageIndex]}
+                alt={images[currentImageIndex].alt || ""}
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="h-full w-full object-cover"
+                priority={currentImageIndex === 0}
+              />
+            </motion.div>
+          </AnimatePresence>
         </div>
       )}
       <div className="relative p-6 lg:p-8">

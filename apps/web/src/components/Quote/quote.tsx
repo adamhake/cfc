@@ -1,6 +1,6 @@
 import Container from "@/components/Container/container";
-import { SanityBackgroundImage } from "@/components/SanityImage/sanity-image";
 import type { SanityImageObject } from "@/components/SanityImage/sanity-image";
+import { SanityBackgroundImage } from "@/components/SanityImage/sanity-image";
 import { QuoteIcon } from "lucide-react";
 
 interface QuoteProps {
@@ -45,10 +45,10 @@ export default function Quote({
         <div className="absolute top-0 left-0 h-full w-full bg-primary-800/60 dark:bg-primary-900/70"></div>
         <div className="relative z-10 mx-auto max-w-3xl space-y-8 text-primary-50">
           <QuoteIcon className="text-primary-200 dark:text-primary-300" />
-          <p className="max-w-3xl font-body text-xl font-normal text-primary-50 lg:text-3xl dark:text-primary-100">
+          <p className="max-w-3xl font-display text-xl font-normal text-primary-50 lg:text-3xl dark:text-primary-100">
             {quoteText}
           </p>
-          <p className="font-display lg:text-xl">&mdash; {attribution}</p>
+          <p className="font-body lg:text-xl">&mdash; {attribution}</p>
         </div>
       </div>
     </Container>

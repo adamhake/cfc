@@ -42,3 +42,12 @@ export const Advocate: Story = {
     icon: <Leaf className="h-6 w-6 text-accent-600 dark:text-accent-400" />,
   },
 };
+
+export const ComingSoon: Story = {
+  args: {
+    title: "Adopt a Bench",
+    description: "Honor a loved one with a personalized dedication plaque on one of our park benches.",
+    icon: <Heart className="h-6 w-6 text-accent-600 dark:text-accent-400" />,
+    comingSoon: true,
+  },
+};

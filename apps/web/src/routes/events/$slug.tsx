@@ -211,8 +211,8 @@ function EventPage() {
             <aside className="lg:col-span-4">
               <div className="sticky top-24 space-y-6">
                 {/* Event Details Card */}
-                <div className="overflow-hidden rounded-2xl border border-accent-200 bg-white shadow-sm dark:border-accent-700/30 dark:bg-grey-800">
-                  <div className="bg-gradient-to-br from-accent-50 to-accent-100/50 px-6 py-5 dark:from-accent-900/30 dark:to-accent-800/20">
+                <div className="overflow-hidden rounded-2xl border border-accent-200 bg-white shadow-sm dark:border-accent-700/30 dark:bg-primary-950">
+                  <div className="bg-gradient-to-br from-accent-50 to-accent-100/50 px-6 py-5 dark:from-primary-900/30 dark:to-primary-800/20">
                     <h2 className="font-display text-xl font-semibold text-grey-900 md:text-2xl dark:text-grey-100">
                       Event Details
                     </h2>

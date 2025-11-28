@@ -195,7 +195,7 @@ function RouteComponent() {
                       }
                     : undefined
                 }
-                sanityImage={amenity.image?.image}
+                images={amenity.images?.map((img) => img.image).filter(Boolean) ?? []}
               />
             ))}
           </div>
@@ -227,7 +227,7 @@ function RouteComponent() {
                       }
                     : undefined
                 }
-                sanityImage={amenity.image?.image}
+                images={amenity.images?.map((img) => img.image).filter(Boolean) ?? []}
               />
             ))}
           </div>
@@ -248,24 +248,28 @@ function RouteComponent() {
               title="Volunteer with Us"
               description="Join Friends of Chimborazo Park and the Chimborazo Park Conservancy for clean-up days, plantings, and restoration projects. Every helping hand makes a difference."
               icon={<Heart className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />}
+              comingSoon
             />
 
             <SupportOption
               title="Adopt a Bench"
               description="Honor a loved one or celebrate a special occasion with a personalized dedication plaque on one of our park benches."
               icon={<Building2 className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />}
+              comingSoon
             />
 
             <SupportOption
               title="Adopt a Tree"
               description="Support the park's urban canopy with a tree dedication. Each adopted tree receives a sign with the species name and your dedication."
               icon={<Trees className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />}
+              comingSoon
             />
 
             <SupportOption
               title="Plant Spring Color"
               description="Donate tulips and daffodils to naturalize the hillsides along the bluff and brighten our flower beds each spring. We'll handle the planting."
               icon={<TreePine className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />}
+              comingSoon
             />
           </div>
         </div>
