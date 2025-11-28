@@ -1,44 +1,30 @@
-import { useMutation } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query";
+import type { SubscribeRequest, SubscribeResponse } from "@/types/newsletter";
 
-export type NewsletterSource = "get-involved-page" | "homepage-widget" | "footer"
+// Re-export NewsletterSource for backwards compatibility
+export type { NewsletterSource } from "@/types/newsletter";
 
-interface SubscribeRequest {
-  email: string
-  source: NewsletterSource
-  turnstileToken: string
-}
-
-interface SubscribeResponse {
-  success?: boolean
-  error?: string
-  message: string
-  alreadySubscribed?: boolean
-  reactivated?: boolean
-}
-
-async function subscribeToNewsletter(
-  data: SubscribeRequest
-): Promise<SubscribeResponse> {
+async function subscribeToNewsletter(data: SubscribeRequest): Promise<SubscribeResponse> {
   const response = await fetch("/api/newsletter-subscribe", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
-  })
+  });
 
-  const result = (await response.json()) as SubscribeResponse
+  const result = (await response.json()) as SubscribeResponse;
 
   if (!response.ok) {
-    throw new Error(result.message || "Failed to subscribe")
+    throw new Error(result.message || "Failed to subscribe");
   }
 
-  return result
+  return result;
 }
 
 export function useNewsletterSignup() {
   return useMutation({
     mutationFn: subscribeToNewsletter,
     mutationKey: ["newsletter", "subscribe"],
-  })
+  });
 }
