@@ -1,6 +1,8 @@
 import { createClient } from "@sanity/client"
-import imageUrlBuilder from "@sanity/image-url"
-import type { SanityImageSource } from "@sanity/image-url/lib/types/types"
+import {
+  createImageUrlBuilder as sanityImageUrlBuilder,
+  type SanityImageSource,
+} from "@sanity/image-url"
 
 export interface SanityConfig {
   projectId: string
@@ -30,7 +32,7 @@ export function createImageUrlBuilder(config: Pick<SanityConfig, "projectId" | "
     useCdn: true,
   })
 
-  return imageUrlBuilder(client)
+  return sanityImageUrlBuilder(client)
 }
 
 export function urlForImage(
