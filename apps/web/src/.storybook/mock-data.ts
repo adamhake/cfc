@@ -5,7 +5,7 @@
  * making it easier to maintain and update test data.
  */
 
-import type { SanityImageObject } from "@sanity/image-url/lib/types/types";
+import type { SanityImageObject } from "@/components/SanityImage/sanity-image";
 
 /**
  * Mock Sanity image objects

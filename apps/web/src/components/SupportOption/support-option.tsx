@@ -1,12 +1,25 @@
+import Chip from "@/components/Chip/chip";
+
 interface SupportOptionProps {
   title: string;
   description: string;
   icon: React.ReactNode;
+  comingSoon?: boolean;
 }
 
-export default function SupportOption({ title, description, icon }: SupportOptionProps) {
+export default function SupportOption({
+  title,
+  description,
+  icon,
+  comingSoon,
+}: SupportOptionProps) {
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-accent-600/20 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md dark:border-accent-500/20 dark:bg-primary-900">
+      {comingSoon && (
+        <div className="absolute top-4 right-4">
+          <Chip variant="comingSoon" />
+        </div>
+      )}
       {/* Icon with circular background */}
       <div
         className="relative mb-4 inline-flex rounded-full bg-accent-600/10 p-3 dark:bg-accent-500/10"

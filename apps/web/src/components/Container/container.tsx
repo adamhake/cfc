@@ -36,7 +36,7 @@ export default function Container({
   };
 
   const gutterClasses = {
-    default: "w-full px-4 sm:px-6 lg:px-0",
+    default: "w-full px-4 sm:px-6 lg:px-8 xl:px-0",
     none: "",
   };
 

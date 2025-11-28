@@ -163,11 +163,17 @@ export default defineType({
               description: "Bullet points highlighting key features",
             }),
             defineField({
-              name: "image",
-              title: "Image",
-              type: "reference",
-              to: [{ type: "mediaImage" }],
-              description: "Select an image from the media library",
+              name: "images",
+              title: "Images",
+              type: "array",
+              of: [
+                {
+                  type: "reference",
+                  to: [{ type: "mediaImage" }],
+                },
+              ],
+              description: "Select images from the media library",
+              validation: (rule) => rule.min(1),
             }),
             defineField({
               name: "externalLink",
@@ -205,7 +211,7 @@ export default defineType({
             select: {
               title: "title",
               section: "section",
-              media: "image.image",
+              media: "images.0.image",
             },
             prepare({ title, section, media }) {
               const sectionLabels: Record<string, string> = {

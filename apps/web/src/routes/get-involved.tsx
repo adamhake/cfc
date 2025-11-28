@@ -338,8 +338,7 @@ function GetInvolvedPage() {
                   </h3>
                 </div>
                 <p className="mb-6 font-body text-grey-700 dark:text-grey-300">
-                  Get monthly updates on park improvements, volunteer days, and community events
-                  delivered straight to your inbox.
+                  Get regular updates on park improvements, volunteer days, and community events.
                 </p>
                 <form onSubmit={handleEmailSubmit} className="space-y-3">
                   <label

@@ -12,7 +12,9 @@ export type ChipVariant =
   | "preservation"
   // Event status
   | "upcoming"
-  | "past";
+  | "past"
+  // General
+  | "comingSoon";
 
 export interface ChipProps {
   variant: ChipVariant;
@@ -35,6 +37,9 @@ const variantStyles: Record<ChipVariant, string> = {
   // Event Status
   upcoming: "bg-accent-500 text-white dark:bg-accent-500 dark:text-grey-900",
   past: "bg-primary-800 text-primary-50 dark:bg-primary-700 dark:text-primary-100",
+
+  // General
+  comingSoon: "bg-grey-200 text-grey-700 dark:bg-grey-700 dark:text-grey-200",
 };
 
 const defaultLabels: Record<ChipVariant, string> = {
@@ -52,6 +57,9 @@ const defaultLabels: Record<ChipVariant, string> = {
   // Event Status
   upcoming: "Upcoming",
   past: "Past",
+
+  // General
+  comingSoon: "Coming Soon",
 };
 
 export default function Chip({ variant, label, className }: ChipProps) {
