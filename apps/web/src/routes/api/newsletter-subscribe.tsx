@@ -1,6 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router"
-import { Resend } from "resend"
-import { env } from "@/env"
+import { createFileRoute } from "@tanstack/react-router";
+import { Resend } from "resend";
+import { env } from "@/env";
+import { subscribeRequestSchema, type SubscribeResponse } from "@/types/newsletter";
 
 /**
  * Newsletter subscription API endpoint
@@ -9,75 +10,122 @@ import { env } from "@/env"
  * - Cloudflare Turnstile verification for spam protection
  * - Resend Audiences/Contacts for subscriber management
  * - Optional admin email notification
+ * - Simple rate limiting
  */
 
-interface SubscribeRequest {
-  email: string
-  source: "get-involved-page" | "homepage-widget" | "footer"
-  turnstileToken: string
+interface TurnstileResponse {
+  success: boolean;
+  "error-codes"?: string[];
 }
 
-interface TurnstileResponse {
-  success: boolean
-  "error-codes"?: string[]
+/**
+ * Simple in-memory rate limiter
+ * Note: This resets on server restart. For production at scale,
+ * consider using Redis or a distributed rate limiting service.
+ */
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const RATE_LIMIT_MAX_REQUESTS = 5; // 5 requests per minute per IP
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const record = rateLimitMap.get(ip);
+
+  if (!record || now > record.resetTime) {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return false;
+  }
+
+  record.count++;
+  return record.count > RATE_LIMIT_MAX_REQUESTS;
+}
+
+// Clean up old rate limit entries periodically
+setInterval(
+  () => {
+    const now = Date.now();
+    for (const [ip, record] of rateLimitMap.entries()) {
+      if (now > record.resetTime) {
+        rateLimitMap.delete(ip);
+      }
+    }
+  },
+  5 * 60 * 1000,
+); // Clean every 5 minutes
+
+function jsonResponse(body: SubscribeResponse, status: number): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+function getClientIp(request: Request): string {
+  // Check common headers for proxied requests
+  const forwardedFor = request.headers.get("x-forwarded-for");
+  if (forwardedFor) {
+    return forwardedFor.split(",")[0].trim();
+  }
+
+  const realIp = request.headers.get("x-real-ip");
+  if (realIp) {
+    return realIp;
+  }
+
+  // Fallback - in serverless environments this may not be available
+  return "unknown";
 }
 
 export const Route = createFileRoute("/api/newsletter-subscribe")({
   server: {
     handlers: {
       GET: async () => {
+        // Return minimal information - don't expose configuration state
         return new Response(
           JSON.stringify({
-            service: "Newsletter Subscription API",
-            status: "active",
-            configured: Boolean(
-              env.RESEND_API_KEY &&
-                env.RESEND_AUDIENCE_ID &&
-                env.TURNSTILE_SECRET_KEY
-            ),
+            status: "ok",
           }),
           {
             status: 200,
             headers: { "Content-Type": "application/json" },
-          }
-        )
+          },
+        );
       },
 
       POST: async ({ request }) => {
         try {
-          const body = (await request.json()) as SubscribeRequest
-
-          // Validate required fields
-          if (!body.email || !body.turnstileToken) {
-            return new Response(
-              JSON.stringify({
-                error: "Validation failed",
-                message: "Email and security token are required",
-              }),
+          // Rate limiting
+          const clientIp = getClientIp(request);
+          if (isRateLimited(clientIp)) {
+            console.warn(`[Newsletter] Rate limit exceeded for IP: ${clientIp}`);
+            return jsonResponse(
               {
-                status: 400,
-                headers: { "Content-Type": "application/json" },
-              }
-            )
+                error: "Rate limit exceeded",
+                message: "Too many requests. Please try again in a minute.",
+              },
+              429,
+            );
           }
 
-          // Basic email validation
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-          if (!emailRegex.test(body.email)) {
-            return new Response(
-              JSON.stringify({
-                error: "Validation failed",
-                message: "Please enter a valid email address",
-              }),
+          // Parse and validate request body with Zod
+          const rawBody = await request.json();
+          const parseResult = subscribeRequestSchema.safeParse(rawBody);
+
+          if (!parseResult.success) {
+            const firstError = parseResult.error.issues[0];
+            return jsonResponse(
               {
-                status: 400,
-                headers: { "Content-Type": "application/json" },
-              }
-            )
+                error: "Validation failed",
+                message: firstError?.message || "Invalid request data",
+              },
+              400,
+            );
           }
+
+          const body = parseResult.data;
 
           // Verify Turnstile token
-          const turnstileSecret = env.TURNSTILE_SECRET_KEY
+          const turnstileSecret = env.TURNSTILE_SECRET_KEY;
           if (turnstileSecret) {
             const turnstileResponse = await fetch(
               "https://challenges.cloudflare.com/turnstile/v0/siteverify",
@@ -88,88 +136,85 @@ export const Route = createFileRoute("/api/newsletter-subscribe")({
                   secret: turnstileSecret,
                   response: body.turnstileToken,
                 }),
-              }
-            )
+              },
+            );
 
-            const turnstileResult =
-              (await turnstileResponse.json()) as TurnstileResponse
+            const turnstileResult = (await turnstileResponse.json()) as TurnstileResponse;
 
             if (!turnstileResult.success) {
               console.warn(
                 "[Newsletter] Turnstile verification failed:",
-                turnstileResult["error-codes"]
-              )
-              return new Response(
-                JSON.stringify({
-                  error: "Verification failed",
-                  message:
-                    "Security verification failed. Please try again.",
-                }),
+                turnstileResult["error-codes"],
+              );
+              return jsonResponse(
                 {
-                  status: 400,
-                  headers: { "Content-Type": "application/json" },
-                }
-              )
+                  error: "Verification failed",
+                  message: "Security verification failed. Please try again.",
+                },
+                400,
+              );
             }
           } else {
+            // In production, this should be configured
+            if (process.env.NODE_ENV === "production") {
+              console.error("[Newsletter] TURNSTILE_SECRET_KEY not configured in production!");
+              return jsonResponse(
+                {
+                  error: "Server configuration error",
+                  message: "Unable to process subscription",
+                },
+                500,
+              );
+            }
             console.warn(
-              "[Newsletter] TURNSTILE_SECRET_KEY not configured, skipping verification"
-            )
+              "[Newsletter] TURNSTILE_SECRET_KEY not configured, skipping verification (dev mode)",
+            );
           }
 
           // Validate Resend configuration
-          const resendApiKey = env.RESEND_API_KEY
-          const audienceId = env.RESEND_AUDIENCE_ID
+          const resendApiKey = env.RESEND_API_KEY;
+          const audienceId = env.RESEND_AUDIENCE_ID;
 
           if (!resendApiKey || !audienceId) {
-            console.error(
-              "[Newsletter] RESEND_API_KEY or RESEND_AUDIENCE_ID not configured"
-            )
-            return new Response(
-              JSON.stringify({
+            console.error("[Newsletter] RESEND_API_KEY or RESEND_AUDIENCE_ID not configured");
+            return jsonResponse(
+              {
                 error: "Server configuration error",
                 message: "Unable to process subscription",
-              }),
-              {
-                status: 500,
-                headers: { "Content-Type": "application/json" },
-              }
-            )
+              },
+              500,
+            );
           }
 
-          const resend = new Resend(resendApiKey)
+          const resend = new Resend(resendApiKey);
 
           // Add contact to Resend audience
           // Resend handles duplicates gracefully - if the contact exists, it updates it
-          const { data: contact, error: contactError } =
-            await resend.contacts.create({
-              audienceId,
-              email: body.email.toLowerCase(),
-              unsubscribed: false,
-            })
+          const { data: contact, error: contactError } = await resend.contacts.create({
+            audienceId,
+            email: body.email.toLowerCase(),
+            unsubscribed: false,
+          });
 
           if (contactError) {
-            console.error("[Newsletter] Failed to create contact:", contactError)
-            return new Response(
-              JSON.stringify({
+            console.error("[Newsletter] Failed to create contact:", contactError);
+            return jsonResponse(
+              {
                 error: "Subscription failed",
                 message: "Unable to add you to our mailing list. Please try again.",
-              }),
-              {
-                status: 500,
-                headers: { "Content-Type": "application/json" },
-              }
-            )
+              },
+              500,
+            );
           }
 
           console.log("[Newsletter] Contact added to audience:", {
             id: contact?.id,
             email: body.email,
             source: body.source,
-          })
+          });
 
-          // Send admin notification email (optional)
-          const adminEmail = env.ADMIN_EMAIL
+          // Send admin notification email (optional, rate limited separately)
+          const adminEmail = env.ADMIN_EMAIL;
           if (adminEmail) {
             try {
               await resend.emails.send({
@@ -178,50 +223,40 @@ export const Route = createFileRoute("/api/newsletter-subscribe")({
                 subject: "New Newsletter Signup - Chimborazo Park Conservancy",
                 text: `
 New subscriber: ${body.email}
-Source: ${body.source || "get-involved-page"}
+Source: ${body.source}
 Date: ${new Date().toLocaleString()}
 
 View all contacts in Resend dashboard:
 https://resend.com/audiences/${audienceId}
                 `.trim(),
-              })
-              console.log("[Newsletter] Admin notification email sent")
+              });
+              console.log("[Newsletter] Admin notification email sent");
             } catch (emailError) {
               // Log but don't fail the request if email fails
-              console.error(
-                "[Newsletter] Failed to send admin notification:",
-                emailError
-              )
+              console.error("[Newsletter] Failed to send admin notification:", emailError);
             }
           }
 
-          return new Response(
-            JSON.stringify({
+          return jsonResponse(
+            {
               success: true,
-              message:
-                "Thank you for subscribing! We'll keep you updated on park news and events.",
-            }),
-            {
-              status: 200,
-              headers: { "Content-Type": "application/json" },
-            }
-          )
+              message: "Thank you for subscribing! We'll keep you updated on park news and events.",
+            },
+            200,
+          );
         } catch (error) {
-          console.error("[Newsletter] Error processing subscription:", error)
+          console.error("[Newsletter] Error processing subscription:", error);
 
-          return new Response(
-            JSON.stringify({
-              error: "Internal server error",
-              message:
-                error instanceof Error ? error.message : "Unknown error",
-            }),
+          // Don't expose internal error details to the client
+          return jsonResponse(
             {
-              status: 500,
-              headers: { "Content-Type": "application/json" },
-            }
-          )
+              error: "Internal server error",
+              message: "An unexpected error occurred. Please try again.",
+            },
+            500,
+          );
         }
       },
     },
   },
-})
+});

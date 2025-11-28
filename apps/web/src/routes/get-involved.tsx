@@ -332,10 +332,7 @@ function GetInvolvedPage() {
                 <p className="mb-6 font-body text-grey-700 dark:text-grey-300">
                   Get regular updates on park improvements, volunteer days, and community events.
                 </p>
-                <NewsletterForm
-                  source="get-involved-page"
-                  label="Email address"
-                />
+                <NewsletterForm source="get-involved-page" label="Email address" />
               </div>
 
               {/* Social Media */}
