@@ -56,7 +56,8 @@
       "WebFetch(domain:tanstack.com)",
       "WebFetch(domain:www.sanity.io)",
       "mcp__sanity__get_schema",
-      "WebFetch(domain:storybook.js.org)"
+      "WebFetch(domain:storybook.js.org)",
+      "Bash(xargs cat:*)"
     ],
     "deny": [],
     "ask": []
