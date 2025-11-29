@@ -289,6 +289,7 @@ export default function Header() {
                         }
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label="Follow us on Facebook (opens in new window)"
                         className="transition-transform active:scale-90"
                       >
                         <FacebookIcon className="h-6 w-6 fill-grey-700 transition hover:fill-accent-600 dark:fill-primary-400 dark:hover:fill-accent-400" />
@@ -300,6 +301,7 @@ export default function Header() {
                         }
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label="Follow us on Instagram (opens in new window)"
                         className="transition-transform active:scale-90"
                       >
                         <InstagramIcon className="h-6 w-6 fill-grey-700 transition hover:fill-accent-600 dark:fill-primary-400 dark:hover:fill-accent-400" />
@@ -404,7 +406,7 @@ export default function Header() {
                     <Link
                       to="/projects"
                       onClick={() => setMenuOpen(false)}
-                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/events" ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
+                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/projects" ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
                     >
                       Projects
                     </Link>
@@ -461,6 +463,7 @@ export default function Header() {
                     }
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label="Follow us on Facebook (opens in new window)"
                     className="transition-transform active:scale-90"
                   >
                     <FacebookIcon className="h-6 w-6 fill-grey-700 transition hover:fill-accent-700 dark:fill-primary-400 dark:hover:fill-accent-400" />
@@ -472,6 +475,7 @@ export default function Header() {
                     }
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label="Follow us on Instagram (opens in new window)"
                     className="transition-transform active:scale-90"
                   >
                     <InstagramIcon className="h-6 w-6 fill-grey-700 transition hover:fill-accent-700 dark:fill-primary-400 dark:hover:fill-accent-400" />

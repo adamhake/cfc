@@ -66,9 +66,20 @@ export interface ButtonProps {
   rel?: string;
 
   /**
-   * Allow additional props like zeffy-form-link
+   * Download attribute for anchor tags (triggers download instead of navigation)
    */
-  [key: string]: unknown;
+  download?: boolean | string;
+
+  /**
+   * Aria label for accessibility
+   */
+  "aria-label"?: string;
+
+  /**
+   * Allow custom data attributes for external integrations (e.g., zeffy-form-link)
+   * Note: Using specific data attribute typing instead of index signature for better type safety
+   */
+  "data-zeffy-form-link"?: string;
 }
 
 /**
@@ -97,7 +108,9 @@ export const Button: React.FC<ButtonProps> = ({
   href,
   target,
   rel,
-  ...rest
+  download,
+  "aria-label": ariaLabel,
+  "data-zeffy-form-link": zeffyFormLink,
 }) => {
   const baseStyles =
     "cursor-pointer rounded-xl border-2 font-body font-semibold tracking-wider uppercase transition-all duration-150 no-underline";
@@ -147,6 +160,9 @@ export const Button: React.FC<ButtonProps> = ({
     className,
   );
 
+  // Build optional props object for clean rendering
+  const dataProps = zeffyFormLink ? { "data-zeffy-form-link": zeffyFormLink } : {};
+
   if (as === "a") {
     return (
       <a
@@ -154,25 +170,24 @@ export const Button: React.FC<ButtonProps> = ({
         onClick={onClick}
         target={target}
         rel={rel}
+        download={download}
+        aria-label={ariaLabel}
         className={combinedClassName}
-        {...rest}
+        {...dataProps}
       >
         {children}
       </a>
     );
   }
 
-  // Filter out non-DOM props before spreading to button element
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { asChild, ...domProps } = rest;
-
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
+      aria-label={ariaLabel}
       className={combinedClassName}
-      {...domProps}
+      {...dataProps}
     >
       {children}
     </button>
