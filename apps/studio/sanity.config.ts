@@ -1,4 +1,4 @@
-import { schemas, generateMetadataAction } from "@chimborazo/sanity-config"
+import { schemas, createGenerateMetadataAction } from "@chimborazo/sanity-config"
 import { visionTool } from "@sanity/vision"
 import { defineConfig } from "sanity"
 import { presentationTool } from "sanity/presentation"
@@ -12,6 +12,11 @@ import "./studio.css"
 // Get environment variables from validated env config
 const projectId = env.SANITY_STUDIO_PROJECT_ID
 const dataset = env.SANITY_STUDIO_DATASET
+
+// Create the generate metadata action with the configured API URL
+const generateMetadataAction = createGenerateMetadataAction({
+  apiUrl: env.SANITY_STUDIO_API_URL,
+})
 
 // Define custom structure for organizing content
 const structure: StructureResolver = (S) =>

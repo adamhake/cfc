@@ -22,7 +22,34 @@ interface MediaImageDocument {
   category?: string
 }
 
-export const generateMetadataAction: DocumentActionComponent = (props) => {
+/**
+ * Configuration options for the generate metadata action
+ */
+export interface GenerateMetadataActionConfig {
+  /** The API URL for the metadata generation endpoint */
+  apiUrl: string
+}
+
+/**
+ * Factory function to create a generate metadata document action.
+ * This allows the Studio to inject the API URL from its environment configuration.
+ *
+ * @param config - Configuration object containing the apiUrl
+ * @returns A DocumentActionComponent for generating AI metadata
+ *
+ * @example
+ * ```ts
+ * import { createGenerateMetadataAction } from "@chimborazo/sanity-config"
+ * import { env } from "./src/env"
+ *
+ * const generateMetadataAction = createGenerateMetadataAction({
+ *   apiUrl: env.SANITY_STUDIO_API_URL
+ * })
+ * ```
+ */
+export const createGenerateMetadataAction = (
+  config: GenerateMetadataActionConfig
+): DocumentActionComponent => (props) => {
   const { type, draft, published, onComplete } = props
   const { patch } = useDocumentOperation(props.id, props.type)
   const toast = useToast()
@@ -77,9 +104,8 @@ export const generateMetadataAction: DocumentActionComponent = (props) => {
 
       // Call the TanStack Start server function to generate metadata
       // This keeps the Anthropic API key secure on the server
-      // SANITY_STUDIO_API_URL is validated at build time via T3 Env with a default value
-      const apiUrl =
-        process.env.SANITY_STUDIO_API_URL || "http://localhost:3000/api/generate-metadata"
+      // The apiUrl is injected via the factory config from the Studio's env configuration
+      const apiUrl = config.apiUrl
 
       console.log("Calling API at:", apiUrl)
       console.log("Image URL:", imageUrl)
@@ -128,8 +154,7 @@ export const generateMetadataAction: DocumentActionComponent = (props) => {
 
       let errorMessage = "Unknown error occurred"
       if (error instanceof TypeError && error.message.includes("fetch")) {
-        errorMessage =
-          "Network error: Cannot reach the API server. Make sure the web app dev server is running on port 3000. Check console for details."
+        errorMessage = `Network error: Cannot reach the API server at ${config.apiUrl}. Check console for details.`
       } else if (error instanceof Error) {
         errorMessage = error.message
       }

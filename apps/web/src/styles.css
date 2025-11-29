@@ -1,4 +1,79 @@
 /* ============================================
+   DESIGN SYSTEM TOKENS
+   Reference guide for consistent UI development
+   ============================================ */
+
+/* TYPOGRAPHY SCALE
+   Use these responsive patterns for consistent heading hierarchy:
+
+   Hero H1:      text-4xl md:text-5xl lg:text-6xl  (36→48→60px)
+   Page H1:      text-3xl md:text-4xl lg:text-5xl  (30→36→48px)
+   Section H2:   text-2xl md:text-3xl lg:text-4xl  (24→30→36px)
+   Subsection H3: text-xl md:text-2xl lg:text-3xl  (20→24→30px)
+   Body Large:   text-lg md:text-xl                (18→20px)
+   Body:         text-base md:text-lg              (16→18px)
+   Small:        text-sm                           (14px)
+
+   Font families:
+   - font-display: Vollkorn SC (headings, emphasis)
+   - font-body: Montserrat (body text, UI elements)
+*/
+
+/* BORDER RADIUS SCALE
+   Standardized corner rounding for visual consistency:
+
+   Small elements (tags, badges):     rounded-lg   (8px)
+   Cards, buttons, inputs:            rounded-xl   (12px)
+   Hero sections, modals, images:     rounded-2xl  (16px)
+   Large feature sections:            rounded-3xl  (24px)
+   Circular elements (icons, avatars): rounded-full
+*/
+
+/* SPACING SCALE
+   Component padding tiers:
+
+   Tight (small cards, compact UI):   p-4          (16px)
+   Standard (cards, sections):        p-6 md:p-8   (24px → 32px)
+   Spacious (hero, featured):         p-8 lg:p-12  (32px → 48px)
+
+   Gap values for grids/flex (use multiples of 4):
+   - Tight:    gap-4   (16px)
+   - Standard: gap-8   (32px)
+   - Spacious: gap-12  (48px)
+
+   Section spacing:
+   - Between sections: space-y-16 md:space-y-24 (64px → 96px)
+*/
+
+/* SHADOW SCALE
+   Elevation hierarchy:
+
+   Cards at rest:      shadow-sm
+   Interactive hover:  shadow-md
+   Modals/overlays:    shadow-xl
+*/
+
+/* COLOR USAGE
+   Always use semantic tokens for theme-aware colors:
+
+   Primary colors:  primary-{50-950}  (main brand color)
+   Accent colors:   accent-{50-950}   (CTAs, highlights)
+   Neutral colors:  neutral-{50-950}  (backgrounds, borders)
+   Grey palette:    grey-{50-950}     (text, dividers)
+
+   Note: Use 'grey' (not 'gray') for consistency with design tokens.
+
+   DARK MODE CONTRAST GUIDELINES:
+   For dark backgrounds (primary-900, grey-800/900):
+   - Headings:    Use grey-100 (L=0.93) - excellent contrast
+   - Body text:   Use grey-200 (L=0.85) or grey-300 (L=0.78)
+   - Secondary:   Use grey-400 (L=0.71) - meets AA for large text
+   - Muted/meta:  Use grey-500 (L=0.64) - large text only (18px+)
+
+   Accent colors automatically lighten in dark mode (see .dark overrides).
+*/
+
+/* ============================================
    FONT FACE DECLARATIONS
    Self-hosted fonts for optimal performance
    ============================================ */

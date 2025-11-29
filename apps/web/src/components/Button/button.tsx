@@ -15,7 +15,7 @@ export interface ButtonProps {
    * Size of the button
    * @default "standard"
    */
-  size?: "standard" | "small";
+  size?: "standard" | "small" | "large";
 
   /**
    * Button content
@@ -116,8 +116,9 @@ export const Button: React.FC<ButtonProps> = ({
     "cursor-pointer rounded-xl border-2 font-body font-semibold tracking-wider uppercase transition-all duration-150 no-underline";
 
   const sizeStyles = {
-    standard: "px-6 py-3 text-base",
     small: "px-4 py-3 md:py-2 text-sm",
+    standard: "px-6 py-3 text-base",
+    large: "px-8 py-4 text-lg",
   };
 
   const variantStyles = {
