@@ -20,7 +20,6 @@ import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
 import { Route as EventsIndexRouteImport } from './routes/events/index'
 import { Route as ProjectsSlugRouteImport } from './routes/projects/$slug'
 import { Route as EventsSlugRouteImport } from './routes/events/$slug'
-import { Route as ApiNewsletterSubscribeRouteImport } from './routes/api/newsletter-subscribe'
 import { Route as ApiGenerateMetadataRouteImport } from './routes/api/generate-metadata'
 import { Route as ApiDraftRouteImport } from './routes/api/draft'
 import { Route as ApiWebhooksSanityRouteImport } from './routes/api/webhooks/sanity'
@@ -80,11 +79,6 @@ const EventsSlugRoute = EventsSlugRouteImport.update({
   path: '/events/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiNewsletterSubscribeRoute = ApiNewsletterSubscribeRouteImport.update({
-  id: '/api/newsletter-subscribe',
-  path: '/api/newsletter-subscribe',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiGenerateMetadataRoute = ApiGenerateMetadataRouteImport.update({
   id: '/api/generate-metadata',
   path: '/api/generate-metadata',
@@ -111,7 +105,6 @@ export interface FileRoutesByFullPath {
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/api/draft': typeof ApiDraftRoute
   '/api/generate-metadata': typeof ApiGenerateMetadataRoute
-  '/api/newsletter-subscribe': typeof ApiNewsletterSubscribeRoute
   '/events/$slug': typeof EventsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/events': typeof EventsIndexRoute
@@ -128,7 +121,6 @@ export interface FileRoutesByTo {
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/api/draft': typeof ApiDraftRoute
   '/api/generate-metadata': typeof ApiGenerateMetadataRoute
-  '/api/newsletter-subscribe': typeof ApiNewsletterSubscribeRoute
   '/events/$slug': typeof EventsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/events': typeof EventsIndexRoute
@@ -146,7 +138,6 @@ export interface FileRoutesById {
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/api/draft': typeof ApiDraftRoute
   '/api/generate-metadata': typeof ApiGenerateMetadataRoute
-  '/api/newsletter-subscribe': typeof ApiNewsletterSubscribeRoute
   '/events/$slug': typeof EventsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/events/': typeof EventsIndexRoute
@@ -165,7 +156,6 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/api/draft'
     | '/api/generate-metadata'
-    | '/api/newsletter-subscribe'
     | '/events/$slug'
     | '/projects/$slug'
     | '/events'
@@ -182,7 +172,6 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/api/draft'
     | '/api/generate-metadata'
-    | '/api/newsletter-subscribe'
     | '/events/$slug'
     | '/projects/$slug'
     | '/events'
@@ -199,7 +188,6 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/api/draft'
     | '/api/generate-metadata'
-    | '/api/newsletter-subscribe'
     | '/events/$slug'
     | '/projects/$slug'
     | '/events/'
@@ -217,7 +205,6 @@ export interface RootRouteChildren {
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   ApiDraftRoute: typeof ApiDraftRoute
   ApiGenerateMetadataRoute: typeof ApiGenerateMetadataRoute
-  ApiNewsletterSubscribeRoute: typeof ApiNewsletterSubscribeRoute
   EventsSlugRoute: typeof EventsSlugRoute
   ProjectsSlugRoute: typeof ProjectsSlugRoute
   EventsIndexRoute: typeof EventsIndexRoute
@@ -304,13 +291,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/newsletter-subscribe': {
-      id: '/api/newsletter-subscribe'
-      path: '/api/newsletter-subscribe'
-      fullPath: '/api/newsletter-subscribe'
-      preLoaderRoute: typeof ApiNewsletterSubscribeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/generate-metadata': {
       id: '/api/generate-metadata'
       path: '/api/generate-metadata'
@@ -345,7 +325,6 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   ApiDraftRoute: ApiDraftRoute,
   ApiGenerateMetadataRoute: ApiGenerateMetadataRoute,
-  ApiNewsletterSubscribeRoute: ApiNewsletterSubscribeRoute,
   EventsSlugRoute: EventsSlugRoute,
   ProjectsSlugRoute: ProjectsSlugRoute,
   EventsIndexRoute: EventsIndexRoute,
