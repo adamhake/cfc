@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
 import Anthropic from "@anthropic-ai/sdk";
+import { createFileRoute } from "@tanstack/react-router";
 
 /**
  * TanStack Start server function for AI-powered image metadata generation
@@ -31,6 +31,7 @@ interface RequestBody {
 // CORS configuration - restrict to Sanity Studio origins
 const ALLOWED_ORIGINS = [
   "https://chimborazo-park-conservancy.sanity.studio",
+  "https://studio.chimborazoparkconservancy.org",
   "http://localhost:3333", // Local Sanity Studio development
 ];
 
