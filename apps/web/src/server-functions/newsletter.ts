@@ -154,7 +154,7 @@ export const subscribeToNewsletter = createServerFn({ method: "POST" })
     // Only send if admin email is from verified domain for security
     const adminEmail = env.ADMIN_EMAIL;
     const fromEmail = env.NEWSLETTER_FROM_EMAIL;
-    const verifiedDomain = "@chimborazopark.org";
+    const verifiedDomain = env.VERIFIED_EMAIL_DOMAIN;
 
     if (adminEmail) {
       if (!adminEmail.endsWith(verifiedDomain)) {

@@ -55,6 +55,15 @@ function getImageProps(image: GalleryImage | SanityGalleryImage) {
   };
 }
 
+// Helper to generate stable keys for images
+function getImageKey(image: GalleryImage | SanityGalleryImage, index: number): string {
+  if (isSanityImage(image)) {
+    return image.asset._id;
+  }
+  // For legacy images, combine src with index as fallback
+  return `legacy-${index}-${image.src}`;
+}
+
 const gapClasses = {
   sm: "gap-2",
   md: "gap-4",
@@ -224,7 +233,7 @@ export default function ImageGallery({
             const props = getImageProps(image);
             return (
               <div
-                key={`${index}`}
+                key={getImageKey(image, index)}
                 className={`mb-${gap === "sm" ? "2" : gap === "md" ? "4" : "6"} break-inside-avoid ${props.showOnMobile === false ? "hidden sm:block" : ""}`}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
@@ -293,8 +302,12 @@ export default function ImageGallery({
             onClick={handleCloseModal}
             role="dialog"
             aria-modal="true"
-            aria-label="Image viewer"
+            aria-labelledby="gallery-modal-title"
           >
+            {/* Screen reader heading for modal context */}
+            <h2 id="gallery-modal-title" className="sr-only">
+              Image Viewer
+            </h2>
             <button
               ref={closeButtonRef}
               className="absolute top-4 right-4 z-10 rounded-full bg-white/10 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:ring-2 focus:ring-white focus:outline-none"
@@ -528,7 +541,7 @@ export default function ImageGallery({
           const props = getImageProps(image);
           return (
             <motion.div
-              key={index}
+              key={getImageKey(image, index)}
               className={`${index % 3 === 1 ? "mt-0 md:mt-8" : ""} ${props.showOnMobile === false ? "hidden sm:block" : ""}`}
               variants={itemVariants}
               onMouseEnter={() => setHoveredIndex(index)}
@@ -589,7 +602,7 @@ export default function ImageGallery({
         const props = getImageProps(image);
         return (
           <motion.div
-            key={index}
+            key={getImageKey(image, index)}
             className={props.showOnMobile === false ? "hidden sm:block" : ""}
             variants={itemVariants}
             onMouseEnter={() => setHoveredIndex(index)}

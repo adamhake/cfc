@@ -22,11 +22,15 @@ export const Route = createFileRoute("/api/draft")({
         // Ensure redirectTo is an absolute URL
         const redirectUrl = new URL(redirectTo, url.origin).toString();
 
+        // Add Secure flag in production to ensure cookie is only sent over HTTPS
+        const isProduction = process.env.NODE_ENV === "production";
+        const cookieValue = `sanity-preview=true; Path=/; HttpOnly; SameSite=Lax; Max-Age=3600${isProduction ? "; Secure" : ""}`;
+
         return new Response(null, {
           status: 307,
           headers: {
             Location: redirectUrl,
-            "Set-Cookie": "sanity-preview=true; Path=/; HttpOnly; SameSite=Lax; Max-Age=3600",
+            "Set-Cookie": cookieValue,
           },
         });
       },

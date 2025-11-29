@@ -5,6 +5,7 @@ import { Markdown } from "@/components/Markdown/markdown";
 import PageHero from "@/components/PageHero/page-hero";
 import { PortableText } from "@/components/PortableText/portable-text";
 import { events as staticEvents, type Event as StaticEvent } from "@/data/events";
+import { CACHE_PRESETS } from "@/lib/query-config";
 import { queryKeys } from "@/lib/query-keys";
 import { sanityClient } from "@/lib/sanity";
 import type { SanityEvent } from "@/lib/sanity-types";
@@ -31,33 +32,35 @@ const eventBySlugQueryOptions = (slug: string) =>
   queryOptions({
     queryKey: queryKeys.events.detail(slug),
     queryFn: async () => {
-      // Try to fetch from Sanity first
-      let sanityEvent: SanityEvent | null = null;
+      // Try to fetch from Sanity first (primary source)
       try {
-        sanityEvent = await sanityClient.fetch(eventBySlugQuery, { slug });
+        const sanityEvent = await sanityClient.fetch<SanityEvent | null>(eventBySlugQuery, {
+          slug,
+        });
+        if (sanityEvent) {
+          return {
+            event: sanityEvent,
+            isSanityEvent: true,
+            markdownContent: null,
+          };
+        }
+        // Sanity query succeeded but returned null - event doesn't exist there
       } catch (error) {
-        console.warn("Failed to fetch event from Sanity:", error);
+        // Log Sanity fetch errors but continue to fallback
+        console.warn("Failed to fetch event from Sanity, falling back to static events:", error);
       }
 
-      // If we have a Sanity event, use it
-      if (sanityEvent) {
-        return {
-          event: sanityEvent,
-          isSanityEvent: true,
-          markdownContent: null,
-        };
-      }
-
-      // Otherwise fall back to static events
+      // Fall back to static events (legacy data source)
       const staticEvent = staticEvents.find((e) => e.slug === slug);
       if (!staticEvent) {
+        // Event not found in either source
         throw notFound();
       }
 
+      // Load optional markdown content for static events
       let markdownContent: string | null = null;
       if (staticEvent.markdownFile) {
         try {
-          // Load markdown file from pre-loaded glob
           const markdownPath = `../../data/events/${staticEvent.markdownFile}`;
           const loadMarkdown = markdownFiles[markdownPath];
           if (loadMarkdown) {
@@ -65,6 +68,7 @@ const eventBySlugQueryOptions = (slug: string) =>
             markdownContent = typeof module === "string" ? module : module.default;
           }
         } catch (error) {
+          // Markdown is optional, log warning and continue
           console.warn(`Failed to load markdown file: ${staticEvent.markdownFile}`, error);
         }
       }
@@ -75,9 +79,7 @@ const eventBySlugQueryOptions = (slug: string) =>
         markdownContent,
       };
     },
-    // Event content rarely changes after publish - cache for 10 minutes
-    staleTime: 10 * 60 * 1000, // 10 minutes
-    gcTime: 30 * 60 * 1000, // 30 minutes
+    ...CACHE_PRESETS.EVENT_DETAIL,
   });
 
 export const Route = createFileRoute("/events/$slug")({

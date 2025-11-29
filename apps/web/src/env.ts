@@ -25,6 +25,8 @@ export const env = createEnv({
       .email()
       .optional()
       .default("noreply@chimborazopark.org"),
+    // Verified email domain for admin notifications (must match Resend domain)
+    VERIFIED_EMAIL_DOMAIN: z.string().optional().default("@chimborazopark.org"),
   },
 
   /**
@@ -59,6 +61,7 @@ export const env = createEnv({
     TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,
     NEWSLETTER_FROM_EMAIL: process.env.NEWSLETTER_FROM_EMAIL,
+    VERIFIED_EMAIL_DOMAIN: process.env.VERIFIED_EMAIL_DOMAIN,
     // Client-side variables from import.meta.env
     VITE_APP_TITLE: import.meta.env.VITE_APP_TITLE,
     VITE_SANITY_PROJECT_ID: import.meta.env.VITE_SANITY_PROJECT_ID,

@@ -1,43 +1,16 @@
 import { urlForImage } from "@/lib/sanity";
+import type { SanityImage as SanityImageType } from "@/lib/sanity-types";
 import type { SanityImageSource } from "@sanity/image-url";
 import type { CSSProperties } from "react";
 
-export interface SanityImageMetadata {
-  dimensions?: {
-    width: number;
-    height: number;
-    aspectRatio: number;
-  };
-  lqip?: string;
-  blurhash?: string;
-  palette?: {
-    dominant?: {
-      background: string;
-      foreground: string;
-    };
-  };
-}
+// Re-export types for external use
+// These are derived from the centralized SanityImage type in sanity-types.ts
+export type SanityImageMetadata = NonNullable<SanityImageType["asset"]["metadata"]>;
+export type SanityImageAsset = SanityImageType["asset"];
 
-export interface SanityImageAsset {
-  _id: string;
-  url: string;
-  metadata?: SanityImageMetadata;
-}
-
-export interface SanityImageObject {
-  asset: SanityImageAsset;
-  alt?: string;
-  caption?: string;
-  hotspot?: {
-    x: number;
-    y: number;
-  };
-  crop?: {
-    top: number;
-    bottom: number;
-    left: number;
-    right: number;
-  };
+// Using SanityImage from sanity-types.ts with optional alt for component flexibility
+export interface SanityImageObject extends Omit<SanityImageType, "alt"> {
+  alt?: string; // Make alt optional since it may come from props instead
 }
 
 export interface SanityImageProps {

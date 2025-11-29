@@ -52,7 +52,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 We're sorry, but something unexpected happened. Please try refreshing the page.
               </p>
             </div>
-            {this.state.error && (
+            {/* Only show error details in development to avoid exposing internals */}
+            {process.env.NODE_ENV !== "production" && this.state.error && (
               <details className="text-left">
                 <summary className="cursor-pointer font-body text-sm text-grey-600 hover:text-grey-800 dark:text-grey-400 dark:hover:text-grey-200">
                   Error details

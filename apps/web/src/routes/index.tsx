@@ -12,6 +12,7 @@ import SectionHeader from "@/components/SectionHeader/section-header";
 import Vision from "@/components/Vision/vision";
 import { events } from "@/data/events";
 import { siteSettingsQueryOptions } from "@/hooks/useSiteSettings";
+import { CACHE_PRESETS } from "@/lib/query-config";
 import { queryKeys } from "@/lib/query-keys";
 import { sanityClient } from "@/lib/sanity";
 import type { SanityHomePage, SanityProject } from "@/lib/sanity-types";
@@ -32,9 +33,7 @@ const homePageQueryOptions = queryOptions({
       return null;
     }
   },
-  // Curated content changes infrequently - cache for 30 minutes
-  staleTime: 30 * 60 * 1000, // 30 minutes
-  gcTime: 60 * 60 * 1000, // 1 hour (must be >= staleTime)
+  ...CACHE_PRESETS.CURATED_CONTENT,
 });
 
 const featuredProjectsQueryOptions = queryOptions({
@@ -47,9 +46,7 @@ const featuredProjectsQueryOptions = queryOptions({
       return [];
     }
   },
-  // Featured projects change occasionally - cache for 30 minutes
-  staleTime: 30 * 60 * 1000, // 30 minutes
-  gcTime: 60 * 60 * 1000, // 1 hour
+  ...CACHE_PRESETS.CURATED_CONTENT,
 });
 
 export const Route = createFileRoute("/")({
