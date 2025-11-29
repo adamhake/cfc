@@ -28,6 +28,26 @@ interface RequestBody {
   imageUrl: string;
 }
 
+// CORS configuration - restrict to Sanity Studio origins
+const ALLOWED_ORIGINS = [
+  "https://chimborazo-park-conservancy.sanity.studio",
+  "http://localhost:3333", // Local Sanity Studio development
+];
+
+// Sanity CDN URL pattern for SSRF protection
+const SANITY_CDN_PATTERN = /^https:\/\/cdn\.sanity\.io\//;
+
+function getCorsHeaders(request: Request): Record<string, string> {
+  const origin = request.headers.get("Origin") || "";
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+
+  return {
+    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  };
+}
+
 export const Route = createFileRoute("/api/generate-metadata")({
   server: {
     handlers: {
@@ -48,6 +68,7 @@ export const Route = createFileRoute("/api/generate-metadata")({
 
       POST: async ({ request }) => {
         console.log("API route invoked");
+        const corsHeaders = getCorsHeaders(request);
 
         try {
           // Parse request body
@@ -62,9 +83,24 @@ export const Route = createFileRoute("/api/generate-metadata")({
               status: 400,
               headers: {
                 "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
+                ...corsHeaders,
               },
             });
+          }
+
+          // Validate URL is from Sanity CDN to prevent SSRF attacks
+          if (!SANITY_CDN_PATTERN.test(imageUrl)) {
+            console.error("Invalid image URL - not from Sanity CDN:", imageUrl);
+            return new Response(
+              JSON.stringify({ error: "Invalid image URL. Only Sanity CDN URLs are allowed." }),
+              {
+                status: 400,
+                headers: {
+                  "Content-Type": "application/json",
+                  ...corsHeaders,
+                },
+              },
+            );
           }
 
           // Get API key from environment variables
@@ -80,7 +116,7 @@ export const Route = createFileRoute("/api/generate-metadata")({
                 status: 500,
                 headers: {
                   "Content-Type": "application/json",
-                  "Access-Control-Allow-Origin": "*",
+                  ...corsHeaders,
                 },
               },
             );
@@ -194,9 +230,7 @@ Return ONLY valid JSON with no additional text, in this exact format:
             status: 200,
             headers: {
               "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-              "Access-Control-Allow-Headers": "Content-Type",
-              "Access-Control-Allow-Methods": "POST, OPTIONS",
+              ...corsHeaders,
             },
           });
         } catch (error) {
@@ -212,7 +246,7 @@ Return ONLY valid JSON with no additional text, in this exact format:
               status: 500,
               headers: {
                 "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
+                ...corsHeaders,
               },
             },
           );
@@ -220,14 +254,11 @@ Return ONLY valid JSON with no additional text, in this exact format:
       },
 
       // Handle CORS preflight
-      OPTIONS: async () => {
+      OPTIONS: async ({ request }) => {
+        const corsHeaders = getCorsHeaders(request);
         return new Response(null, {
           status: 204,
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Headers": "Content-Type",
-            "Access-Control-Allow-Methods": "POST, OPTIONS",
-          },
+          headers: corsHeaders,
         });
       },
     },
