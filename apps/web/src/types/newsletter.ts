@@ -21,9 +21,8 @@ export type SubscribeRequest = z.infer<typeof subscribeRequestSchema>;
 
 /**
  * Response from the newsletter subscription API
+ * Uses discriminated union for type-safe success/error handling
  */
-export interface SubscribeResponse {
-  success?: boolean;
-  error?: string;
-  message: string;
-}
+export type SubscribeResponse =
+  | { success: true; message: string }
+  | { success: false; error: string; message: string };

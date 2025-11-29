@@ -15,11 +15,16 @@ export const env = createEnv({
     NETLIFY_AUTH_TOKEN: z.string().optional(),
     NETLIFY_SITE_ID: z.string().optional(),
     ANTHROPIC_API_KEY: z.string().optional(),
-    // Newsletter signup (Resend Audiences)
+    // Newsletter signup (Resend Contacts + Segments)
     RESEND_API_KEY: z.string().optional(),
-    RESEND_AUDIENCE_ID: z.string().optional(),
+    RESEND_SEGMENT_ID: z.string().optional(),
     TURNSTILE_SECRET_KEY: z.string().optional(),
     ADMIN_EMAIL: z.string().email().optional().default("info@chimborazopark.org"),
+    NEWSLETTER_FROM_EMAIL: z
+      .string()
+      .email()
+      .optional()
+      .default("noreply@chimborazopark.org"),
   },
 
   /**
@@ -50,9 +55,10 @@ export const env = createEnv({
     NETLIFY_SITE_ID: process.env.NETLIFY_SITE_ID,
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
-    RESEND_AUDIENCE_ID: process.env.RESEND_AUDIENCE_ID,
+    RESEND_SEGMENT_ID: process.env.RESEND_SEGMENT_ID,
     TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,
+    NEWSLETTER_FROM_EMAIL: process.env.NEWSLETTER_FROM_EMAIL,
     // Client-side variables from import.meta.env
     VITE_APP_TITLE: import.meta.env.VITE_APP_TITLE,
     VITE_SANITY_PROJECT_ID: import.meta.env.VITE_SANITY_PROJECT_ID,
