@@ -217,7 +217,7 @@ function Home() {
           <SectionHeader title="The Park" size="large" />
 
           {/* Enhanced opening with larger text */}
-          <p className="text-gray-800 font-body text-xl leading-relaxed font-medium md:text-2xl dark:text-grey-200">
+          <p className="text-grey-800 font-body text-xl leading-relaxed font-medium md:text-2xl dark:text-grey-200">
             Chimborazo Hill's story reaches back centuries—from the indigenous Powhatan people to
             its pivotal role in the Civil War. In 1874, as Richmond rebuilt, the city transformed
             this storied site into a public park for all residents to enjoy.
@@ -228,14 +228,14 @@ function Home() {
             <div className="grid gap-8 md:grid-cols-2 md:gap-10 lg:gap-12">
               {/* Text content */}
               <div className="space-y-6">
-                <p className="text-gray-800 font-body md:text-lg dark:text-grey-200">
+                <p className="text-grey-800 font-body md:text-lg dark:text-grey-200">
                   City engineer Wilfred Cutshaw spent decades in the late 1800s designing winding
                   cobbled carriage roads that embraced the steep terrain, revealing breathtaking
                   vistas at every turn. These paths connected Church Hill with the traditionally
                   African American Fulton neighborhood below, creating vital links between
                   communities.
                 </p>
-                <p className="text-gray-800 font-body md:text-lg dark:text-grey-200">
+                <p className="text-grey-800 font-body md:text-lg dark:text-grey-200">
                   By the turn of the 20th century, Chimborazo had become Richmond's beloved suburban
                   retreat. Visitors arrived by streetcar to enjoy the bandstand, refreshment
                   pavilion, and sweeping 180-degree views of the James River and downtown—a golden
@@ -274,7 +274,7 @@ function Home() {
 
             {/* Continued text */}
             <div className="mt-8 space-y-6">
-              <p className="text-gray-800 font-body md:text-lg dark:text-grey-200">
+              <p className="text-grey-800 font-body md:text-lg dark:text-grey-200">
                 Today, the park includes scenic trails, a dog park, the historic Round House, a
                 picnic gazebo, and an eight-foot Statue of Liberty replica erected by Boy Scouts in
                 the 1950s.
@@ -282,11 +282,11 @@ function Home() {
 
               {/* Call-out final paragraph */}
               <div className="space-y-6 rounded-2xl border border-primary-200/50 bg-gradient-to-br from-primary-100/60 to-primary-50/40 p-6 md:p-8 dark:border-primary-700/30 dark:from-primary-900/30 dark:to-primary-800/20">
-                <p className="text-gray-800 font-body text-lg leading-relaxed font-medium md:text-xl dark:text-grey-100">
+                <p className="text-grey-800 font-body text-lg leading-relaxed font-medium md:text-xl dark:text-grey-100">
                   Time and reduced funding have taken their toll—many of the park's original and
                   historic features have fallen into disrepair.
                 </p>
-                <p className="text-gray-800 font-body text-lg leading-relaxed font-medium md:text-xl dark:text-grey-100">
+                <p className="text-grey-800 font-body text-lg leading-relaxed font-medium md:text-xl dark:text-grey-100">
                   <strong className="font-display text-xl font-semibold text-primary-800 md:text-2xl dark:text-primary-200">
                     We're changing that.
                   </strong>{" "}

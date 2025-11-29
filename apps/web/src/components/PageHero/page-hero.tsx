@@ -88,7 +88,7 @@ export default function PageHero({
         />
       )}
       <div
-        className="absolute inset-0 bg-gradient-to-r from-primary-900/70 to-primary-800/50 dark:from-primary-950/85 dark:to-primary-900/65"
+        className="absolute inset-0 bg-gradient-to-br from-primary-900/75 via-primary-800/50 to-primary-700/30 dark:from-grey-900/80 dark:via-grey-900/60 dark:to-grey-800/40"
         aria-hidden="true"
       ></div>
       <div

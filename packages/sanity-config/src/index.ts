@@ -15,7 +15,10 @@ export {
 export { MediaImageReferenceInput } from "./components/MediaImageReferenceInput"
 
 // Export document actions
-export { generateMetadataAction } from "./actions"
+export {
+  createGenerateMetadataAction,
+  type GenerateMetadataActionConfig,
+} from "./actions"
 
 // Export queries
 export * from "./queries"
