@@ -1,10 +1,10 @@
+import {
+  sanityApiVersionSchema,
+  sanityDatasetSchema,
+  sanityProjectIdSchema,
+} from "@chimborazo/sanity-config"
 import { createEnv } from "@t3-oss/env-core"
 import { z } from "zod"
-import {
-  sanityProjectIdSchema,
-  sanityDatasetSchema,
-  sanityApiVersionSchema,
-} from "@chimborazo/sanity-config"
 
 /**
  * Environment variables for Sanity Studio.
@@ -25,8 +25,8 @@ export const env = createEnv({
     SANITY_STUDIO_PROJECT_ID: sanityProjectIdSchema,
     SANITY_STUDIO_DATASET: sanityDatasetSchema,
     SANITY_STUDIO_API_VERSION: sanityApiVersionSchema,
-    SANITY_STUDIO_PREVIEW_URL: z.string().url().default("http://localhost:3000"),
-    SANITY_STUDIO_API_URL: z.string().url().default("http://localhost:3000/api/generate-metadata"),
+    SANITY_STUDIO_PREVIEW_URL: z.url().default("http://localhost:3000"),
+    SANITY_STUDIO_API_URL: z.url(),
   },
 
   /**

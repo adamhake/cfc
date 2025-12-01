@@ -1,10 +1,10 @@
-import { schemas, createGenerateMetadataAction } from "@chimborazo/sanity-config"
+import { createGenerateMetadataAction, schemas } from "@chimborazo/sanity-config"
+import { CogIcon, HomeIcon, InfoOutlineIcon } from "@sanity/icons"
 import { visionTool } from "@sanity/vision"
 import { defineConfig } from "sanity"
 import { presentationTool } from "sanity/presentation"
 import type { StructureResolver } from "sanity/structure"
 import { structureTool } from "sanity/structure"
-import { CogIcon, HomeIcon, InfoOutlineIcon } from "@sanity/icons"
 import { StudioLogo } from "./components/StudioLogo"
 import { env } from "./src/env"
 import "./studio.css"
@@ -12,15 +12,15 @@ import "./studio.css"
 // Get environment variables from validated env config
 const projectId = env.SANITY_STUDIO_PROJECT_ID
 const dataset = env.SANITY_STUDIO_DATASET
+const apiUrl = env.SANITY_STUDIO_API_URL
 
-// Get API URL directly from process.env to ensure Sanity's bundler replaces it at build time
-// Sanity Studio replaces process.env.SANITY_STUDIO_* at build time
-const apiUrl =
-  process.env.SANITY_STUDIO_API_URL || "http://localhost:3000/api/generate-metadata"
+if (!apiUrl) {
+  console.error("SANITY_STUDIO_API_URL is not defined")
+}
 
 // Create the generate metadata action with the configured API URL
 const generateMetadataAction = createGenerateMetadataAction({
-  apiUrl,
+  apiUrl: apiUrl ?? "",
 })
 
 // Define custom structure for organizing content
