@@ -35,16 +35,16 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.70.1",
-    "@sanity/client": "^6.24.2",
+    "@anthropic-ai/sdk": "^0.71.0",
+    "@sanity/client": "^7.13.1",
     "@sanity/icons": "^3.7.4",
     "@sanity/image-url": "^2.0.1",
     "@sanity/types": "^4.19.0",
-    "@sanity/ui": "^2.10.9",
+    "@sanity/ui": "^3.1.11",
     "@t3-oss/env-core": "^0.13.8",
-    "groq": "^4.15.0",
+    "groq": "^4.19.0",
     "sanity": "^4.19.0",
-    "zod": "^4.1.12"
+    "zod": "^4.1.13"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
@@ -56,8 +56,8 @@
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "eslint": "^9.39.1",
-    "prettier": "^3.6.2",
+    "prettier": "^3.7.3",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.4"
+    "typescript-eslint": "^8.48.0"
   }
 }
