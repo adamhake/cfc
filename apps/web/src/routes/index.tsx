@@ -114,16 +114,23 @@ function Home() {
       {/* Intro + Gallery */}
       <div className="text-grey-900">
         <Container spacing="md">
-          <p className="max-w-4xl font-body text-2xl leading-tight font-medium md:text-3xl dark:text-grey-100">
+          <p className="max-w-4xl font-body text-2xl leading-snug font-medium md:text-3xl dark:text-grey-100">
             The Chimborazo Park Conservancy and Friends of Chimborazo Park preserve and enhance this
             Church Hill landmark through community stewardship.
           </p>
           <p className="mt-4 max-w-4xl font-body text-grey-800 md:text-lg dark:text-grey-100">
-            Established in 2023 as a 501(c)(3) non-profit, we formed to continue essential park
-            support after the dissolution of Enrichmond. Since then, our volunteers and partners
-            have contributed generous donations, grants, and countless hours to build a sustainable
-            foundation for the park's future.
+            Established in 2023 as a 501(c)(3) non-profit, we united the Friends Group with the
+            Conservancy to address the broader needs of this historic greenspace as it continues to
+            recover and thrive.
           </p>
+
+          <p className="mt-4 max-w-4xl font-body text-grey-800 md:text-lg dark:text-grey-100">
+            Since then, we've been putting down roots—engaging volunteers and partners on
+            environmental projects while planning for the future. Together, we're building a
+            sustainable foundation for a healthier, more beautiful park that serves our community
+            for generations to come.
+          </p>
+
           <div className="mt-12">
             <ImageGallery
               images={galleryData}
@@ -146,9 +153,9 @@ function Home() {
           </p>
           <div className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-14">
             <Vision
-              title="Restoration"
+              title="Stewardship"
               icon="leafy-green"
-              description="Preserving Chimborazo's historic character through careful reconstruction and repair of the park's unique heritage elements."
+              description="Restoring Chimborazo's natural environments through native plantings, ecological repair, and building resilience for the future."
             />
             <Vision
               title="Recreation"
@@ -217,7 +224,7 @@ function Home() {
           <SectionHeader title="The Park" size="large" />
 
           {/* Enhanced opening with larger text */}
-          <p className="text-grey-800 font-body text-xl leading-relaxed font-medium md:text-2xl dark:text-grey-200">
+          <p className="font-body text-xl leading-relaxed font-medium text-grey-800 md:text-2xl dark:text-grey-200">
             Chimborazo Hill's story reaches back centuries—from the indigenous Powhatan people to
             its pivotal role in the Civil War. In 1874, as Richmond rebuilt, the city transformed
             this storied site into a public park for all residents to enjoy.
@@ -228,14 +235,14 @@ function Home() {
             <div className="grid gap-8 md:grid-cols-2 md:gap-10 lg:gap-12">
               {/* Text content */}
               <div className="space-y-6">
-                <p className="text-grey-800 font-body md:text-lg dark:text-grey-200">
+                <p className="font-body text-grey-800 md:text-lg dark:text-grey-200">
                   City engineer Wilfred Cutshaw spent decades in the late 1800s designing winding
                   cobbled carriage roads that embraced the steep terrain, revealing breathtaking
                   vistas at every turn. These paths connected Church Hill with the traditionally
                   African American Fulton neighborhood below, creating vital links between
                   communities.
                 </p>
-                <p className="text-grey-800 font-body md:text-lg dark:text-grey-200">
+                <p className="font-body text-grey-800 md:text-lg dark:text-grey-200">
                   By the turn of the 20th century, Chimborazo had become Richmond's beloved suburban
                   retreat. Visitors arrived by streetcar to enjoy the bandstand, refreshment
                   pavilion, and sweeping 180-degree views of the James River and downtown—a golden
@@ -274,7 +281,7 @@ function Home() {
 
             {/* Continued text */}
             <div className="mt-8 space-y-6">
-              <p className="text-grey-800 font-body md:text-lg dark:text-grey-200">
+              <p className="font-body text-grey-800 md:text-lg dark:text-grey-200">
                 Today, the park includes scenic trails, a dog park, the historic Round House, a
                 picnic gazebo, and an eight-foot Statue of Liberty replica erected by Boy Scouts in
                 the 1950s.
@@ -282,11 +289,12 @@ function Home() {
 
               {/* Call-out final paragraph */}
               <div className="space-y-6 rounded-2xl border border-primary-200/50 bg-gradient-to-br from-primary-100/60 to-primary-50/40 p-6 md:p-8 dark:border-primary-700/30 dark:from-primary-900/30 dark:to-primary-800/20">
-                <p className="text-grey-800 font-body text-lg leading-relaxed font-medium md:text-xl dark:text-grey-100">
-                  Time and reduced funding have taken their toll—many of the park's original and
-                  historic features have fallen into disrepair.
+                <p className="font-body text-lg leading-relaxed font-medium text-grey-800 md:text-xl dark:text-grey-100">
+                  Time and reduced funding have taken their toll&mdash;many of the park's original
+                  features have fallen into disrepair. Invasive species and climate change have
+                  further diminished its native plantings and natural areas.
                 </p>
-                <p className="text-grey-800 font-body text-lg leading-relaxed font-medium md:text-xl dark:text-grey-100">
+                <p className="font-body text-lg leading-relaxed font-medium text-grey-800 md:text-xl dark:text-grey-100">
                   <strong className="font-display text-xl font-semibold text-primary-800 md:text-2xl dark:text-primary-200">
                     We're changing that.
                   </strong>{" "}

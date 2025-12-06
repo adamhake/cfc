@@ -15,15 +15,15 @@
     "clean": "rm -rf dist .sanity"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.71.0",
+    "@anthropic-ai/sdk": "^0.71.1",
     "@sanity/icons": "^3.7.4",
     "@sanity/ui": "^3.1.11",
-    "@sanity/vision": "^4.19.0",
+    "@sanity/vision": "^4.20.3",
     "@t3-oss/env-core": "^0.13.8",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "sanity": "^4.19.0",
-    "sanity-plugin-media": "^4.0.0",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "sanity": "^4.20.3",
+    "sanity-plugin-media": "^4.1.0",
     "styled-components": "^6.1.19",
     "zod": "^4.1.13"
   },
@@ -34,7 +34,7 @@
     "@types/react": "^19.2.7",
     "@types/styled-components": "^5.1.36",
     "eslint": "^9.39.1",
-    "prettier": "^3.7.3",
+    "prettier": "^3.7.4",
     "typescript": "^5.9.3"
   }
 }
