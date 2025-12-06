@@ -1,3 +1,4 @@
+import Chip from "@/components/Chip/chip";
 import Container from "@/components/Container/container";
 import { FacebookIcon } from "@/components/FacebookIcon/facebook-icon";
 import { InstagramIcon } from "@/components/InstagramIcon/instagram-icon";
@@ -246,10 +247,11 @@ function GetInvolvedPage() {
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-600 dark:bg-accent-700">
                         <Trees className="h-5 w-5 stroke-white" />
                       </div>
-                      <div>
+                      <div className="flex flex-wrap items-center gap-3">
                         <h3 className="font-display text-xl font-semibold text-grey-900 md:text-2xl dark:text-grey-100">
                           Adopt a Feature
                         </h3>
+                        <Chip variant="comingSoon" />
                       </div>
                     </div>
                     <div className="space-y-4">
