@@ -53,6 +53,33 @@
    Modals/overlays:    shadow-xl
 */
 
+/* OVERLAY OPACITY STANDARDS
+   Standardized opacity values for image overlays:
+
+   Hero overlays (gradient over hero images):
+   - Light mode: from-primary-900/60 via-primary-800/40 to-primary-700/20
+   - Dark mode:  from-grey-900/70 via-grey-900/50 to-grey-800/30
+
+   Card overlays (solid color over card images):
+   - Light mode: bg-primary-900/55
+   - Dark mode:  bg-grey-900/60
+
+   Accent washes (subtle tints on images):
+   - Light mode: from-accent-600/20 to-accent-800/25
+   - Dark mode:  from-accent-900/20 to-accent-950/30
+*/
+
+/* BORDER TREATMENT STANDARDS
+   Standardized border opacity for card components:
+
+   Card borders (Vision, Event, Project, ImageCard):
+   - Light mode: border-accent-600/20
+   - Dark mode:  border-accent-500/20
+
+   Interactive borders (buttons, inputs):
+   - Use solid colors per component variant
+*/
+
 /* COLOR USAGE
    Always use semantic tokens for theme-aware colors:
 

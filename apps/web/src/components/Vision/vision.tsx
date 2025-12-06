@@ -1,4 +1,6 @@
 import { BookOpenText, HeartHandshake, LeafyGreen, Trees } from "lucide-react";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { cn } from "@/utils/cn";
 
 interface VisionProps {
   title: string;
@@ -27,8 +29,17 @@ function getIcon(icon: string) {
   }
 }
 export default function Vision({ title, icon, description }: VisionProps) {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-accent-600/20 bg-gradient-to-br from-grey-100/10 to-grey-100/50 p-8 shadow-sm transition-all duration-300 lg:p-12 dark:border-accent-500/20 dark:from-primary-900 dark:to-primary-900/80">
+    <div
+      className={cn(
+        "group relative overflow-hidden rounded-2xl border border-accent-600/20",
+        "bg-gradient-to-br from-grey-100/10 to-grey-100/50 p-8 shadow-sm lg:p-12",
+        "dark:border-accent-500/20 dark:from-primary-900 dark:to-primary-900/80",
+        !prefersReducedMotion && "transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md",
+      )}
+    >
       <div className="relative">
         {/* Icon with background circle */}
         <div className="mb-6 inline-flex rounded-full bg-accent-600/10 p-3 dark:bg-accent-500/10">

@@ -30,7 +30,7 @@ export default function Event({
         height={image.height}
         className="absolute inset-0 h-full w-full object-cover transition-opacity group-hover:opacity-0"
       />
-      <div className="absolute top-0 left-0 h-full w-full bg-primary-900/60"></div>
+      <div className="absolute top-0 left-0 h-full w-full bg-primary-900/55 dark:bg-grey-900/60"></div>
       <div className="relative z-10 space-y-6 p-8 md:space-y-8">
         <Chip variant={isPast ? "past" : "upcoming"} />
         <h3 className="font-display text-3xl text-primary-50 dark:text-grey-100">{title}</h3>
