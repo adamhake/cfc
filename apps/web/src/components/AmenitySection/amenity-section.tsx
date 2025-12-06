@@ -44,7 +44,7 @@ export default function AmenitySection({
     <div className="w-full lg:w-3/5">
       <SanityImageCarousel
         images={images}
-        aspectRatio="4/3"
+        aspectRatio="3/2"
         showNavigation={true}
         showDots={true}
         showCaptions={false}
