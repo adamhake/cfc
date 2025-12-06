@@ -330,7 +330,7 @@ export default function Header() {
             animate={{ opacity: 1 }}
             exit={prefersReducedMotion ? {} : { opacity: 0 }}
             transition={{ duration: prefersReducedMotion ? 0 : 0.15 }}
-            className="fixed inset-0 z-50 overflow-y-auto bg-grey-50 md:hidden dark:bg-grey-900"
+            className="fixed inset-0 z-50 overflow-y-auto bg-grey-50 md:hidden dark:bg-primary-900"
             role="dialog"
             aria-modal="true"
             aria-label="Mobile navigation menu"

@@ -185,7 +185,8 @@ export function NewsletterForm({
                 "flex-1 rounded-xl border border-accent-300 bg-white px-4 py-3",
                 "font-body text-grey-900 placeholder-grey-500",
                 "focus:border-accent-600 focus:ring-2 focus:ring-accent-600/20 focus:outline-none",
-                "dark:border-accent-600/30 dark:bg-transparent dark:text-grey-100 dark:placeholder-grey-400",
+                "dark:border-accent-600/30 dark:bg-primary-950 dark:text-grey-100 dark:placeholder-grey-400",
+                "dark:focus:border-accent-400 dark:focus:ring-accent-400/20",
                 "disabled:cursor-not-allowed disabled:opacity-60",
               )}
             />

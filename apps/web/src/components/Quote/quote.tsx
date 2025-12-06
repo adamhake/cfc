@@ -42,7 +42,7 @@ export default function Quote({
             loading="eager"
           />
         ) : null}
-        <div className="absolute top-0 left-0 h-full w-full bg-primary-800/60 dark:bg-primary-900/70"></div>
+        <div className="absolute top-0 left-0 h-full w-full bg-primary-800/55 dark:bg-primary-900/60"></div>
         <div className="relative z-10 mx-auto max-w-3xl space-y-8 text-primary-50">
           <QuoteIcon className="text-primary-200 dark:text-primary-300" />
           <p className="max-w-3xl font-display text-xl font-normal text-primary-50 lg:text-3xl dark:text-primary-100">
