@@ -124,22 +124,22 @@ export const Button: React.FC<ButtonProps> = ({
   const variantStyles = {
     primary: cn(
       "border-primary-800 bg-primary-700 text-primary-100",
-      "hover:opacity-90 active:scale-95",
+      "hover:brightness-105 active:scale-[0.97]",
       "dark:border-primary-700 dark:bg-primary-600 dark:text-grey-100",
     ),
     secondary: cn(
       "border-primary-300 bg-primary-100 text-primary-800",
-      "hover:opacity-90 active:scale-95",
-      "dark:border-primary-800 dark:bg-primary-900 dark:text-primary-300",
+      "hover:bg-primary-50 active:scale-[0.97]",
+      "dark:border-primary-800 dark:bg-primary-900 dark:text-primary-300 dark:hover:bg-primary-800",
     ),
     outline: cn(
       "border-primary-800 bg-transparent text-primary-800",
-      "hover:opacity-90 active:scale-95",
-      "dark:border-primary-500 dark:bg-transparent dark:text-primary-400",
+      "hover:bg-primary-50 active:scale-[0.97]",
+      "dark:border-primary-500 dark:bg-transparent dark:text-primary-400 dark:hover:bg-primary-900/50",
     ),
     accent: cn(
       "border-accent-700 bg-accent-600 text-white shadow-sm",
-      "hover:opacity-90 hover:shadow-md active:scale-95",
+      "hover:brightness-105 hover:shadow-md active:scale-[0.97]",
       "dark:border-accent-600 dark:bg-accent-500 dark:text-primary-900",
     ),
   };
@@ -150,7 +150,7 @@ export const Button: React.FC<ButtonProps> = ({
   );
 
   const focusStyles =
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2";
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 dark:focus-visible:ring-primary-400";
 
   const combinedClassName = cn(
     baseStyles,
