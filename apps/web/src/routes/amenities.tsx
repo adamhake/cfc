@@ -1,4 +1,4 @@
-import AmenityCard from "@/components/AmenityCard/amenity-card";
+import AmenitySection from "@/components/AmenitySection/amenity-section";
 import Container from "@/components/Container/container";
 import GetInvolved from "@/components/GetInvolved/get-involved";
 import PageHero from "@/components/PageHero/page-hero";
@@ -139,30 +139,44 @@ function RouteComponent() {
 
         {/* Location and Hours */}
         <div className="max-w-3xl">
-          <div className="flex flex-col items-start gap-6 rounded-2xl border-2 border-grey-200 bg-white p-8 md:flex-row md:gap-12 dark:border-primary-600 dark:bg-primary-800">
-            <div className="flex items-center gap-3">
-              <MapPin className="h-5 w-5 shrink-0 stroke-primary-600 dark:stroke-primary-400" />
-              <div>
-                <div className="mb-0.5 font-display text-sm font-semibold tracking-wide text-grey-600 uppercase dark:text-grey-400">
-                  Location
+          <div className="group overflow-hidden rounded-2xl border border-accent-600/20 bg-gradient-to-br from-grey-100/10 to-grey-100/50 p-8 shadow-sm transition-all duration-300 hover:shadow-md dark:border-accent-500/20 dark:from-primary-900 dark:to-primary-900/80">
+            <div className="flex flex-col items-start gap-6 md:flex-row md:gap-12">
+              <div className="flex items-start gap-4">
+                <div
+                  className="inline-flex shrink-0 rounded-full bg-accent-600/10 p-3 dark:bg-accent-500/15"
+                  role="img"
+                  aria-label="Location icon"
+                >
+                  <MapPin className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />
                 </div>
-                <div className="font-body text-lg text-grey-900 dark:text-grey-100">
-                  3215 E. Broad St, Richmond VA
+                <div>
+                  <div className="mb-1 font-display text-sm font-semibold tracking-wide text-grey-600 uppercase dark:text-grey-400">
+                    Location
+                  </div>
+                  <div className="font-body text-lg font-medium text-grey-900 dark:text-grey-100">
+                    3215 E. Broad St, Richmond VA
+                  </div>
                 </div>
               </div>
-            </div>
-            <div
-              className="hidden h-12 w-px bg-grey-300 md:block dark:bg-primary-600"
-              aria-hidden="true"
-            ></div>
-            <div className="flex items-center gap-3">
-              <Clock className="h-5 w-5 shrink-0 stroke-primary-600 dark:stroke-primary-400" />
-              <div>
-                <div className="mb-0.5 font-display text-sm font-semibold tracking-wide text-grey-600 uppercase dark:text-grey-400">
-                  Hours
+              <div
+                className="hidden h-14 w-px bg-accent-200 md:block dark:bg-accent-700/30"
+                aria-hidden="true"
+              ></div>
+              <div className="flex items-start gap-4">
+                <div
+                  className="inline-flex shrink-0 rounded-full bg-accent-600/10 p-3 dark:bg-accent-500/15"
+                  role="img"
+                  aria-label="Hours icon"
+                >
+                  <Clock className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />
                 </div>
-                <div className="font-body text-lg text-grey-900 dark:text-grey-100">
-                  Dawn to Dusk
+                <div>
+                  <div className="mb-1 font-display text-sm font-semibold tracking-wide text-grey-600 uppercase dark:text-grey-400">
+                    Hours
+                  </div>
+                  <div className="font-body text-lg font-medium text-grey-900 dark:text-grey-100">
+                    Dawn to Dusk
+                  </div>
                 </div>
               </div>
             </div>
@@ -179,9 +193,9 @@ function RouteComponent() {
             with historic structures and gathering spaces perfect for events and relaxation.
           </p>
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            {upperParkAmenities.map((amenity) => (
-              <AmenityCard
+          <div className="space-y-20 md:space-y-28">
+            {upperParkAmenities.map((amenity, index) => (
+              <AmenitySection
                 key={amenity.slug.current}
                 title={amenity.title}
                 icon={getIconComponent(amenity.icon)}
@@ -195,7 +209,15 @@ function RouteComponent() {
                       }
                     : undefined
                 }
-                images={amenity.images?.map((img) => img.image).filter(Boolean) ?? []}
+                images={
+                  amenity.images?.map((img) => ({
+                    image: img.image,
+                    alt: img.image.alt,
+                    caption: img.image.caption,
+                  })) ?? []
+                }
+                imagePosition={index % 2 === 0 ? "left" : "right"}
+                priority={index === 0}
               />
             ))}
           </div>
@@ -211,9 +233,9 @@ function RouteComponent() {
             can explore, play, and connect with nature.
           </p>
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            {lowerParkAmenities.map((amenity) => (
-              <AmenityCard
+          <div className="space-y-20 md:space-y-28">
+            {lowerParkAmenities.map((amenity, index) => (
+              <AmenitySection
                 key={amenity.slug.current}
                 title={amenity.title}
                 icon={getIconComponent(amenity.icon)}
@@ -227,7 +249,14 @@ function RouteComponent() {
                       }
                     : undefined
                 }
-                images={amenity.images?.map((img) => img.image).filter(Boolean) ?? []}
+                images={
+                  amenity.images?.map((img) => ({
+                    image: img.image,
+                    alt: img.image.alt,
+                    caption: img.image.caption,
+                  })) ?? []
+                }
+                imagePosition={index % 2 === 0 ? "left" : "right"}
               />
             ))}
           </div>

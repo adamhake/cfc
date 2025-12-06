@@ -20,11 +20,7 @@ export const env = createEnv({
     RESEND_SEGMENT_ID: z.string().optional(),
     TURNSTILE_SECRET_KEY: z.string().optional(),
     ADMIN_EMAIL: z.string().email().optional().default("info@chimborazopark.org"),
-    NEWSLETTER_FROM_EMAIL: z
-      .string()
-      .email()
-      .optional()
-      .default("noreply@chimborazopark.org"),
+    NEWSLETTER_FROM_EMAIL: z.string().email().optional().default("noreply@chimborazopark.org"),
     // Verified email domain for admin notifications (must match Resend domain)
     VERIFIED_EMAIL_DOMAIN: z.string().optional().default("@chimborazopark.org"),
   },
