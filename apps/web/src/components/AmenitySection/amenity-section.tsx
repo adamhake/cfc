@@ -41,7 +41,9 @@ export default function AmenitySection({
     : icon;
 
   const imageContent = (
-    <div className="w-full lg:w-3/5">
+    <div
+      className={`order-1 w-full lg:w-3/5 ${imagePosition === "right" ? "lg:order-2" : "lg:order-1"}`}
+    >
       <SanityImageCarousel
         images={images}
         aspectRatio="3/2"
@@ -56,7 +58,9 @@ export default function AmenitySection({
   );
 
   const contentSection = (
-    <div className="flex w-full flex-col justify-center lg:w-2/5">
+    <div
+      className={`order-2 flex w-full flex-col justify-center lg:w-2/5 ${imagePosition === "right" ? "lg:order-1" : "lg:order-2"}`}
+    >
       <div className="space-y-4">
         {/* Icon and Title */}
         <div className="flex items-center gap-3">
@@ -112,17 +116,8 @@ export default function AmenitySection({
 
   return (
     <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
-      {imagePosition === "left" ? (
-        <>
-          {imageContent}
-          {contentSection}
-        </>
-      ) : (
-        <>
-          {contentSection}
-          {imageContent}
-        </>
-      )}
+      {imageContent}
+      {contentSection}
     </div>
   );
 }
