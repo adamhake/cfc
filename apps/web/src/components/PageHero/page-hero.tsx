@@ -56,7 +56,7 @@ export default function PageHero({
     large: "text-4xl md:text-5xl lg:text-6xl",
   };
 
-  const classes = cn("relative w-full overflow-visible", {
+  const classes = cn("relative flex w-full flex-col overflow-visible", {
     "min-h-[400px] sm:min-h-[480px] md:min-h-[520px]": selectedHeight == "auto",
     "min-h-[440px] sm:min-h-[500px] md:min-h-[540px]": selectedHeight == "small",
     "min-h-[480px] sm:min-h-[560px] md:min-h-[600px]": selectedHeight == "medium",
@@ -93,7 +93,7 @@ export default function PageHero({
       ></div>
       <div
         className={cn(
-          "absolute inset-0 z-10 flex justify-center pt-20 pb-24 lg:pt-32 lg:pb-42",
+          "relative z-10 flex flex-1 justify-center pt-20 pb-24 lg:pt-32 lg:pb-42",
           alignmentClasses[alignment],
           paddingClasses,
         )}
