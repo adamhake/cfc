@@ -73,7 +73,7 @@ function GetInvolvedPage() {
             </p>
             <p className="font-body text-grey-700 md:text-lg dark:text-grey-300">
               Since our founding in 2023, volunteers and supporters have donated thousands of hours
-              and generous resources to restore this historic 42-acre treasure. Together, we're
+              and generous resources to restore this historic 33-acre treasure. Together, we're
               ensuring Chimborazo remains a beautiful, safe, and welcoming space for all.
             </p>
           </div>

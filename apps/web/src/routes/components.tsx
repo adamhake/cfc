@@ -599,7 +599,7 @@ function ComponentPlayground() {
                 Subsection with Brand Color (H3)
               </h3>
               <p className="mb-4 font-body text-base text-grey-800 dark:text-grey-100">
-                This is body text in the primary font. Chimborazo Park is a historic 42-acre green
+                This is body text in the primary font. Chimborazo Park is a historic 33-acre green
                 space in Richmond's Church Hill neighborhood, featuring expansive views of the James
                 River and downtown Richmond.
               </p>
