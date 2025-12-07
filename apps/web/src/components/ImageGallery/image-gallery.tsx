@@ -1,7 +1,7 @@
 import { SanityImage, type SanityImageObject } from "@/components/SanityImage";
-import { Image } from "@unpic/react";
+import Masonry from "@mui/lab/Masonry";
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export interface GalleryImage {
   src: string;
@@ -63,12 +63,6 @@ function getImageKey(image: GalleryImage | SanityGalleryImage, index: number): s
   // For legacy images, combine src with index as fallback
   return `legacy-${index}-${image.src}`;
 }
-
-const gapClasses = {
-  sm: "gap-2",
-  md: "gap-4",
-  lg: "gap-6",
-};
 
 export default function ImageGallery({
   images,
@@ -143,101 +137,29 @@ export default function ImageGallery({
     [images.length],
   );
 
-  // Memoize column classes for performance
-  const columnClass = useMemo(() => {
-    const classes = [];
-
-    // Map column numbers to Tailwind classes
-    if (columns.default === 1) classes.push("grid-cols-1");
-    else if (columns.default === 2) classes.push("grid-cols-2");
-    else if (columns.default === 3) classes.push("grid-cols-3");
-    else if (columns.default === 4) classes.push("grid-cols-4");
-
-    if (columns.sm === 1) classes.push("sm:grid-cols-1");
-    else if (columns.sm === 2) classes.push("sm:grid-cols-2");
-    else if (columns.sm === 3) classes.push("sm:grid-cols-3");
-    else if (columns.sm === 4) classes.push("sm:grid-cols-4");
-
-    if (columns.md === 1) classes.push("md:grid-cols-1");
-    else if (columns.md === 2) classes.push("md:grid-cols-2");
-    else if (columns.md === 3) classes.push("md:grid-cols-3");
-    else if (columns.md === 4) classes.push("md:grid-cols-4");
-
-    if (columns.lg === 1) classes.push("lg:grid-cols-1");
-    else if (columns.lg === 2) classes.push("lg:grid-cols-2");
-    else if (columns.lg === 3) classes.push("lg:grid-cols-3");
-    else if (columns.lg === 4) classes.push("lg:grid-cols-4");
-
-    return classes.join(" ");
-  }, [columns]);
-
-  const masonryColumnClass = useMemo(() => {
-    const classes = [];
-
-    // Map column numbers to Tailwind classes
-    if (columns.default === 1) classes.push("columns-1");
-    else if (columns.default === 2) classes.push("columns-2");
-    else if (columns.default === 3) classes.push("columns-3");
-    else if (columns.default === 4) classes.push("columns-4");
-
-    if (columns.sm === 1) classes.push("sm:columns-1");
-    else if (columns.sm === 2) classes.push("sm:columns-2");
-    else if (columns.sm === 3) classes.push("sm:columns-3");
-    else if (columns.sm === 4) classes.push("sm:columns-4");
-
-    if (columns.md === 1) classes.push("md:columns-1");
-    else if (columns.md === 2) classes.push("md:columns-2");
-    else if (columns.md === 3) classes.push("md:columns-3");
-    else if (columns.md === 4) classes.push("md:columns-4");
-
-    if (columns.lg === 1) classes.push("lg:columns-1");
-    else if (columns.lg === 2) classes.push("lg:columns-2");
-    else if (columns.lg === 3) classes.push("lg:columns-3");
-    else if (columns.lg === 4) classes.push("lg:columns-4");
-
-    return classes.join(" ");
-  }, [columns]);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.4,
-        ease: [0, 0, 0.2, 1] as const,
-      },
-    },
-  };
-
   if (variant === "masonry") {
-    // Masonry layout using CSS columns
+    // MUI Masonry layout - preserves image positions when new images are added
     return (
       <>
-        <div
-          className={`${masonryColumnClass} ${gapClasses[gap]}`}
-          role="list"
-          aria-label="Photo gallery"
+        <Masonry
+          columns={{
+            xs: columns.default || 1,
+            sm: columns.sm || 2,
+            md: columns.md || 3,
+            lg: columns.lg || 4,
+          }}
+          spacing={gap === "sm" ? 1 : gap === "md" ? 2 : 3}
+          sequential
         >
           {images.map((image, index) => {
+            if (!isSanityImage(image)) return null;
             const props = getImageProps(image);
             return (
               <div
                 key={getImageKey(image, index)}
-                className={`mb-${gap === "sm" ? "2" : gap === "md" ? "4" : "6"} break-inside-avoid ${props.showOnMobile === false ? "hidden sm:block" : ""}`}
+                className={props.showOnMobile === false ? "hidden sm:block" : ""}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                role="listitem"
               >
                 <button
                   className="group relative w-full cursor-pointer overflow-hidden rounded-2xl shadow-sm transition-shadow hover:shadow-xl focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:outline-none"
@@ -245,24 +167,14 @@ export default function ImageGallery({
                   aria-label={`View ${props.alt}${props.caption ? `: ${props.caption}` : ""}`}
                   type="button"
                 >
-                  {isSanityImage(image) ? (
-                    <SanityImage
-                      image={image}
-                      alt={props.alt}
-                      className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      maxWidth={800}
-                    />
-                  ) : (
-                    <Image
-                      src={image.src}
-                      alt={props.alt}
-                      width={props.width}
-                      height={props.height}
-                      className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                  )}
+                  <SanityImage
+                    image={image}
+                    alt={props.alt}
+                    className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    breakpoints={[320, 480, 640, 800]}
+                    maxWidth={800}
+                  />
                   {showCaptions && captionPosition === "hover" && props.caption && (
                     <div
                       className={`absolute inset-0 flex items-end bg-black/85 p-4 backdrop-blur-sm transition-opacity duration-300 ${
@@ -285,7 +197,7 @@ export default function ImageGallery({
               </div>
             );
           })}
-        </div>
+        </Masonry>
 
         {/* Lightbox Modal */}
         {selectedImage !== null && (
@@ -527,126 +439,4 @@ export default function ImageGallery({
       </>
     );
   }
-
-  if (variant === "staggered") {
-    // Staggered grid with alternating heights
-    return (
-      <motion.div
-        className={`grid ${columnClass} ${gapClasses[gap]}`}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        {images.map((image, index) => {
-          const props = getImageProps(image);
-          return (
-            <motion.div
-              key={getImageKey(image, index)}
-              className={`${index % 3 === 1 ? "mt-0 md:mt-8" : ""} ${props.showOnMobile === false ? "hidden sm:block" : ""}`}
-              variants={itemVariants}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
-              <div className="group relative overflow-hidden rounded-2xl">
-                {isSanityImage(image) ? (
-                  <SanityImage
-                    image={image}
-                    alt={props.alt}
-                    className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    maxWidth={800}
-                  />
-                ) : (
-                  <Image
-                    src={image.src}
-                    alt={props.alt}
-                    width={props.width}
-                    height={props.height}
-                    className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                )}
-                {showCaptions && captionPosition === "hover" && props.caption && (
-                  <div
-                    className={`absolute inset-0 flex items-end bg-black/85 p-4 backdrop-blur-sm transition-opacity duration-300 ${
-                      hoveredIndex === index ? "opacity-100" : "opacity-0"
-                    }`}
-                  >
-                    <p className="line-clamp-3 font-body text-sm text-white md:text-base">
-                      {props.caption}
-                    </p>
-                  </div>
-                )}
-              </div>
-              {showCaptions && captionPosition === "below" && props.caption && (
-                <p className="mt-2 line-clamp-2 font-body text-sm text-neutral-700 dark:text-neutral-300">
-                  {props.caption}
-                </p>
-              )}
-            </motion.div>
-          );
-        })}
-      </motion.div>
-    );
-  }
-
-  // Default grid layout
-  return (
-    <motion.div
-      className={`grid ${columnClass} ${gapClasses[gap]}`}
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      {images.map((image, index) => {
-        const props = getImageProps(image);
-        return (
-          <motion.div
-            key={getImageKey(image, index)}
-            className={props.showOnMobile === false ? "hidden sm:block" : ""}
-            variants={itemVariants}
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
-          >
-            <div className="group relative overflow-hidden rounded-2xl">
-              {isSanityImage(image) ? (
-                <SanityImage
-                  image={image}
-                  alt={props.alt}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  maxWidth={800}
-                />
-              ) : (
-                <Image
-                  src={image.src}
-                  alt={props.alt}
-                  width={props.width}
-                  height={props.height}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  loading="lazy"
-                />
-              )}
-              {showCaptions && captionPosition === "hover" && props.caption && (
-                <div
-                  className={`absolute inset-0 flex items-end bg-black/85 p-4 backdrop-blur-sm transition-opacity duration-300 ${
-                    hoveredIndex === index ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  <p className="line-clamp-3 font-body text-sm text-white md:text-base">
-                    {props.caption}
-                  </p>
-                </div>
-              )}
-            </div>
-            {showCaptions && captionPosition === "below" && props.caption && (
-              <p className="mt-2 line-clamp-2 font-body text-sm text-neutral-700 dark:text-neutral-300">
-                {props.caption}
-              </p>
-            )}
-          </motion.div>
-        );
-      })}
-    </motion.div>
-  );
 }

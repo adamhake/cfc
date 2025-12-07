@@ -52,3 +52,16 @@ export const mediaImageByIdQuery = `
     ${mediaImageFields}
   }
 `
+
+// Paginated media images query
+// Uses slice-based pagination with limit and offset
+export const paginatedMediaImagesQuery = `
+  *[_type == "mediaImage" && !(_id in path("drafts.**")) && hideFromMediaPage != true] | order(uploadedAt desc) [$start...$end] {
+    ${mediaImageFields}
+  }
+`
+
+// Get total count of media images
+export const mediaImagesCountQuery = `
+  count(*[_type == "mediaImage" && !(_id in path("drafts.**")) && hideFromMediaPage != true])
+`

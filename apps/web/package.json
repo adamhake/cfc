@@ -27,7 +27,11 @@
   },
   "dependencies": {
     "@chimborazo/sanity-config": "workspace:*",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@marsidev/react-turnstile": "^1.3.1",
+    "@mui/lab": "7.0.1-beta.20",
+    "@mui/material": "^7.3.6",
     "@netlify/vite-plugin-tanstack-start": "^1.2.2",
     "@portabletext/react": "^5.0.0",
     "@sanity/client": "^7.13.1",
