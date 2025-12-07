@@ -39,6 +39,7 @@ export const queryKeys = {
   // Media gallery
   media: {
     all: () => ["media", "all"] as const,
+    paginated: () => ["media", "paginated"] as const,
   },
 } as const;
 

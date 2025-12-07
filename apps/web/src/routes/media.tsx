@@ -6,32 +6,46 @@ import { queryKeys } from "@/lib/query-keys";
 import { sanityClient } from "@/lib/sanity";
 import type { SanityMediaImage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
-import { allMediaImagesQuery } from "@chimborazo/sanity-config";
-import { queryOptions } from "@tanstack/react-query";
+import {
+  mediaImagesCountQuery,
+  paginatedMediaImagesQuery,
+} from "@chimborazo/sanity-config";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 
-// Query options for TanStack Query
-const mediaQueryOptions = queryOptions({
-  queryKey: queryKeys.media.all(),
-  queryFn: async (): Promise<SanityMediaImage[]> => {
-    try {
-      return await sanityClient.fetch(allMediaImagesQuery);
-    } catch (error) {
-      console.warn("Failed to fetch media from Sanity:", error);
-      return [];
-    }
-  },
-  // Media images are mostly static after upload - cache for 15 minutes
-  staleTime: 15 * 60 * 1000, // 15 minutes
-  gcTime: 60 * 60 * 1000, // 1 hour
-});
+const PAGE_SIZE = 9;
+
+interface MediaPage {
+  images: SanityMediaImage[];
+  nextCursor: number | null;
+  totalCount: number;
+}
+
+async function fetchMediaPage(pageParam: number): Promise<MediaPage> {
+  const start = pageParam;
+  const end = pageParam + PAGE_SIZE;
+
+  const [images, totalCount] = await Promise.all([
+    sanityClient.fetch<SanityMediaImage[]>(paginatedMediaImagesQuery, { start, end }),
+    sanityClient.fetch<number>(mediaImagesCountQuery),
+  ]);
+
+  return {
+    images,
+    nextCursor: end < totalCount ? end : null,
+    totalCount,
+  };
+}
 
 export const Route = createFileRoute("/media")({
   component: Media,
   loader: async ({ context }) => {
-    // Prefetch media data on the server
-    return context.queryClient.ensureQueryData(mediaQueryOptions);
+    // Prefetch first page on the server
+    await context.queryClient.prefetchInfiniteQuery({
+      queryKey: queryKeys.media.paginated(),
+      queryFn: ({ pageParam }) => fetchMediaPage(pageParam),
+      initialPageParam: 0,
+    });
   },
   head: () => ({
     meta: generateMetaTags({
@@ -47,38 +61,92 @@ export const Route = createFileRoute("/media")({
   }),
 });
 
-const INITIAL_IMAGE_COUNT = 9;
-
 function Media() {
-  const sanityImages = Route.useLoaderData();
-  const [visibleCount, setVisibleCount] = useState(INITIAL_IMAGE_COUNT);
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery({
+    queryKey: queryKeys.media.paginated(),
+    queryFn: ({ pageParam }) => fetchMediaPage(pageParam),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    staleTime: 15 * 60 * 1000, // 15 minutes
+    gcTime: 60 * 60 * 1000, // 1 hour
+  });
 
-  // Convert SanityMediaImage format to SanityGalleryImage format
-  const galleryImages: SanityGalleryImage[] = (sanityImages || [])
-    .filter((img) => {
-      // Ensure all required properties exist and are valid
-      const isValid =
-        img?.image?.asset?.url &&
-        img?.image?.asset?.metadata?.dimensions?.width &&
-        img?.image?.asset?.metadata?.dimensions?.height;
+  // Flatten all pages into a single array of gallery images
+  const galleryImages: SanityGalleryImage[] =
+    data?.pages.flatMap((page) =>
+      page.images
+        .filter((img) => {
+          const isValid =
+            img?.image?.asset?.url &&
+            img?.image?.asset?.metadata?.dimensions?.width &&
+            img?.image?.asset?.metadata?.dimensions?.height;
 
-      if (!isValid) {
-        console.warn("[Media] Filtering out invalid image:", img);
-      }
+          if (!isValid) {
+            console.warn("[Media] Filtering out invalid image:", img);
+          }
 
-      return isValid;
-    })
-    .map((img) => ({
-      ...img.image,
-      alt: img.image.alt || img.title || "Park image",
-    }));
+          return isValid;
+        })
+        .map((img) => ({
+          ...img.image,
+          alt: img.image.alt || img.title || "Park image",
+        }))
+    ) ?? [];
 
-  const visibleImages = galleryImages.slice(0, visibleCount);
-  const hasMore = visibleCount < galleryImages.length;
+  const totalCount = data?.pages[0]?.totalCount ?? 0;
 
-  const handleLoadMore = () => {
-    setVisibleCount((prev) => Math.min(prev + INITIAL_IMAGE_COUNT, galleryImages.length));
-  };
+  if (status === "pending") {
+    return (
+      <div className="min-h-screen">
+        <PageHero
+          title="Media Gallery"
+          subtitle="Explore photos of our park, community events, and restoration efforts"
+          imageSrc="/bike_sunset.webp"
+          imageAlt="Chimborazo Park landscape"
+          imageWidth={2000}
+          imageHeight={1262}
+          height="small"
+        />
+        <Container maxWidth="6xl" spacing="md" className="py-16 md:py-24">
+          <div className="flex justify-center">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-200 border-t-primary-600" />
+          </div>
+        </Container>
+      </div>
+    );
+  }
+
+  if (status === "error") {
+    return (
+      <div className="min-h-screen">
+        <PageHero
+          title="Media Gallery"
+          subtitle="Explore photos of our park, community events, and restoration efforts"
+          imageSrc="/bike_sunset.webp"
+          imageAlt="Chimborazo Park landscape"
+          imageWidth={2000}
+          imageHeight={1262}
+          height="small"
+        />
+        <Container maxWidth="6xl" spacing="md" className="py-16 md:py-24">
+          <div className="mx-auto max-w-2xl rounded-2xl border border-red-200 bg-red-50/30 p-12 text-center dark:border-red-700/30 dark:bg-red-900/20">
+            <h2 className="mb-3 font-display text-2xl font-semibold text-grey-900 dark:text-grey-100">
+              Error Loading Images
+            </h2>
+            <p className="font-body text-lg text-grey-700 dark:text-grey-300">
+              Something went wrong while loading the gallery. Please try again later.
+            </p>
+          </div>
+        </Container>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
@@ -92,7 +160,7 @@ function Media() {
         height="small"
       />
       <Container maxWidth="6xl" spacing="md" className="py-16 md:py-24">
-        {sanityImages.length === 0 ? (
+        {totalCount === 0 ? (
           <div className="mx-auto max-w-2xl rounded-2xl border border-primary-200 bg-primary-50/30 p-12 text-center dark:border-primary-700/30 dark:bg-primary-900/20">
             <div className="mb-4 text-6xl">📷</div>
             <h2 className="mb-3 font-display text-2xl font-semibold text-grey-900 dark:text-grey-100">
@@ -116,17 +184,22 @@ function Media() {
         ) : (
           <div className="space-y-12">
             <ImageGallery
-              images={visibleImages}
+              images={galleryImages}
               variant="masonry"
               columns={{ default: 1, sm: 2, md: 3, lg: 3 }}
               showCaptions={true}
               captionPosition="hover"
               gap="lg"
             />
-            {hasMore && (
+            {hasNextPage && (
               <div className="flex justify-center">
-                <Button onClick={handleLoadMore} variant="primary" size="standard">
-                  Load More Photos
+                <Button
+                  onClick={() => fetchNextPage()}
+                  variant="primary"
+                  size="standard"
+                  disabled={isFetchingNextPage}
+                >
+                  {isFetchingNextPage ? "Loading..." : "Load More Photos"}
                 </Button>
               </div>
             )}
