@@ -141,7 +141,8 @@ export default function ImageGallery({
     // MUI Masonry layout - preserves image positions when new images are added
     return (
       <>
-        <Masonry
+        <div className="overflow-hidden">
+          <Masonry
           columns={{
             xs: columns.default || 1,
             sm: columns.sm || 2,
@@ -197,7 +198,8 @@ export default function ImageGallery({
               </div>
             );
           })}
-        </Masonry>
+          </Masonry>
+        </div>
 
         {/* Lightbox Modal */}
         {selectedImage !== null && (
