@@ -135,7 +135,7 @@ function ComponentPlayground() {
       src: "/chimbo_hero_adj.webp",
       alt: "Chimborazo Park vista",
       title: "Discover Richmond's Hidden Gem",
-      caption: "42 acres of natural beauty and history in Church Hill",
+      caption: "33 acres of natural beauty and history in Church Hill",
       width: 2000,
       height: 1333,
     },

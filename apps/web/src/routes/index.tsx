@@ -153,9 +153,9 @@ function Home() {
           </p>
           <div className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-14">
             <Vision
-              title="Stewardship"
+              title="Restoration"
               icon="leafy-green"
-              description="Restoring Chimborazo's natural environments through native plantings, ecological repair, and building resilience for the future."
+              description="Preserving Chimborazo's environmental character through and repairing, creating resilience and expanding the natural environments native to our park."
             />
             <Vision
               title="Recreation"
