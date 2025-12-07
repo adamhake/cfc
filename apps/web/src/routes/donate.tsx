@@ -45,7 +45,7 @@ function Donate() {
               </p>
               <p className="font-body text-grey-700 md:text-lg dark:text-grey-300">
                 As a grassroots 501(c)(3) nonprofit, we rely entirely on community donations,
-                grants, and volunteer support to care for this 42-acre historic treasure. Every
+                grants, and volunteer support to care for this 33-acre historic treasure. Every
                 gift—large or small—directly funds park improvements and ensures Chimborazo remains
                 beautiful, safe, and accessible for generations to come.
               </p>
