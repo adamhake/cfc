@@ -15,7 +15,7 @@
     "clean": "rm -rf dist .sanity"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.71.1",
+    "@anthropic-ai/sdk": "^0.71.2",
     "@sanity/icons": "^3.7.4",
     "@sanity/ui": "^3.1.11",
     "@sanity/vision": "^4.20.3",
