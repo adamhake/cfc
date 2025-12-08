@@ -3,7 +3,7 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import Fade from "embla-carousel-fade";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export interface SanityCarouselImage {
   image: SanityImageObject;
@@ -42,8 +42,8 @@ export default function SanityImageCarousel({
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
   const [isPlaying, setIsPlaying] = useState(autoPlay);
-  const [progress, setProgress] = useState(0);
-  const progressIntervalRef = useRef<number | null>(null);
+  // Key to reset CSS animation when slide changes
+  const [animationKey, setAnimationKey] = useState(0);
   const prefersReducedMotion = useReducedMotion();
 
   const scrollPrev = useCallback(() => {
@@ -64,6 +64,8 @@ export default function SanityImageCarousel({
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
+    // Reset animation when slide changes
+    setAnimationKey((prev) => prev + 1);
   }, [emblaApi]);
 
   useEffect(() => {
@@ -83,25 +85,11 @@ export default function SanityImageCarousel({
     };
   }, [emblaApi, onSelect]);
 
-  // Auto-play functionality with play/pause support and progress tracking
+  // Auto-play functionality with play/pause support
   useEffect(() => {
-    // Early exit conditions - cleanup only, no state updates
     if (!emblaApi || !autoPlay || !isPlaying || prefersReducedMotion) {
-      if (progressIntervalRef.current) {
-        clearInterval(progressIntervalRef.current);
-        progressIntervalRef.current = null;
-      }
       return;
     }
-
-    const startTime = Date.now();
-
-    // Progress updates for the ring animation
-    progressIntervalRef.current = window.setInterval(() => {
-      const elapsed = Date.now() - startTime;
-      const newProgress = Math.min((elapsed / autoPlayInterval) * 100, 100);
-      setProgress(newProgress);
-    }, 16); // 60fps for smooth animation
 
     // Auto-advance timer
     const autoAdvanceTimer = setTimeout(() => {
@@ -109,13 +97,7 @@ export default function SanityImageCarousel({
     }, autoPlayInterval);
 
     return () => {
-      if (progressIntervalRef.current) {
-        clearInterval(progressIntervalRef.current);
-        progressIntervalRef.current = null;
-      }
       clearTimeout(autoAdvanceTimer);
-      // Reset progress on cleanup (when dependencies change)
-      setProgress(0);
     };
   }, [emblaApi, autoPlay, autoPlayInterval, isPlaying, selectedIndex, prefersReducedMotion]);
 
@@ -228,13 +210,13 @@ export default function SanityImageCarousel({
                   aria-current={index === selectedIndex ? "true" : undefined}
                   type="button"
                 >
-                  {/* Progress overlay for active dot during autoplay */}
-                  {index === selectedIndex && autoPlay && isPlaying && (
+                  {/* Progress overlay for active dot during autoplay - uses CSS animation for smooth 60fps */}
+                  {index === selectedIndex && autoPlay && isPlaying && !prefersReducedMotion && (
                     <span
+                      key={animationKey}
                       className="absolute inset-y-0 right-0 bg-grey-300 dark:bg-grey-600"
                       style={{
-                        width: `${100 - progress}%`,
-                        transition: "width 16ms linear",
+                        animation: `carousel-progress ${autoPlayInterval}ms linear forwards`,
                       }}
                     />
                   )}
