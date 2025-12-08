@@ -74,6 +74,13 @@ export interface SanityImageProps {
    * Callback when image loads
    */
   onLoad?: () => void;
+  /**
+   * Apply hotspot data as CSS object-position
+   * Useful for images using object-fit: cover where you want the hotspot
+   * to determine the focal point of the crop
+   * @default false
+   */
+  useHotspotPosition?: boolean;
 }
 
 const DEFAULT_BREAKPOINTS = [640, 1024, 1536];
@@ -114,6 +121,7 @@ export function SanityImage({
   showPlaceholder = true,
   style,
   onLoad,
+  useHotspotPosition = false,
 }: SanityImageProps) {
   // Extract image data - handle both full SanityImageObject and simple SanityImageSource
   const imageObject = image as SanityImageObject;
@@ -123,6 +131,7 @@ export function SanityImage({
   const metadata = hasAsset ? imageObject.asset.metadata : undefined;
   const lqip = metadata?.lqip;
   const dimensions = metadata?.dimensions;
+  const hotspot = imageObject?.hotspot;
 
   // Generate srcset with multiple widths
   const srcset = breakpoints
@@ -158,9 +167,19 @@ export function SanityImage({
         }
       : {};
 
+  // Calculate object-position from hotspot data
+  // Hotspot x/y are values 0-1 representing the focal point (0,0 = top-left, 1,1 = bottom-right)
+  const hotspotStyle: CSSProperties =
+    useHotspotPosition && hotspot
+      ? {
+          objectPosition: `${hotspot.x * 100}% ${hotspot.y * 100}%`,
+        }
+      : {};
+
   // Combined styles
   const combinedStyle: CSSProperties = {
     ...placeholderStyle,
+    ...hotspotStyle,
     ...style,
   };
 
@@ -195,6 +214,7 @@ export function SanityBackgroundImage({
   fit = "crop",
   children,
   style,
+  useHotspotPosition = false,
 }: {
   image: SanityImageObject | SanityImageSource;
   className?: string;
@@ -203,16 +223,23 @@ export function SanityBackgroundImage({
   fit?: SanityImageProps["fit"];
   children?: React.ReactNode;
   style?: CSSProperties;
+  /** Apply hotspot data as CSS background-position */
+  useHotspotPosition?: boolean;
 }) {
   const url = urlForImage(image).width(maxWidth).fit(fit).quality(quality).auto("format").url();
 
   const imageObject = image as SanityImageObject;
   const lqip = imageObject?.asset?.metadata?.lqip;
+  const hotspot = imageObject?.hotspot;
+
+  // Calculate background-position from hotspot data
+  const backgroundPosition =
+    useHotspotPosition && hotspot ? `${hotspot.x * 100}% ${hotspot.y * 100}%` : "center";
 
   const backgroundStyle: CSSProperties = {
     backgroundImage: `url(${url})`,
     backgroundSize: "cover",
-    backgroundPosition: "center",
+    backgroundPosition,
     ...style,
   };
 

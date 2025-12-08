@@ -64,6 +64,8 @@ export interface SanityEvent {
   time: string;
   location: string;
   body?: PortableTextBlock[];
+  recap?: PortableTextBlock[];
+  recapGallery?: SanityGallery;
   featured?: boolean;
   publishedAt?: string;
 }
@@ -79,7 +81,9 @@ export interface SanityProject {
   heroImage: SanityMediaImage;
   status: "planned" | "active" | "completed";
   startDate: string;
+  startDateOverride?: string;
   completionDate?: string;
+  completionDateOverride?: string;
   goal?: string;
   location?: string;
   budget?: string;
@@ -221,4 +225,20 @@ export interface SanityProjectsPage {
     image?: SanityMediaImage;
   };
   introduction?: PortableTextBlock[];
+}
+
+export interface SanityMediaPage {
+  pageHero: {
+    title: string;
+    description?: string;
+    image?: SanityMediaImage;
+  };
+}
+
+export interface SanityDonatePage {
+  pageHero: {
+    title: string;
+    description?: string;
+    image?: SanityMediaImage;
+  };
 }

@@ -33,6 +33,7 @@ export default function Quote({
             className="absolute inset-0 h-full w-full"
             maxWidth={1536}
             quality={85}
+            useHotspotPosition
           />
         ) : backgroundImage && "src" in backgroundImage ? (
           <img

@@ -10,8 +10,19 @@ export interface ProjectProps {
 }
 
 export default function Project({ project }: ProjectProps) {
-  const { title, slug, description, heroImage, status, startDate, category, location } = project;
-  const fmtDate = formatDateString(startDate, "short");
+  const {
+    title,
+    slug,
+    description,
+    heroImage,
+    status,
+    startDate,
+    startDateOverride,
+    category,
+    location,
+  } = project;
+  // Use override text if provided, otherwise format the date
+  const fmtDate = startDateOverride || formatDateString(startDate, "short");
 
   return (
     <Link

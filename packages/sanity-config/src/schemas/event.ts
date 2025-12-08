@@ -1,6 +1,6 @@
-import { defineField, defineType } from "sanity"
-import { CalendarIcon, ImageIcon, CogIcon } from "@sanity/icons"
+import { CalendarIcon, CogIcon, ImageIcon } from "@sanity/icons"
 import React from "react"
+import { defineField, defineType } from "sanity"
 
 export const eventSchema = defineType({
   name: "event",
@@ -48,7 +48,7 @@ export const eventSchema = defineType({
       title: "Short Description",
       type: "text",
       rows: 3,
-      validation: (Rule) => Rule.required().max(300),
+      validation: (Rule) => Rule.required().max(325),
       description: "Brief summary shown in event listings",
       group: "editorial",
     }),
@@ -201,8 +201,124 @@ export const eventSchema = defineType({
           ],
         },
       ],
-      description: "Extended event information (replaces markdown files)",
+      description: "Extended event information",
       group: "editorial",
+    }),
+    defineField({
+      name: "recap",
+      title: "Event Recap",
+      type: "array",
+      of: [
+        {
+          type: "block",
+          styles: [
+            { title: "Normal", value: "normal" },
+            {
+              title: "Leading",
+              value: "leading",
+              component: ({ children }: { children?: React.ReactNode }) =>
+                React.createElement(
+                  "p",
+                  { style: { fontSize: "1rem", lineHeight: "1.6" } },
+                  children
+                ),
+            },
+            {
+              title: "Leading Large",
+              value: "leading-lg",
+              component: ({ children }: { children?: React.ReactNode }) =>
+                React.createElement(
+                  "p",
+                  { style: { fontSize: "1.25rem", lineHeight: "1.6" } },
+                  children
+                ),
+            },
+            { title: "H2", value: "h2" },
+            { title: "H3", value: "h3" },
+            { title: "Quote", value: "blockquote" },
+          ],
+          lists: [
+            { title: "Bullet", value: "bullet" },
+            { title: "Numbered", value: "number" },
+          ],
+          marks: {
+            decorators: [
+              { title: "Strong", value: "strong" },
+              { title: "Emphasis", value: "em" },
+            ],
+            annotations: [
+              {
+                name: "link",
+                type: "object",
+                title: "URL",
+                fields: [
+                  {
+                    title: "URL",
+                    name: "href",
+                    type: "url",
+                    validation: (Rule) =>
+                      Rule.uri({
+                        allowRelative: true,
+                        scheme: ["http", "https", "mailto", "tel"],
+                      }),
+                  },
+                ],
+              },
+            ],
+          },
+        },
+        {
+          type: "image",
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            {
+              name: "alt",
+              type: "string",
+              title: "Alternative text",
+            },
+            {
+              name: "caption",
+              type: "string",
+              title: "Caption",
+            },
+          ],
+        },
+        {
+          type: "file",
+          name: "fileAttachment",
+          title: "File Attachment",
+          options: {
+            accept: ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.csv,.txt",
+          },
+          fields: [
+            {
+              name: "title",
+              type: "string",
+              title: "File Title",
+              description: "Optional custom label for the file",
+            },
+            {
+              name: "description",
+              type: "text",
+              title: "Description",
+              description: "Optional description of the file content",
+            },
+          ],
+        },
+      ],
+      description:
+        "Retrospective content shown for past events. When populated, this replaces the Event Details on the public page.",
+      group: "editorial",
+    }),
+    defineField({
+      name: "recapGallery",
+      title: "Recap Gallery",
+      type: "reference",
+      to: [{ type: "gallery" }],
+      description: "Optional photo gallery to display with the event recap",
+      group: "media",
     }),
     defineField({
       name: "featured",

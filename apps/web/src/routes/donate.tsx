@@ -1,11 +1,35 @@
 import Container from "@/components/Container/container";
 import PageHero from "@/components/PageHero/page-hero";
+import { queryKeys } from "@/lib/query-keys";
+import { sanityClient } from "@/lib/sanity";
+import type { SanityDonatePage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
+import { getDonatePageQuery } from "@chimborazo/sanity-config";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
+// Query options for donate page content
+const donatePageQueryOptions = queryOptions({
+  queryKey: queryKeys.donatePage(),
+  queryFn: async (): Promise<SanityDonatePage | null> => {
+    try {
+      return await sanityClient.fetch(getDonatePageQuery);
+    } catch (error) {
+      console.warn("Failed to fetch donate page from Sanity:", error);
+      return null;
+    }
+  },
+  staleTime: 30 * 60 * 1000, // 30 minutes
+  gcTime: 60 * 60 * 1000, // 1 hour
+});
+
 export const Route = createFileRoute("/donate")({
   component: Donate,
+  loader: async ({ context }) => {
+    // Prefetch donate page content on the server
+    await context.queryClient.ensureQueryData(donatePageQueryOptions);
+  },
   head: () => ({
     meta: generateMetaTags({
       title: "Donate",
@@ -21,18 +45,27 @@ export const Route = createFileRoute("/donate")({
 });
 
 function Donate() {
+  const { data: donatePageData } = useQuery(donatePageQueryOptions);
   const [isIframeLoaded, setIsIframeLoaded] = useState(false);
+
+  // Prepare hero data from Sanity or use defaults
+  const heroData = donatePageData?.pageHero?.image?.image
+    ? {
+        title: donatePageData.pageHero.title,
+        subtitle: donatePageData.pageHero.description,
+        sanityImage: donatePageData.pageHero.image.image,
+      }
+    : {
+        title: "Support Us",
+        imageSrc: "/bike_sunset.webp",
+        imageAlt: "Chimborazo Park landscape",
+        imageWidth: 2000,
+        imageHeight: 1262,
+      };
 
   return (
     <div>
-      <PageHero
-        title="Support Us"
-        imageSrc="/bike_sunset.webp"
-        imageAlt="Chimborazo Park landscape"
-        imageWidth={2000}
-        imageHeight={1262}
-        height="medium"
-      />
+      <PageHero {...heroData} height="medium" priority={true} />
       <div>
         <Container spacing="xl" className="py-24">
           <div className="space-y-8">

@@ -139,7 +139,7 @@ export const Button: React.FC<ButtonProps> = ({
     ),
     accent: cn(
       "border-accent-700 bg-accent-600 text-white shadow-sm",
-      "hover:brightness-105 hover:shadow-md active:scale-[0.97]",
+      "hover:shadow-md hover:brightness-105 active:scale-[0.97]",
       "dark:border-accent-600 dark:bg-accent-500 dark:text-primary-900",
     ),
   };
