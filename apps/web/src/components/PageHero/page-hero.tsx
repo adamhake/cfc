@@ -74,6 +74,7 @@ export default function PageHero({
           sizes="100vw"
           priority={priority}
           maxWidth={1920}
+          useHotspotPosition
         />
       ) : (
         <Image

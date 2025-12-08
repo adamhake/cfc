@@ -65,15 +65,29 @@ const structure: StructureResolver = (S) =>
                 .title("Projects Page")
                 .icon(InfoOutlineIcon)
                 .child(S.document().schemaType("projectsPage").documentId("projectsPage")),
+              S.listItem()
+                .title("Media Page")
+                .icon(InfoOutlineIcon)
+                .child(S.document().schemaType("mediaPage").documentId("mediaPage")),
+              S.listItem()
+                .title("Donate Page")
+                .icon(InfoOutlineIcon)
+                .child(S.document().schemaType("donatePage").documentId("donatePage")),
             ])
         ),
       S.divider(),
       // Content types (excluding singletons)
       ...S.documentTypeListItems().filter(
         (listItem) =>
-          !["siteSettings", "homePage", "amenitiesPage", "eventsPage", "projectsPage"].includes(
-            listItem.getId() ?? ""
-          )
+          ![
+            "siteSettings",
+            "homePage",
+            "amenitiesPage",
+            "eventsPage",
+            "projectsPage",
+            "mediaPage",
+            "donatePage",
+          ].includes(listItem.getId() ?? "")
       ),
     ])
 

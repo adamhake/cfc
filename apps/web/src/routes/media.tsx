@@ -4,24 +4,40 @@ import ImageGallery, { type SanityGalleryImage } from "@/components/ImageGallery
 import PageHero from "@/components/PageHero/page-hero";
 import { queryKeys } from "@/lib/query-keys";
 import { sanityClient } from "@/lib/sanity";
-import type { SanityMediaImage } from "@/lib/sanity-types";
+import type { SanityMediaImage, SanityMediaPage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import {
+  getMediaPageQuery,
   mediaImagesCountQuery,
   paginatedMediaImagesQuery,
 } from "@chimborazo/sanity-config";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { queryOptions, useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
 const PAGE_SIZE = 9;
 
-interface MediaPage {
+// Query options for media page content
+const mediaPageQueryOptions = queryOptions({
+  queryKey: queryKeys.mediaPage(),
+  queryFn: async (): Promise<SanityMediaPage | null> => {
+    try {
+      return await sanityClient.fetch(getMediaPageQuery);
+    } catch (error) {
+      console.warn("Failed to fetch media page from Sanity:", error);
+      return null;
+    }
+  },
+  staleTime: 30 * 60 * 1000, // 30 minutes
+  gcTime: 60 * 60 * 1000, // 1 hour
+});
+
+interface MediaPageData {
   images: SanityMediaImage[];
   nextCursor: number | null;
   totalCount: number;
 }
 
-async function fetchMediaPage(pageParam: number): Promise<MediaPage> {
+async function fetchMediaPage(pageParam: number): Promise<MediaPageData> {
   const start = pageParam;
   const end = pageParam + PAGE_SIZE;
 
@@ -40,12 +56,15 @@ async function fetchMediaPage(pageParam: number): Promise<MediaPage> {
 export const Route = createFileRoute("/media")({
   component: Media,
   loader: async ({ context }) => {
-    // Prefetch first page on the server
-    await context.queryClient.prefetchInfiniteQuery({
-      queryKey: queryKeys.media.paginated(),
-      queryFn: ({ pageParam }) => fetchMediaPage(pageParam),
-      initialPageParam: 0,
-    });
+    // Prefetch media page content and first page of images
+    await Promise.all([
+      context.queryClient.ensureQueryData(mediaPageQueryOptions),
+      context.queryClient.prefetchInfiniteQuery({
+        queryKey: queryKeys.media.paginated(),
+        queryFn: ({ pageParam }) => fetchMediaPage(pageParam),
+        initialPageParam: 0,
+      }),
+    ]);
   },
   head: () => ({
     meta: generateMetaTags({
@@ -62,13 +81,8 @@ export const Route = createFileRoute("/media")({
 });
 
 function Media() {
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    status,
-  } = useInfiniteQuery({
+  const { data: mediaPageData } = useQuery(mediaPageQueryOptions);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useInfiniteQuery({
     queryKey: queryKeys.media.paginated(),
     queryFn: ({ pageParam }) => fetchMediaPage(pageParam),
     initialPageParam: 0,
@@ -76,6 +90,22 @@ function Media() {
     staleTime: 15 * 60 * 1000, // 15 minutes
     gcTime: 60 * 60 * 1000, // 1 hour
   });
+
+  // Prepare hero data from Sanity or use defaults
+  const heroData = mediaPageData?.pageHero?.image?.image
+    ? {
+        title: mediaPageData.pageHero.title,
+        subtitle: mediaPageData.pageHero.description,
+        sanityImage: mediaPageData.pageHero.image.image,
+      }
+    : {
+        title: "Media Gallery",
+        subtitle: "Explore photos of our park, community events, and restoration efforts",
+        imageSrc: "/bike_sunset.webp",
+        imageAlt: "Chimborazo Park landscape",
+        imageWidth: 2000,
+        imageHeight: 1262,
+      };
 
   // Flatten all pages into a single array of gallery images
   const galleryImages: SanityGalleryImage[] =
@@ -96,7 +126,7 @@ function Media() {
         .map((img) => ({
           ...img.image,
           alt: img.image.alt || img.title || "Park image",
-        }))
+        })),
     ) ?? [];
 
   const totalCount = data?.pages[0]?.totalCount ?? 0;
@@ -104,15 +134,7 @@ function Media() {
   if (status === "pending") {
     return (
       <div className="min-h-screen">
-        <PageHero
-          title="Media Gallery"
-          subtitle="Explore photos of our park, community events, and restoration efforts"
-          imageSrc="/bike_sunset.webp"
-          imageAlt="Chimborazo Park landscape"
-          imageWidth={2000}
-          imageHeight={1262}
-          height="small"
-        />
+        <PageHero {...heroData} height="small" priority={true} />
         <Container maxWidth="6xl" spacing="md" className="py-16 md:py-24">
           <div className="flex justify-center">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-200 border-t-primary-600" />
@@ -125,17 +147,9 @@ function Media() {
   if (status === "error") {
     return (
       <div className="min-h-screen">
-        <PageHero
-          title="Media Gallery"
-          subtitle="Explore photos of our park, community events, and restoration efforts"
-          imageSrc="/bike_sunset.webp"
-          imageAlt="Chimborazo Park landscape"
-          imageWidth={2000}
-          imageHeight={1262}
-          height="small"
-        />
+        <PageHero {...heroData} height="small" priority={true} />
         <Container maxWidth="6xl" spacing="md" className="py-16 md:py-24">
-          <div className="mx-auto max-w-2xl rounded-2xl border border-red-200 bg-red-50/30 p-12 text-center dark:border-red-700/30 dark:bg-red-900/20">
+          <div className="border-red-200 bg-red-50/30 dark:border-red-700/30 dark:bg-red-900/20 mx-auto max-w-2xl rounded-2xl border p-12 text-center">
             <h2 className="mb-3 font-display text-2xl font-semibold text-grey-900 dark:text-grey-100">
               Error Loading Images
             </h2>
@@ -150,15 +164,7 @@ function Media() {
 
   return (
     <div className="min-h-screen">
-      <PageHero
-        title="Media Gallery"
-        subtitle="Explore photos of our park, community events, and restoration efforts"
-        imageSrc="/bike_sunset.webp"
-        imageAlt="Chimborazo Park landscape"
-        imageWidth={2000}
-        imageHeight={1262}
-        height="small"
-      />
+      <PageHero {...heroData} height="small" priority={true} />
       <Container maxWidth="6xl" spacing="md" className="py-16 md:py-24">
         {totalCount === 0 ? (
           <div className="mx-auto max-w-2xl rounded-2xl border border-primary-200 bg-primary-50/30 p-12 text-center dark:border-primary-700/30 dark:bg-primary-900/20">

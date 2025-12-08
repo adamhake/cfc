@@ -9,6 +9,7 @@ import Quote from "@/components/Quote/quote";
 import RotatingImages from "@/components/RotatingImages/rotating-images";
 import type { SanityImageObject } from "@/components/SanityImage/sanity-image";
 import SectionHeader from "@/components/SectionHeader/section-header";
+import Update, { type UpdateData, UpdateFeatured } from "@/components/Update/update";
 import Vision from "@/components/Vision/vision";
 import { events } from "@/data/events";
 import { siteSettingsQueryOptions } from "@/hooks/useSiteSettings";
@@ -17,7 +18,11 @@ import { queryKeys } from "@/lib/query-keys";
 import { sanityClient } from "@/lib/sanity";
 import type { SanityHomePage, SanityProject } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
-import { featuredProjectsQuery, getHomePageQuery } from "@chimborazo/sanity-config";
+import {
+  featuredProjectsQuery,
+  featuredUpdatesQuery,
+  getHomePageQuery,
+} from "@chimborazo/sanity-config";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Image } from "@unpic/react";
@@ -49,14 +54,28 @@ const featuredProjectsQueryOptions = queryOptions({
   ...CACHE_PRESETS.CURATED_CONTENT,
 });
 
+const featuredUpdatesQueryOptions = queryOptions({
+  queryKey: queryKeys.updates.featured(),
+  queryFn: async (): Promise<UpdateData[]> => {
+    try {
+      return await sanityClient.fetch(featuredUpdatesQuery);
+    } catch (error) {
+      console.warn("Failed to fetch featured updates from Sanity:", error);
+      return [];
+    }
+  },
+  ...CACHE_PRESETS.CURATED_CONTENT,
+});
+
 export const Route = createFileRoute("/")({
   component: Home,
   loader: async ({ context }) => {
-    // Prefetch homepage data, site settings, and featured projects on the server
+    // Prefetch homepage data, site settings, featured projects, and featured updates on the server
     const [homePageData] = await Promise.all([
       context.queryClient.ensureQueryData(homePageQueryOptions),
       context.queryClient.ensureQueryData(siteSettingsQueryOptions),
       context.queryClient.ensureQueryData(featuredProjectsQueryOptions),
+      context.queryClient.ensureQueryData(featuredUpdatesQueryOptions),
     ]);
     return homePageData;
   },
@@ -79,6 +98,7 @@ export const Route = createFileRoute("/")({
 function Home() {
   const homePageData = Route.useLoaderData();
   const { data: featuredProjects } = useSuspenseQuery(featuredProjectsQueryOptions);
+  const { data: featuredUpdates } = useSuspenseQuery(featuredUpdatesQueryOptions);
 
   // Prepare hero data from Sanity or use defaults
   const heroData = homePageData?.hero?.heroImage?.image?.asset?.url
@@ -155,7 +175,10 @@ function Home() {
             <Vision
               title="Restoration"
               icon="leafy-green"
-              description="Preserving Chimborazo's environmental character through and repairing, creating resilience and expanding the natural environments native to our park."
+              description={[
+                "Revitalizing and preserving Chimborazo&apos;s environmental character through the diligent recovery and expansion of our natural spaces and habitats.",
+                "Preserving Chimborazo&apos;s historic character through careful reconstruction and repair of thepark&apos;s unique cultural heritage elements.",
+              ]}
             />
             <Vision
               title="Recreation"
@@ -361,6 +384,57 @@ function Home() {
           </div>
         </Container>
       </div>
+
+      {/* Recent Updates */}
+      {featuredUpdates && featuredUpdates.length > 0 && (
+        <div>
+          <Container>
+            <SectionHeader title="Updates" size="large" />
+            <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
+              Stay informed about the latest news, volunteer spotlights, and happenings at
+              Chimborazo Park.
+            </p>
+
+            <div className="mt-10 space-y-10">
+              {/* Featured Update */}
+              {featuredUpdates.length > 0 && <UpdateFeatured {...featuredUpdates[0]} />}
+
+              {/* Additional Updates Grid */}
+              {featuredUpdates.length > 1 && (
+                <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
+                  {featuredUpdates.slice(1, 3).map((update: UpdateData) => (
+                    <Update key={update._id} {...update} />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* View All Updates CTA */}
+            <div className="mt-12 flex justify-center">
+              <Link
+                to="/updates"
+                search={{}}
+                className="group inline-flex items-center gap-2 rounded-xl border-2 border-accent-600 bg-transparent px-6 py-3 font-body text-base font-semibold text-accent-700 uppercase transition-all hover:bg-accent-600 hover:text-white focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:border-accent-500 dark:text-accent-400 dark:hover:bg-accent-500 dark:hover:text-primary-900"
+              >
+                <span>View All Updates</span>
+                <svg
+                  className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </Link>
+            </div>
+          </Container>
+        </div>
+      )}
 
       {/* Get Involved */}
       <div>

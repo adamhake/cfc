@@ -36,6 +36,26 @@ export const queryKeys = {
     featured: () => ["projects", "featured"] as const,
   },
 
+  // Updates
+  updates: {
+    all: () => ["updates", "all"] as const,
+    detail: (slug: string) => ["update", slug] as const,
+    featured: () => ["updates", "featured"] as const,
+    categories: () => ["updates", "categories"] as const,
+    byCategory: (categorySlug: string) => ["updates", "byCategory", categorySlug] as const,
+    byEvent: (eventId: string) => ["updates", "byEvent", eventId] as const,
+    byProject: (projectId: string) => ["updates", "byProject", projectId] as const,
+  },
+
+  // Updates page
+  updatesPage: () => ["updatesPage"] as const,
+
+  // Media page
+  mediaPage: () => ["mediaPage"] as const,
+
+  // Donate page
+  donatePage: () => ["donatePage"] as const,
+
   // Media gallery
   media: {
     all: () => ["media", "all"] as const,
@@ -78,4 +98,13 @@ export const invalidateHomePage = (queryClient: {
   invalidateQueries: (opts: { queryKey: readonly string[] }) => void;
 }) => {
   queryClient.invalidateQueries({ queryKey: queryKeys.homePage() });
+};
+
+/**
+ * Helper to invalidate all updates queries
+ */
+export const invalidateUpdates = (queryClient: {
+  invalidateQueries: (opts: { queryKey: readonly string[] }) => void;
+}) => {
+  queryClient.invalidateQueries({ queryKey: ["updates"] as const });
 };
