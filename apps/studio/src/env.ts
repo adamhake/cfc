@@ -26,7 +26,9 @@ export const env = createEnv({
     SANITY_STUDIO_DATASET: sanityDatasetSchema,
     SANITY_STUDIO_API_VERSION: sanityApiVersionSchema,
     SANITY_STUDIO_PREVIEW_URL: z.url().default("http://localhost:3000"),
-    SANITY_STUDIO_API_URL: z.url(),
+    SANITY_STUDIO_API_URL: z
+      .url()
+      .default("http://localhost:3000/api/generate-metadata"),
   },
 
   /**
@@ -36,14 +38,14 @@ export const env = createEnv({
 
   /**
    * What object holds the environment variables at runtime.
-   * For Sanity Studio, all variables come from process.env at build time.
+   * Sanity Studio uses Vite under the hood, so env vars are on import.meta.env
    */
   runtimeEnv: {
-    SANITY_STUDIO_PROJECT_ID: process.env.SANITY_STUDIO_PROJECT_ID,
-    SANITY_STUDIO_DATASET: process.env.SANITY_STUDIO_DATASET,
-    SANITY_STUDIO_API_VERSION: process.env.SANITY_STUDIO_API_VERSION,
-    SANITY_STUDIO_PREVIEW_URL: process.env.SANITY_STUDIO_PREVIEW_URL,
-    SANITY_STUDIO_API_URL: process.env.SANITY_STUDIO_API_URL,
+    SANITY_STUDIO_PROJECT_ID: import.meta.env.SANITY_STUDIO_PROJECT_ID,
+    SANITY_STUDIO_DATASET: import.meta.env.SANITY_STUDIO_DATASET,
+    SANITY_STUDIO_API_VERSION: import.meta.env.SANITY_STUDIO_API_VERSION,
+    SANITY_STUDIO_PREVIEW_URL: import.meta.env.SANITY_STUDIO_PREVIEW_URL,
+    SANITY_STUDIO_API_URL: import.meta.env.SANITY_STUDIO_API_URL,
   },
 
   /**
