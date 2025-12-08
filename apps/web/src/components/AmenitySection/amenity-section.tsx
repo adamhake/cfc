@@ -51,6 +51,8 @@ export default function AmenitySection({
         showDots={true}
         showCaptions={false}
         loop={true}
+        autoPlay
+        autoPlayInterval={5000}
         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 60vw, 720px"
         priority={priority}
       />
