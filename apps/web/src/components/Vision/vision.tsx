@@ -5,7 +5,7 @@ import { cn } from "@/utils/cn";
 interface VisionProps {
   title: string;
   icon: "leafy-green" | "trees" | "heart-handshake" | "book-open-text";
-  description: string;
+  description: string | string[];
 }
 
 function getIcon(icon: string) {
@@ -37,7 +37,8 @@ export default function Vision({ title, icon, description }: VisionProps) {
         "group relative overflow-hidden rounded-2xl border border-accent-600/20",
         "bg-gradient-to-br from-grey-100/10 to-grey-100/50 p-8 shadow-sm lg:p-12",
         "dark:border-accent-500/20 dark:from-primary-900 dark:to-primary-900/80",
-        !prefersReducedMotion && "transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md",
+        !prefersReducedMotion &&
+          "transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md",
       )}
     >
       <div className="relative">
@@ -50,9 +51,17 @@ export default function Vision({ title, icon, description }: VisionProps) {
           {title}
         </h3>
 
-        <p className="font-body text-base leading-relaxed text-grey-700 md:text-lg dark:text-grey-300">
-          {description}
-        </p>
+        {Array.isArray(description) ? (
+          <ul className="list-disc space-y-2 pl-5 font-body text-base leading-relaxed text-grey-700 md:text-lg dark:text-grey-300">
+            {description.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        ) : (
+          <p className="font-body text-base leading-relaxed text-grey-700 md:text-lg dark:text-grey-300">
+            {description}
+          </p>
+        )}
       </div>
     </div>
   );

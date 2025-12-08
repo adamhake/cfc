@@ -74,6 +74,45 @@ export const eventBySlugQuery = `
           }
         }
       }
+    },
+    recap[]{
+      ...,
+      _type == "image" => {
+        ...,
+        asset->{
+          _id,
+          url,
+          metadata{
+            dimensions,
+            lqip,
+            blurhash
+          }
+        }
+      }
+    },
+    "recapGallery": recapGallery->{
+      _id,
+      title,
+      images[]{
+        image->{
+          _id,
+          title,
+          image{
+            asset->{
+              _id,
+              url,
+              metadata{
+                dimensions,
+                lqip
+              }
+            },
+            alt,
+            caption,
+            hotspot
+          }
+        },
+        showOnMobile
+      }
     }
   }
 `

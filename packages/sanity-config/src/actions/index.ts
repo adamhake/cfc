@@ -1,4 +1,1 @@
-export {
-  createGenerateMetadataAction,
-  type GenerateMetadataActionConfig,
-} from "./generateMetadata"
+export { createGenerateMetadataAction, type GenerateMetadataActionConfig } from "./generateMetadata"

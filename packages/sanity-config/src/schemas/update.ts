@@ -1,16 +1,16 @@
-import { CogIcon, ImageIcon, LinkIcon, RocketIcon } from "@sanity/icons"
-import React from "react"
 import { defineField, defineType } from "sanity"
+import { DocumentTextIcon, ImageIcon, CogIcon, LinkIcon } from "@sanity/icons"
+import React from "react"
 
-export const projectSchema = defineType({
-  name: "project",
-  title: "Project",
+export const updateSchema = defineType({
+  name: "update",
+  title: "Update",
   type: "document",
   groups: [
     {
       name: "editorial",
       title: "Editorial",
-      icon: RocketIcon,
+      icon: DocumentTextIcon,
       default: true,
     },
     {
@@ -52,9 +52,9 @@ export const projectSchema = defineType({
       name: "description",
       title: "Short Description",
       type: "text",
-      rows: 3,
-      validation: (Rule) => Rule.required().max(300),
-      description: "Brief summary shown in project listings",
+      rows: 2,
+      validation: (Rule) => Rule.required().max(200),
+      description: "Brief summary shown in update listings (max 200 characters)",
       group: "editorial",
     }),
     defineField({
@@ -67,89 +67,8 @@ export const projectSchema = defineType({
       group: "media",
     }),
     defineField({
-      name: "status",
-      title: "Project Status",
-      type: "string",
-      options: {
-        list: [
-          { title: "Planned", value: "planned" },
-          { title: "Active", value: "active" },
-          { title: "Completed", value: "completed" },
-        ],
-        layout: "radio",
-      },
-      initialValue: "planned",
-      validation: (Rule) => Rule.required(),
-      group: "editorial",
-    }),
-    defineField({
-      name: "startDate",
-      title: "Start Date",
-      type: "date",
-      validation: (Rule) => Rule.required(),
-      group: "editorial",
-    }),
-    defineField({
-      name: "startDateOverride",
-      title: "Start Date Override",
-      type: "string",
-      description: "Display this text instead of the formatted start date (e.g., 'Spring 2024', 'Early 2025')",
-      group: "editorial",
-    }),
-    defineField({
-      name: "completionDate",
-      title: "Completion Date",
-      type: "date",
-      description: "Optional - leave blank for ongoing projects",
-      group: "editorial",
-    }),
-    defineField({
-      name: "completionDateOverride",
-      title: "Completion Date Override",
-      type: "string",
-      description: "Display this text instead of the formatted completion date (e.g., 'Fall 2025', 'Ongoing')",
-      group: "editorial",
-    }),
-    defineField({
-      name: "goal",
-      title: "Project Goal",
-      type: "text",
-      rows: 3,
-      description: "What this project aims to achieve",
-      group: "editorial",
-    }),
-    defineField({
-      name: "location",
-      title: "Location",
-      type: "string",
-      description: "Specific area within the park, if applicable",
-      group: "editorial",
-    }),
-    defineField({
-      name: "budget",
-      title: "Budget",
-      type: "string",
-      description: "Project budget or funding goal (e.g., '$50,000')",
-      group: "editorial",
-    }),
-    defineField({
-      name: "category",
-      title: "Category",
-      type: "string",
-      options: {
-        list: [
-          { title: "Restoration", value: "restoration" },
-          { title: "Recreation", value: "recreation" },
-          { title: "Connection", value: "connection" },
-          { title: "Preservation", value: "preservation" },
-        ],
-      },
-      description: "Aligns with the Conservancy's vision pillars",
-      group: "editorial",
-    }),
-    defineField({
       name: "body",
-      title: "Project Details",
+      title: "Update Content",
       type: "array",
       of: [
         {
@@ -251,35 +170,16 @@ export const projectSchema = defineType({
           ],
         },
       ],
-      description: "Extended project information and updates",
+      description: "Rich text content for the update",
       group: "editorial",
     }),
     defineField({
-      name: "gallery",
-      title: "Project Gallery",
-      type: "array",
-      of: [
-        {
-          type: "image",
-          options: {
-            hotspot: true,
-          },
-          fields: [
-            {
-              name: "alt",
-              type: "string",
-              title: "Alternative text",
-            },
-            {
-              name: "caption",
-              type: "string",
-              title: "Caption",
-            },
-          ],
-        },
-      ],
-      description: "Additional images showcasing the project",
-      group: "media",
+      name: "category",
+      title: "Category",
+      type: "reference",
+      to: [{ type: "updateCategory" }],
+      description: "Categorize this update for filtering",
+      group: "editorial",
     }),
     defineField({
       name: "relatedEvents",
@@ -291,28 +191,28 @@ export const projectSchema = defineType({
           to: [{ type: "event" }],
         },
       ],
-      description: "Events associated with this project",
+      description: "Events associated with this update",
       group: "relationships",
     }),
     defineField({
-      name: "partners",
-      title: "Project Partners",
+      name: "relatedProjects",
+      title: "Related Projects",
       type: "array",
       of: [
         {
           type: "reference",
-          to: [{ type: "partner" }],
+          to: [{ type: "project" }],
         },
       ],
-      description: "Organizations partnering on this project",
+      description: "Projects associated with this update",
       group: "relationships",
     }),
     defineField({
       name: "featured",
-      title: "Featured Project",
+      title: "Featured Update",
       type: "boolean",
       initialValue: false,
-      description: "Show this project prominently on the homepage",
+      description: "Show this update prominently on the homepage and listing page",
       group: "settings",
     }),
     defineField({
@@ -320,46 +220,44 @@ export const projectSchema = defineType({
       title: "Published at",
       type: "datetime",
       initialValue: () => new Date().toISOString(),
+      validation: (Rule) => Rule.required(),
       group: "settings",
     }),
   ],
   preview: {
     select: {
       title: "title",
-      status: "status",
-      startDate: "startDate",
+      category: "category.title",
+      date: "publishedAt",
+      featured: "featured",
       media: "heroImage",
     },
     prepare(selection) {
-      const { title, status, startDate, media } = selection
-      const statusLabel =
-        status === "planned" ? "Planned" : status === "active" ? "Active" : "Completed"
-      const dateStr = startDate ? new Date(startDate).toLocaleDateString() : "No date"
+      const { title, category, date, featured, media } = selection
+      const dateStr = date ? new Date(date).toLocaleDateString() : "No date"
+      const categoryStr = category || "Uncategorized"
       return {
-        title: title,
-        subtitle: `${statusLabel} • ${dateStr}`,
+        title: featured ? `${title}` : title,
+        subtitle: `${categoryStr} • ${dateStr}${featured ? " • Featured" : ""}`,
         media: media,
       }
     },
   },
   orderings: [
     {
-      title: "Start Date, Newest",
-      name: "startDateDesc",
-      by: [{ field: "startDate", direction: "desc" }],
+      title: "Published Date, Newest",
+      name: "publishedAtDesc",
+      by: [{ field: "publishedAt", direction: "desc" }],
     },
     {
-      title: "Start Date, Oldest",
-      name: "startDateAsc",
-      by: [{ field: "startDate", direction: "asc" }],
+      title: "Published Date, Oldest",
+      name: "publishedAtAsc",
+      by: [{ field: "publishedAt", direction: "asc" }],
     },
     {
-      title: "Status",
-      name: "statusOrder",
-      by: [
-        { field: "status", direction: "asc" },
-        { field: "startDate", direction: "desc" },
-      ],
+      title: "Title A-Z",
+      name: "titleAsc",
+      by: [{ field: "title", direction: "asc" }],
     },
   ],
 })
