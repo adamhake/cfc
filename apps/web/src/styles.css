@@ -660,3 +660,13 @@ html[data-palette="green-navy"] {
 .scrollbar-track-transparent::-webkit-scrollbar-track {
   background-color: transparent;
 }
+
+/* Carousel progress animation - runs on compositor thread for smooth 60fps */
+@keyframes carousel-progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
