@@ -1,5 +1,6 @@
 import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import Fade from "embla-carousel-fade";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -37,7 +38,7 @@ export default function SanityImageCarousel({
   sizes = "(max-width: 768px) 100vw, 60vw",
   priority = false,
 }: SanityImageCarouselProps) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop });
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop, duration: 50 }, [Fade()]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
   const [isPlaying, setIsPlaying] = useState(autoPlay);
@@ -164,11 +165,14 @@ export default function SanityImageCarousel({
       aria-roledescription="carousel"
     >
       <div className="relative overflow-hidden rounded-2xl" ref={emblaRef}>
-        <div className="flex">
+        <div className="flex touch-pan-y touch-pinch-zoom">
           {images.map((item, index) => (
             <div
               key={index}
               className="min-w-0 flex-[0_0_100%]"
+              style={{
+                transform: "translate3d(0, 0, 0)",
+              }}
               role="group"
               aria-roledescription="slide"
               aria-label={`${index + 1} of ${images.length}`}
