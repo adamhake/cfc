@@ -126,7 +126,7 @@ function Events() {
 
   return (
     <div className="space-y-24 pb-24">
-      <PageHero {...heroData} height="small" priority={true} />
+      <PageHero {...heroData} height="medium" priority={true} />
 
       <Container spacing="md">
         {pageData?.introduction && pageData.introduction.length > 0 ? (
