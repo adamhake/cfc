@@ -77,6 +77,10 @@ const structure: StructureResolver = (S) =>
                 .title("Donate Page")
                 .icon(DocumentTextIcon)
                 .child(S.document().schemaType("donatePage").documentId("donatePage")),
+              S.listItem()
+                .title("Get Involved Page")
+                .icon(DocumentTextIcon)
+                .child(S.document().schemaType("getInvolvedPage").documentId("getInvolvedPage")),
             ])
         ),
       S.divider(),
@@ -90,6 +94,7 @@ const structure: StructureResolver = (S) =>
             "eventsPage",
             "historyPage",
             "projectsPage",
+            "getInvolvedPage",
             "mediaPage",
             "donatePage",
           ].includes(listItem.getId() ?? "")

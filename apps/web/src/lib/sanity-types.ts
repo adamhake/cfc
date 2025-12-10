@@ -217,6 +217,14 @@ export interface SanityHistoryPage {
   };
 }
 
+export interface SanityGetInvolvedPage {
+  pageHero: {
+    title: string;
+    description?: string;
+    image?: SanityMediaImage;
+  };
+}
+
 export interface SanityEventsPage {
   pageHero: {
     title: string;

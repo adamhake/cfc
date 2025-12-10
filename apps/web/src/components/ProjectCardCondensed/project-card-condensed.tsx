@@ -25,6 +25,7 @@ export default function ProjectCardCondensed({ project, onClick }: ProjectCardCo
           className="absolute inset-0 h-full w-full object-cover"
           sizes="288px"
           priority={false}
+          useHotspotPosition
         />
         <div className="absolute inset-0 bg-primary-900/60"></div>
       </div>
