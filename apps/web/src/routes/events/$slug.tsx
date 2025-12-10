@@ -5,7 +5,6 @@ import ImageGallery, { type SanityGalleryImage } from "@/components/ImageGallery
 import { Markdown } from "@/components/Markdown/markdown";
 import PageHero from "@/components/PageHero/page-hero";
 import { PortableText } from "@/components/PortableText/portable-text";
-import { UpdateCondensed, type UpdateData } from "@/components/Update/update";
 import { events as staticEvents, type Event as StaticEvent } from "@/data/events";
 import { CACHE_PRESETS } from "@/lib/query-config";
 import { queryKeys } from "@/lib/query-keys";
@@ -18,10 +17,10 @@ import {
   SITE_CONFIG,
 } from "@/utils/seo";
 import { formatDateString } from "@/utils/time";
-import { eventBySlugQuery, updatesByEventQuery } from "@chimborazo/sanity-config";
+import { eventBySlugQuery } from "@chimborazo/sanity-config";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, Calendar, Clock, MapPin, Newspaper } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, MapPin } from "lucide-react";
 import { useState } from "react";
 
 // Pre-load all markdown files using glob import
@@ -85,32 +84,11 @@ const eventBySlugQueryOptions = (slug: string) =>
     ...CACHE_PRESETS.EVENT_DETAIL,
   });
 
-// Query options for fetching updates related to an event
-const updatesByEventQueryOptions = (eventId: string) =>
-  queryOptions({
-    queryKey: queryKeys.updates.byEvent(eventId),
-    queryFn: async (): Promise<UpdateData[]> => {
-      try {
-        return await sanityClient.fetch(updatesByEventQuery, { eventId });
-      } catch (error) {
-        console.warn("Failed to fetch related updates:", error);
-        return [];
-      }
-    },
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 15 * 60 * 1000, // 15 minutes
-  });
-
 export const Route = createFileRoute("/events/$slug")({
   component: EventPage,
   loader: async ({ params, context }) => {
     // Use TanStack Query for caching
-    const eventData = await context.queryClient.ensureQueryData(
-      eventBySlugQueryOptions(params.slug),
-    );
-    // Prefetch related updates
-    const eventId = eventData.isSanityEvent ? (eventData.event as SanityEvent)._id : "skip";
-    await context.queryClient.ensureQueryData(updatesByEventQueryOptions(eventId));
+    await context.queryClient.ensureQueryData(eventBySlugQueryOptions(params.slug));
   },
   head: ({ params }) => {
     // Generate basic meta tags - detailed ones are in component's structured data
@@ -135,18 +113,15 @@ function EventPage() {
   const { data } = useSuspenseQuery(eventBySlugQueryOptions(slug));
   const { event, isSanityEvent, markdownContent } = data;
 
-  // Fetch related updates if this is a Sanity event
-  const sanityEventId = isSanityEvent ? (event as SanityEvent)._id : null;
-  const { data: relatedUpdates = [] } = useSuspenseQuery(
-    updatesByEventQueryOptions(sanityEventId || "skip"),
-  );
-
   const isPast = new Date(event.date) < new Date();
 
   // Check if event has recap content (for past events)
   const sanityEvent = isSanityEvent ? (event as SanityEvent) : null;
   const hasRecap =
-    isPast && sanityEvent?.recap && Array.isArray(sanityEvent.recap) && sanityEvent.recap.length > 0;
+    isPast &&
+    sanityEvent?.recap &&
+    Array.isArray(sanityEvent.recap) &&
+    sanityEvent.recap.length > 0;
 
   // Transform recap gallery images for ImageGallery component
   const recapGalleryImages: SanityGalleryImage[] =
@@ -365,36 +340,6 @@ function EventPage() {
                     )}
                   </div>
                 </div>
-
-                {/* Related Updates */}
-                {relatedUpdates.length > 0 && (
-                  <div className="overflow-hidden rounded-2xl border border-terra-200 bg-white shadow-sm dark:border-terra-700/30 dark:bg-primary-950">
-                    <div className="bg-gradient-to-br from-terra-50 to-terra-100/50 px-6 py-5 dark:from-primary-900/30 dark:to-primary-800/20">
-                      <h2 className="flex items-center gap-2 font-display text-xl font-semibold text-grey-900 dark:text-grey-100">
-                        <Newspaper className="h-5 w-5" />
-                        Related Updates
-                      </h2>
-                    </div>
-                    <div className="divide-y divide-terra-100 dark:divide-terra-800/30">
-                      {relatedUpdates.slice(0, 3).map((update: UpdateData) => (
-                        <div key={update._id} className="px-4 py-3">
-                          <UpdateCondensed {...update} />
-                        </div>
-                      ))}
-                    </div>
-                    {relatedUpdates.length > 3 && (
-                      <div className="border-t border-terra-100 px-6 py-4 dark:border-terra-800/30">
-                        <Link
-                          to="/updates"
-                          search={{}}
-                          className="font-body text-sm font-medium text-terra-700 hover:text-terra-900 dark:text-terra-400 dark:hover:text-terra-300"
-                        >
-                          View all related updates
-                        </Link>
-                      </div>
-                    )}
-                  </div>
-                )}
 
                 {/* Call to Action */}
                 <div className="rounded-2xl border border-primary-200 bg-gradient-to-br from-primary-50 to-primary-100/50 p-6 dark:border-primary-700/30 dark:from-primary-900/20 dark:to-primary-800/10">

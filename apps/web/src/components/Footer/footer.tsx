@@ -47,30 +47,12 @@ export default function Footer() {
             <h3 className="font-display text-lg font-semibold text-primary-800 dark:text-primary-400">
               Navigation
             </h3>
-            <nav className="flex flex-col space-y-2">
+            <nav className="grid grid-cols-1 gap-y-2 sm:grid-cols-2 sm:gap-x-6">
               <Link
                 to="/"
                 className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
               >
                 Home
-              </Link>
-              <Link
-                to="/amenities"
-                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
-              >
-                Amenities
-              </Link>
-              <Link
-                to="/projects"
-                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
-              >
-                Projects
-              </Link>
-              <Link
-                to="/events"
-                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
-              >
-                Events
               </Link>
               <Link
                 to="/get-involved"
@@ -79,10 +61,34 @@ export default function Footer() {
                 Get Involved
               </Link>
               <Link
+                to="/events"
+                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
+              >
+                Events
+              </Link>
+              <Link
+                to="/history"
+                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
+              >
+                History
+              </Link>
+              <Link
+                to="/amenities"
+                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
+              >
+                Amenities
+              </Link>
+              <Link
                 to="/media"
                 className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
               >
                 Media
+              </Link>
+              <Link
+                to="/projects"
+                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
+              >
+                Projects
               </Link>
             </nav>
           </div>
