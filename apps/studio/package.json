@@ -18,11 +18,11 @@
     "@anthropic-ai/sdk": "^0.71.2",
     "@sanity/icons": "^3.7.4",
     "@sanity/ui": "^3.1.11",
-    "@sanity/vision": "^4.20.3",
+    "@sanity/vision": "^4.21.0",
     "@t3-oss/env-core": "^0.13.8",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
-    "sanity": "^4.20.3",
+    "sanity": "^4.21.0",
     "sanity-plugin-media": "^4.1.0",
     "styled-components": "^6.1.19",
     "zod": "^4.1.13"
