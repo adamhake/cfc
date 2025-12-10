@@ -197,8 +197,8 @@ export default function Header() {
               className="hidden md:block"
             >
               <div className="mt-4 flex w-full justify-between gap-12 border-t border-accent-600/20 p-6 pt-8 transition dark:border-accent-500/20">
-                <nav className="flex-1 border-r border-accent-600/20 pr-12 dark:border-accent-500/20">
-                  <ul className="space-y-4">
+                <nav className="flex flex-1 flex-col justify-between border-r border-accent-600/20 pr-12 dark:border-accent-500/20">
+                  <ul className="grid grid-cols-2 gap-x-8 gap-y-5">
                     <li>
                       <Link
                         to="/"
@@ -214,32 +214,6 @@ export default function Header() {
                     </li>
                     <li>
                       <Link
-                        to="/amenities"
-                        onClick={() => setMenuOpen(false)}
-                        className="group inline-block font-body text-lg font-medium text-grey-800 transition focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-100"
-                      >
-                        <span
-                          className={`border-b-2 transition group-hover:border-accent-600 dark:group-hover:border-accent-400 ${currentPath === "/amenities" ? "border-accent-600 dark:border-accent-400" : "border-transparent"}`}
-                        >
-                          Amenities
-                        </span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="/projects"
-                        onClick={() => setMenuOpen(false)}
-                        className="group inline-block font-body text-lg font-medium text-grey-800 transition focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-100"
-                      >
-                        <span
-                          className={`border-b-2 transition group-hover:border-accent-600 dark:group-hover:border-accent-400 ${currentPath === "/projects" ? "border-accent-600 dark:border-accent-400" : "border-transparent"}`}
-                        >
-                          Projects
-                        </span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
                         to="/events"
                         onClick={() => setMenuOpen(false)}
                         className="group inline-block font-body text-lg font-medium text-grey-800 transition focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-100"
@@ -248,6 +222,19 @@ export default function Header() {
                           className={`border-b-2 transition group-hover:border-accent-600 dark:group-hover:border-accent-400 ${currentPath === "/events" ? "border-accent-600 dark:border-accent-400" : "border-transparent"}`}
                         >
                           Events
+                        </span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/amenities"
+                        onClick={() => setMenuOpen(false)}
+                        className="group inline-block font-body text-lg font-medium text-grey-800 transition focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-100"
+                      >
+                        <span
+                          className={`border-b-2 transition group-hover:border-accent-600 dark:group-hover:border-accent-400 ${currentPath === "/amenities" ? "border-accent-600 dark:border-accent-400" : "border-transparent"}`}
+                        >
+                          Amenities
                         </span>
                       </Link>
                     </li>
@@ -267,6 +254,19 @@ export default function Header() {
                     </li>
                     <li>
                       <Link
+                        to="/projects"
+                        onClick={() => setMenuOpen(false)}
+                        className="group inline-block font-body text-lg font-medium text-grey-800 transition focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-100"
+                      >
+                        <span
+                          className={`border-b-2 transition group-hover:border-accent-600 dark:group-hover:border-accent-400 ${currentPath === "/projects" ? "border-accent-600 dark:border-accent-400" : "border-transparent"}`}
+                        >
+                          Projects
+                        </span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
                         to="/get-involved"
                         onClick={() => setMenuOpen(false)}
                         className="group inline-block font-body text-lg font-medium text-grey-800 transition focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-100"
@@ -275,6 +275,19 @@ export default function Header() {
                           className={`border-b-2 transition group-hover:border-accent-600 dark:group-hover:border-accent-400 ${currentPath === "/get-involved" ? "border-accent-600 dark:border-accent-400" : "border-transparent"}`}
                         >
                           Get Involved
+                        </span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/history"
+                        onClick={() => setMenuOpen(false)}
+                        className="group inline-block font-body text-lg font-medium text-grey-800 transition focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-100"
+                      >
+                        <span
+                          className={`border-b-2 transition group-hover:border-accent-600 dark:group-hover:border-accent-400 ${currentPath === "/history" ? "border-accent-600 dark:border-accent-400" : "border-transparent"}`}
+                        >
+                          History
                         </span>
                       </Link>
                     </li>
@@ -294,7 +307,7 @@ export default function Header() {
                   </ul>
 
                   {/* Social Media Links */}
-                  <div className="mt-8">
+                  <div className="mt-6">
                     <div className="flex gap-3">
                       <a
                         href={
@@ -463,6 +476,19 @@ export default function Header() {
                       className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/get-involved" ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
                     >
                       Get Involved
+                    </Link>
+                  </motion.li>
+                  <motion.li
+                    initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: prefersReducedMotion ? 0 : 0.045 }}
+                  >
+                    <Link
+                      to="/history"
+                      onClick={() => setMenuOpen(false)}
+                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/history" ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
+                    >
+                      History
                     </Link>
                   </motion.li>
                   <motion.li
