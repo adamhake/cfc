@@ -1,7 +1,7 @@
 import { defineQuery } from "groq"
 
-export const getHistoryPageQuery = defineQuery(`
-  *[_type == "historyPage"][0]{
+export const getGetInvolvedPageQuery = defineQuery(`
+  *[_type == "getInvolvedPage"][0]{
     pageHero{
       title,
       description,

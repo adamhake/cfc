@@ -183,7 +183,7 @@ function ProjectPage() {
                   <h2 className="font-display text-2xl font-semibold text-primary-800 md:text-3xl dark:text-grey-100">
                     Project Events
                   </h2>
-                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                  <div className="grid grid-cols-1 gap-6">
                     {project.relatedEvents.map((event) => (
                       <Event
                         key={event._id}

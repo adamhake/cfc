@@ -7,7 +7,12 @@ import PageHero from "@/components/PageHero/page-hero";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import SupportOption from "@/components/SupportOption/support-option";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { queryKeys } from "@/lib/query-keys";
+import { sanityClient } from "@/lib/sanity";
+import { SanityGetInvolvedPage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
+import { getGetInvolvedPageQuery } from "@chimborazo/sanity-config";
+import { queryOptions } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Image } from "@unpic/react";
 import {
@@ -23,8 +28,28 @@ import {
 } from "lucide-react";
 import { Button } from "../components/Button/button";
 
+const getInvolvedPageOptions = queryOptions({
+  queryKey: queryKeys.getInvolvedPage(),
+  queryFn: async (): Promise<SanityGetInvolvedPage | null> => {
+    try {
+      return await sanityClient.fetch(getGetInvolvedPageQuery);
+    } catch (error) {
+      console.warn("Failed to fetch donate page from Sanity:", error);
+      return null;
+    }
+  },
+  staleTime: 30 * 60 * 1000, // 30 minutes
+  gcTime: 60 * 60 * 1000, // 1 hour
+});
+
 export const Route = createFileRoute("/get-involved")({
   component: GetInvolvedPage,
+  loader: async ({ context }) => {
+    const pageData = await context.queryClient.ensureQueryData(getInvolvedPageOptions);
+    return {
+      pageData,
+    };
+  },
   head: () => ({
     meta: generateMetaTags({
       title: "Get Involved",
@@ -41,6 +66,7 @@ export const Route = createFileRoute("/get-involved")({
 
 function GetInvolvedPage() {
   const { data: siteSettings } = useSiteSettings();
+  const { pageData } = Route.useLoaderData();
 
   // Extract social media handles from URLs
   const facebookHandle =
@@ -50,17 +76,24 @@ function GetInvolvedPage() {
     siteSettings?.socialMedia?.instagram?.split("instagram.com/")[1]?.replace(/\/$/, "") ||
     "friendsofchimborazopark";
 
+  const heroData = pageData?.pageHero?.image?.image
+    ? {
+        title: pageData.pageHero.title,
+        subtitle: pageData.pageHero.description,
+        sanityImage: pageData.pageHero.image.image,
+      }
+    : {
+        title: "Get Involved",
+        subtitle: "Join our community in preserving and enhancing Chimborazo Park",
+        imageSrc: "/get_involved.webp",
+        imageAlt: "Volunteers working at Chimborazo Park",
+        imageWidth: 800,
+        imageHeight: 600,
+      };
+
   return (
     <div>
-      <PageHero
-        title="Get Involved"
-        subtitle="Join our community in preserving and enhancing Chimborazo Park"
-        imageSrc="/volunteers.webp"
-        imageAlt="Volunteers working together at Chimborazo Park"
-        imageWidth={1600}
-        imageHeight={1200}
-        height="small"
-      />
+      <PageHero {...heroData} height="medium" priority={true} />
 
       <div>
         <Container spacing="xl" className="space-y-24 py-16 pb-24">
