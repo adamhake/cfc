@@ -61,6 +61,9 @@ export const queryKeys = {
     all: () => ["media", "all"] as const,
     paginated: () => ["media", "paginated"] as const,
   },
+
+  // Events page
+  historyPage: () => ["historyPage"] as const,
 } as const;
 
 /**
