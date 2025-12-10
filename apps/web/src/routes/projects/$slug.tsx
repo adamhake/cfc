@@ -5,24 +5,15 @@ import Event from "@/components/Event/event";
 import PageHero from "@/components/PageHero/page-hero";
 import { PortableText } from "@/components/PortableText/portable-text";
 import { SanityImage } from "@/components/SanityImage/sanity-image";
-import { UpdateCondensed, type UpdateData } from "@/components/Update/update";
 import { queryKeys } from "@/lib/query-keys";
 import { sanityClient } from "@/lib/sanity";
 import type { SanityProject } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { formatDateString } from "@/utils/time";
-import { projectBySlugQuery, updatesByProjectQuery } from "@chimborazo/sanity-config";
+import { projectBySlugQuery } from "@chimborazo/sanity-config";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import {
-  ArrowLeft,
-  Calendar,
-  CheckCircle2,
-  DollarSign,
-  MapPin,
-  Newspaper,
-  Target,
-} from "lucide-react";
+import { ArrowLeft, Calendar, CheckCircle2, DollarSign, MapPin, Target } from "lucide-react";
 
 // Query options for fetching project by slug with caching
 const projectBySlugQueryOptions = (slug: string) =>
@@ -42,22 +33,6 @@ const projectBySlugQueryOptions = (slug: string) =>
     gcTime: 30 * 60 * 1000, // 30 minutes
   });
 
-// Query options for fetching updates related to a project
-const updatesByProjectQueryOptions = (projectId: string) =>
-  queryOptions({
-    queryKey: queryKeys.updates.byProject(projectId),
-    queryFn: async (): Promise<UpdateData[]> => {
-      try {
-        return await sanityClient.fetch(updatesByProjectQuery, { projectId });
-      } catch (error) {
-        console.warn("Failed to fetch related updates:", error);
-        return [];
-      }
-    },
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 15 * 60 * 1000, // 15 minutes
-  });
-
 export const Route = createFileRoute("/projects/$slug")({
   component: ProjectPage,
   loader: async ({ params, context }) => {
@@ -65,8 +40,6 @@ export const Route = createFileRoute("/projects/$slug")({
     const project = await context.queryClient.ensureQueryData(
       projectBySlugQueryOptions(params.slug),
     );
-    // Prefetch related updates
-    await context.queryClient.ensureQueryData(updatesByProjectQueryOptions(project._id));
     return project;
   },
   head: ({ loaderData }) => {
@@ -114,7 +87,6 @@ const categoryLabels = {
 function ProjectPage() {
   const { slug } = Route.useParams();
   const { data: project } = useSuspenseQuery(projectBySlugQueryOptions(slug));
-  const { data: relatedUpdates = [] } = useSuspenseQuery(updatesByProjectQueryOptions(project._id));
 
   // Use override text if provided, otherwise format the date
   const fmtStartDate = project.startDateOverride || formatDateString(project.startDate);
@@ -330,36 +302,6 @@ function ProjectPage() {
                     )}*/}
                   </div>
                 </div>
-
-                {/* Related Updates */}
-                {relatedUpdates.length > 0 && (
-                  <div className="overflow-hidden rounded-2xl border border-terra-200 bg-white shadow-sm dark:border-terra-700/30 dark:bg-primary-950">
-                    <div className="bg-gradient-to-br from-terra-50 to-terra-100/50 px-6 py-5 dark:from-primary-900/30 dark:to-primary-800/20">
-                      <h2 className="flex items-center gap-2 font-display text-xl font-semibold text-grey-900 dark:text-grey-100">
-                        <Newspaper className="h-5 w-5" />
-                        Project Updates
-                      </h2>
-                    </div>
-                    <div className="divide-y divide-terra-100 dark:divide-terra-800/30">
-                      {relatedUpdates.slice(0, 3).map((update: UpdateData) => (
-                        <div key={update._id} className="px-4 py-3">
-                          <UpdateCondensed {...update} />
-                        </div>
-                      ))}
-                    </div>
-                    {relatedUpdates.length > 3 && (
-                      <div className="border-t border-terra-100 px-6 py-4 dark:border-terra-800/30">
-                        <Link
-                          to="/updates"
-                          search={{}}
-                          className="font-body text-sm font-medium text-terra-700 hover:text-terra-900 dark:text-terra-400 dark:hover:text-terra-300"
-                        >
-                          View all project updates
-                        </Link>
-                      </div>
-                    )}
-                  </div>
-                )}
 
                 {/* Call to Action */}
                 <div className="rounded-2xl border border-primary-200 bg-gradient-to-br from-primary-50 to-primary-100/50 p-6 dark:border-primary-700/30 dark:from-primary-900/20 dark:to-primary-800/10">
