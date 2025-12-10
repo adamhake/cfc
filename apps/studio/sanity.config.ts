@@ -1,5 +1,5 @@
 import { createGenerateMetadataAction, schemas } from "@chimborazo/sanity-config"
-import { CogIcon, HomeIcon, InfoOutlineIcon } from "@sanity/icons"
+import { CogIcon, DocumentTextIcon, HomeIcon } from "@sanity/icons"
 import { visionTool } from "@sanity/vision"
 import { defineConfig } from "sanity"
 import { presentationTool } from "sanity/presentation"
@@ -55,23 +55,27 @@ const structure: StructureResolver = (S) =>
                 .child(S.document().schemaType("homePage").documentId("homePage")),
               S.listItem()
                 .title("Amenities Page")
-                .icon(InfoOutlineIcon)
+                .icon(DocumentTextIcon)
                 .child(S.document().schemaType("amenitiesPage").documentId("amenitiesPage")),
               S.listItem()
                 .title("Events Page")
-                .icon(InfoOutlineIcon)
+                .icon(DocumentTextIcon)
                 .child(S.document().schemaType("eventsPage").documentId("eventsPage")),
               S.listItem()
+                .title("History Page")
+                .icon(DocumentTextIcon)
+                .child(S.document().schemaType("historyPage").documentId("historyPage")),
+              S.listItem()
                 .title("Projects Page")
-                .icon(InfoOutlineIcon)
+                .icon(DocumentTextIcon)
                 .child(S.document().schemaType("projectsPage").documentId("projectsPage")),
               S.listItem()
                 .title("Media Page")
-                .icon(InfoOutlineIcon)
+                .icon(DocumentTextIcon)
                 .child(S.document().schemaType("mediaPage").documentId("mediaPage")),
               S.listItem()
                 .title("Donate Page")
-                .icon(InfoOutlineIcon)
+                .icon(DocumentTextIcon)
                 .child(S.document().schemaType("donatePage").documentId("donatePage")),
             ])
         ),
@@ -84,6 +88,7 @@ const structure: StructureResolver = (S) =>
             "homePage",
             "amenitiesPage",
             "eventsPage",
+            "historyPage",
             "projectsPage",
             "mediaPage",
             "donatePage",

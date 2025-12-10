@@ -72,7 +72,6 @@ export default function SanityImageCarousel({
     if (!emblaApi) return;
 
     // Initialize state from carousel API
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSelectedIndex(emblaApi.selectedScrollSnap());
     setScrollSnaps(emblaApi.scrollSnapList());
 
