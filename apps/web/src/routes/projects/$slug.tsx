@@ -185,22 +185,7 @@ function ProjectPage() {
                   </h2>
                   <div className="grid grid-cols-1 gap-6">
                     {project.relatedEvents.map((event) => (
-                      <Event
-                        key={event._id}
-                        id={event._id}
-                        title={event.title}
-                        slug={event.slug.current}
-                        description={event.description}
-                        date={event.date}
-                        time={event.time}
-                        location={event.location}
-                        image={{
-                          src: event.heroImage?.asset?.url || "",
-                          alt: event.heroImage?.alt || event.title,
-                          width: event.heroImage?.asset?.metadata?.dimensions?.width || 800,
-                          height: event.heroImage?.asset?.metadata?.dimensions?.height || 600,
-                        }}
-                      />
+                      <Event key={event._id} {...event} />
                     ))}
                   </div>
                 </div>

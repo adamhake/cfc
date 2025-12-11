@@ -2,7 +2,6 @@ import Container from "@/components/Container/container";
 import Event from "@/components/Event/event";
 import PageHero from "@/components/PageHero/page-hero";
 import { PortableText } from "@/components/PortableText/portable-text";
-import { events as staticEvents, type Event as StaticEvent } from "@/data/events";
 import { queryKeys } from "@/lib/query-keys";
 import { sanityClient } from "@/lib/sanity";
 import type { SanityEvent, SanityEventsPage } from "@/lib/sanity-types";
@@ -73,10 +72,7 @@ export const Route = createFileRoute("/events/")({
 });
 
 function Events() {
-  const { events: sanityEvents, pageData } = Route.useLoaderData();
-
-  // Use Sanity events if available, otherwise fall back to static events
-  const eventsToDisplay = sanityEvents && sanityEvents.length > 0 ? sanityEvents : staticEvents;
+  const { events, pageData } = Route.useLoaderData();
 
   // Prepare hero data from Sanity or use fallbacks
   const heroData = pageData?.pageHero?.image?.image
@@ -94,33 +90,8 @@ function Events() {
         imageHeight: 1333,
       };
 
-  // Convert Sanity events to the format expected by the Event component
-  const formattedEvents = eventsToDisplay.map((event: SanityEvent | StaticEvent) => {
-    // Check if it's a Sanity event or static event
-    if ("_id" in event) {
-      // Sanity event
-      return {
-        id: event._id,
-        title: event.title,
-        slug: event.slug.current,
-        description: event.description,
-        date: event.date,
-        time: event.time,
-        location: event.location,
-        image: {
-          src: event.heroImage.asset.url,
-          alt: event.heroImage.alt,
-          width: event.heroImage.asset.metadata?.dimensions?.width || 1200,
-          height: event.heroImage.asset.metadata?.dimensions?.height || 800,
-        },
-      };
-    }
-    // Static event - return as is
-    return event;
-  });
-
-  // Sort events by date, newest first
-  const sortedEvents = [...formattedEvents].sort(
+  // Sort events by date, newest first (events come from Sanity already sorted, but ensure order)
+  const sortedEvents = [...events].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
 
@@ -148,7 +119,7 @@ function Events() {
 
         <div className="mt-20 grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
           {sortedEvents.map((event) => (
-            <Event key={`event-${event.id}`} {...event} />
+            <Event key={`event-${event._id}`} {...event} />
           ))}
         </div>
       </Container>

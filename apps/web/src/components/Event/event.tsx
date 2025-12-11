@@ -1,9 +1,9 @@
-import { Event as EventData } from "@/data/events";
+import type { SanityEvent } from "@/lib/sanity-types";
 import { formatDateString } from "@/utils/time";
 import { Link } from "@tanstack/react-router";
-import { Image } from "@unpic/react";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import Chip from "../Chip/chip";
+import { SanityImage } from "../SanityImage/sanity-image";
 
 export default function Event({
   title,
@@ -12,23 +12,23 @@ export default function Event({
   date,
   time,
   location,
-  image,
-}: EventData) {
+  heroImage,
+}: SanityEvent) {
   const isPast = new Date(date) < new Date();
   const fmtDate = formatDateString(date, "short");
 
   return (
     <Link
       to="/events/$slug"
-      params={{ slug }}
+      params={{ slug: slug.current }}
       className="group relative block min-h-[400px] cursor-pointer overflow-hidden rounded-2xl border border-accent-600/20 transition-transform active:scale-98 md:min-h-[450px] dark:border-accent-500/20"
     >
-      <Image
-        src={image.src}
-        alt={image.alt}
-        width={image.width}
-        height={image.height}
+      <SanityImage
+        image={heroImage}
+        alt={heroImage.alt}
         className="absolute inset-0 h-full w-full object-cover transition-opacity group-hover:opacity-0"
+        sizes="(max-width: 768px) 100vw, 50vw"
+        useHotspotPosition
       />
       <div className="absolute top-0 left-0 h-full w-full bg-primary-900/55 dark:bg-grey-900/60"></div>
       <div className="relative z-10 space-y-6 p-8 md:space-y-8">

@@ -68,19 +68,28 @@ function ComponentPlayground() {
 
   // Sample event data for Event component
   const sampleEvent = {
-    id: 999,
+    _id: "sample-event-999",
+    _type: "event" as const,
     title: "Spring Park Cleanup",
-    slug: "spring-cleanup-2025",
+    slug: { current: "spring-cleanup-2025" },
     description:
       "Join us for our annual spring cleanup event to help keep Chimborazo Park beautiful.",
     date: "2025-04-15",
     time: "9:00 AM - 12:00 PM",
     location: "Main Pavilion",
-    image: {
-      src: "/chimbo_arial.webp",
+    heroImage: {
+      asset: {
+        _id: "sample-image",
+        url: "/chimbo_arial.webp",
+        metadata: {
+          dimensions: {
+            width: 1600,
+            height: 1200,
+            aspectRatio: 1600 / 1200,
+          },
+        },
+      },
       alt: "Aerial view of Chimborazo Park",
-      width: 1600,
-      height: 1200,
     },
   };
 
