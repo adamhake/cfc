@@ -216,6 +216,21 @@ function EventPage() {
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
             {/* Main Content */}
             <main className="lg:col-span-8">
+              {hasRecap && (
+                <div className="rounded-2xl border p-8">
+                  <p>
+                    This event has passed, but read below for a recap. You can also view the
+                    original even details here:{" "}
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="small"
+                    onClick={() => setShowOriginalDetails(true)}
+                  >
+                    View original event details
+                  </Button>
+                </div>
+              )}
               {/* Show recap for past events (if available and not toggled to original) */}
               {hasRecap && !showOriginalDetails ? (
                 <>

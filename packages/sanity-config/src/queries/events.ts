@@ -56,6 +56,13 @@ export const featuredEventsQuery = `
   }
 `
 
+// Get recent events (3 most recent by date)
+export const recentEventsQuery = `
+  *[_type == "event" && !(_id in path("drafts.**"))] | order(date desc) [0...3] {
+    ${eventFields}
+  }
+`
+
 // Get event by slug
 export const eventBySlugQuery = `
   *[_type == "event" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
