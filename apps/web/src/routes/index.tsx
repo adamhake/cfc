@@ -68,14 +68,15 @@ const recentEventsQueryOptions = queryOptions({
 export const Route = createFileRoute("/")({
   component: Home,
   loader: async ({ context }) => {
-    // Prefetch homepage data, site settings, featured projects, and recent events on the server
-    const [homePageData] = await Promise.all([
+    // Block on critical above-the-fold data
+    await Promise.all([
       context.queryClient.ensureQueryData(homePageQueryOptions),
       context.queryClient.ensureQueryData(siteSettingsQueryOptions),
-      context.queryClient.ensureQueryData(featuredProjectsQueryOptions),
-      context.queryClient.ensureQueryData(recentEventsQueryOptions),
     ]);
-    return homePageData;
+
+    // Stream below-the-fold data (fire-and-forget, no await)
+    context.queryClient.fetchQuery(featuredProjectsQueryOptions);
+    context.queryClient.fetchQuery(recentEventsQueryOptions);
   },
   head: () => ({
     meta: generateMetaTags({
@@ -94,7 +95,8 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const homePageData = Route.useLoaderData();
+  // All data accessed via useSuspenseQuery for consistency and cache subscription
+  const { data: homePageData } = useSuspenseQuery(homePageQueryOptions);
   const { data: featuredProjects } = useSuspenseQuery(featuredProjectsQueryOptions);
   const { data: recentEvents } = useSuspenseQuery(recentEventsQueryOptions);
 
