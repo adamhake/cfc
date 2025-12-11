@@ -140,14 +140,10 @@ export default function Header() {
             to="/"
             className="group hidden items-center gap-2 rounded-xl px-3 py-1 text-primary-800 transition hover:bg-grey-50/50 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none md:flex dark:text-grey-100 dark:hover:bg-primary-800/50"
           >
+            <IconLogo className="mr-1 h-10 w-10 transition group-hover:text-accent-600 dark:text-primary-600 dark:group-hover:text-accent-400" />
             <div className="flex flex-col font-display transition group-hover:text-accent-700 dark:group-hover:text-accent-400">
               <span className="text-xl leading-none">Chimborazo</span>
               <span className="text-sm leading-none">Park Conservancy</span>
-            </div>
-            <IconLogo className="mx-3 h-10 w-10 transition group-hover:text-accent-600 dark:text-primary-600 dark:group-hover:text-accent-400" />
-            <div className="flex flex-col font-display transition group-hover:text-accent-700 dark:group-hover:text-accent-400">
-              <span className="text-xl leading-none">Friends of</span>
-              <span className="text-sm leading-none">Chimborazo Park</span>
             </div>
           </Link>
 
@@ -373,17 +369,11 @@ export default function Header() {
                 onClick={() => setMenuOpen(false)}
                 className="mb-12 flex items-center justify-center gap-2 rounded-lg text-primary-800 focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-100"
               >
+                <IconLogo className="h-10 w-10 shrink-0" />
                 <div className="flex flex-col text-right font-display">
                   <span className="text-base leading-none font-semibold">Chimborazo</span>
                   <span className="text-xs leading-none text-primary-700 dark:text-primary-400">
                     Park Conservancy
-                  </span>
-                </div>
-                <IconLogo className="h-10 w-10 shrink-0" />
-                <div className="flex flex-col font-display">
-                  <span className="text-base leading-none font-semibold">Friends of</span>
-                  <span className="text-xs leading-none text-primary-700 dark:text-primary-400">
-                    Chimborazo Park
                   </span>
                 </div>
               </Link>

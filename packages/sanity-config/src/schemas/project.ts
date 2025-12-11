@@ -93,7 +93,8 @@ export const projectSchema = defineType({
       name: "startDateOverride",
       title: "Start Date Override",
       type: "string",
-      description: "Display this text instead of the formatted start date (e.g., 'Spring 2024', 'Early 2025')",
+      description:
+        "Display this text instead of the formatted start date (e.g., 'Spring 2024', 'Early 2025')",
       group: "editorial",
     }),
     defineField({
@@ -107,7 +108,8 @@ export const projectSchema = defineType({
       name: "completionDateOverride",
       title: "Completion Date Override",
       type: "string",
-      description: "Display this text instead of the formatted completion date (e.g., 'Fall 2025', 'Ongoing')",
+      description:
+        "Display this text instead of the formatted completion date (e.g., 'Fall 2025', 'Ongoing')",
       group: "editorial",
     }),
     defineField({

@@ -10,14 +10,17 @@ import RotatingImages from "@/components/RotatingImages/rotating-images";
 import type { SanityImageObject } from "@/components/SanityImage/sanity-image";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import Vision from "@/components/Vision/vision";
-import { events } from "@/data/events";
 import { siteSettingsQueryOptions } from "@/hooks/useSiteSettings";
 import { CACHE_PRESETS } from "@/lib/query-config";
 import { queryKeys } from "@/lib/query-keys";
 import { sanityClient } from "@/lib/sanity";
-import type { SanityHomePage, SanityProject } from "@/lib/sanity-types";
+import type { SanityEvent, SanityHomePage, SanityProject } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
-import { featuredProjectsQuery, getHomePageQuery } from "@chimborazo/sanity-config";
+import {
+  featuredProjectsQuery,
+  getHomePageQuery,
+  recentEventsQuery,
+} from "@chimborazo/sanity-config";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Image } from "@unpic/react";
@@ -49,14 +52,28 @@ const featuredProjectsQueryOptions = queryOptions({
   ...CACHE_PRESETS.CURATED_CONTENT,
 });
 
+const recentEventsQueryOptions = queryOptions({
+  queryKey: queryKeys.events.recent(),
+  queryFn: async (): Promise<SanityEvent[]> => {
+    try {
+      return await sanityClient.fetch(recentEventsQuery);
+    } catch (error) {
+      console.warn("Failed to fetch recent events from Sanity:", error);
+      return [];
+    }
+  },
+  ...CACHE_PRESETS.CURATED_CONTENT,
+});
+
 export const Route = createFileRoute("/")({
   component: Home,
   loader: async ({ context }) => {
-    // Prefetch homepage data, site settings, and featured projects on the server
+    // Prefetch homepage data, site settings, featured projects, and recent events on the server
     const [homePageData] = await Promise.all([
       context.queryClient.ensureQueryData(homePageQueryOptions),
       context.queryClient.ensureQueryData(siteSettingsQueryOptions),
       context.queryClient.ensureQueryData(featuredProjectsQueryOptions),
+      context.queryClient.ensureQueryData(recentEventsQueryOptions),
     ]);
     return homePageData;
   },
@@ -79,6 +96,7 @@ export const Route = createFileRoute("/")({
 function Home() {
   const homePageData = Route.useLoaderData();
   const { data: featuredProjects } = useSuspenseQuery(featuredProjectsQueryOptions);
+  const { data: recentEvents } = useSuspenseQuery(recentEventsQueryOptions);
 
   // Prepare hero data from Sanity or use defaults
   const heroData = homePageData?.hero?.heroImage?.image?.asset?.url
@@ -119,9 +137,9 @@ function Home() {
             Church Hill landmark through community stewardship.
           </p>
           <p className="mt-4 max-w-4xl font-body text-grey-800 md:text-lg dark:text-grey-100">
-            Established in 2023 as a 501(c)(3) non-profit, we united the Friends Group with the
-            Conservancy to address the broader needs of this historic greenspace as it continues to
-            recover and thrive.
+            Established in 2023 as a 501(c)(3) non-profit, the conservancy was formed out of the
+            Friends of Chimborazo Park to address the broader needs of this historic greenspace as
+            it continues to recover and thrive.
           </p>
 
           <p className="mt-4 max-w-4xl font-body text-grey-800 md:text-lg dark:text-grey-100">
@@ -157,7 +175,7 @@ function Home() {
               icon="leafy-green"
               description={[
                 "Revitalizing and preserving the park's environmental character through the recovery and expansion of our natural spaces and habitats.",
-                "Preserving the park's historic character through reconstruction and repair of the park's unique cultural heritage elements.",
+                "Restoring and repairing the park's unique cultural heritage elements.",
               ]}
             />
             <Vision
@@ -322,22 +340,18 @@ function Home() {
 
           <div className="mt-10 space-y-10">
             {/* Featured Event - Full Width */}
-            {events
-              .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-              .slice(0, 1)
-              .map((event) => (
-                <Event key={`event-featured-${event.id}`} {...event} />
-              ))}
+            {recentEvents.slice(0, 1).map((event) => (
+              <Event key={`event-featured-${event._id}`} {...event} />
+            ))}
 
             {/* Recent Events Grid */}
-            <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
-              {events
-                .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                .slice(1, 3)
-                .map((event) => (
-                  <Event key={`event-${event.id}`} {...event} />
+            {recentEvents.length > 1 && (
+              <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
+                {recentEvents.slice(1, 3).map((event) => (
+                  <Event key={`event-${event._id}`} {...event} />
                 ))}
-            </div>
+              </div>
+            )}
           </div>
 
           {/* View All Events CTA */}

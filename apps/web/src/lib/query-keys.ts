@@ -26,6 +26,7 @@ export const queryKeys = {
   // Events
   events: {
     all: () => ["events", "all"] as const,
+    recent: () => ["events", "recent"] as const,
     detail: (slug: string) => ["event", slug] as const,
   },
 
