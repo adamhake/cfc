@@ -11,9 +11,10 @@ import type { SanityImageObject } from "@/components/SanityImage/sanity-image";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import Vision from "@/components/Vision/vision";
 import { siteSettingsQueryOptions } from "@/hooks/useSiteSettings";
+import { getIsPreviewMode } from "@/lib/preview";
 import { CACHE_PRESETS } from "@/lib/query-config";
 import { queryKeys } from "@/lib/query-keys";
-import { sanityClient } from "@/lib/sanity";
+import { getSanityClient } from "@/lib/sanity";
 import type { SanityEvent, SanityHomePage, SanityProject } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import {
@@ -25,58 +26,66 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Image } from "@unpic/react";
 
-// Query options for TanStack Query
-const homePageQueryOptions = queryOptions({
-  queryKey: queryKeys.homePage(),
-  queryFn: async (): Promise<SanityHomePage | null> => {
-    try {
-      return await sanityClient.fetch(getHomePageQuery);
-    } catch (error) {
-      console.warn("Failed to fetch homepage from Sanity:", error);
-      return null;
-    }
-  },
-  ...CACHE_PRESETS.CURATED_CONTENT,
-});
+// Query options for TanStack Query - accept preview flag for Visual Editing
+const homePageQueryOptions = (preview = false) =>
+  queryOptions({
+    queryKey: [...queryKeys.homePage(), { preview }],
+    queryFn: async (): Promise<SanityHomePage | null> => {
+      try {
+        return await getSanityClient(preview).fetch(getHomePageQuery);
+      } catch (error) {
+        console.warn("Failed to fetch homepage from Sanity:", error);
+        return null;
+      }
+    },
+    ...CACHE_PRESETS.CURATED_CONTENT,
+  });
 
-const featuredProjectsQueryOptions = queryOptions({
-  queryKey: queryKeys.projects.featured(),
-  queryFn: async (): Promise<SanityProject[]> => {
-    try {
-      return await sanityClient.fetch(featuredProjectsQuery);
-    } catch (error) {
-      console.warn("Failed to fetch featured projects from Sanity:", error);
-      return [];
-    }
-  },
-  ...CACHE_PRESETS.CURATED_CONTENT,
-});
+const featuredProjectsQueryOptions = (preview = false) =>
+  queryOptions({
+    queryKey: [...queryKeys.projects.featured(), { preview }],
+    queryFn: async (): Promise<SanityProject[]> => {
+      try {
+        return await getSanityClient(preview).fetch(featuredProjectsQuery);
+      } catch (error) {
+        console.warn("Failed to fetch featured projects from Sanity:", error);
+        return [];
+      }
+    },
+    ...CACHE_PRESETS.CURATED_CONTENT,
+  });
 
-const recentEventsQueryOptions = queryOptions({
-  queryKey: queryKeys.events.recent(),
-  queryFn: async (): Promise<SanityEvent[]> => {
-    try {
-      return await sanityClient.fetch(recentEventsQuery);
-    } catch (error) {
-      console.warn("Failed to fetch recent events from Sanity:", error);
-      return [];
-    }
-  },
-  ...CACHE_PRESETS.CURATED_CONTENT,
-});
+const recentEventsQueryOptions = (preview = false) =>
+  queryOptions({
+    queryKey: [...queryKeys.events.recent(), { preview }],
+    queryFn: async (): Promise<SanityEvent[]> => {
+      try {
+        return await getSanityClient(preview).fetch(recentEventsQuery);
+      } catch (error) {
+        console.warn("Failed to fetch recent events from Sanity:", error);
+        return [];
+      }
+    },
+    ...CACHE_PRESETS.CURATED_CONTENT,
+  });
 
 export const Route = createFileRoute("/")({
   component: Home,
   loader: async ({ context }) => {
+    // Check if we're in preview mode for Visual Editing
+    const preview = await getIsPreviewMode();
+
     // Block on critical above-the-fold data
     await Promise.all([
-      context.queryClient.ensureQueryData(homePageQueryOptions),
+      context.queryClient.ensureQueryData(homePageQueryOptions(preview)),
       context.queryClient.ensureQueryData(siteSettingsQueryOptions),
     ]);
 
     // Stream below-the-fold data (fire-and-forget, no await)
-    context.queryClient.fetchQuery(featuredProjectsQueryOptions);
-    context.queryClient.fetchQuery(recentEventsQueryOptions);
+    context.queryClient.fetchQuery(featuredProjectsQueryOptions(preview));
+    context.queryClient.fetchQuery(recentEventsQueryOptions(preview));
+
+    return { preview };
   },
   head: () => ({
     meta: generateMetaTags({
@@ -95,10 +104,13 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  // Get preview mode from loader data
+  const { preview } = Route.useLoaderData();
+
   // All data accessed via useSuspenseQuery for consistency and cache subscription
-  const { data: homePageData } = useSuspenseQuery(homePageQueryOptions);
-  const { data: featuredProjects } = useSuspenseQuery(featuredProjectsQueryOptions);
-  const { data: recentEvents } = useSuspenseQuery(recentEventsQueryOptions);
+  const { data: homePageData } = useSuspenseQuery(homePageQueryOptions(preview));
+  const { data: featuredProjects } = useSuspenseQuery(featuredProjectsQueryOptions(preview));
+  const { data: recentEvents } = useSuspenseQuery(recentEventsQueryOptions(preview));
 
   // Prepare hero data from Sanity or use defaults
   const heroData = homePageData?.hero?.heroImage?.image?.asset?.url

@@ -2,34 +2,40 @@ import { Button } from "@/components/Button/button";
 import Container from "@/components/Container/container";
 import PageHero from "@/components/PageHero/page-hero";
 import SectionHeader from "@/components/SectionHeader/section-header";
+import { getIsPreviewMode } from "@/lib/preview";
 import { queryKeys } from "@/lib/query-keys";
-import { sanityClient } from "@/lib/sanity";
+import { getSanityClient } from "@/lib/sanity";
 import { SanityHistoryPage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { getHistoryPageQuery } from "@chimborazo/sanity-config";
 import { queryOptions } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
-const historyPageQueryOptions = queryOptions({
-  queryKey: queryKeys.historyPage(),
-  queryFn: async (): Promise<SanityHistoryPage | null> => {
-    try {
-      return await sanityClient.fetch(getHistoryPageQuery);
-    } catch (error) {
-      console.warn("Failed to fetch donate page from Sanity:", error);
-      return null;
-    }
-  },
-  staleTime: 30 * 60 * 1000, // 30 minutes
-  gcTime: 60 * 60 * 1000, // 1 hour
-});
+// Query options for history page content - accept preview flag for Visual Editing
+const historyPageQueryOptions = (preview = false) =>
+  queryOptions({
+    queryKey: [...queryKeys.historyPage(), { preview }],
+    queryFn: async (): Promise<SanityHistoryPage | null> => {
+      try {
+        return await getSanityClient(preview).fetch(getHistoryPageQuery);
+      } catch (error) {
+        console.warn("Failed to fetch history page from Sanity:", error);
+        return null;
+      }
+    },
+    staleTime: 30 * 60 * 1000, // 30 minutes
+    gcTime: 60 * 60 * 1000, // 1 hour
+  });
 
 export const Route = createFileRoute("/history")({
   component: HistoryPage,
   loader: async ({ context }) => {
-    // Prefetch both events data and page content on the server
-    const pageData = await context.queryClient.ensureQueryData(historyPageQueryOptions);
-    return { pageData };
+    // Check if we're in preview mode for Visual Editing
+    const preview = await getIsPreviewMode();
+
+    // Prefetch history page content on the server
+    const pageData = await context.queryClient.ensureQueryData(historyPageQueryOptions(preview));
+    return { pageData, preview };
   },
   head: () => ({
     meta: generateMetaTags({

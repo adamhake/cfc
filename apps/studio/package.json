@@ -18,22 +18,22 @@
     "@anthropic-ai/sdk": "^0.71.2",
     "@sanity/icons": "^3.7.4",
     "@sanity/ui": "^3.1.11",
-    "@sanity/vision": "^4.21.0",
-    "@t3-oss/env-core": "^0.13.8",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1",
-    "sanity": "^4.21.0",
-    "sanity-plugin-media": "^4.1.0",
+    "@sanity/vision": "^5.1.0",
+    "@t3-oss/env-core": "^0.13.10",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "sanity": "^5.1.0",
+    "sanity-plugin-media": "^4.1.1",
     "styled-components": "^6.1.19",
-    "zod": "^4.1.13"
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@chimborazo/sanity-config": "workspace:*",
-    "@sanity/eslint-config-studio": "^5.0.2",
+    "@sanity/eslint-config-studio": "^6.0.0",
     "@total-typescript/ts-reset": "^0.6.1",
     "@types/react": "^19.2.7",
     "@types/styled-components": "^5.1.36",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "prettier": "^3.7.4",
     "typescript": "^5.9.3"
   }

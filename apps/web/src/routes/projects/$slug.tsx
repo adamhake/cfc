@@ -5,8 +5,9 @@ import Event from "@/components/Event/event";
 import PageHero from "@/components/PageHero/page-hero";
 import { PortableText } from "@/components/PortableText/portable-text";
 import { SanityImage } from "@/components/SanityImage/sanity-image";
+import { getIsPreviewMode } from "@/lib/preview";
 import { queryKeys } from "@/lib/query-keys";
-import { sanityClient } from "@/lib/sanity";
+import { getSanityClient } from "@/lib/sanity";
 import type { SanityProject } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { formatDateString } from "@/utils/time";
@@ -15,12 +16,15 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, Calendar, CheckCircle2, DollarSign, MapPin, Target } from "lucide-react";
 
-// Query options for fetching project by slug with caching
-const projectBySlugQueryOptions = (slug: string) =>
+// Query options for fetching project by slug with caching - accept preview flag for Visual Editing
+const projectBySlugQueryOptions = (slug: string, preview = false) =>
   queryOptions({
-    queryKey: queryKeys.projects.detail(slug),
+    queryKey: [...queryKeys.projects.detail(slug), { preview }],
     queryFn: async () => {
-      const project: SanityProject | null = await sanityClient.fetch(projectBySlugQuery, { slug });
+      const project: SanityProject | null = await getSanityClient(preview).fetch(
+        projectBySlugQuery,
+        { slug },
+      );
 
       if (!project) {
         throw notFound();
@@ -28,22 +32,24 @@ const projectBySlugQueryOptions = (slug: string) =>
 
       return project;
     },
-    // Project content rarely changes after publish - cache for 10 minutes
-    staleTime: 10 * 60 * 1000, // 10 minutes
-    gcTime: 30 * 60 * 1000, // 30 minutes
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
   });
 
 export const Route = createFileRoute("/projects/$slug")({
   component: ProjectPage,
   loader: async ({ params, context }) => {
+    // Check if we're in preview mode for Visual Editing
+    const preview = await getIsPreviewMode();
+
     // Use TanStack Query for caching
     const project = await context.queryClient.ensureQueryData(
-      projectBySlugQueryOptions(params.slug),
+      projectBySlugQueryOptions(params.slug, preview),
     );
-    return project;
+    return { project, preview };
   },
   head: ({ loaderData }) => {
-    if (!loaderData) {
+    if (!loaderData?.project) {
       return {
         meta: generateMetaTags({
           title: "Project Not Found",
@@ -52,21 +58,22 @@ export const Route = createFileRoute("/projects/$slug")({
       };
     }
 
-    const projectUrl = `${SITE_CONFIG.url}/projects/${loaderData.slug.current}`;
-    const imageUrl = loaderData.heroImage?.image?.asset?.url;
+    const { project } = loaderData;
+    const projectUrl = `${SITE_CONFIG.url}/projects/${project.slug.current}`;
+    const imageUrl = project.heroImage?.image?.asset?.url;
 
     return {
       meta: generateMetaTags({
-        title: loaderData.title,
-        description: loaderData.description,
+        title: project.title,
+        description: project.description,
         type: "article",
         url: projectUrl,
         image: imageUrl
           ? {
               url: imageUrl,
-              width: loaderData.heroImage?.image?.asset?.metadata?.dimensions?.width || 1200,
-              height: loaderData.heroImage?.image?.asset?.metadata?.dimensions?.height || 630,
-              alt: loaderData.heroImage?.image?.alt || loaderData.title,
+              width: project.heroImage?.image?.asset?.metadata?.dimensions?.width || 1200,
+              height: project.heroImage?.image?.asset?.metadata?.dimensions?.height || 630,
+              alt: project.heroImage?.image?.alt || project.title,
             }
           : undefined,
       }),
@@ -86,7 +93,8 @@ const categoryLabels = {
 
 function ProjectPage() {
   const { slug } = Route.useParams();
-  const { data: project } = useSuspenseQuery(projectBySlugQueryOptions(slug));
+  const { preview } = Route.useLoaderData();
+  const { data: project } = useSuspenseQuery(projectBySlugQueryOptions(slug, preview));
 
   // Use override text if provided, otherwise format the date
   const fmtStartDate = project.startDateOverride || formatDateString(project.startDate);

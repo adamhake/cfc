@@ -2,7 +2,7 @@ import { createGenerateMetadataAction, schemas } from "@chimborazo/sanity-config
 import { CogIcon, DocumentTextIcon, HomeIcon } from "@sanity/icons"
 import { visionTool } from "@sanity/vision"
 import { defineConfig } from "sanity"
-import { presentationTool } from "sanity/presentation"
+import { defineDocuments, defineLocations, presentationTool } from "sanity/presentation"
 import type { StructureResolver } from "sanity/structure"
 import { structureTool } from "sanity/structure"
 import { StudioLogo } from "./components/StudioLogo"
@@ -122,6 +122,103 @@ export default defineConfig({
         origin: env.SANITY_STUDIO_PREVIEW_URL,
         draftMode: {
           enable: "/api/draft",
+          disable: "/api/draft/disable",
+        },
+      },
+      allowOrigins: [
+        "http://localhost:3000",
+        "https://chimborazoparkconservancy.org",
+        "https://*.chimborazoparkconservancy.org",
+      ],
+      resolve: {
+        mainDocuments: defineDocuments([
+          // Singleton pages - match URL to document type
+          { route: "/", type: "homePage" },
+          { route: "/events", type: "eventsPage" },
+          { route: "/projects", type: "projectsPage" },
+          { route: "/amenities", type: "amenitiesPage" },
+          { route: "/media", type: "mediaPage" },
+          { route: "/donate", type: "donatePage" },
+          { route: "/get-involved", type: "getInvolvedPage" },
+          { route: "/history", type: "historyPage" },
+          // Dynamic routes - use filter to match by slug
+          {
+            route: "/events/:slug",
+            filter: `_type == "event" && slug.current == $slug`,
+          },
+          {
+            route: "/projects/:slug",
+            filter: `_type == "project" && slug.current == $slug`,
+          },
+        ]),
+        locations: {
+          // Singleton pages
+          homePage: defineLocations({
+            message: "This document controls the homepage content",
+            locations: [{ title: "Homepage", href: "/" }],
+          }),
+          eventsPage: defineLocations({
+            message: "This document controls the Events listing page",
+            locations: [{ title: "Events", href: "/events" }],
+          }),
+          projectsPage: defineLocations({
+            message: "This document controls the Projects listing page",
+            locations: [{ title: "Projects", href: "/projects" }],
+          }),
+          amenitiesPage: defineLocations({
+            message: "This document controls the Amenities page",
+            locations: [{ title: "Amenities", href: "/amenities" }],
+          }),
+          mediaPage: defineLocations({
+            message: "This document controls the Media page",
+            locations: [{ title: "Media", href: "/media" }],
+          }),
+          donatePage: defineLocations({
+            message: "This document controls the Donate page",
+            locations: [{ title: "Donate", href: "/donate" }],
+          }),
+          getInvolvedPage: defineLocations({
+            message: "This document controls the Get Involved page",
+            locations: [{ title: "Get Involved", href: "/get-involved" }],
+          }),
+          historyPage: defineLocations({
+            message: "This document controls the History page",
+            locations: [{ title: "History", href: "/history" }],
+          }),
+          // Dynamic content types
+          event: defineLocations({
+            select: {
+              title: "title",
+              slug: "slug.current",
+            },
+            resolve: (doc) => ({
+              locations: doc?.slug
+                ? [
+                    { title: doc.title || "Untitled Event", href: `/events/${doc.slug}` },
+                    { title: "Events Listing", href: "/events" },
+                  ]
+                : [],
+            }),
+          }),
+          project: defineLocations({
+            select: {
+              title: "title",
+              slug: "slug.current",
+            },
+            resolve: (doc) => ({
+              locations: doc?.slug
+                ? [
+                    { title: doc.title || "Untitled Project", href: `/projects/${doc.slug}` },
+                    { title: "Projects Listing", href: "/projects" },
+                  ]
+                : [],
+            }),
+          }),
+          // Site settings appears across all pages
+          siteSettings: defineLocations({
+            message: "This document is used across the entire site",
+            tone: "caution",
+          }),
         },
       },
     }),
