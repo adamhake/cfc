@@ -4,8 +4,9 @@ import GetInvolved from "@/components/GetInvolved/get-involved";
 import PageHero from "@/components/PageHero/page-hero";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import SupportOption from "@/components/SupportOption/support-option";
+import { getIsPreviewMode } from "@/lib/preview";
 import { queryKeys } from "@/lib/query-keys";
-import { sanityClient } from "@/lib/sanity";
+import { getSanityClient } from "@/lib/sanity";
 import type { SanityAmenitiesPage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { getAmenitiesPageQuery } from "@chimborazo/sanity-config";
@@ -51,27 +52,32 @@ const getIconComponent = (iconName: string) => {
   return IconComponent ? <IconComponent /> : <Building2 />;
 };
 
-// Query options for TanStack Query
-const amenitiesPageQueryOptions = queryOptions({
-  queryKey: queryKeys.amenitiesPage(),
-  queryFn: async (): Promise<SanityAmenitiesPage | null> => {
-    try {
-      return await sanityClient.fetch(getAmenitiesPageQuery);
-    } catch (error) {
-      console.warn("Failed to fetch amenities page from Sanity:", error);
-      return null;
-    }
-  },
-  // Page content changes infrequently - cache for 30 minutes
-  staleTime: 30 * 60 * 1000, // 30 minutes
-  gcTime: 60 * 60 * 1000, // 1 hour (must be >= staleTime)
-});
+// Query options for TanStack Query - accept preview flag for Visual Editing
+const amenitiesPageQueryOptions = (preview = false) =>
+  queryOptions({
+    queryKey: [...queryKeys.amenitiesPage(), { preview }],
+    queryFn: async (): Promise<SanityAmenitiesPage | null> => {
+      try {
+        return await getSanityClient(preview).fetch(getAmenitiesPageQuery);
+      } catch (error) {
+        console.warn("Failed to fetch amenities page from Sanity:", error);
+        return null;
+      }
+    },
+    staleTime: 30 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
+  });
 
 export const Route = createFileRoute("/amenities")({
   component: RouteComponent,
   loader: async ({ context }) => {
+    // Check if we're in preview mode for Visual Editing
+    const preview = await getIsPreviewMode();
+
     // Prefetch amenities page data on the server
-    await context.queryClient.ensureQueryData(amenitiesPageQueryOptions);
+    await context.queryClient.ensureQueryData(amenitiesPageQueryOptions(preview));
+
+    return { preview };
   },
   head: () => ({
     meta: generateMetaTags({
@@ -88,7 +94,8 @@ export const Route = createFileRoute("/amenities")({
 });
 
 function RouteComponent() {
-  const { data: amenitiesPageData } = useQuery(amenitiesPageQueryOptions);
+  const { preview } = Route.useLoaderData();
+  const { data: amenitiesPageData } = useQuery(amenitiesPageQueryOptions(preview));
 
   // Prepare hero data from Sanity or use defaults
   const heroData = amenitiesPageData?.pageHero?.image?.image

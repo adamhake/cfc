@@ -36,6 +36,8 @@ export const env = createEnv({
     VITE_SANITY_PROJECT_ID: sanityProjectIdSchema,
     VITE_SANITY_DATASET: sanityDatasetSchema,
     VITE_SANITY_API_VERSION: sanityApiVersionSchema,
+    // Visual Editing - Studio URL for click-to-edit
+    VITE_SANITY_STUDIO_URL: z.string().url().optional(),
     // Newsletter signup
     VITE_TURNSTILE_SITE_KEY: z.string().optional(),
   },
@@ -63,6 +65,7 @@ export const env = createEnv({
     VITE_SANITY_PROJECT_ID: import.meta.env.VITE_SANITY_PROJECT_ID,
     VITE_SANITY_DATASET: import.meta.env.VITE_SANITY_DATASET,
     VITE_SANITY_API_VERSION: import.meta.env.VITE_SANITY_API_VERSION,
+    VITE_SANITY_STUDIO_URL: import.meta.env.VITE_SANITY_STUDIO_URL,
     VITE_TURNSTILE_SITE_KEY: import.meta.env.VITE_TURNSTILE_SITE_KEY,
   },
 

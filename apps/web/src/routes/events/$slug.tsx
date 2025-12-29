@@ -6,9 +6,10 @@ import { Markdown } from "@/components/Markdown/markdown";
 import PageHero from "@/components/PageHero/page-hero";
 import { PortableText } from "@/components/PortableText/portable-text";
 import { events as staticEvents, type Event as StaticEvent } from "@/data/events";
+import { getIsPreviewMode } from "@/lib/preview";
 import { CACHE_PRESETS } from "@/lib/query-config";
 import { queryKeys } from "@/lib/query-keys";
-import { sanityClient } from "@/lib/sanity";
+import { getSanityClient } from "@/lib/sanity";
 import type { SanityEvent } from "@/lib/sanity-types";
 import {
   generateEventStructuredData,
@@ -29,16 +30,17 @@ const markdownFiles = import.meta.glob<{ default: string }>("../../data/events/*
   import: "default",
 });
 
-// Query options for fetching event by slug with caching
-const eventBySlugQueryOptions = (slug: string) =>
+// Query options for fetching event by slug with caching - accept preview flag for Visual Editing
+const eventBySlugQueryOptions = (slug: string, preview = false) =>
   queryOptions({
-    queryKey: queryKeys.events.detail(slug),
+    queryKey: [...queryKeys.events.detail(slug), { preview }],
     queryFn: async () => {
       // Try to fetch from Sanity first (primary source)
       try {
-        const sanityEvent = await sanityClient.fetch<SanityEvent | null>(eventBySlugQuery, {
-          slug,
-        });
+        const sanityEvent = await getSanityClient(preview).fetch<SanityEvent | null>(
+          eventBySlugQuery,
+          { slug },
+        );
         if (sanityEvent) {
           return {
             event: sanityEvent,
@@ -87,8 +89,13 @@ const eventBySlugQueryOptions = (slug: string) =>
 export const Route = createFileRoute("/events/$slug")({
   component: EventPage,
   loader: async ({ params, context }) => {
+    // Check if we're in preview mode for Visual Editing
+    const preview = await getIsPreviewMode();
+
     // Use TanStack Query for caching
-    await context.queryClient.ensureQueryData(eventBySlugQueryOptions(params.slug));
+    await context.queryClient.ensureQueryData(eventBySlugQueryOptions(params.slug, preview));
+
+    return { preview };
   },
   head: ({ params }) => {
     // Generate basic meta tags - detailed ones are in component's structured data
@@ -110,7 +117,8 @@ export const Route = createFileRoute("/events/$slug")({
 
 function EventPage() {
   const { slug } = Route.useParams();
-  const { data } = useSuspenseQuery(eventBySlugQueryOptions(slug));
+  const { preview } = Route.useLoaderData();
+  const { data } = useSuspenseQuery(eventBySlugQueryOptions(slug, preview));
   const { event, isSanityEvent, markdownContent } = data;
 
   const isPast = new Date(event.date) < new Date();

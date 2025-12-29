@@ -24,6 +24,7 @@ import { Route as EventsSlugRouteImport } from './routes/events/$slug'
 import { Route as ApiGenerateMetadataRouteImport } from './routes/api/generate-metadata'
 import { Route as ApiDraftRouteImport } from './routes/api/draft'
 import { Route as ApiWebhooksSanityRouteImport } from './routes/api/webhooks/sanity'
+import { Route as ApiDraftDisableRouteImport } from './routes/api/draft/disable'
 
 const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
   id: '/privacy-policy',
@@ -100,6 +101,11 @@ const ApiWebhooksSanityRoute = ApiWebhooksSanityRouteImport.update({
   path: '/api/webhooks/sanity',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiDraftDisableRoute = ApiDraftDisableRouteImport.update({
+  id: '/disable',
+  path: '/disable',
+  getParentRoute: () => ApiDraftRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -110,12 +116,13 @@ export interface FileRoutesByFullPath {
   '/history': typeof HistoryRoute
   '/media': typeof MediaRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
-  '/api/draft': typeof ApiDraftRoute
+  '/api/draft': typeof ApiDraftRouteWithChildren
   '/api/generate-metadata': typeof ApiGenerateMetadataRoute
   '/events/$slug': typeof EventsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/events': typeof EventsIndexRoute
   '/projects': typeof ProjectsIndexRoute
+  '/api/draft/disable': typeof ApiDraftDisableRoute
   '/api/webhooks/sanity': typeof ApiWebhooksSanityRoute
 }
 export interface FileRoutesByTo {
@@ -127,12 +134,13 @@ export interface FileRoutesByTo {
   '/history': typeof HistoryRoute
   '/media': typeof MediaRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
-  '/api/draft': typeof ApiDraftRoute
+  '/api/draft': typeof ApiDraftRouteWithChildren
   '/api/generate-metadata': typeof ApiGenerateMetadataRoute
   '/events/$slug': typeof EventsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/events': typeof EventsIndexRoute
   '/projects': typeof ProjectsIndexRoute
+  '/api/draft/disable': typeof ApiDraftDisableRoute
   '/api/webhooks/sanity': typeof ApiWebhooksSanityRoute
 }
 export interface FileRoutesById {
@@ -145,12 +153,13 @@ export interface FileRoutesById {
   '/history': typeof HistoryRoute
   '/media': typeof MediaRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
-  '/api/draft': typeof ApiDraftRoute
+  '/api/draft': typeof ApiDraftRouteWithChildren
   '/api/generate-metadata': typeof ApiGenerateMetadataRoute
   '/events/$slug': typeof EventsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/events/': typeof EventsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/api/draft/disable': typeof ApiDraftDisableRoute
   '/api/webhooks/sanity': typeof ApiWebhooksSanityRoute
 }
 export interface FileRouteTypes {
@@ -170,6 +179,7 @@ export interface FileRouteTypes {
     | '/projects/$slug'
     | '/events'
     | '/projects'
+    | '/api/draft/disable'
     | '/api/webhooks/sanity'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -187,6 +197,7 @@ export interface FileRouteTypes {
     | '/projects/$slug'
     | '/events'
     | '/projects'
+    | '/api/draft/disable'
     | '/api/webhooks/sanity'
   id:
     | '__root__'
@@ -204,6 +215,7 @@ export interface FileRouteTypes {
     | '/projects/$slug'
     | '/events/'
     | '/projects/'
+    | '/api/draft/disable'
     | '/api/webhooks/sanity'
   fileRoutesById: FileRoutesById
 }
@@ -216,7 +228,7 @@ export interface RootRouteChildren {
   HistoryRoute: typeof HistoryRoute
   MediaRoute: typeof MediaRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
-  ApiDraftRoute: typeof ApiDraftRoute
+  ApiDraftRoute: typeof ApiDraftRouteWithChildren
   ApiGenerateMetadataRoute: typeof ApiGenerateMetadataRoute
   EventsSlugRoute: typeof EventsSlugRoute
   ProjectsSlugRoute: typeof ProjectsSlugRoute
@@ -332,8 +344,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiWebhooksSanityRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/draft/disable': {
+      id: '/api/draft/disable'
+      path: '/disable'
+      fullPath: '/api/draft/disable'
+      preLoaderRoute: typeof ApiDraftDisableRouteImport
+      parentRoute: typeof ApiDraftRoute
+    }
   }
 }
+
+interface ApiDraftRouteChildren {
+  ApiDraftDisableRoute: typeof ApiDraftDisableRoute
+}
+
+const ApiDraftRouteChildren: ApiDraftRouteChildren = {
+  ApiDraftDisableRoute: ApiDraftDisableRoute,
+}
+
+const ApiDraftRouteWithChildren = ApiDraftRoute._addFileChildren(
+  ApiDraftRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -344,7 +375,7 @@ const rootRouteChildren: RootRouteChildren = {
   HistoryRoute: HistoryRoute,
   MediaRoute: MediaRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
-  ApiDraftRoute: ApiDraftRoute,
+  ApiDraftRoute: ApiDraftRouteWithChildren,
   ApiGenerateMetadataRoute: ApiGenerateMetadataRoute,
   EventsSlugRoute: EventsSlugRoute,
   ProjectsSlugRoute: ProjectsSlugRoute,

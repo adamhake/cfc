@@ -2,54 +2,59 @@ import Container from "@/components/Container/container";
 import Event from "@/components/Event/event";
 import PageHero from "@/components/PageHero/page-hero";
 import { PortableText } from "@/components/PortableText/portable-text";
+import { getIsPreviewMode } from "@/lib/preview";
 import { queryKeys } from "@/lib/query-keys";
-import { sanityClient } from "@/lib/sanity";
+import { getSanityClient } from "@/lib/sanity";
 import type { SanityEvent, SanityEventsPage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { allEventsQuery, getEventsPageQuery } from "@chimborazo/sanity-config";
 import { queryOptions } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
-// Query options for TanStack Query
-const eventsQueryOptions = queryOptions({
-  queryKey: queryKeys.events.all(),
-  queryFn: async (): Promise<SanityEvent[]> => {
-    try {
-      return await sanityClient.fetch(allEventsQuery);
-    } catch (error) {
-      console.warn("Failed to fetch events from Sanity, using static data:", error);
-      // Return empty array if Sanity is not configured
-      return [];
-    }
-  },
-  // Events list changes occasionally - cache for 5 minutes
-  staleTime: 5 * 60 * 1000, // 5 minutes
-  gcTime: 15 * 60 * 1000, // 15 minutes
-});
+// Query options for TanStack Query - accept preview flag for Visual Editing
+const eventsQueryOptions = (preview = false) =>
+  queryOptions({
+    queryKey: [...queryKeys.events.all(), { preview }],
+    queryFn: async (): Promise<SanityEvent[]> => {
+      try {
+        return await getSanityClient(preview).fetch(allEventsQuery);
+      } catch (error) {
+        console.warn("Failed to fetch events from Sanity, using static data:", error);
+        return [];
+      }
+    },
+    // Events list changes occasionally - cache for 5 minutes
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
+  });
 
-const eventsPageQueryOptions = queryOptions({
-  queryKey: queryKeys.eventsPage(),
-  queryFn: async (): Promise<SanityEventsPage | null> => {
-    try {
-      return await sanityClient.fetch(getEventsPageQuery);
-    } catch (error) {
-      console.warn("Failed to fetch events page from Sanity:", error);
-      return null;
-    }
-  },
-  staleTime: 30 * 60 * 1000, // 30 minutes
-  gcTime: 60 * 60 * 1000, // 1 hour
-});
+const eventsPageQueryOptions = (preview = false) =>
+  queryOptions({
+    queryKey: [...queryKeys.eventsPage(), { preview }],
+    queryFn: async (): Promise<SanityEventsPage | null> => {
+      try {
+        return await getSanityClient(preview).fetch(getEventsPageQuery);
+      } catch (error) {
+        console.warn("Failed to fetch events page from Sanity:", error);
+        return null;
+      }
+    },
+    staleTime: 30 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
+  });
 
 export const Route = createFileRoute("/events/")({
   component: Events,
   loader: async ({ context }) => {
+    // Check if we're in preview mode for Visual Editing
+    const preview = await getIsPreviewMode();
+
     // Prefetch both events data and page content on the server
     const [events, pageData] = await Promise.all([
-      context.queryClient.ensureQueryData(eventsQueryOptions),
-      context.queryClient.ensureQueryData(eventsPageQueryOptions),
+      context.queryClient.ensureQueryData(eventsQueryOptions(preview)),
+      context.queryClient.ensureQueryData(eventsPageQueryOptions(preview)),
     ]);
-    return { events, pageData };
+    return { events, pageData, preview };
   },
   head: () => ({
     meta: generateMetaTags({

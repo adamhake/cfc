@@ -2,8 +2,9 @@ import { Button } from "@/components/Button/button";
 import Container from "@/components/Container/container";
 import ImageGallery, { type SanityGalleryImage } from "@/components/ImageGallery/image-gallery";
 import PageHero from "@/components/PageHero/page-hero";
+import { getIsPreviewMode } from "@/lib/preview";
 import { queryKeys } from "@/lib/query-keys";
-import { sanityClient } from "@/lib/sanity";
+import { getSanityClient } from "@/lib/sanity";
 import type { SanityMediaImage, SanityMediaPage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import {
@@ -16,20 +17,21 @@ import { createFileRoute } from "@tanstack/react-router";
 
 const PAGE_SIZE = 9;
 
-// Query options for media page content
-const mediaPageQueryOptions = queryOptions({
-  queryKey: queryKeys.mediaPage(),
-  queryFn: async (): Promise<SanityMediaPage | null> => {
-    try {
-      return await sanityClient.fetch(getMediaPageQuery);
-    } catch (error) {
-      console.warn("Failed to fetch media page from Sanity:", error);
-      return null;
-    }
-  },
-  staleTime: 30 * 60 * 1000, // 30 minutes
-  gcTime: 60 * 60 * 1000, // 1 hour
-});
+// Query options for media page content - accept preview flag for Visual Editing
+const mediaPageQueryOptions = (preview = false) =>
+  queryOptions({
+    queryKey: [...queryKeys.mediaPage(), { preview }],
+    queryFn: async (): Promise<SanityMediaPage | null> => {
+      try {
+        return await getSanityClient(preview).fetch(getMediaPageQuery);
+      } catch (error) {
+        console.warn("Failed to fetch media page from Sanity:", error);
+        return null;
+      }
+    },
+    staleTime: 30 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
+  });
 
 interface MediaPageData {
   images: SanityMediaImage[];
@@ -37,13 +39,14 @@ interface MediaPageData {
   totalCount: number;
 }
 
-async function fetchMediaPage(pageParam: number): Promise<MediaPageData> {
+async function fetchMediaPage(pageParam: number, preview = false): Promise<MediaPageData> {
   const start = pageParam;
   const end = pageParam + PAGE_SIZE;
+  const client = getSanityClient(preview);
 
   const [images, totalCount] = await Promise.all([
-    sanityClient.fetch<SanityMediaImage[]>(paginatedMediaImagesQuery, { start, end }),
-    sanityClient.fetch<number>(mediaImagesCountQuery),
+    client.fetch<SanityMediaImage[]>(paginatedMediaImagesQuery, { start, end }),
+    client.fetch<number>(mediaImagesCountQuery),
   ]);
 
   return {
@@ -56,15 +59,20 @@ async function fetchMediaPage(pageParam: number): Promise<MediaPageData> {
 export const Route = createFileRoute("/media")({
   component: Media,
   loader: async ({ context }) => {
+    // Check if we're in preview mode for Visual Editing
+    const preview = await getIsPreviewMode();
+
     // Prefetch media page content and first page of images
     await Promise.all([
-      context.queryClient.ensureQueryData(mediaPageQueryOptions),
+      context.queryClient.ensureQueryData(mediaPageQueryOptions(preview)),
       context.queryClient.prefetchInfiniteQuery({
-        queryKey: queryKeys.media.paginated(),
-        queryFn: ({ pageParam }) => fetchMediaPage(pageParam),
+        queryKey: [...queryKeys.media.paginated(), { preview }],
+        queryFn: ({ pageParam }) => fetchMediaPage(pageParam, preview),
         initialPageParam: 0,
       }),
     ]);
+
+    return { preview };
   },
   head: () => ({
     meta: generateMetaTags({
@@ -81,14 +89,15 @@ export const Route = createFileRoute("/media")({
 });
 
 function Media() {
-  const { data: mediaPageData } = useQuery(mediaPageQueryOptions);
+  const { preview } = Route.useLoaderData();
+  const { data: mediaPageData } = useQuery(mediaPageQueryOptions(preview));
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useInfiniteQuery({
-    queryKey: queryKeys.media.paginated(),
-    queryFn: ({ pageParam }) => fetchMediaPage(pageParam),
+    queryKey: [...queryKeys.media.paginated(), { preview }],
+    queryFn: ({ pageParam }) => fetchMediaPage(pageParam, preview),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
-    staleTime: 15 * 60 * 1000, // 15 minutes
-    gcTime: 60 * 60 * 1000, // 1 hour
+    staleTime: 15 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
   });
 
   // Prepare hero data from Sanity or use defaults

@@ -11,6 +11,10 @@ export interface SanityConfig {
   useCdn?: boolean
   token?: string
   perspective?: "published" | "previewDrafts" | "raw"
+  stega?: {
+    enabled?: boolean
+    studioUrl?: string
+  }
 }
 
 export function createSanityClient(config: SanityConfig) {
@@ -21,6 +25,12 @@ export function createSanityClient(config: SanityConfig) {
     useCdn: config.useCdn ?? true,
     token: config.token,
     perspective: config.perspective || "published",
+    stega: config.stega?.enabled
+      ? {
+          enabled: true,
+          studioUrl: config.stega.studioUrl,
+        }
+      : undefined,
   })
 }
 

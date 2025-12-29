@@ -11,7 +11,7 @@ export const sanityClient = createSanityClient({
   perspective: "raw",
 });
 
-// Preview client (no CDN, includes drafts) - for draft/preview mode
+// Preview client (no CDN, includes drafts, stega enabled) - for draft/preview mode
 // Lazy-loaded to avoid accessing server-side env vars on client
 let _sanityPreviewClient: ReturnType<typeof createSanityClient> | null = null;
 export const sanityPreviewClient = () => {
@@ -23,6 +23,11 @@ export const sanityPreviewClient = () => {
       useCdn: false,
       perspective: "previewDrafts",
       token: env.SANITY_API_TOKEN, // Server-side only
+      // Enable stega encoding for Visual Editing click-to-edit overlays
+      stega: {
+        enabled: true,
+        studioUrl: env.VITE_SANITY_STUDIO_URL ?? "http://localhost:3333",
+      },
     });
   }
   return _sanityPreviewClient;

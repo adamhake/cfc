@@ -59,7 +59,10 @@
       "WebFetch(domain:storybook.js.org)",
       "Bash(xargs cat:*)",
       "mcp__resend__SearchResend",
-      "Bash(pnpm list:*)"
+      "Bash(pnpm list:*)",
+      "Bash(pnpm why:*)",
+      "WebFetch(domain:github.com)",
+      "mcp__context7__get-library-docs"
     ],
     "deny": [],
     "ask": []

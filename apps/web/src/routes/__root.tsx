@@ -2,11 +2,13 @@ import { ErrorBoundary } from "@/components/ErrorBoundary/error-boundary";
 import Footer from "@/components/Footer/footer";
 import Header from "@/components/Header/header";
 import { NotFound } from "@/components/NotFound/not-found";
+import { DisablePreview, VisualEditing } from "@/components/VisualEditing";
+import { getIsPreviewMode } from "@/lib/preview";
 import type { PaletteMode } from "@/utils/palette";
 import { generateOrganizationStructuredData, SITE_CONFIG } from "@/utils/seo";
 import type { ResolvedTheme, ThemeMode } from "@/utils/theme";
 import type { QueryClient } from "@tanstack/react-query";
-import { createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
+import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
 
 interface MyRouterContext {
@@ -21,7 +23,13 @@ interface MyRouterContext {
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
+  component: RootComponent,
   notFoundComponent: NotFound,
+  loader: async () => {
+    // Detect preview mode for Visual Editing
+    const preview = await getIsPreviewMode();
+    return { preview };
+  },
   head: () => ({
     meta: [
       {
@@ -96,6 +104,26 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
   shellComponent: RootDocument,
 });
+
+/**
+ * Root component that wraps all routes.
+ * Conditionally renders Visual Editing components when in preview mode.
+ */
+function RootComponent() {
+  const { preview } = Route.useLoaderData();
+
+  return (
+    <>
+      <Outlet />
+      {preview && (
+        <>
+          <VisualEditing />
+          <DisablePreview />
+        </>
+      )}
+    </>
+  );
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const structuredData = generateOrganizationStructuredData();
