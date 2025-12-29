@@ -1,7 +1,8 @@
 import Container from "@/components/Container/container";
 import PageHero from "@/components/PageHero/page-hero";
+import { getIsPreviewMode } from "@/lib/preview";
 import { queryKeys } from "@/lib/query-keys";
-import { sanityClient } from "@/lib/sanity";
+import { getSanityClient } from "@/lib/sanity";
 import type { SanityDonatePage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { getDonatePageQuery } from "@chimborazo/sanity-config";
@@ -9,26 +10,32 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
-// Query options for donate page content
-const donatePageQueryOptions = queryOptions({
-  queryKey: queryKeys.donatePage(),
-  queryFn: async (): Promise<SanityDonatePage | null> => {
-    try {
-      return await sanityClient.fetch(getDonatePageQuery);
-    } catch (error) {
-      console.warn("Failed to fetch donate page from Sanity:", error);
-      return null;
-    }
-  },
-  staleTime: 30 * 60 * 1000, // 30 minutes
-  gcTime: 60 * 60 * 1000, // 1 hour
-});
+// Query options for donate page content - accept preview flag for Visual Editing
+const donatePageQueryOptions = (preview = false) =>
+  queryOptions({
+    queryKey: [...queryKeys.donatePage(), { preview }],
+    queryFn: async (): Promise<SanityDonatePage | null> => {
+      try {
+        return await getSanityClient(preview).fetch(getDonatePageQuery);
+      } catch (error) {
+        console.warn("Failed to fetch donate page from Sanity:", error);
+        return null;
+      }
+    },
+    staleTime: 30 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
+  });
 
 export const Route = createFileRoute("/donate")({
   component: Donate,
   loader: async ({ context }) => {
+    // Check if we're in preview mode for Visual Editing
+    const preview = await getIsPreviewMode();
+
     // Prefetch donate page content on the server
-    await context.queryClient.ensureQueryData(donatePageQueryOptions);
+    await context.queryClient.ensureQueryData(donatePageQueryOptions(preview));
+
+    return { preview };
   },
   head: () => ({
     meta: generateMetaTags({
@@ -45,7 +52,8 @@ export const Route = createFileRoute("/donate")({
 });
 
 function Donate() {
-  const { data: donatePageData } = useQuery(donatePageQueryOptions);
+  const { preview } = Route.useLoaderData();
+  const { data: donatePageData } = useQuery(donatePageQueryOptions(preview));
   const [isIframeLoaded, setIsIframeLoaded] = useState(false);
 
   // Prepare hero data from Sanity or use defaults

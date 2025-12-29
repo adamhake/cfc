@@ -7,8 +7,9 @@ import PageHero from "@/components/PageHero/page-hero";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import SupportOption from "@/components/SupportOption/support-option";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { getIsPreviewMode } from "@/lib/preview";
 import { queryKeys } from "@/lib/query-keys";
-import { sanityClient } from "@/lib/sanity";
+import { getSanityClient } from "@/lib/sanity";
 import { SanityGetInvolvedPage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { getGetInvolvedPageQuery } from "@chimborazo/sanity-config";
@@ -28,27 +29,31 @@ import {
 } from "lucide-react";
 import { Button } from "../components/Button/button";
 
-const getInvolvedPageOptions = queryOptions({
-  queryKey: queryKeys.getInvolvedPage(),
-  queryFn: async (): Promise<SanityGetInvolvedPage | null> => {
-    try {
-      return await sanityClient.fetch(getGetInvolvedPageQuery);
-    } catch (error) {
-      console.warn("Failed to fetch donate page from Sanity:", error);
-      return null;
-    }
-  },
-  staleTime: 30 * 60 * 1000, // 30 minutes
-  gcTime: 60 * 60 * 1000, // 1 hour
-});
+// Query options for get-involved page content - accept preview flag for Visual Editing
+const getInvolvedPageQueryOptions = (preview = false) =>
+  queryOptions({
+    queryKey: [...queryKeys.getInvolvedPage(), { preview }],
+    queryFn: async (): Promise<SanityGetInvolvedPage | null> => {
+      try {
+        return await getSanityClient(preview).fetch(getGetInvolvedPageQuery);
+      } catch (error) {
+        console.warn("Failed to fetch get-involved page from Sanity:", error);
+        return null;
+      }
+    },
+    staleTime: 30 * 60 * 1000, // 30 minutes
+    gcTime: 60 * 60 * 1000, // 1 hour
+  });
 
 export const Route = createFileRoute("/get-involved")({
   component: GetInvolvedPage,
   loader: async ({ context }) => {
-    const pageData = await context.queryClient.ensureQueryData(getInvolvedPageOptions);
-    return {
-      pageData,
-    };
+    // Check if we're in preview mode for Visual Editing
+    const preview = await getIsPreviewMode();
+
+    // Prefetch get-involved page content on the server
+    const pageData = await context.queryClient.ensureQueryData(getInvolvedPageQueryOptions(preview));
+    return { pageData, preview };
   },
   head: () => ({
     meta: generateMetaTags({

@@ -2,53 +2,58 @@ import Container from "@/components/Container/container";
 import PageHero from "@/components/PageHero/page-hero";
 import { PortableText } from "@/components/PortableText/portable-text";
 import Project from "@/components/Project/project";
+import { getIsPreviewMode } from "@/lib/preview";
 import { queryKeys } from "@/lib/query-keys";
-import { sanityClient } from "@/lib/sanity";
+import { getSanityClient } from "@/lib/sanity";
 import type { SanityProject, SanityProjectsPage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { allProjectsQuery, getProjectsPageQuery } from "@chimborazo/sanity-config";
 import { queryOptions } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
-// Query options for TanStack Query
-const projectsQueryOptions = queryOptions({
-  queryKey: queryKeys.projects.all(),
-  queryFn: async (): Promise<SanityProject[]> => {
-    try {
-      return await sanityClient.fetch(allProjectsQuery);
-    } catch (error) {
-      console.warn("Failed to fetch projects from Sanity:", error);
-      return [];
-    }
-  },
-  // Projects list changes occasionally - cache for 5 minutes
-  staleTime: 5 * 60 * 1000, // 5 minutes
-  gcTime: 15 * 60 * 1000, // 15 minutes
-});
+// Query options for TanStack Query - accept preview flag for Visual Editing
+const projectsQueryOptions = (preview = false) =>
+  queryOptions({
+    queryKey: [...queryKeys.projects.all(), { preview }],
+    queryFn: async (): Promise<SanityProject[]> => {
+      try {
+        return await getSanityClient(preview).fetch(allProjectsQuery);
+      } catch (error) {
+        console.warn("Failed to fetch projects from Sanity:", error);
+        return [];
+      }
+    },
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
+  });
 
-const projectsPageQueryOptions = queryOptions({
-  queryKey: queryKeys.projectsPage(),
-  queryFn: async (): Promise<SanityProjectsPage | null> => {
-    try {
-      return await sanityClient.fetch(getProjectsPageQuery);
-    } catch (error) {
-      console.warn("Failed to fetch projects page from Sanity:", error);
-      return null;
-    }
-  },
-  staleTime: 30 * 60 * 1000, // 30 minutes
-  gcTime: 60 * 60 * 1000, // 1 hour
-});
+const projectsPageQueryOptions = (preview = false) =>
+  queryOptions({
+    queryKey: [...queryKeys.projectsPage(), { preview }],
+    queryFn: async (): Promise<SanityProjectsPage | null> => {
+      try {
+        return await getSanityClient(preview).fetch(getProjectsPageQuery);
+      } catch (error) {
+        console.warn("Failed to fetch projects page from Sanity:", error);
+        return null;
+      }
+    },
+    staleTime: 30 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
+  });
 
 export const Route = createFileRoute("/projects/")({
   component: Projects,
   loader: async ({ context }) => {
+    // Check if we're in preview mode for Visual Editing
+    const preview = await getIsPreviewMode();
+
     // Prefetch both projects data and page content on the server
     const [projects, pageData] = await Promise.all([
-      context.queryClient.ensureQueryData(projectsQueryOptions),
-      context.queryClient.ensureQueryData(projectsPageQueryOptions),
+      context.queryClient.ensureQueryData(projectsQueryOptions(preview)),
+      context.queryClient.ensureQueryData(projectsPageQueryOptions(preview)),
     ]);
-    return { projects, pageData };
+    return { projects, pageData, preview };
   },
   head: () => ({
     meta: generateMetaTags({
