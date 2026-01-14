@@ -31,7 +31,7 @@ const variantStyles: Record<ChipVariant, string> = {
   // Project Category
   restoration: "bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200",
   recreation: "bg-accent-100 text-accent-800 dark:bg-accent-900 dark:text-accent-200",
-  connection: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
+  connection: "bg-heather-100 text-heather-800 dark:bg-heather-900 dark:text-heather-200",
   preservation: "bg-terra-100 text-terra-800 dark:bg-terra-900 dark:text-terra-200",
 
   // Event Status
