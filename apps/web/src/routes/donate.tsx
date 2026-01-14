@@ -96,7 +96,7 @@ function Donate() {
           {/* Donation form */}
           <div
             className="mt-12"
-            style={{ position: "relative", minHeight: "600px", width: "100%" }}
+            style={{ position: "relative", minHeight: "700px", width: "100%" }}
           >
             {/* Loading skeleton */}
             {!isIframeLoaded && (
