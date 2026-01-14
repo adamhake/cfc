@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>;
 export const LeafyGreen: Story = {
   args: {
     title: "Preservation",
-    icon: "leafy-green",
+    pillar: "preservation",
     description:
       "Dedicated to preserving the natural beauty and historical significance of Chimborazo Park for future generations.",
   },
@@ -25,7 +25,7 @@ export const LeafyGreen: Story = {
 export const Trees: Story = {
   args: {
     title: "Sustainability",
-    icon: "trees",
+    pillar: "recreation",
     description:
       "Implementing sustainable practices to ensure the park's ecosystem thrives amidst urban development.",
   },
@@ -34,7 +34,7 @@ export const Trees: Story = {
 export const HeartHandshake: Story = {
   args: {
     title: "Community",
-    icon: "heart-handshake",
+    pillar: "connection",
     description:
       "Fostering a strong sense of community through inclusive events, volunteer opportunities, and shared spaces.",
   },
@@ -43,7 +43,7 @@ export const HeartHandshake: Story = {
 export const BookOpenText: Story = {
   args: {
     title: "Education",
-    icon: "book-open-text",
+    pillar: "preservation",
     description:
       "Providing educational resources and programs to learn about the park's rich history and diverse ecology.",
   },

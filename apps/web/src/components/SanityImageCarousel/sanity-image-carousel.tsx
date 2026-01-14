@@ -5,14 +5,11 @@ import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
-export interface SanityCarouselImage {
-  image: SanityImageObject;
-  alt?: string;
-  caption?: string;
-}
+// Re-export for convenience
+export type { SanityImageObject };
 
 interface SanityImageCarouselProps {
-  images: SanityCarouselImage[];
+  images: SanityImageObject[];
   autoPlay?: boolean;
   autoPlayInterval?: number;
   showNavigation?: boolean;
@@ -160,11 +157,12 @@ export default function SanityImageCarousel({
             >
               <div className={`relative ${getAspectClass()} bg-grey-200 dark:bg-primary-700`}>
                 <SanityImage
-                  image={item.image}
-                  alt={item.alt || item.image.alt || ""}
+                  image={item}
+                  alt={item.alt || ""}
                   sizes={sizes}
                   className="h-full w-full object-cover"
                   priority={priority && index === 0}
+                  useHotspotPosition={true}
                 />
                 {showCaptions && captionPosition === "overlay" && item.caption && (
                   <div className="absolute inset-0 flex items-end bg-gradient-to-t from-primary-900/80 via-primary-900/40 to-transparent p-4 md:p-6 dark:from-grey-900/80 dark:via-grey-900/40">

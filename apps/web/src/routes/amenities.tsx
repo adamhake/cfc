@@ -216,13 +216,7 @@ function RouteComponent() {
                       }
                     : undefined
                 }
-                images={
-                  amenity.images?.map((img) => ({
-                    image: img.image,
-                    alt: img.image.alt,
-                    caption: img.image.caption,
-                  })) ?? []
-                }
+                images={amenity.images?.map((img) => img.image) ?? []}
                 imagePosition={index % 2 === 0 ? "left" : "right"}
                 priority={index === 0}
               />
@@ -256,13 +250,7 @@ function RouteComponent() {
                       }
                     : undefined
                 }
-                images={
-                  amenity.images?.map((img) => ({
-                    image: img.image,
-                    alt: img.image.alt,
-                    caption: img.image.caption,
-                  })) ?? []
-                }
+                images={amenity.images?.map((img) => img.image) ?? []}
                 imagePosition={index % 2 === 0 ? "left" : "right"}
               />
             ))}
