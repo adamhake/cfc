@@ -36,13 +36,13 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
-    "@sanity/client": "^7.13.2",
+    "@sanity/client": "^7.14.0",
     "@sanity/icons": "^3.7.4",
     "@sanity/image-url": "^2.0.2",
-    "@sanity/types": "^5.1.0",
+    "@sanity/types": "^5.3.0",
     "@t3-oss/env-core": "^0.13.10",
-    "groq": "^5.1.0",
-    "zod": "^4.2.1"
+    "groq": "^5.3.0",
+    "zod": "^4.3.5"
   },
   "peerDependencies": {
     "@sanity/ui": "^2.0.0 || ^3.0.0",
@@ -53,11 +53,11 @@
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "@total-typescript/ts-reset": "^0.6.1",
-    "@types/node": "^25.0.3",
-    "@types/react": "^19.2.7",
+    "@types/node": "^25.0.8",
+    "@types/react": "^19.2.8",
     "eslint": "^9.39.2",
     "prettier": "^3.7.4",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.51.0"
+    "typescript-eslint": "^8.53.0"
   }
 }
