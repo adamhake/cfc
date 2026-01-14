@@ -16,7 +16,8 @@ export const getAmenitiesPageQuery = defineQuery(`
             }
           },
           alt,
-          hotspot
+          hotspot,
+          crop
         }
       }
     },
@@ -39,7 +40,8 @@ export const getAmenitiesPageQuery = defineQuery(`
           },
           alt,
           caption,
-          hotspot
+          hotspot,
+          crop
         }
       },
       externalLink,
