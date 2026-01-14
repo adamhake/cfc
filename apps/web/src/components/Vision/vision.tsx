@@ -1,34 +1,47 @@
-import { BookOpenText, HeartHandshake, LeafyGreen, Trees } from "lucide-react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { cn } from "@/utils/cn";
+import { BookOpenText, HeartHandshake, LeafyGreen, Trees } from "lucide-react";
+
+type Pillar = "restoration" | "preservation" | "connection" | "recreation";
 
 interface VisionProps {
   title: string;
-  icon: "leafy-green" | "trees" | "heart-handshake" | "book-open-text";
   description: string | string[];
+  pillar: Pillar;
 }
 
-function getIcon(icon: string) {
-  switch (icon) {
-    case "leafy-green":
+function getIcon(pillar: Pillar) {
+  switch (pillar) {
+    case "restoration":
       return (
-        <LeafyGreen className="h-8 w-8 stroke-accent-600 md:h-10 md:w-10 dark:stroke-accent-400" />
+        <div className="mb-6 inline-flex rounded-full bg-primary-100 p-3 dark:bg-primary-900">
+          <LeafyGreen className="h-8 w-8 stroke-primary-800 md:h-10 md:w-10 dark:stroke-primary-200" />
+        </div>
       );
-    case "trees":
-      return <Trees className="h-8 w-8 stroke-accent-600 md:h-10 md:w-10 dark:stroke-accent-400" />;
-    case "heart-handshake":
+    case "recreation":
       return (
-        <HeartHandshake className="h-8 w-8 stroke-accent-600 md:h-10 md:w-10 dark:stroke-accent-400" />
+        <div className="mb-6 inline-flex rounded-full bg-accent-100 p-3 dark:bg-accent-900">
+          <Trees className="h-8 w-8 stroke-accent-800 md:h-10 md:w-10 dark:stroke-accent-200" />
+        </div>
       );
-    case "book-open-text":
+    case "connection":
       return (
-        <BookOpenText className="h-8 w-8 stroke-accent-600 md:h-10 md:w-10 dark:stroke-accent-400" />
+        <div className="mb-6 inline-flex rounded-full bg-heather-100 p-3 dark:bg-heather-900">
+          <HeartHandshake className="h-8 w-8 stroke-heather-900 md:h-10 md:w-10 dark:stroke-heather-200" />
+        </div>
+      );
+    case "preservation":
+      // bg-terra-100 text-terra-800 dark:bg-terra-900 dark:text-terra-200
+      return (
+        <div className="mb-6 inline-flex rounded-full bg-terra-100 p-3 dark:bg-terra-900">
+          <BookOpenText className="h-8 w-8 stroke-terra-800 md:h-10 md:w-10 dark:stroke-terra-200" />
+        </div>
       );
     default:
       return null;
   }
 }
-export default function Vision({ title, icon, description }: VisionProps) {
+export default function Vision({ title, icon, description, pillar }: VisionProps) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
@@ -43,9 +56,7 @@ export default function Vision({ title, icon, description }: VisionProps) {
     >
       <div className="relative">
         {/* Icon with background circle */}
-        <div className="mb-6 inline-flex rounded-full bg-accent-600/10 p-3 dark:bg-accent-500/10">
-          {getIcon(icon)}
-        </div>
+        {getIcon(pillar)}
 
         <h3 className="mb-4 font-display text-2xl text-grey-900 md:text-3xl dark:text-grey-100">
           {title}
