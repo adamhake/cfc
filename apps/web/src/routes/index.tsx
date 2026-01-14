@@ -186,7 +186,7 @@ function Home() {
           <div className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-14">
             <Vision
               title="Restoration"
-              icon="leafy-green"
+              pillar="restoration"
               description={[
                 "Revitalizing and preserving the park's environmental character through the recovery and expansion of our natural spaces and habitats.",
                 "Restoring and repairing the park's unique cultural heritage elements.",
@@ -194,17 +194,17 @@ function Home() {
             />
             <Vision
               title="Recreation"
-              icon="trees"
+              pillar="recreation"
               description="Providing vibrant play spaces, natural areas, and a dog park where neighbors of all ages—and their pets—can gather and stay active."
             />
             <Vision
               title="Connection"
-              icon="heart-handshake"
+              pillar="connection"
               description="Building an inclusive, welcoming park through volunteer stewardship and partnerships that strengthen our Church Hill neighborhood."
             />
             <Vision
               title="Preservation"
-              icon="book-open-text"
+              pillar="preservation"
               description="Honoring all chapters of Chimborazo's rich history and ensuring its complete story is shared and understood by future generations."
             />
           </div>
