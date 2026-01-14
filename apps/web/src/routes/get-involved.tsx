@@ -52,7 +52,9 @@ export const Route = createFileRoute("/get-involved")({
     const preview = await getIsPreviewMode();
 
     // Prefetch get-involved page content on the server
-    const pageData = await context.queryClient.ensureQueryData(getInvolvedPageQueryOptions(preview));
+    const pageData = await context.queryClient.ensureQueryData(
+      getInvolvedPageQueryOptions(preview),
+    );
     return { pageData, preview };
   },
   head: () => ({
@@ -207,8 +209,8 @@ function GetInvolvedPage() {
                         <li>Event setup and support</li>
                       </ul>
                       <p className="font-body text-sm text-grey-700 dark:text-grey-300">
-                        Sign up for our newsletter below to receive volunteer opportunities and
-                        event announcements.
+                        Sign up for park update below to receive volunteer opportunities and event
+                        announcements.
                       </p>
                       <div className="pt-2">
                         <Button as="a" variant="accent" size="small" href="/events">
