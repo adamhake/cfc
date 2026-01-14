@@ -1,5 +1,5 @@
 import SanityImageCarousel, {
-  type SanityCarouselImage,
+  type SanityImageObject,
 } from "@/components/SanityImageCarousel/sanity-image-carousel";
 import { cloneElement, isValidElement } from "react";
 
@@ -12,7 +12,7 @@ interface AmenitySectionProps {
     text: string;
     url: string;
   };
-  images: SanityCarouselImage[];
+  images: SanityImageObject[];
   /**
    * Whether to show the image on the left (default) or right side
    */

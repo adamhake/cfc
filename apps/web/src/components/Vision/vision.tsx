@@ -41,7 +41,7 @@ function getIcon(pillar: Pillar) {
       return null;
   }
 }
-export default function Vision({ title, icon, description, pillar }: VisionProps) {
+export default function Vision({ title, description, pillar }: VisionProps) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
