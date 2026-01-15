@@ -12,9 +12,7 @@ const config = defineConfig({
     viteTsConfigPaths({
       projects: ["./tsconfig.json"],
     }),
-    netlify({
-      edgeSSR: true,
-    }),
+    netlify(),
     tanstackStart({
       prerender: {
         enabled: true,
