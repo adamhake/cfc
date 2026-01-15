@@ -40,6 +40,9 @@ export default function Footer() {
               A 501(c)(3) non-profit dedicated to preserving and enhancing Chimborazo Park in
               Richmond, VA's Church Hill neighborhood.
             </p>
+            <address className="font-body text-sm leading-relaxed text-grey-700 not-italic dark:text-grey-300">
+              3215 E. Broad St. <br /> Richmond, VA 23223
+            </address>
           </div>
 
           {/* Quick links */}

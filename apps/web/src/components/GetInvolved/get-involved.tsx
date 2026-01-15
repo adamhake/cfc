@@ -18,6 +18,7 @@ export default function GetInvolved({
   title = "Get Involved",
   description = "Join our community of volunteers and supporters. Get updates on park projects, upcoming events, and opportunities to make a difference in Chimborazo Park.",
   gutter = "default",
+  id = "get-involved",
 }: GetInvolvedProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { data: siteSettings } = useSiteSettings();
@@ -48,7 +49,7 @@ export default function GetInvolved({
   }, [prefersReducedMotion, images.length]);
 
   return (
-    <Container spacing="none" gutter={gutter}>
+    <Container spacing="none" gutter={gutter} id={id}>
       <div className="overflow-hidden rounded-3xl bg-white shadow-md dark:border dark:border-primary-700 dark:bg-primary-950">
         <div className="grid grid-cols-1 lg:grid-cols-2">
           {/* Image side with cycling images */}

@@ -352,7 +352,22 @@ export default function Header() {
           >
             <div className="flex min-h-full flex-col p-6">
               {/* Close button */}
-              <div className="mb-8 flex justify-end">
+              <div className="mb-12 flex items-center justify-between">
+                {/* Logo and branding */}
+                <Link
+                  to="/"
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 rounded-lg text-primary-800 focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-100"
+                >
+                  <IconLogo className="h-8 w-8 shrink-0" />
+                  <div className="flex flex-col font-display">
+                    <span className="text-base leading-none font-semibold">Chimborazo</span>
+                    <span className="text-sm leading-none text-primary-700 dark:text-primary-400">
+                      Park Conservancy
+                    </span>
+                  </div>
+                </Link>
+
                 <Button
                   onClick={() => setMenuOpen(false)}
                   variant="secondary"
@@ -362,21 +377,6 @@ export default function Header() {
                   <X className="h-6 w-6" />
                 </Button>
               </div>
-
-              {/* Logo and branding */}
-              <Link
-                to="/"
-                onClick={() => setMenuOpen(false)}
-                className="mb-12 flex items-center justify-center gap-2 rounded-lg text-primary-800 focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-100"
-              >
-                <IconLogo className="h-10 w-10 shrink-0" />
-                <div className="flex flex-col text-right font-display">
-                  <span className="text-base leading-none font-semibold">Chimborazo</span>
-                  <span className="text-xs leading-none text-primary-700 dark:text-primary-400">
-                    Park Conservancy
-                  </span>
-                </div>
-              </Link>
 
               {/* Navigation */}
               <nav className="flex-1">
