@@ -12,6 +12,7 @@ interface GetInvolvedProps {
   title?: string;
   description?: string;
   gutter?: "default" | "none";
+  id?: string;
 }
 
 export default function GetInvolved({

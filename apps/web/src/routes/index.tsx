@@ -11,6 +11,7 @@ import type { SanityImageObject } from "@/components/SanityImage/sanity-image";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import Vision from "@/components/Vision/vision";
 import { siteSettingsQueryOptions } from "@/hooks/useSiteSettings";
+import { CACHE_TAGS, generateCacheHeaders } from "@/lib/cache-headers";
 import { getIsPreviewMode } from "@/lib/preview";
 import { CACHE_PRESETS } from "@/lib/query-config";
 import { queryKeys } from "@/lib/query-keys";
@@ -86,6 +87,13 @@ export const Route = createFileRoute("/")({
     context.queryClient.fetchQuery(recentEventsQueryOptions(preview));
 
     return { preview };
+  },
+  headers: ({ loaderData }) => {
+    return generateCacheHeaders({
+      preset: "CURATED_CONTENT",
+      tags: [CACHE_TAGS.HOMEPAGE],
+      isPreview: loaderData?.preview ?? false,
+    });
   },
   head: () => ({
     meta: generateMetaTags({

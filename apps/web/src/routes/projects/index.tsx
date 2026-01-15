@@ -2,6 +2,7 @@ import Container from "@/components/Container/container";
 import PageHero from "@/components/PageHero/page-hero";
 import { PortableText } from "@/components/PortableText/portable-text";
 import Project from "@/components/Project/project";
+import { CACHE_TAGS, generateCacheHeaders } from "@/lib/cache-headers";
 import { getIsPreviewMode } from "@/lib/preview";
 import { queryKeys } from "@/lib/query-keys";
 import { getSanityClient } from "@/lib/sanity";
@@ -54,6 +55,13 @@ export const Route = createFileRoute("/projects/")({
       context.queryClient.ensureQueryData(projectsPageQueryOptions(preview)),
     ]);
     return { projects, pageData, preview };
+  },
+  headers: ({ loaderData }) => {
+    return generateCacheHeaders({
+      preset: "EVENTS_LIST", // Reuse 5min preset for project listings
+      tags: [CACHE_TAGS.PROJECTS_LIST, CACHE_TAGS.PROJECTS],
+      isPreview: loaderData?.preview ?? false,
+    });
   },
   head: () => ({
     meta: generateMetaTags({
