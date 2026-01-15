@@ -6,6 +6,7 @@ import { Markdown } from "@/components/Markdown/markdown";
 import PageHero from "@/components/PageHero/page-hero";
 import { PortableText } from "@/components/PortableText/portable-text";
 import { events as staticEvents, type Event as StaticEvent } from "@/data/events";
+import { CACHE_TAGS, generateCacheHeaders } from "@/lib/cache-headers";
 import { getIsPreviewMode } from "@/lib/preview";
 import { CACHE_PRESETS } from "@/lib/query-config";
 import { queryKeys } from "@/lib/query-keys";
@@ -98,6 +99,13 @@ export const Route = createFileRoute("/events/$slug")({
     );
 
     return { preview, eventData };
+  },
+  headers: ({ loaderData }) => {
+    return generateCacheHeaders({
+      preset: "EVENT_DETAIL",
+      tags: [CACHE_TAGS.EVENT_DETAIL, CACHE_TAGS.EVENTS],
+      isPreview: loaderData?.preview ?? false,
+    });
   },
   head: ({ params, loaderData }) => {
     const eventUrl = `${SITE_CONFIG.url}/events/${params.slug}`;

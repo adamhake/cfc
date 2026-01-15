@@ -2,6 +2,7 @@ import { Button } from "@/components/Button/button";
 import Container from "@/components/Container/container";
 import ImageGallery, { type SanityGalleryImage } from "@/components/ImageGallery/image-gallery";
 import PageHero from "@/components/PageHero/page-hero";
+import { CACHE_TAGS, generateCacheHeaders } from "@/lib/cache-headers";
 import { getIsPreviewMode } from "@/lib/preview";
 import { queryKeys } from "@/lib/query-keys";
 import { getSanityClient } from "@/lib/sanity";
@@ -73,6 +74,13 @@ export const Route = createFileRoute("/media")({
     ]);
 
     return { preview };
+  },
+  headers: ({ loaderData }) => {
+    return generateCacheHeaders({
+      preset: "MEDIA_CONTENT",
+      tags: [CACHE_TAGS.MEDIA],
+      isPreview: loaderData?.preview ?? false,
+    });
   },
   head: () => ({
     meta: generateMetaTags({
