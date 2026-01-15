@@ -1,4 +1,5 @@
 import { CACHE_TAGS, type CacheTag } from "@/lib/cache-headers";
+import { purgeCache } from "@netlify/functions";
 import { isValidSignature, SIGNATURE_HEADER_NAME } from "@sanity/webhook";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -136,16 +137,12 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
             );
           }
 
-          console.log(
-            `[Sanity Webhook] Successfully purged cache (method: ${purgeResult.method}) for tags:`,
-            cacheTags,
-          );
+          console.log(`[Sanity Webhook] Successfully purged cache for tags:`, cacheTags);
 
           return new Response(
             JSON.stringify({
               success: true,
               message: "Cache purged successfully",
-              method: purgeResult.method,
               type: payload._type,
               tags: cacheTags,
             }),
@@ -241,72 +238,21 @@ function getCacheTagsForDocumentType(docType: string): CacheTag[] {
 }
 
 /**
- * Purges Netlify cache using their Purge API with cache tag support
- * Requires NETLIFY_AUTH_TOKEN and NETLIFY_SITE_ID environment variables
+ * Purges Netlify cache using the @netlify/functions purgeCache helper
  *
- * Uses Netlify's cache tag purging for granular invalidation:
- * - POST /api/v1/purge with cache_tags for tag-based purging
- * - Falls back to full site purge if tag purge fails
+ * Uses Netlify's cache tag purging for granular invalidation.
+ * The purgeCache function handles authentication automatically when
+ * running in a Netlify function context.
  */
 async function purgeNetlifyCache(
   tags: CacheTag[],
-): Promise<{ success: boolean; error?: string; method?: "tags" | "full" }> {
-  const authToken = process.env.NETLIFY_AUTH_TOKEN;
-  const siteId = process.env.NETLIFY_SITE_ID;
-
-  if (!authToken || !siteId) {
-    return {
-      success: false,
-      error: "Netlify credentials not configured (NETLIFY_AUTH_TOKEN or NETLIFY_SITE_ID missing)",
-    };
-  }
-
+): Promise<{ success: boolean; error?: string }> {
   try {
-    // Try cache tag purging first (more granular)
-    const tagPurgeResponse = await fetch("https://api.netlify.com/api/v1/purge", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        site_id: siteId,
-        cache_tags: tags,
-      }),
-    });
+    // Use Netlify's purgeCache function for cache tag invalidation
+    // This automatically handles authentication in the Netlify function context
+    await purgeCache({ tags });
 
-    if (tagPurgeResponse.ok) {
-      return { success: true, method: "tags" };
-    }
-
-    // Log the tag purge failure for debugging
-    const tagErrorText = await tagPurgeResponse.text();
-    console.warn(
-      `[Sanity Webhook] Tag-based purge failed (${tagPurgeResponse.status}): ${tagErrorText}`,
-    );
-
-    // Fall back to full site cache purge
-    console.log("[Sanity Webhook] Falling back to full site cache purge");
-    const fullPurgeResponse = await fetch(
-      `https://api.netlify.com/api/v1/sites/${siteId}/purge_cache`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-          "Content-Type": "application/json",
-        },
-      },
-    );
-
-    if (!fullPurgeResponse.ok) {
-      const errorText = await fullPurgeResponse.text();
-      return {
-        success: false,
-        error: `Full site purge failed (${fullPurgeResponse.status}): ${errorText}`,
-      };
-    }
-
-    return { success: true, method: "full" };
+    return { success: true };
   } catch (error) {
     return {
       success: false,
