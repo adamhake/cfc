@@ -135,7 +135,7 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-grey-200 pt-8 md:flex-row dark:border-primary-700">
-          <p className="font-body text-sm text-grey-600 dark:text-grey-400">
+          <p className="text-center font-body text-sm text-grey-600 md:text-left dark:text-grey-400">
             &copy; {new Date().getFullYear()} Chimborazo Park Conservancy. All rights reserved.
           </p>
           <div className="flex gap-6">
