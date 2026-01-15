@@ -14,26 +14,26 @@ function getIcon(pillar: Pillar) {
   switch (pillar) {
     case "restoration":
       return (
-        <div className="mb-6 inline-flex rounded-full bg-primary-100 p-3 dark:bg-primary-900">
+        <div className="mb-6 inline-flex rounded-full bg-primary-100 p-3 dark:bg-primary-800">
           <LeafyGreen className="h-8 w-8 stroke-primary-800 md:h-10 md:w-10 dark:stroke-primary-200" />
         </div>
       );
     case "recreation":
       return (
-        <div className="mb-6 inline-flex rounded-full bg-accent-100 p-3 dark:bg-accent-900">
+        <div className="mb-6 inline-flex rounded-full bg-accent-100 p-3 dark:bg-accent-800">
           <Trees className="h-8 w-8 stroke-accent-800 md:h-10 md:w-10 dark:stroke-accent-200" />
         </div>
       );
     case "connection":
       return (
-        <div className="mb-6 inline-flex rounded-full bg-heather-100 p-3 dark:bg-heather-900">
+        <div className="mb-6 inline-flex rounded-full bg-heather-100 p-3 dark:bg-heather-800">
           <HeartHandshake className="h-8 w-8 stroke-heather-900 md:h-10 md:w-10 dark:stroke-heather-200" />
         </div>
       );
     case "preservation":
       // bg-terra-100 text-terra-800 dark:bg-terra-900 dark:text-terra-200
       return (
-        <div className="mb-6 inline-flex rounded-full bg-terra-100 p-3 dark:bg-terra-900">
+        <div className="mb-6 inline-flex rounded-full bg-terra-100 p-3 dark:bg-terra-800">
           <BookOpenText className="h-8 w-8 stroke-terra-800 md:h-10 md:w-10 dark:stroke-terra-200" />
         </div>
       );
@@ -48,7 +48,7 @@ export default function Vision({ title, description, pillar }: VisionProps) {
     <div
       className={cn(
         "group relative overflow-hidden rounded-2xl border border-accent-600/20",
-        "bg-gradient-to-br from-grey-100/10 to-grey-100/50 p-8 shadow-sm lg:p-12",
+        "bg-gradient-to-br from-grey-50 to-grey-100/90 p-8 shadow-sm lg:p-12",
         "dark:border-accent-500/20 dark:from-primary-900 dark:to-primary-900/80",
         !prefersReducedMotion &&
           "transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md",
