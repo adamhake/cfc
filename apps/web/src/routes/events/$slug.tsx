@@ -92,19 +92,24 @@ export const Route = createFileRoute("/events/$slug")({
     // Check if we're in preview mode for Visual Editing
     const preview = await getIsPreviewMode();
 
-    // Use TanStack Query for caching
-    await context.queryClient.ensureQueryData(eventBySlugQueryOptions(params.slug, preview));
+    // Use TanStack Query for caching and return the data for head()
+    const eventData = await context.queryClient.ensureQueryData(
+      eventBySlugQueryOptions(params.slug, preview),
+    );
 
-    return { preview };
+    return { preview, eventData };
   },
-  head: ({ params }) => {
-    // Generate basic meta tags - detailed ones are in component's structured data
+  head: ({ params, loaderData }) => {
     const eventUrl = `${SITE_CONFIG.url}/events/${params.slug}`;
+    const title = loaderData?.eventData?.event?.title ?? "Event Details";
+    const description =
+      loaderData?.eventData?.event?.description ??
+      "Join us for this Chimborazo Park event. Check out the details and RSVP.";
 
     return {
       meta: generateMetaTags({
-        title: "Event Details",
-        description: "Join us for this Chimborazo Park event. Check out the details and RSVP.",
+        title,
+        description,
         type: "article",
         url: eventUrl,
       }),
