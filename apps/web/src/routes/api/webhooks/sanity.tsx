@@ -1,3 +1,4 @@
+import { CACHE_TAGS, type CacheTag } from "@/lib/cache-headers";
 import { isValidSignature, SIGNATURE_HEADER_NAME } from "@sanity/webhook";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -118,8 +119,8 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
           // Determine cache tags to purge based on document type
           const cacheTags = getCacheTagsForDocumentType(payload._type);
 
-          // Purge Netlify cache
-          const purgeResult = await purgeNetlifyCache();
+          // Purge Netlify cache using the determined cache tags
+          const purgeResult = await purgeNetlifyCache(cacheTags);
 
           if (!purgeResult.success) {
             console.error("[Sanity Webhook] Failed to purge cache:", purgeResult.error);
@@ -135,12 +136,16 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
             );
           }
 
-          console.log(`[Sanity Webhook] Successfully purged cache for tags:`, cacheTags);
+          console.log(
+            `[Sanity Webhook] Successfully purged cache (method: ${purgeResult.method}) for tags:`,
+            cacheTags,
+          );
 
           return new Response(
             JSON.stringify({
               success: true,
               message: "Cache purged successfully",
+              method: purgeResult.method,
               type: payload._type,
               tags: cacheTags,
             }),
@@ -171,49 +176,81 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
 /**
  * Maps Sanity document types to Netlify cache tags
  * Cache tags determine which pages to invalidate when content changes
+ *
+ * Uses the CACHE_TAGS constants from cache-headers.ts to ensure consistency
+ * between header generation and cache invalidation.
  */
-function getCacheTagsForDocumentType(docType: string): string[] {
-  const tags: string[] = [];
+function getCacheTagsForDocumentType(docType: string): CacheTag[] {
+  const tags: CacheTag[] = [];
 
   switch (docType) {
     case "event":
-      // Events affect: event list page, individual event pages, homepage
-      tags.push("events", "homepage");
+      // Events affect: event list page, individual event pages, homepage (recent events)
+      tags.push(CACHE_TAGS.EVENTS, CACHE_TAGS.EVENTS_LIST, CACHE_TAGS.EVENT_DETAIL);
+      tags.push(CACHE_TAGS.HOMEPAGE);
+      break;
+
+    case "project":
+      // Projects affect: project list page, individual project pages, homepage (featured projects)
+      tags.push(CACHE_TAGS.PROJECTS, CACHE_TAGS.PROJECTS_LIST, CACHE_TAGS.PROJECT_DETAIL);
+      tags.push(CACHE_TAGS.HOMEPAGE);
       break;
 
     case "mediaImage":
-      // Media affects: media gallery, homepage
-      tags.push("media", "homepage");
+      // Media affects: media gallery, homepage (galleries)
+      tags.push(CACHE_TAGS.MEDIA);
+      tags.push(CACHE_TAGS.HOMEPAGE);
       break;
 
     case "homePage":
       // Homepage content only affects homepage
-      tags.push("homepage");
+      tags.push(CACHE_TAGS.HOMEPAGE);
+      break;
+
+    case "eventsPage":
+      // Events page content affects events list
+      tags.push(CACHE_TAGS.EVENTS_LIST);
+      break;
+
+    case "projectsPage":
+      // Projects page content affects projects list
+      tags.push(CACHE_TAGS.PROJECTS_LIST);
+      break;
+
+    case "mediaPage":
+      // Media page content affects media gallery
+      tags.push(CACHE_TAGS.MEDIA);
       break;
 
     case "partner":
     case "quote":
-      // Partners and quotes are shown on homepage
-      tags.push("homepage");
+    case "gallery":
+      // Partners, quotes, and galleries are shown on homepage
+      tags.push(CACHE_TAGS.HOMEPAGE);
       break;
 
     default:
-      // Unknown types: purge everything to be safe
-      console.warn(`[Sanity Webhook] Unknown document type: ${docType}, purging all`);
-      tags.push("all");
+      // Unknown types: log warning but don't purge everything
+      // This prevents accidental full cache purges for new document types
+      console.warn(`[Sanity Webhook] Unknown document type: ${docType}`);
+      // Still purge homepage as a safe default since most content appears there
+      tags.push(CACHE_TAGS.HOMEPAGE);
   }
 
   return tags;
 }
 
 /**
- * Purges Netlify cache using their Purge API
+ * Purges Netlify cache using their Purge API with cache tag support
  * Requires NETLIFY_AUTH_TOKEN and NETLIFY_SITE_ID environment variables
  *
- * Note: Cache tags could be used in the future for granular invalidation
- * if Netlify adds support for cache tags in their API
+ * Uses Netlify's cache tag purging for granular invalidation:
+ * - POST /api/v1/purge with cache_tags for tag-based purging
+ * - Falls back to full site purge if tag purge fails
  */
-async function purgeNetlifyCache(): Promise<{ success: boolean; error?: string }> {
+async function purgeNetlifyCache(
+  tags: CacheTag[],
+): Promise<{ success: boolean; error?: string; method?: "tags" | "full" }> {
   const authToken = process.env.NETLIFY_AUTH_TOKEN;
   const siteId = process.env.NETLIFY_SITE_ID;
 
@@ -225,29 +262,51 @@ async function purgeNetlifyCache(): Promise<{ success: boolean; error?: string }
   }
 
   try {
-    // Netlify's cache purge API endpoint
-    const response = await fetch(`https://api.netlify.com/api/v1/sites/${siteId}/purge_cache`, {
+    // Try cache tag purging first (more granular)
+    const tagPurgeResponse = await fetch("https://api.netlify.com/api/v1/purge", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${authToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        // Purge specific cache tags or entire site
-        // Note: Netlify's API may vary - adjust based on their current API
         site_id: siteId,
+        cache_tags: tags,
       }),
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
+    if (tagPurgeResponse.ok) {
+      return { success: true, method: "tags" };
+    }
+
+    // Log the tag purge failure for debugging
+    const tagErrorText = await tagPurgeResponse.text();
+    console.warn(
+      `[Sanity Webhook] Tag-based purge failed (${tagPurgeResponse.status}): ${tagErrorText}`,
+    );
+
+    // Fall back to full site cache purge
+    console.log("[Sanity Webhook] Falling back to full site cache purge");
+    const fullPurgeResponse = await fetch(
+      `https://api.netlify.com/api/v1/sites/${siteId}/purge_cache`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (!fullPurgeResponse.ok) {
+      const errorText = await fullPurgeResponse.text();
       return {
         success: false,
-        error: `Netlify API error (${response.status}): ${errorText}`,
+        error: `Full site purge failed (${fullPurgeResponse.status}): ${errorText}`,
       };
     }
 
-    return { success: true };
+    return { success: true, method: "full" };
   } catch (error) {
     return {
       success: false,

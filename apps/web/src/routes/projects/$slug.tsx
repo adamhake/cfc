@@ -5,6 +5,7 @@ import Event from "@/components/Event/event";
 import PageHero from "@/components/PageHero/page-hero";
 import { PortableText } from "@/components/PortableText/portable-text";
 import { SanityImage } from "@/components/SanityImage/sanity-image";
+import { CACHE_TAGS, generateCacheHeaders } from "@/lib/cache-headers";
 import { getIsPreviewMode } from "@/lib/preview";
 import { queryKeys } from "@/lib/query-keys";
 import { getSanityClient } from "@/lib/sanity";
@@ -47,6 +48,13 @@ export const Route = createFileRoute("/projects/$slug")({
       projectBySlugQueryOptions(params.slug, preview),
     );
     return { project, preview };
+  },
+  headers: ({ loaderData }) => {
+    return generateCacheHeaders({
+      preset: "PROJECT_CONTENT",
+      tags: [CACHE_TAGS.PROJECT_DETAIL, CACHE_TAGS.PROJECTS],
+      isPreview: loaderData?.preview ?? false,
+    });
   },
   head: ({ loaderData }) => {
     if (!loaderData?.project) {
