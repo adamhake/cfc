@@ -40,7 +40,7 @@ export default function Partners({ partners }: PartnersProps) {
             href={partner.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative overflow-hidden rounded-2xl border border-accent-600/20 bg-gradient-to-br from-grey-100/10 to-grey-100/50 p-8 shadow-sm transition-all duration-300 hover:shadow-md lg:p-12 dark:border-primary-600 dark:from-primary-900 dark:to-primary-900/80"
+            className="group relative overflow-hidden rounded-2xl border border-accent-600/20 bg-gradient-to-br from-grey-50 to-grey-100/90 p-8 shadow-sm transition-all duration-300 hover:shadow-md lg:p-12 dark:border-primary-600 dark:from-primary-900 dark:to-primary-900/80"
           >
             <div className="relative space-y-6">
               {/* Logo */}

@@ -1,4 +1,5 @@
 import { cn } from "@/utils/cn";
+import { Link } from "@tanstack/react-router";
 import type React from "react";
 
 /**
@@ -26,6 +27,8 @@ export interface ButtonProps {
    * Click handler function
    */
   onClick?: () => void;
+
+  hash?: string;
 
   /**
    * Whether the button is disabled
@@ -99,6 +102,7 @@ export interface ButtonProps {
 export const Button: React.FC<ButtonProps> = ({
   variant = "primary",
   size = "standard",
+  hash,
   children,
   onClick,
   disabled = false,
@@ -166,8 +170,9 @@ export const Button: React.FC<ButtonProps> = ({
 
   if (as === "a") {
     return (
-      <a
-        href={href}
+      <Link
+        hash={hash}
+        to={href}
         onClick={onClick}
         target={target}
         rel={rel}
@@ -177,7 +182,7 @@ export const Button: React.FC<ButtonProps> = ({
         {...dataProps}
       >
         {children}
-      </a>
+      </Link>
     );
   }
 

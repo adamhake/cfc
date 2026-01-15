@@ -225,8 +225,8 @@ function EventPage() {
             {/* Main Content */}
             <main className="lg:col-span-8">
               {hasRecap && (
-                <div className="rounded-2xl border p-8">
-                  <p>
+                <div className="mb-10 space-y-8 rounded-2xl border border-primary-700 p-8">
+                  <p className="font-body text-lg text-grey-900 dark:text-grey-100">
                     This event has passed, but read below for a recap. You can also view the
                     original even details here:{" "}
                   </p>
@@ -245,7 +245,7 @@ function EventPage() {
                   <PortableText value={sanityEvent!.recap!} />
                   {recapGalleryImages.length > 0 && (
                     <div className="mt-12">
-                      <h2 className="mb-6 font-display text-2xl font-semibold text-grey-900 dark:text-grey-100">
+                      <h2 className="mb-6 font-display text-2xl font-semibold text-primary-700 dark:text-primary-500">
                         Event Photos
                       </h2>
                       <ImageGallery
@@ -311,8 +311,8 @@ function EventPage() {
             <aside className="lg:col-span-4">
               <div className="sticky top-24 space-y-6">
                 {/* Event Details Card */}
-                <div className="overflow-hidden rounded-2xl border border-accent-200 bg-white shadow-sm dark:border-accent-700/30 dark:bg-primary-950">
-                  <div className="bg-gradient-to-br from-accent-50 to-accent-100/50 px-6 py-5 dark:from-primary-900/30 dark:to-primary-800/20">
+                <div className="overflow-hidden rounded-2xl border border-accent-200 bg-white shadow-sm dark:border-accent-700/30 dark:bg-primary-900">
+                  <div className="bg-gradient-to-br from-accent-50 to-accent-100/50 px-6 py-5 dark:from-primary-950/30 dark:to-primary-950/20">
                     <h2 className="font-display text-xl font-semibold text-grey-900 md:text-2xl dark:text-grey-100">
                       Event Details
                     </h2>

@@ -682,3 +682,7 @@ html[data-palette="green-navy"] {
     width: 0%;
   }
 }
+
+html {
+  scroll-behavior: smooth;
+}

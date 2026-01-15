@@ -272,7 +272,8 @@ function RouteComponent() {
               title="Volunteer with Us"
               description="Join Friends of Chimborazo Park and the Chimborazo Park Conservancy for clean-up days, plantings, and restoration projects. Every helping hand makes a difference."
               icon={<Heart className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />}
-              comingSoon
+              ctaText="Volunteer With Us"
+              ctaLink="/get-involved"
             />
 
             <SupportOption

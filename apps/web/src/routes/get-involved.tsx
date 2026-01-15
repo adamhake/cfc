@@ -171,7 +171,7 @@ function GetInvolvedPage() {
 
             <div className="space-y-6">
               {/* Volunteer */}
-              <div className="overflow-hidden rounded-2xl border border-grey-200 bg-white shadow-sm dark:border-grey-700 dark:bg-grey-900">
+              <div className="overflow-hidden rounded-2xl border border-grey-200 bg-white shadow-sm dark:border-primary-700 dark:bg-primary-950">
                 <div className="grid grid-cols-1 md:grid-cols-5">
                   <div className="relative h-48 md:col-span-2 md:h-auto">
                     <Image
@@ -186,7 +186,7 @@ function GetInvolvedPage() {
                   </div>
                   <div className="p-6 md:col-span-3 md:p-8">
                     <div className="mb-4 flex items-start gap-4">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-600 dark:bg-accent-700">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-600 dark:bg-accent-900">
                         <Heart className="h-5 w-5 stroke-white" />
                       </div>
                       <div>
@@ -212,9 +212,12 @@ function GetInvolvedPage() {
                         Sign up for park update below to receive volunteer opportunities and event
                         announcements.
                       </p>
-                      <div className="pt-2">
+                      <div className="flex flex-col gap-4 pt-2 md:flex-row md:gap-6">
                         <Button as="a" variant="accent" size="small" href="/events">
                           View Upcoming Events
+                        </Button>
+                        <Button as="a" variant="outline" size="small" hash="stay-connected">
+                          Sign Up for Updates
                         </Button>
                       </div>
                     </div>
@@ -223,7 +226,7 @@ function GetInvolvedPage() {
               </div>
 
               {/* Donate */}
-              <div className="overflow-hidden rounded-2xl border border-grey-200 bg-white shadow-sm dark:border-grey-700 dark:bg-grey-900">
+              <div className="overflow-hidden rounded-2xl border border-grey-200 bg-white shadow-sm dark:border-primary-700 dark:bg-primary-950">
                 <div className="grid grid-cols-1 md:grid-cols-5">
                   <div className="relative h-48 md:col-span-2 md:h-auto">
                     <Image
@@ -238,8 +241,8 @@ function GetInvolvedPage() {
                   </div>
                   <div className="p-6 md:col-span-3 md:p-8">
                     <div className="mb-4 flex items-start gap-4">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-600 dark:bg-accent-700">
-                        <HandHeart className="h-5 w-5 stroke-white" />
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-600 dark:bg-accent-900">
+                        <HandHeart className="h-5 w-5 stroke-accent-100 dark:stroke-accent-200" />
                       </div>
                       <div>
                         <h3 className="font-display text-xl font-semibold text-grey-900 md:text-2xl dark:text-grey-100">
@@ -269,7 +272,7 @@ function GetInvolvedPage() {
               </div>
 
               {/* Adopt a Feature */}
-              <div className="overflow-hidden rounded-2xl border border-grey-200 bg-white shadow-sm dark:border-grey-700 dark:bg-grey-900">
+              <div className="overflow-hidden rounded-2xl border border-grey-200 bg-white shadow-sm dark:border-primary-700 dark:bg-primary-950">
                 <div className="grid grid-cols-1 md:grid-cols-5">
                   <div className="relative h-48 md:col-span-2 md:h-auto">
                     <Image
@@ -284,8 +287,8 @@ function GetInvolvedPage() {
                   </div>
                   <div className="p-6 md:col-span-3 md:p-8">
                     <div className="mb-4 flex items-start gap-4">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-600 dark:bg-accent-700">
-                        <Trees className="h-5 w-5 stroke-white" />
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-600 dark:bg-accent-900">
+                        <Trees className="h-5 w-5 stroke-accent-100 dark:stroke-accent-200" />
                       </div>
                       <div className="flex flex-wrap items-center gap-3">
                         <h3 className="font-display text-xl font-semibold text-grey-900 md:text-2xl dark:text-grey-100">
@@ -301,7 +304,7 @@ function GetInvolvedPage() {
                         support for ongoing care.
                       </p>
                       <div className="grid gap-3 sm:grid-cols-2">
-                        <div className="rounded-lg border border-grey-200 bg-grey-50 p-4 dark:border-grey-700 dark:bg-grey-800">
+                        <div className="rounded-lg border border-grey-200 bg-grey-50 p-4 dark:border-primary-800 dark:bg-primary-900">
                           <h4 className="mb-1.5 font-display text-base font-semibold text-grey-900 dark:text-grey-100">
                             Adopt a Bench
                           </h4>
@@ -309,7 +312,7 @@ function GetInvolvedPage() {
                             Dedication plaque with your personalized message
                           </p>
                         </div>
-                        <div className="rounded-lg border border-grey-200 bg-grey-50 p-4 dark:border-grey-700 dark:bg-grey-800">
+                        <div className="rounded-lg border border-grey-200 bg-grey-50 p-4 dark:border-primary-800 dark:bg-primary-900">
                           <h4 className="mb-1.5 font-display text-base font-semibold text-grey-900 dark:text-grey-100">
                             Adopt a Tree
                           </h4>
@@ -317,7 +320,7 @@ function GetInvolvedPage() {
                             Species identification sign with your dedication
                           </p>
                         </div>
-                        <div className="rounded-lg border border-grey-200 bg-grey-50 p-4 dark:border-grey-700 dark:bg-grey-800">
+                        <div className="rounded-lg border border-grey-200 bg-grey-50 p-4 dark:border-primary-800 dark:bg-primary-900">
                           <h4 className="mb-1.5 font-display text-base font-semibold text-grey-900 dark:text-grey-100">
                             Plant Spring Color
                           </h4>
@@ -325,7 +328,7 @@ function GetInvolvedPage() {
                             Donate bulbs to brighten the hillsides each spring
                           </p>
                         </div>
-                        <div className="rounded-lg border border-grey-200 bg-grey-50 p-4 dark:border-grey-700 dark:bg-grey-800">
+                        <div className="rounded-lg border border-grey-200 bg-grey-50 p-4 dark:border-primary-800 dark:bg-primary-900">
                           <h4 className="mb-1.5 font-display text-base font-semibold text-grey-900 dark:text-grey-100">
                             Sponsor a Project
                           </h4>
@@ -352,7 +355,7 @@ function GetInvolvedPage() {
           </div>
 
           {/* Stay Connected */}
-          <div>
+          <div id="stay-connected">
             <SectionHeader title="Stay Connected" size="large" />
             <p className="mt-4 mb-12 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
               Sign up for our newsletter to receive updates on park projects, volunteer
@@ -362,13 +365,13 @@ function GetInvolvedPage() {
 
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
               {/* Email Signup */}
-              <div className="rounded-2xl border border-accent-200/50 bg-gradient-to-br from-accent-50/40 to-white p-8 shadow-sm dark:border-accent-700/30 dark:from-accent-900/10 dark:to-transparent">
+              <div className="rounded-2xl border border-accent-200/50 bg-gradient-to-br from-accent-50/40 to-white p-8 shadow-sm dark:border-accent-700/30 dark:from-primary-950/90 dark:to-transparent">
                 <div className="mb-6 flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent-600 dark:bg-accent-700">
-                    <Mail className="h-5 w-5 stroke-white" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent-600 dark:bg-accent-900">
+                    <Mail className="h-5 w-5 stroke-accent-100 dark:stroke-accent-200" />
                   </div>
                   <h3 className="font-display text-2xl font-semibold text-grey-900 dark:text-grey-100">
-                    Newsletter Signup
+                    Sign up for Park Updates
                   </h3>
                 </div>
                 <p className="mb-6 font-body text-grey-700 dark:text-grey-300">
@@ -378,10 +381,10 @@ function GetInvolvedPage() {
               </div>
 
               {/* Social Media */}
-              <div className="rounded-2xl border border-accent-200/50 bg-gradient-to-br from-accent-50/40 to-white p-8 shadow-sm dark:border-accent-700/30 dark:from-accent-900/10 dark:to-transparent">
+              <div className="rounded-2xl border border-accent-200/50 bg-gradient-to-br from-accent-50/40 to-white p-8 shadow-sm dark:border-accent-700/30 dark:from-primary-950/90 dark:to-transparent">
                 <div className="mb-6 flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent-600 dark:bg-accent-700">
-                    <Users className="h-5 w-5 stroke-white" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent-600 dark:bg-accent-900">
+                    <Users className="h-5 w-5 stroke-accent-100 dark:stroke-accent-200" />
                   </div>
                   <h3 className="font-display text-2xl font-semibold text-grey-900 dark:text-grey-100">
                     Follow Us
