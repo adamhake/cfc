@@ -358,16 +358,16 @@ function GetInvolvedPage() {
           <div id="stay-connected">
             <SectionHeader title="Stay Connected" size="large" />
             <p className="mt-4 mb-12 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
-              Sign up for our newsletter to receive updates on park projects, volunteer
-              opportunities, and upcoming events. Follow us on social media to see what's happening
-              at the park and connect with our community.
+              Sign up to receive updates on park projects, volunteer opportunities, and upcoming
+              events. Follow us on social media to see what's happening at the park and connect with
+              our community.
             </p>
 
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
               {/* Email Signup */}
               <div className="rounded-2xl border border-accent-200/50 bg-gradient-to-br from-accent-50/40 to-white p-8 shadow-sm dark:border-accent-700/30 dark:from-primary-950/90 dark:to-transparent">
                 <div className="mb-6 flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent-600 dark:bg-accent-900">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-600 dark:bg-accent-900">
                     <Mail className="h-5 w-5 stroke-accent-100 dark:stroke-accent-200" />
                   </div>
                   <h3 className="font-display text-2xl font-semibold text-grey-900 dark:text-grey-100">
