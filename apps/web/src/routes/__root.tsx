@@ -172,7 +172,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         </a>
         <ErrorBoundary>
           <Header />
-          <main id="main-content">{children}</main>
+          <main id="main-content" className="overflow-x-hidden">{children}</main>
           <Footer />
         </ErrorBoundary>
         <Scripts />
