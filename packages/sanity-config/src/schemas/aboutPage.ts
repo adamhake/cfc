@@ -1,8 +1,8 @@
 import { defineField, defineType } from "sanity"
 
 export default defineType({
-  name: "mediaPage",
-  title: "Media Page",
+  name: "aboutPage",
+  title: "About Page",
   type: "document",
   fields: [
     defineField({
@@ -35,8 +35,8 @@ export default defineType({
   preview: {
     prepare() {
       return {
-        title: "Media Page",
-        subtitle: "Photo gallery and media",
+        title: "About Page",
+        subtitle: "Learn about the rich history of Chimborazo Park",
       }
     },
   },

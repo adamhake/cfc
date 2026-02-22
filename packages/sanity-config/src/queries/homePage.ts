@@ -1,26 +1,13 @@
 import { defineQuery } from "groq"
+import { imageFieldProjection } from "./imageProjections"
 
 export const getHomePageQuery = defineQuery(`
   *[_type == "homePage"][0]{
     hero{
       heading,
       subheading,
-      heroImage->{
-        _id,
-        title,
-        image{
-          asset->{
-            _id,
-            url,
-            metadata{
-              dimensions,
-              lqip
-            }
-          },
-          alt,
-          caption,
-          hotspot
-        }
+      "heroImage": heroImageV2{
+        ${imageFieldProjection}
       },
       ctaButton
     },
@@ -47,46 +34,16 @@ export const getHomePageQuery = defineQuery(`
       _id,
       quoteText,
       attribution,
-      backgroundImage->{
-        _id,
-        title,
-        image{
-          asset->{
-            _id,
-            url,
-            metadata{
-              dimensions,
-              lqip,
-              palette
-            }
-          },
-          alt,
-          caption,
-          hotspot,
-          crop
-        }
+      "backgroundImage": backgroundImageV2{
+        ${imageFieldProjection}
       }
     },
     "gallery": homepageGallery->{
       _id,
       title,
       images[]{
-        image->{
-          _id,
-          title,
-          image{
-            asset->{
-              _id,
-              url,
-              metadata{
-                dimensions,
-                lqip
-              }
-            },
-            alt,
-            caption,
-            hotspot
-          }
+        "image": imageV2{
+          ${imageFieldProjection}
         },
         showOnMobile
       }
@@ -95,22 +52,8 @@ export const getHomePageQuery = defineQuery(`
       _id,
       title,
       images[]{
-        image->{
-          _id,
-          title,
-          image{
-            asset->{
-              _id,
-              url,
-              metadata{
-                dimensions,
-                lqip
-              }
-            },
-            alt,
-            caption,
-            hotspot
-          }
+        "image": imageV2{
+          ${imageFieldProjection}
         },
         showOnMobile
       }

@@ -25,11 +25,10 @@ export default defineType({
           validation: (rule) => rule.max(500),
         }),
         defineField({
-          name: "image",
-          title: "Hero Image",
-          type: "reference",
-          to: [{ type: "mediaImage" }],
-          description: "Select an image from the media library to use as the hero image",
+          name: "imageV2",
+          title: "Hero Image (Direct Upload)",
+          type: "contentImage",
+          description: "Upload/select an image directly. Preferred for new content.",
         }),
       ],
       validation: (rule) => rule.required(),
@@ -163,17 +162,16 @@ export default defineType({
               description: "Bullet points highlighting key features",
             }),
             defineField({
-              name: "images",
-              title: "Images",
+              name: "imagesV2",
+              title: "Images (Direct Upload)",
               type: "array",
-              of: [
-                {
-                  type: "reference",
-                  to: [{ type: "mediaImage" }],
-                },
-              ],
-              description: "Select images from the media library",
-              validation: (rule) => rule.min(1),
+              of: [{ type: "contentImage" }],
+              description: "Upload/select images directly. Preferred for new content.",
+              validation: (rule) =>
+                rule.custom((value) => {
+                  const hasV2 = Array.isArray(value) && value.length > 0
+                  return hasV2 ? true : "At least one image is required"
+                }),
             }),
             defineField({
               name: "externalLink",
@@ -211,7 +209,7 @@ export default defineType({
             select: {
               title: "title",
               section: "section",
-              media: "images.0.image",
+              media: "imagesV2.0",
             },
             prepare({ title, section, media }) {
               const sectionLabels: Record<string, string> = {
@@ -224,7 +222,7 @@ export default defineType({
               return {
                 title: title,
                 subtitle: `${sectionLabel} Park`,
-                media,
+                media: media,
               }
             },
           },

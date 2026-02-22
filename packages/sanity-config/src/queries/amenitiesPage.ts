@@ -1,24 +1,13 @@
 import { defineQuery } from "groq"
+import { imageFieldProjection } from "./imageProjections"
 
 export const getAmenitiesPageQuery = defineQuery(`
   *[_type == "amenitiesPage"][0]{
     pageHero{
       title,
       description,
-      image->{
-        image{
-          asset->{
-            _id,
-            url,
-            metadata{
-              dimensions,
-              lqip
-            }
-          },
-          alt,
-          hotspot,
-          crop
-        }
+      "image": imageV2{
+        ${imageFieldProjection}
       }
     },
     introduction,
@@ -28,21 +17,8 @@ export const getAmenitiesPageQuery = defineQuery(`
       icon,
       description,
       details,
-      images[]->{
-        image{
-          asset->{
-            _id,
-            url,
-            metadata{
-              dimensions,
-              lqip
-            }
-          },
-          alt,
-          caption,
-          hotspot,
-          crop
-        }
+      "images": imagesV2[defined(asset)][]{
+        ${imageFieldProjection}
       },
       externalLink,
       linkText,

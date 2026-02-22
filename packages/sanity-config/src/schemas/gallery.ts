@@ -37,12 +37,17 @@ export default defineType({
           type: "object",
           fields: [
             defineField({
-              name: "image",
-              title: "Image",
-              type: "reference",
-              to: [{ type: "mediaImage" }],
-              description: "Select an image from the media library",
-              validation: (rule) => rule.required(),
+              name: "imageV2",
+              title: "Image (Direct Upload)",
+              type: "contentImage",
+              description: "Upload/select an image directly. Preferred for new content.",
+              validation: (rule) =>
+                rule.custom((value) => {
+                  const hasAsset = Boolean(
+                    (value as { asset?: { _ref?: string } } | undefined)?.asset?._ref
+                  )
+                  return hasAsset ? true : "Image is required"
+                }),
             }),
             defineField({
               name: "showOnMobile",
@@ -54,16 +59,16 @@ export default defineType({
           ],
           preview: {
             select: {
-              title: "image.title",
-              subtitle: "image.category",
-              media: "image.image",
+              title: "imageV2.title",
+              subtitle: "imageV2.category",
+              media: "imageV2",
               showOnMobile: "showOnMobile",
             },
             prepare({ title, subtitle, media, showOnMobile }) {
               return {
                 title: title || "Untitled",
                 subtitle: `${subtitle || "Uncategorized"}${!showOnMobile ? " (hidden on mobile)" : ""}`,
-                media,
+                media: media,
               }
             },
           },
@@ -84,13 +89,13 @@ export default defineType({
     select: {
       title: "title",
       subtitle: "galleryType",
-      media: "images.0.image.image",
+      media: "images.0.imageV2",
     },
     prepare({ title, subtitle, media }) {
       return {
         title,
         subtitle: `${subtitle} gallery`,
-        media,
+        media: media,
       }
     },
   },

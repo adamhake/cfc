@@ -1,3 +1,5 @@
+import { imageFieldProjection } from "./imageProjections"
+
 // Base update fields projection
 export const updateFields = `
   _id,
@@ -5,23 +7,8 @@ export const updateFields = `
   title,
   slug,
   description,
-  "heroImage": heroImage->{
-    _id,
-    title,
-    alt,
-    image{
-      asset->{
-        _id,
-        url,
-        metadata{
-          dimensions,
-          lqip,
-          blurhash
-        }
-      },
-      hotspot,
-      crop
-    }
+  "heroImage": heroImageV2{
+    ${imageFieldProjection}
   },
   "category": category->{
     _id,
@@ -65,23 +52,8 @@ export const updateFieldsExtended = `
     slug,
     description,
     status,
-    "heroImage": heroImage->{
-      _id,
-      title,
-      alt,
-      image{
-        asset->{
-          _id,
-          url,
-          metadata{
-            dimensions,
-            lqip,
-            blurhash
-          }
-        },
-        hotspot,
-        crop
-      }
+    "heroImage": heroImageV2{
+      ${imageFieldProjection}
     }
   }
 `
@@ -182,23 +154,8 @@ export const updatesPageQuery = `
     pageHero{
       title,
       description,
-      "image": image->{
-        _id,
-        title,
-        alt,
-        image{
-          asset->{
-            _id,
-            url,
-            metadata{
-              dimensions,
-              lqip,
-              blurhash
-            }
-          },
-          hotspot,
-          crop
-        }
+      "image": imageV2{
+        ${imageFieldProjection}
       }
     },
     introduction

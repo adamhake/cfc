@@ -6,4 +6,9 @@ export default defineCliConfig({
     projectId: "pntpob7k",
     dataset: "production",
   },
+  typegen: {
+    path: "../../packages/sanity-config/src/**/*.{ts,tsx}",
+    schema: "./schema.json",
+    generates: "../../packages/sanity-config/src/sanity.types.ts",
+  },
 })
