@@ -34,7 +34,7 @@ const eventsPageQueryOptions = (preview = false) =>
     queryKey: [...queryKeys.eventsPage(), { preview }],
     queryFn: async (): Promise<SanityEventsPage | null> => {
       try {
-        return await getSanityClient(preview).fetch(getEventsPageQuery);
+        return (await getSanityClient(preview).fetch(getEventsPageQuery)) as SanityEventsPage | null;
       } catch (error) {
         console.warn("Failed to fetch events page from Sanity:", error);
         return null;
@@ -88,11 +88,11 @@ function Events() {
   const { events, pageData } = Route.useLoaderData();
 
   // Prepare hero data from Sanity or use fallbacks
-  const heroData = pageData?.pageHero?.image?.image
+  const heroData = pageData?.pageHero?.image
     ? {
         title: pageData.pageHero.title,
         subtitle: pageData.pageHero.description,
-        sanityImage: pageData.pageHero.image.image,
+        sanityImage: pageData.pageHero.image,
       }
     : {
         title: "Events",

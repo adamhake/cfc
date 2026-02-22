@@ -57,25 +57,18 @@ const mockProjectBase: SanityProject = {
   description:
     "Restoring historic walking trails throughout the park with native plantings and improved drainage systems.",
   heroImage: {
-    _id: "media-1",
-    _type: "mediaImage",
-    title: "Trail Restoration Work",
-    image: {
-      asset: {
-        _id: "image-1",
-        url: "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=800&q=80",
-        metadata: {
-          dimensions: {
-            width: 800,
-            height: 600,
-            aspectRatio: 1.33,
-          },
+    asset: {
+      _id: "image-1",
+      url: "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=800&q=80",
+      metadata: {
+        dimensions: {
+          width: 800,
+          height: 600,
+          aspectRatio: 1.33,
         },
       },
-      alt: "Trail restoration work in progress",
     },
-    category: "park-views",
-    uploadedAt: "2024-01-01T00:00:00.000Z",
+    alt: "Trail restoration work in progress",
   },
   status: "active",
   startDate: "2024-06-01",
@@ -104,25 +97,18 @@ export const PlannedProject: Story = {
       location: "Lower Park",
       goal: "Create 20 new raised garden beds for community use",
       heroImage: {
-        _id: "media-2",
-        _type: "mediaImage",
-        title: "Community Garden",
-        image: {
-          asset: {
-            _id: "image-2",
-            url: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=800&q=80",
-            metadata: {
-              dimensions: {
-                width: 800,
-                height: 600,
-                aspectRatio: 1.33,
-              },
+        asset: {
+          _id: "image-2",
+          url: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=800&q=80",
+          metadata: {
+            dimensions: {
+              width: 800,
+              height: 600,
+              aspectRatio: 1.33,
             },
           },
-          alt: "Community garden beds",
         },
-        category: "community",
-        uploadedAt: "2024-01-01T00:00:00.000Z",
+        alt: "Community garden beds",
       },
     },
   },
@@ -143,25 +129,18 @@ export const CompletedProject: Story = {
       location: "Monument Plaza",
       goal: "Restore and preserve the historic Chimborazo monument for future generations",
       heroImage: {
-        _id: "media-3",
-        _type: "mediaImage",
-        title: "Historic Monument",
-        image: {
-          asset: {
-            _id: "image-3",
-            url: "https://images.unsplash.com/photo-1587486936527-f2d3f741e5bc?auto=format&fit=crop&w=800&q=80",
-            metadata: {
-              dimensions: {
-                width: 800,
-                height: 600,
-                aspectRatio: 1.33,
-              },
+        asset: {
+          _id: "image-3",
+          url: "https://images.unsplash.com/photo-1587486936527-f2d3f741e5bc?auto=format&fit=crop&w=800&q=80",
+          metadata: {
+            dimensions: {
+              width: 800,
+              height: 600,
+              aspectRatio: 1.33,
             },
           },
-          alt: "Restored historic monument",
         },
-        category: "history",
-        uploadedAt: "2024-01-01T00:00:00.000Z",
+        alt: "Restored historic monument",
       },
     },
   },
@@ -180,25 +159,18 @@ export const ProjectWithoutCategory: Story = {
       startDate: "2024-08-01",
       location: "Main Parking Area",
       heroImage: {
-        _id: "media-4",
-        _type: "mediaImage",
-        title: "Parking Lot",
-        image: {
-          asset: {
-            _id: "image-4",
-            url: "https://images.unsplash.com/photo-1581094271901-8022df4466f9?auto=format&fit=crop&w=800&q=80",
-            metadata: {
-              dimensions: {
-                width: 800,
-                height: 600,
-                aspectRatio: 1.33,
-              },
+        asset: {
+          _id: "image-4",
+          url: "https://images.unsplash.com/photo-1581094271901-8022df4466f9?auto=format&fit=crop&w=800&q=80",
+          metadata: {
+            dimensions: {
+              width: 800,
+              height: 600,
+              aspectRatio: 1.33,
             },
           },
-          alt: "Parking lot construction",
         },
-        category: "park-views",
-        uploadedAt: "2024-01-01T00:00:00.000Z",
+        alt: "Parking lot construction",
       },
     },
   },
@@ -218,25 +190,18 @@ export const ProjectWithMinimalInfo: Story = {
       goal: undefined,
       category: undefined,
       heroImage: {
-        _id: "media-5",
-        _type: "mediaImage",
-        title: "Nature Scene",
-        image: {
-          asset: {
-            _id: "image-5",
-            url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80",
-            metadata: {
-              dimensions: {
-                width: 800,
-                height: 600,
-                aspectRatio: 1.33,
-              },
+        asset: {
+          _id: "image-5",
+          url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80",
+          metadata: {
+            dimensions: {
+              width: 800,
+              height: 600,
+              aspectRatio: 1.33,
             },
           },
-          alt: "Nature scene",
         },
-        category: "nature",
-        uploadedAt: "2024-01-01T00:00:00.000Z",
+        alt: "Nature scene",
       },
     },
   },

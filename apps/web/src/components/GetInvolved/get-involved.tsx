@@ -29,11 +29,23 @@ export default function GetInvolved({
   // Type assertion needed until GROQ types are regenerated
   const images =
     (
-      siteSettings as {
-        getInvolvedGallery?: { images?: { image?: { image?: SanityImageObject } }[] };
+      siteSettings as unknown as {
+        getInvolvedGallery?: {
+          images?: Array<{
+            image?:
+              | SanityImageObject
+              | {
+                  image?: SanityImageObject;
+                };
+          }>;
+        };
       }
     )?.getInvolvedGallery?.images
-      ?.map((item) => item.image?.image)
+      ?.map((item) => {
+        if (!item.image) return null;
+        if ("asset" in item.image) return item.image;
+        return item.image.image || null;
+      })
       .filter((img): img is SanityImageObject => img != null) || [];
 
   useEffect(() => {

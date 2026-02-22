@@ -16,7 +16,7 @@ const donatePageQueryOptions = (preview = false) =>
     queryKey: [...queryKeys.donatePage(), { preview }],
     queryFn: async (): Promise<SanityDonatePage | null> => {
       try {
-        return await getSanityClient(preview).fetch(getDonatePageQuery);
+        return (await getSanityClient(preview).fetch(getDonatePageQuery)) as SanityDonatePage | null;
       } catch (error) {
         console.warn("Failed to fetch donate page from Sanity:", error);
         return null;
@@ -57,11 +57,11 @@ function Donate() {
   const [isIframeLoaded, setIsIframeLoaded] = useState(false);
 
   // Prepare hero data from Sanity or use defaults
-  const heroData = donatePageData?.pageHero?.image?.image
+  const heroData = donatePageData?.pageHero?.image
     ? {
         title: donatePageData.pageHero.title,
         subtitle: donatePageData.pageHero.description,
-        sanityImage: donatePageData.pageHero.image.image,
+        sanityImage: donatePageData.pageHero.image,
       }
     : {
         title: "Support Us",

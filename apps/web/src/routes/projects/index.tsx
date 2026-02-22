@@ -33,7 +33,7 @@ const projectsPageQueryOptions = (preview = false) =>
     queryKey: [...queryKeys.projectsPage(), { preview }],
     queryFn: async (): Promise<SanityProjectsPage | null> => {
       try {
-        return await getSanityClient(preview).fetch(getProjectsPageQuery);
+        return (await getSanityClient(preview).fetch(getProjectsPageQuery)) as SanityProjectsPage | null;
       } catch (error) {
         console.warn("Failed to fetch projects page from Sanity:", error);
         return null;
@@ -87,11 +87,11 @@ function Projects() {
   const { projects, pageData } = Route.useLoaderData();
 
   // Prepare hero data from Sanity or use fallbacks
-  const heroData = pageData?.pageHero?.image?.image
+  const heroData = pageData?.pageHero?.image
     ? {
         title: pageData.pageHero.title,
         subtitle: pageData.pageHero.description,
-        sanityImage: pageData.pageHero.image.image,
+        sanityImage: pageData.pageHero.image,
       }
     : {
         title: "Projects",

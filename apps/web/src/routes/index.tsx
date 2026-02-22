@@ -33,7 +33,7 @@ const homePageQueryOptions = (preview = false) =>
     queryKey: [...queryKeys.homePage(), { preview }],
     queryFn: async (): Promise<SanityHomePage | null> => {
       try {
-        return await getSanityClient(preview).fetch(getHomePageQuery);
+        return (await getSanityClient(preview).fetch(getHomePageQuery)) as SanityHomePage | null;
       } catch (error) {
         console.warn("Failed to fetch homepage from Sanity:", error);
         return null;
@@ -121,11 +121,11 @@ function Home() {
   const { data: recentEvents } = useSuspenseQuery(recentEventsQueryOptions(preview));
 
   // Prepare hero data from Sanity or use defaults
-  const heroData = homePageData?.hero?.heroImage?.image?.asset?.url
+  const heroData = homePageData?.hero?.heroImage?.asset?.url
     ? {
         heading: homePageData.hero.heading,
         subheading: homePageData.hero.subheading,
-        heroImage: homePageData.hero.heroImage.image,
+        heroImage: homePageData.hero.heroImage,
         ctaText: homePageData.hero.ctaButton?.text,
         ctaLink: homePageData.hero.ctaButton?.link,
       }
@@ -134,18 +134,18 @@ function Home() {
   // Prepare gallery data from Sanity or use defaults
   const galleryData =
     homePageData?.gallery?.images
-      ?.filter((img) => img?.image?.image?.asset?.url) // Filter out any images without assets
+      ?.filter((img) => img?.image?.asset?.url) // Filter out any images without assets
       .map((img) => ({
-        ...img.image.image,
-        alt: img.image.image.alt || "",
+        ...img.image,
+        alt: img.image.alt || "",
         showOnMobile: img.showOnMobile ?? true,
       })) || [];
 
   // Prepare park gallery data for rotating images
   const parkGalleryData =
     homePageData?.parkGallery?.images
-      ?.filter((img) => img?.image?.image?.asset?.url) // Filter out any images without assets
-      .map((img) => img.image.image) || [];
+      ?.filter((img) => img?.image?.asset?.url) // Filter out any images without assets
+      .map((img) => img.image) || [];
 
   return (
     <div className="space-y-24 pb-24 text-grey-900 dark:text-grey-100">
@@ -436,13 +436,7 @@ function Home() {
       <Quote
         quoteText={homePageData?.quote?.quoteText}
         attribution={homePageData?.quote?.attribution}
-        backgroundImage={
-          (
-            homePageData?.quote?.backgroundImage as {
-              image?: SanityImageObject;
-            }
-          )?.image
-        }
+        backgroundImage={homePageData?.quote?.backgroundImage as SanityImageObject | undefined}
       />
     </div>
   );
