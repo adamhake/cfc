@@ -24,7 +24,7 @@ const mediaPageQueryOptions = (preview = false) =>
     queryKey: [...queryKeys.mediaPage(), { preview }],
     queryFn: async (): Promise<SanityMediaPage | null> => {
       try {
-        return await getSanityClient(preview).fetch(getMediaPageQuery);
+        return (await getSanityClient(preview).fetch(getMediaPageQuery)) as SanityMediaPage | null;
       } catch (error) {
         console.warn("Failed to fetch media page from Sanity:", error);
         return null;
@@ -109,11 +109,11 @@ function Media() {
   });
 
   // Prepare hero data from Sanity or use defaults
-  const heroData = mediaPageData?.pageHero?.image?.image
+  const heroData = mediaPageData?.pageHero?.image
     ? {
         title: mediaPageData.pageHero.title,
         subtitle: mediaPageData.pageHero.description,
-        sanityImage: mediaPageData.pageHero.image.image,
+        sanityImage: mediaPageData.pageHero.image,
       }
     : {
         title: "Media Gallery",

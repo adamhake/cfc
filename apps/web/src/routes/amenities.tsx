@@ -58,7 +58,7 @@ const amenitiesPageQueryOptions = (preview = false) =>
     queryKey: [...queryKeys.amenitiesPage(), { preview }],
     queryFn: async (): Promise<SanityAmenitiesPage | null> => {
       try {
-        return await getSanityClient(preview).fetch(getAmenitiesPageQuery);
+        return (await getSanityClient(preview).fetch(getAmenitiesPageQuery)) as SanityAmenitiesPage | null;
       } catch (error) {
         console.warn("Failed to fetch amenities page from Sanity:", error);
         return null;
@@ -98,11 +98,11 @@ function RouteComponent() {
   const { data: amenitiesPageData } = useQuery(amenitiesPageQueryOptions(preview));
 
   // Prepare hero data from Sanity or use defaults
-  const heroData = amenitiesPageData?.pageHero?.image?.image
+  const heroData = amenitiesPageData?.pageHero?.image
     ? {
         title: amenitiesPageData.pageHero.title,
         subtitle: amenitiesPageData.pageHero.description,
-        sanityImage: amenitiesPageData.pageHero.image.image,
+        sanityImage: amenitiesPageData.pageHero.image,
       }
     : {
         title: "Park Amenities",
@@ -216,7 +216,7 @@ function RouteComponent() {
                       }
                     : undefined
                 }
-                images={amenity.images?.map((img) => img.image) ?? []}
+                images={amenity.images ?? []}
                 imagePosition={index % 2 === 0 ? "left" : "right"}
                 priority={index === 0}
               />
@@ -250,7 +250,7 @@ function RouteComponent() {
                       }
                     : undefined
                 }
-                images={amenity.images?.map((img) => img.image) ?? []}
+                images={amenity.images ?? []}
                 imagePosition={index % 2 === 0 ? "left" : "right"}
               />
             ))}

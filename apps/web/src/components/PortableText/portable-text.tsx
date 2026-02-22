@@ -101,7 +101,7 @@ const components: PortableTextComponents = {
           <SanityImage
             image={value}
             alt={value.alt || ""}
-            className="rounded-lg shadow-lg"
+            className="mx-auto rounded-lg shadow-lg"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
             maxWidth={1200}
             fit="max"

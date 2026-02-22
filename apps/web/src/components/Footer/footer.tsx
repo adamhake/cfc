@@ -58,16 +58,22 @@ export default function Footer() {
                 Home
               </Link>
               <Link
-                to="/get-involved"
-                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
-              >
-                Get Involved
-              </Link>
-              <Link
                 to="/events"
                 className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
               >
                 Events
+              </Link>
+              <Link
+                to="/about"
+                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
+              >
+                About Us
+              </Link>
+              <Link
+                to="/get-involved"
+                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
+              >
+                Get Involved
               </Link>
               <Link
                 to="/history"

@@ -147,10 +147,10 @@ function EventPage() {
   // Transform recap gallery images for ImageGallery component
   const recapGalleryImages: SanityGalleryImage[] =
     sanityEvent?.recapGallery?.images
-      ?.filter((item) => item?.image?.image?.asset?.url)
+      ?.filter((item) => item?.image?.asset?.url)
       .map((item) => ({
-        ...item.image.image,
-        alt: item.image.image.alt || item.image.title || "Event photo",
+        ...item.image,
+        alt: item.image.alt || "Event photo",
         showOnMobile: item.showOnMobile,
       })) ?? [];
 
