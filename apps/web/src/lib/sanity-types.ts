@@ -78,7 +78,7 @@ export interface SanityProject {
     current: string;
   };
   description: string;
-  heroImage: SanityMediaImage;
+  heroImage: SanityImage;
   status: "planned" | "active" | "completed";
   startDate: string;
   startDateOverride?: string;
@@ -137,7 +137,7 @@ export interface SanityQuote {
 }
 
 export interface SanityGalleryImage {
-  image: SanityMediaImage;
+  image: SanityImage;
   showOnMobile: boolean;
 }
 
@@ -152,7 +152,7 @@ export interface SanityHomePage {
   hero: {
     heading: string;
     subheading: string;
-    heroImage: SanityMediaImage;
+    heroImage: SanityImage;
     ctaButton: {
       text: string;
       link: string;
@@ -193,7 +193,7 @@ export interface SanityAmenitiesPage {
   pageHero: {
     title: string;
     description?: string;
-    image?: SanityMediaImage;
+    image?: SanityImage;
   };
   introduction?: PortableTextBlock[];
   amenities?: Array<{
@@ -202,7 +202,7 @@ export interface SanityAmenitiesPage {
     icon: string;
     description: string;
     details?: string[];
-    images?: SanityMediaImage[];
+    images?: SanityImage[];
     externalLink?: string;
     linkText?: string;
     section: "upper-park" | "lower-park" | "both";
@@ -213,15 +213,16 @@ export interface SanityHistoryPage {
   pageHero: {
     title: string;
     description?: string;
-    image?: SanityMediaImage;
+    image?: SanityImage;
   };
+  content?: PortableTextBlock[];
 }
 
 export interface SanityGetInvolvedPage {
   pageHero: {
     title: string;
     description?: string;
-    image?: SanityMediaImage;
+    image?: SanityImage;
   };
 }
 
@@ -229,7 +230,7 @@ export interface SanityEventsPage {
   pageHero: {
     title: string;
     description?: string;
-    image?: SanityMediaImage;
+    image?: SanityImage;
   };
   introduction?: PortableTextBlock[];
 }
@@ -238,7 +239,7 @@ export interface SanityProjectsPage {
   pageHero: {
     title: string;
     description?: string;
-    image?: SanityMediaImage;
+    image?: SanityImage;
   };
   introduction?: PortableTextBlock[];
 }
@@ -247,7 +248,15 @@ export interface SanityMediaPage {
   pageHero: {
     title: string;
     description?: string;
-    image?: SanityMediaImage;
+    image?: SanityImage;
+  };
+}
+
+export interface SanityAboutPage {
+  pageHero: {
+    title: string;
+    description?: string;
+    image?: SanityImage;
   };
 }
 
@@ -255,6 +264,6 @@ export interface SanityDonatePage {
   pageHero: {
     title: string;
     description?: string;
-    image?: SanityMediaImage;
+    image?: SanityImage;
   };
 }

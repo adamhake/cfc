@@ -224,6 +224,19 @@ export default function Header() {
                     </li>
                     <li>
                       <Link
+                        to="/about"
+                        onClick={() => setMenuOpen(false)}
+                        className="group inline-block font-body text-lg font-medium text-grey-800 transition focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-100"
+                      >
+                        <span
+                          className={`border-b-2 transition group-hover:border-accent-600 dark:group-hover:border-accent-400 ${currentPath === "/about" ? "border-accent-600 dark:border-accent-400" : "border-transparent"}`}
+                        >
+                          About Us
+                        </span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
                         to="/amenities"
                         onClick={() => setMenuOpen(false)}
                         className="group inline-block font-body text-lg font-medium text-grey-800 transition focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-100"

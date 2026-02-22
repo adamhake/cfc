@@ -68,7 +68,7 @@ export const Route = createFileRoute("/projects/$slug")({
 
     const { project } = loaderData;
     const projectUrl = `${SITE_CONFIG.url}/projects/${project.slug.current}`;
-    const imageUrl = project.heroImage?.image?.asset?.url;
+    const imageUrl = project.heroImage?.asset?.url;
 
     return {
       meta: generateMetaTags({
@@ -79,9 +79,9 @@ export const Route = createFileRoute("/projects/$slug")({
         image: imageUrl
           ? {
               url: imageUrl,
-              width: project.heroImage?.image?.asset?.metadata?.dimensions?.width || 1200,
-              height: project.heroImage?.image?.asset?.metadata?.dimensions?.height || 630,
-              alt: project.heroImage?.image?.alt || project.title,
+              width: project.heroImage?.asset?.metadata?.dimensions?.width || 1200,
+              height: project.heroImage?.asset?.metadata?.dimensions?.height || 630,
+              alt: project.heroImage?.alt || project.title,
             }
           : undefined,
       }),
@@ -119,7 +119,7 @@ function ProjectPage() {
         <PageHero
           title={project.title}
           subtitle={project.description}
-          sanityImage={project.heroImage.image}
+          sanityImage={project.heroImage}
           height="auto"
           priority={true}
           alignment="bottom-mobile-center-desktop"

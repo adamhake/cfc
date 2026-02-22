@@ -20,8 +20,8 @@ export default function ProjectCardCondensed({ project, onClick }: ProjectCardCo
       {/* Image background */}
       <div className="relative h-32 w-full overflow-hidden">
         <SanityImage
-          image={heroImage.image}
-          alt={heroImage.image.alt}
+          image={heroImage}
+          alt={heroImage.alt}
           className="absolute inset-0 h-full w-full object-cover"
           sizes="288px"
           priority={false}

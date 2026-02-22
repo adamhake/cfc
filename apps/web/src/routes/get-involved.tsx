@@ -10,7 +10,7 @@ import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { getIsPreviewMode } from "@/lib/preview";
 import { queryKeys } from "@/lib/query-keys";
 import { getSanityClient } from "@/lib/sanity";
-import { SanityGetInvolvedPage } from "@/lib/sanity-types";
+import type { SanityGetInvolvedPage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { getGetInvolvedPageQuery } from "@chimborazo/sanity-config";
 import { queryOptions } from "@tanstack/react-query";
@@ -35,7 +35,7 @@ const getInvolvedPageQueryOptions = (preview = false) =>
     queryKey: [...queryKeys.getInvolvedPage(), { preview }],
     queryFn: async (): Promise<SanityGetInvolvedPage | null> => {
       try {
-        return await getSanityClient(preview).fetch(getGetInvolvedPageQuery);
+        return (await getSanityClient(preview).fetch(getGetInvolvedPageQuery)) as SanityGetInvolvedPage | null;
       } catch (error) {
         console.warn("Failed to fetch get-involved page from Sanity:", error);
         return null;
@@ -83,11 +83,11 @@ function GetInvolvedPage() {
     siteSettings?.socialMedia?.instagram?.split("instagram.com/")[1]?.replace(/\/$/, "") ||
     "friendsofchimborazopark";
 
-  const heroData = pageData?.pageHero?.image?.image
+  const heroData = pageData?.pageHero?.image
     ? {
         title: pageData.pageHero.title,
         subtitle: pageData.pageHero.description,
-        sanityImage: pageData.pageHero.image.image,
+        sanityImage: pageData.pageHero.image,
       }
     : {
         title: "Get Involved",

@@ -16,6 +16,7 @@ import { Route as GetInvolvedRouteImport } from './routes/get-involved'
 import { Route as DonateRouteImport } from './routes/donate'
 import { Route as ComponentsRouteImport } from './routes/components'
 import { Route as AmenitiesRouteImport } from './routes/amenities'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
 import { Route as EventsIndexRouteImport } from './routes/events/index'
@@ -59,6 +60,11 @@ const ComponentsRoute = ComponentsRouteImport.update({
 const AmenitiesRoute = AmenitiesRouteImport.update({
   id: '/amenities',
   path: '/amenities',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -109,6 +115,7 @@ const ApiDraftDisableRoute = ApiDraftDisableRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/amenities': typeof AmenitiesRoute
   '/components': typeof ComponentsRoute
   '/donate': typeof DonateRoute
@@ -120,13 +127,14 @@ export interface FileRoutesByFullPath {
   '/api/generate-metadata': typeof ApiGenerateMetadataRoute
   '/events/$slug': typeof EventsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
-  '/events': typeof EventsIndexRoute
-  '/projects': typeof ProjectsIndexRoute
+  '/events/': typeof EventsIndexRoute
+  '/projects/': typeof ProjectsIndexRoute
   '/api/draft/disable': typeof ApiDraftDisableRoute
   '/api/webhooks/sanity': typeof ApiWebhooksSanityRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/amenities': typeof AmenitiesRoute
   '/components': typeof ComponentsRoute
   '/donate': typeof DonateRoute
@@ -146,6 +154,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/amenities': typeof AmenitiesRoute
   '/components': typeof ComponentsRoute
   '/donate': typeof DonateRoute
@@ -166,6 +175,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/amenities'
     | '/components'
     | '/donate'
@@ -177,13 +187,14 @@ export interface FileRouteTypes {
     | '/api/generate-metadata'
     | '/events/$slug'
     | '/projects/$slug'
-    | '/events'
-    | '/projects'
+    | '/events/'
+    | '/projects/'
     | '/api/draft/disable'
     | '/api/webhooks/sanity'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/amenities'
     | '/components'
     | '/donate'
@@ -202,6 +213,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/amenities'
     | '/components'
     | '/donate'
@@ -221,6 +233,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   AmenitiesRoute: typeof AmenitiesRoute
   ComponentsRoute: typeof ComponentsRoute
   DonateRoute: typeof DonateRoute
@@ -288,6 +301,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AmenitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -298,14 +318,14 @@ declare module '@tanstack/react-router' {
     '/projects/': {
       id: '/projects/'
       path: '/projects'
-      fullPath: '/projects'
+      fullPath: '/projects/'
       preLoaderRoute: typeof ProjectsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/events/': {
       id: '/events/'
       path: '/events'
-      fullPath: '/events'
+      fullPath: '/events/'
       preLoaderRoute: typeof EventsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -368,6 +388,7 @@ const ApiDraftRouteWithChildren = ApiDraftRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   AmenitiesRoute: AmenitiesRoute,
   ComponentsRoute: ComponentsRoute,
   DonateRoute: DonateRoute,

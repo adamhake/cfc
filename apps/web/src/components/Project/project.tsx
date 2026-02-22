@@ -31,8 +31,8 @@ export default function Project({ project }: ProjectProps) {
       className="group relative block min-h-[400px] cursor-pointer overflow-hidden rounded-2xl border border-accent-600/20 transition-transform active:scale-98 md:min-h-[450px] dark:border-accent-500/20"
     >
       <SanityImage
-        image={heroImage.image}
-        alt={heroImage.image.alt}
+        image={heroImage}
+        alt={heroImage.alt}
         className="absolute inset-0 h-full w-full object-cover transition-opacity group-hover:opacity-0"
         sizes="(max-width: 768px) 100vw, 50vw"
         priority={false}
