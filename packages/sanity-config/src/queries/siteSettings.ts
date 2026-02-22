@@ -1,4 +1,5 @@
 import { defineQuery } from "groq"
+import { imageFieldProjection } from "./imageProjections"
 
 export const getSiteSettingsQuery = defineQuery(`
   *[_type == "siteSettings"][0]{
@@ -28,24 +29,8 @@ export const getSiteSettingsQuery = defineQuery(`
       _id,
       title,
       images[]{
-        image->{
-          _id,
-          title,
-          image{
-            asset->{
-              _id,
-              url,
-              metadata{
-                dimensions,
-                lqip,
-                palette
-              }
-            },
-            alt,
-            caption,
-            hotspot,
-            crop
-          }
+        "image": imageV2{
+          ${imageFieldProjection}
         }
       }
     },
@@ -53,24 +38,8 @@ export const getSiteSettingsQuery = defineQuery(`
       _id,
       quoteText,
       attribution,
-      backgroundImage->{
-        _id,
-        title,
-        image{
-          asset->{
-            _id,
-            url,
-            metadata{
-              dimensions,
-              lqip,
-              palette
-            }
-          },
-          alt,
-          caption,
-          hotspot,
-          crop
-        }
+      "backgroundImage": backgroundImageV2{
+        ${imageFieldProjection}
       }
     }
   }

@@ -1,4 +1,6 @@
+import aboutPageSchema from "./aboutPage"
 import amenitiesPageSchema from "./amenitiesPage"
+import { contentImageSchema } from "./contentImage"
 import donatePageSchema from "./donatePage"
 import { eventSchema } from "./event"
 import eventsPageSchema from "./eventsPage"
@@ -7,6 +9,7 @@ import getInvolvedPageSchema from "./getInvolvedPage"
 import historyPageSchema from "./historyPage"
 import homePageSchema from "./homePage"
 import { mediaImageSchema } from "./mediaImage"
+import { mediaTagSchema } from "./mediaTag"
 import mediaPageSchema from "./mediaPage"
 import partnerSchema from "./partner"
 import { projectSchema } from "./project"
@@ -19,6 +22,7 @@ import updatesPageSchema from "./updatesPage"
 
 export const schemas = [
   // Pages (singletons)
+  aboutPageSchema,
   siteSettingsSchema,
   homePageSchema,
   amenitiesPageSchema,
@@ -38,11 +42,15 @@ export const schemas = [
   quoteSchema,
   gallerySchema,
   // Media
+  mediaTagSchema,
   mediaImageSchema,
+  contentImageSchema,
 ]
 
 export {
+  aboutPageSchema,
   amenitiesPageSchema,
+  contentImageSchema,
   donatePageSchema,
   eventSchema,
   eventsPageSchema,
@@ -51,6 +59,7 @@ export {
   historyPageSchema,
   homePageSchema,
   mediaImageSchema,
+  mediaTagSchema,
   mediaPageSchema,
   partnerSchema,
   projectSchema,

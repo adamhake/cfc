@@ -1,4 +1,5 @@
 import { defineQuery } from "groq"
+import { imageFieldProjection } from "./imageProjections"
 
 export const getGalleriesQuery = defineQuery(`
   *[_type == "gallery"] | order(order asc){
@@ -6,26 +7,8 @@ export const getGalleriesQuery = defineQuery(`
     title,
     galleryType,
     images[]{
-      image->{
-        _id,
-        title,
-        image{
-          asset->{
-            _id,
-            url,
-            metadata{
-              dimensions,
-              lqip,
-              palette
-            }
-          },
-          alt,
-          caption,
-          hotspot,
-          crop
-        },
-        category,
-        featured
+      "image": imageV2{
+        ${imageFieldProjection}
       },
       showOnMobile
     },
@@ -39,26 +22,8 @@ export const getGalleryByTypeQuery = defineQuery(`
     title,
     galleryType,
     images[]{
-      image->{
-        _id,
-        title,
-        image{
-          asset->{
-            _id,
-            url,
-            metadata{
-              dimensions,
-              lqip,
-              palette
-            }
-          },
-          alt,
-          caption,
-          hotspot,
-          crop
-        },
-        category,
-        featured
+      "image": imageV2{
+        ${imageFieldProjection}
       },
       showOnMobile
     },
@@ -72,26 +37,8 @@ export const getGalleryByIdQuery = defineQuery(`
     title,
     galleryType,
     images[]{
-      image->{
-        _id,
-        title,
-        image{
-          asset->{
-            _id,
-            url,
-            metadata{
-              dimensions,
-              lqip,
-              palette
-            }
-          },
-          alt,
-          caption,
-          hotspot,
-          crop
-        },
-        category,
-        featured
+      "image": imageV2{
+        ${imageFieldProjection}
       },
       showOnMobile
     },

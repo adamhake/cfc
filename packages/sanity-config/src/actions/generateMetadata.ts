@@ -12,13 +12,13 @@ interface MediaImageAsset {
 interface MediaImageDocument {
   _id: string
   _type: string
-  image?: {
+  imageV2?: {
     asset?: MediaImageAsset
     alt?: string
     caption?: string
+    title?: string
+    category?: string
   }
-  title?: string
-  category?: string
 }
 
 /**
@@ -69,10 +69,12 @@ export const createGenerateMetadataAction = (
     const doc = (draft || published) as MediaImageDocument | null
 
     // Check if an image has been uploaded
-    const hasImage = Boolean(doc?.image?.asset?._ref)
+    const hasImage = Boolean(doc?.imageV2?.asset?._ref)
 
     const handleGenerate = useCallback(async () => {
-      if (!doc?.image?.asset?._ref) {
+      const assetRef = doc?.imageV2?.asset?._ref
+
+      if (!assetRef) {
         onComplete()
         return
       }
@@ -82,7 +84,7 @@ export const createGenerateMetadataAction = (
       try {
         // Construct the image URL from the asset reference
         // Format: https://cdn.sanity.io/images/{projectId}/{dataset}/{assetId}-{width}x{height}.{format}
-        const assetId = doc.image.asset._ref
+        const assetId = assetRef
         // These env vars are validated at build time via T3 Env in apps/studio/src/env.ts
         const projectId = process.env.SANITY_STUDIO_PROJECT_ID
         const dataset = process.env.SANITY_STUDIO_DATASET
@@ -134,10 +136,10 @@ export const createGenerateMetadataAction = (
 
         // Patch the document with the generated metadata
         patch.execute([
-          { set: { title: metadata.title } },
-          { set: { "image.alt": metadata.alt } },
-          { set: { "image.caption": metadata.caption } },
-          { set: { category: metadata.category } },
+          { set: { "imageV2.title": metadata.title } },
+          { set: { "imageV2.alt": metadata.alt } },
+          { set: { "imageV2.caption": metadata.caption } },
+          { set: { "imageV2.category": metadata.category } },
         ])
 
         setDialogState({ type: "success", metadata })

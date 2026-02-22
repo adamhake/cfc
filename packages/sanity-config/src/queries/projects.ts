@@ -1,3 +1,5 @@
+import { imageFieldProjection } from "./imageProjections"
+
 // Base project fields projection
 // Note: These are plain GROQ query strings
 export const projectFields = `
@@ -6,24 +8,8 @@ export const projectFields = `
   title,
   slug,
   description,
-  "heroImage": heroImage->{
-    _id,
-    title,
-    image{
-      asset->{
-        _id,
-        url,
-        metadata{
-          dimensions,
-          lqip,
-          blurhash
-        }
-      },
-      alt,
-      caption,
-      hotspot,
-      crop
-    }
+  "heroImage": heroImageV2{
+    ${imageFieldProjection}
   },
   status,
   startDate,
