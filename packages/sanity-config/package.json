@@ -35,29 +35,29 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.71.2",
-    "@sanity/client": "^7.14.0",
+    "@anthropic-ai/sdk": "^0.78.0",
+    "@sanity/client": "^7.15.0",
     "@sanity/icons": "^3.7.4",
-    "@sanity/image-url": "^2.0.2",
-    "@sanity/types": "^5.4.0",
+    "@sanity/image-url": "^2.0.3",
+    "@sanity/types": "^5.11.0",
     "@t3-oss/env-core": "^0.13.10",
-    "groq": "^5.4.0",
-    "zod": "^4.3.5"
+    "groq": "^5.11.0",
+    "zod": "^4.3.6"
   },
   "peerDependencies": {
     "@sanity/ui": "^2.0.0 || ^3.0.0",
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0",
-    "sanity": "^3.0.0 || ^4.0.0"
+    "sanity": "^3.0.0 || ^4.0.0 || ^5.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
+    "@eslint/js": "^10.0.1",
     "@total-typescript/ts-reset": "^0.6.1",
-    "@types/node": "^25.0.8",
-    "@types/react": "^19.2.8",
-    "eslint": "^9.39.2",
-    "prettier": "^3.8.0",
+    "@types/node": "^25.3.0",
+    "@types/react": "^19.2.14",
+    "eslint": "^10.0.1",
+    "prettier": "^3.8.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.53.0"
+    "typescript-eslint": "^8.56.0"
   }
 }
