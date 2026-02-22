@@ -1,8 +1,8 @@
 import { defineQuery } from "groq"
 import { imageFieldProjection } from "./imageProjections"
 
-export const getProjectsPageQuery = defineQuery(`
-  *[_type == "projectsPage"][0]{
+export const getAboutPageQuery = defineQuery(`
+  *[_type == "aboutPage"][0]{
     pageHero{
       title,
       description,
@@ -10,6 +10,5 @@ export const getProjectsPageQuery = defineQuery(`
         ${imageFieldProjection}
       }
     },
-    introduction
   }
 `)

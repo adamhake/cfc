@@ -23,12 +23,17 @@ export default defineType({
           validation: (rule) => rule.required().max(300),
         }),
         defineField({
-          name: "heroImage",
-          title: "Hero Image",
-          type: "reference",
-          to: [{ type: "mediaImage" }],
-          description: "Select an image from the media library to use as the hero image",
-          validation: (rule) => rule.required(),
+          name: "heroImageV2",
+          title: "Hero Image (Direct Upload)",
+          type: "contentImage",
+          description: "Upload/select an image directly. Preferred for new content.",
+          validation: (rule) =>
+            rule.custom((value) => {
+              const hasAsset = Boolean(
+                (value as { asset?: { _ref?: string } } | undefined)?.asset?._ref
+              )
+              return hasAsset ? true : "Hero image is required"
+            }),
         }),
         defineField({
           name: "ctaButton",

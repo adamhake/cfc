@@ -1,22 +1,13 @@
 import { defineQuery } from "groq"
+import { imageFieldProjection } from "./imageProjections"
 
 export const getQuotesQuery = defineQuery(`
   *[_type == "quote"] | order(_createdAt desc){
     _id,
     quoteText,
     attribution,
-    backgroundImage{
-      asset->{
-        _id,
-        url,
-        metadata{
-          dimensions,
-          lqip
-        }
-      },
-      alt,
-      caption,
-      hotspot
+    "backgroundImage": backgroundImageV2{
+      ${imageFieldProjection}
     },
     featured,
     category
@@ -28,18 +19,8 @@ export const getFeaturedQuoteQuery = defineQuery(`
     _id,
     quoteText,
     attribution,
-    backgroundImage{
-      asset->{
-        _id,
-        url,
-        metadata{
-          dimensions,
-          lqip
-        }
-      },
-      alt,
-      caption,
-      hotspot
+    "backgroundImage": backgroundImageV2{
+      ${imageFieldProjection}
     },
     category
   }
@@ -50,18 +31,8 @@ export const getQuotesByCategoryQuery = defineQuery(`
     _id,
     quoteText,
     attribution,
-    backgroundImage{
-      asset->{
-        _id,
-        url,
-        metadata{
-          dimensions,
-          lqip
-        }
-      },
-      alt,
-      caption,
-      hotspot
+    "backgroundImage": backgroundImageV2{
+      ${imageFieldProjection}
     },
     featured
   }

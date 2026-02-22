@@ -1,3 +1,5 @@
+import { imageFieldProjection } from "./imageProjections"
+
 // Base event fields projection
 // Note: These are plain GROQ query strings
 export const eventFields = `
@@ -101,22 +103,8 @@ export const eventBySlugQuery = `
       _id,
       title,
       images[]{
-        image->{
-          _id,
-          title,
-          image{
-            asset->{
-              _id,
-              url,
-              metadata{
-                dimensions,
-                lqip
-              }
-            },
-            alt,
-            caption,
-            hotspot
-          }
+        "image": imageV2{
+          ${imageFieldProjection}
         },
         showOnMobile
       }

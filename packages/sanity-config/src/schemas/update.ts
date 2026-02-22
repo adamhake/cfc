@@ -58,12 +58,17 @@ export const updateSchema = defineType({
       group: "editorial",
     }),
     defineField({
-      name: "heroImage",
-      title: "Hero Image",
-      type: "reference",
-      to: [{ type: "mediaImage" }],
-      description: "Select an image from the media library to use as the hero image",
-      validation: (Rule) => Rule.required(),
+      name: "heroImageV2",
+      title: "Hero Image (Direct Upload)",
+      type: "contentImage",
+      description: "Upload/select an image directly. Preferred for new content.",
+      validation: (Rule) =>
+        Rule.custom((value) => {
+          const hasAsset = Boolean(
+            (value as { asset?: { _ref?: string } } | undefined)?.asset?._ref
+          )
+          return hasAsset ? true : "Hero image is required"
+        }),
       group: "media",
     }),
     defineField({
@@ -230,7 +235,7 @@ export const updateSchema = defineType({
       category: "category.title",
       date: "publishedAt",
       featured: "featured",
-      media: "heroImage",
+      media: "heroImageV2",
     },
     prepare(selection) {
       const { title, category, date, featured, media } = selection

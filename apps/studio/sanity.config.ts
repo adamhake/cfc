@@ -2,6 +2,7 @@ import { createGenerateMetadataAction, schemas } from "@chimborazo/sanity-config
 import { CogIcon, DocumentTextIcon, HomeIcon } from "@sanity/icons"
 import { visionTool } from "@sanity/vision"
 import { defineConfig } from "sanity"
+import { media } from "sanity-plugin-media"
 import { defineDocuments, defineLocations, presentationTool } from "sanity/presentation"
 import type { StructureResolver } from "sanity/structure"
 import { structureTool } from "sanity/structure"
@@ -54,6 +55,10 @@ const structure: StructureResolver = (S) =>
                 .icon(HomeIcon)
                 .child(S.document().schemaType("homePage").documentId("homePage")),
               S.listItem()
+                .title("About Page")
+                .icon(DocumentTextIcon)
+                .child(S.document().schemaType("aboutPage").documentId("aboutPage")),
+              S.listItem()
                 .title("Amenities Page")
                 .icon(DocumentTextIcon)
                 .child(S.document().schemaType("amenitiesPage").documentId("amenitiesPage")),
@@ -96,7 +101,9 @@ const structure: StructureResolver = (S) =>
             "projectsPage",
             "getInvolvedPage",
             "mediaPage",
+            "aboutPage",
             "donatePage",
+            "media.tag",
           ].includes(listItem.getId() ?? "")
       ),
     ])
@@ -116,6 +123,7 @@ export default defineConfig({
 
   plugins: [
     structureTool({ structure }),
+    media(),
     visionTool(),
     presentationTool({
       previewUrl: {
@@ -137,6 +145,8 @@ export default defineConfig({
           { route: "/events", type: "eventsPage" },
           { route: "/projects", type: "projectsPage" },
           { route: "/amenities", type: "amenitiesPage" },
+          { route: "/projects", type: "projectsPage" },
+          { route: "/about", type: "aboutPage" },
           { route: "/media", type: "mediaPage" },
           { route: "/donate", type: "donatePage" },
           { route: "/get-involved", type: "getInvolvedPage" },
@@ -168,6 +178,10 @@ export default defineConfig({
           amenitiesPage: defineLocations({
             message: "This document controls the Amenities page",
             locations: [{ title: "Amenities", href: "/amenities" }],
+          }),
+          aboutPage: defineLocations({
+            message: "This document controls the About page",
+            locations: [{ title: "About", href: "/about" }],
           }),
           mediaPage: defineLocations({
             message: "This document controls the Media page",

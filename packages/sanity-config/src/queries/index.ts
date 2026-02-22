@@ -8,6 +8,7 @@ export * from "./updates"
 export * from "./siteSettings"
 
 // Pages
+export * from "./aboutPage"
 export * from "./amenitiesPage"
 export * from "./donatePage"
 export * from "./eventsPage"

@@ -1,5 +1,4 @@
 import { defineField, defineType } from "sanity"
-import { MediaImageReferenceInput } from "../components/MediaImageReferenceInput"
 
 export default defineType({
   name: "quote",
@@ -21,15 +20,17 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: "backgroundImage",
-      title: "Background Image",
-      type: "reference",
-      description: "Reference to a Media Image for the quote background",
-      to: [{ type: "mediaImage" }],
-      components: {
-        input: MediaImageReferenceInput,
-      },
-      validation: (rule) => rule.required(),
+      name: "backgroundImageV2",
+      title: "Background Image (Direct Upload)",
+      type: "contentImage",
+      description: "Upload/select an image directly. Preferred for new content.",
+      validation: (rule) =>
+        rule.custom((value) => {
+          const hasAsset = Boolean(
+            (value as { asset?: { _ref?: string } } | undefined)?.asset?._ref
+          )
+          return hasAsset ? true : "Background image is required"
+        }),
     }),
     defineField({
       name: "featured",
@@ -58,7 +59,7 @@ export default defineType({
     select: {
       title: "quoteText",
       subtitle: "attribution",
-      media: "backgroundImage",
+      media: "backgroundImageV2",
       featured: "featured",
     },
     prepare({ title, subtitle, media, featured }) {
