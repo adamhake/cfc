@@ -42,7 +42,7 @@ export default function SupportOption({
 
       {ctaText && (ctaHash || ctaLink) && (
         <div className="mt-8">
-          <Button variant="accent" size="small" as="a" hash={ctaHash} href={ctaLink}>
+          <Button variant="accent" size="small" as="a" hash={ctaHash} href={ctaLink} trackingLocation="support-option">
             {ctaText}
           </Button>
         </div>

@@ -164,6 +164,7 @@ export default function Header() {
             variant="accent"
             size="small"
             href="/donate"
+            trackingLocation="header"
             className="hidden text-center md:block md:w-28"
           >
             Donate
@@ -481,7 +482,13 @@ export default function Header() {
 
               {/* Footer CTA */}
               <div className="mt-6">
-                <Button as="a" variant="accent" href="/donate" className="block w-full text-center">
+                <Button
+                  as="a"
+                  variant="accent"
+                  href="/donate"
+                  trackingLocation="mobile-menu"
+                  className="block w-full text-center"
+                >
                   Donate
                 </Button>
               </div>

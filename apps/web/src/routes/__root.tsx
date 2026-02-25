@@ -3,6 +3,7 @@ import Footer from "@/components/Footer/footer";
 import Header from "@/components/Header/header";
 import { NotFound } from "@/components/NotFound/not-found";
 import { DisablePreview, VisualEditing } from "@/components/VisualEditing";
+import { PostHogProvider } from "@/integrations/posthog/provider";
 import { getIsPreviewMode } from "@/lib/preview";
 import type { PaletteMode } from "@/utils/palette";
 import { JsonLd } from "@/components/JsonLd/json-ld";
@@ -61,6 +62,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       {
         rel: "dns-prefetch",
         href: "https://cdn.sanity.io",
+      },
+      {
+        rel: "dns-prefetch",
+        href: "https://us.i.posthog.com",
       },
       {
         rel: "preload",
@@ -155,17 +160,19 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <JsonLd data={structuredData} />
       </head>
       <body className="bg-grey-50 dark:bg-primary-900" suppressHydrationWarning>
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-primary-700 focus:px-4 focus:py-2 focus:text-primary-50 focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 focus:outline-none"
-        >
-          Skip to main content
-        </a>
-        <ErrorBoundary>
-          <Header />
-          <main id="main-content">{children}</main>
-          <Footer />
-        </ErrorBoundary>
+        <PostHogProvider>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-primary-700 focus:px-4 focus:py-2 focus:text-primary-50 focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 focus:outline-none"
+          >
+            Skip to main content
+          </a>
+          <ErrorBoundary>
+            <Header />
+            <main id="main-content">{children}</main>
+            <Footer />
+          </ErrorBoundary>
+        </PostHogProvider>
         <Scripts />
       </body>
     </html>
