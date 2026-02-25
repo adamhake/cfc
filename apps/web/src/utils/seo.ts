@@ -16,7 +16,11 @@ export const SITE_CONFIG = {
     "A 501(c)(3) non-profit dedicated to preserving and enhancing Chimborazo Park in Richmond, VA's Church Hill neighborhood through community stewardship.",
   locale: "en_US",
   themeColor: "#166534",
-  twitterHandle: undefined, // Add when available
+  twitterHandle: undefined, // Add when available (no Twitter/X account currently)
+  socialProfiles: [
+    "https://www.facebook.com/friendsofchimborazopark",
+    "https://www.instagram.com/friendsofchimborazopark/",
+  ],
   defaultImage: {
     url: "https://chimborazoparkconservancy.org/bike_sunset.webp",
     width: 2000,
@@ -378,8 +382,44 @@ export function generateOrganizationStructuredData() {
       "@type": "Place",
       name: "Church Hill, Richmond, Virginia",
     },
-    sameAs: [
-      // Add social media URLs here when available
-    ],
+    sameAs: SITE_CONFIG.socialProfiles,
+  };
+}
+
+/**
+ * Generates JSON-LD BreadcrumbList structured data
+ */
+export function generateBreadcrumbStructuredData(
+  items: Array<{ name: string; url: string }>,
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+}
+
+/**
+ * Generates JSON-LD FAQPage structured data
+ */
+export function generateFAQStructuredData(
+  faqs: Array<{ question: string; answer: string }>,
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
   };
 }

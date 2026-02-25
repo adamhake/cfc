@@ -1,3 +1,36 @@
 # https://www.robotstxt.org/robotstxt.html
+
+# Default: allow all crawlers
 User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /components/
+
+# AI Crawlers - explicitly allow for search and answering
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Block training-only scrapers
+User-agent: CCBot
 Disallow: /
+
+# Sitemap
+Sitemap: https://chimborazoparkconservancy.org/sitemap.xml

@@ -5,6 +5,7 @@ import { NotFound } from "@/components/NotFound/not-found";
 import { DisablePreview, VisualEditing } from "@/components/VisualEditing";
 import { getIsPreviewMode } from "@/lib/preview";
 import type { PaletteMode } from "@/utils/palette";
+import { JsonLd } from "@/components/JsonLd/json-ld";
 import { generateOrganizationStructuredData, SITE_CONFIG } from "@/utils/seo";
 import type { ResolvedTheme, ThemeMode } from "@/utils/theme";
 import type { QueryClient } from "@tanstack/react-query";
@@ -115,9 +116,6 @@ function RootComponent() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const structuredData = generateOrganizationStructuredData();
-  const safeStructuredDataJson = JSON.stringify(structuredData)
-    .replace(/</g, "\\u003c")
-    .replace(/>/g, "\\u003e");
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -149,10 +147,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           }}
         />
         <HeadContent />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: safeStructuredDataJson }}
-        />
+        <JsonLd data={structuredData} />
       </head>
       <body className="bg-grey-50 dark:bg-primary-900" suppressHydrationWarning>
         <a

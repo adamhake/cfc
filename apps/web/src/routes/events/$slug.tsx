@@ -12,7 +12,9 @@ import { CACHE_PRESETS } from "@/lib/query-config";
 import { queryKeys } from "@/lib/query-keys";
 import { getSanityClient } from "@/lib/sanity";
 import type { SanityEvent } from "@/lib/sanity-types";
+import { JsonLd } from "@/components/JsonLd/json-ld";
 import {
+  generateBreadcrumbStructuredData,
   generateEventStructuredData,
   generateLinkTags,
   generateMetaTags,
@@ -200,17 +202,16 @@ function EventPage() {
     isSanityEvent && "heroImage" in event ? (event as SanityEvent).heroImage : null;
   const staticImageData = !isSanityEvent ? (event as StaticEvent).image : null;
 
-  const safeStructuredDataJson = JSON.stringify(structuredData)
-    .replace(/</g, "\\u003c")
-    .replace(/>/g, "\\u003e");
+  const breadcrumbData = generateBreadcrumbStructuredData([
+    { name: "Home", url: SITE_CONFIG.url },
+    { name: "Events", url: `${SITE_CONFIG.url}/events` },
+    { name: event.title, url: eventUrl },
+  ]);
 
   return (
     <>
-      {/* Event Structured Data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: safeStructuredDataJson }}
-      />
+      <JsonLd data={structuredData} />
+      <JsonLd data={breadcrumbData} />
 
       <div className="min-h-screen">
         {/* Hero Section */}
