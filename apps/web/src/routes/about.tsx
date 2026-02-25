@@ -144,37 +144,21 @@ function AboutPage() {
   );
 }
 
-const highlightColors = [
-  {
-    value: "text-primary-800 dark:text-primary-300",
-    bg: "bg-primary-100 border-primary-200 dark:bg-primary-900/50 dark:border-primary-800/70",
-  },
-  {
-    value: "text-accent-700 dark:text-accent-300",
-    bg: "bg-accent-100 border-accent-200 dark:bg-accent-900/50 dark:border-accent-800/70",
-  },
-  {
-    value: "text-terra-700 dark:text-terra-300",
-    bg: "bg-terra-100 border-terra-200 dark:bg-terra-900/50 dark:border-terra-800/70",
-  },
-  {
-    value: "text-heather-700 dark:text-heather-300",
-    bg: "bg-heather-100 border-heather-200 dark:bg-heather-900/50 dark:border-heather-800/70",
-  },
-];
-
 function Highlights({ items }: { items: SanityHighlight[] }) {
   return (
     <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4">
       {items.map((item, i) => {
-        const color = highlightColors[i % highlightColors.length];
         return (
           <div
             key={item._key}
-            className={`rounded-xl border px-4 py-5 text-center md:px-6 md:py-7 ${color.bg}`}
+            className={`rounded-xl border border-primary-200 bg-primary-100 px-4 py-5 text-center md:px-6 md:py-7 dark:border-primary-800/70 dark:bg-primary-900/50`}
           >
-            <p className={`font-display text-4xl md:text-5xl ${color.value}`}>{item.value}</p>
-            <p className="mt-1 font-body text-lg font-medium text-grey-600 dark:text-grey-300">
+            <p
+              className={`font-display text-4xl text-primary-800 md:text-5xl dark:text-primary-300`}
+            >
+              {item.value}
+            </p>
+            <p className="mt-1 font-body text-lg font-medium text-primary-800 dark:text-primary-300">
               {item.label}
             </p>
           </div>
