@@ -1,0 +1,157 @@
+{
+  "name": "@chimborazo/ui",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./tokens": {
+      "import": "./src/tokens/index.ts",
+      "types": "./src/tokens/index.ts"
+    },
+    "./tokens/styles.css": "./src/tokens/styles.css",
+    "./utils": {
+      "import": "./src/utils/index.ts",
+      "types": "./src/utils/index.ts"
+    },
+    "./hooks": {
+      "import": "./src/hooks/index.ts",
+      "types": "./src/hooks/index.ts"
+    },
+    "./button": {
+      "import": "./src/components/button/index.ts",
+      "types": "./src/components/button/index.ts"
+    },
+    "./chip": {
+      "import": "./src/components/chip/index.ts",
+      "types": "./src/components/chip/index.ts"
+    },
+    "./container": {
+      "import": "./src/components/container/index.ts",
+      "types": "./src/components/container/index.ts"
+    },
+    "./section-header": {
+      "import": "./src/components/section-header/index.ts",
+      "types": "./src/components/section-header/index.ts"
+    },
+    "./flowing-section": {
+      "import": "./src/components/flowing-section/index.ts",
+      "types": "./src/components/flowing-section/index.ts"
+    },
+    "./asymmetric-section": {
+      "import": "./src/components/asymmetric-section/index.ts",
+      "types": "./src/components/asymmetric-section/index.ts"
+    },
+    "./staggered-grid": {
+      "import": "./src/components/staggered-grid/index.ts",
+      "types": "./src/components/staggered-grid/index.ts"
+    },
+    "./organic-card": {
+      "import": "./src/components/organic-card/index.ts",
+      "types": "./src/components/organic-card/index.ts"
+    },
+    "./info-card": {
+      "import": "./src/components/info-card/index.ts",
+      "types": "./src/components/info-card/index.ts"
+    },
+    "./icon-logo": {
+      "import": "./src/components/icon-logo/index.ts",
+      "types": "./src/components/icon-logo/index.ts"
+    },
+    "./facebook-icon": {
+      "import": "./src/components/facebook-icon/index.ts",
+      "types": "./src/components/facebook-icon/index.ts"
+    },
+    "./instagram-icon": {
+      "import": "./src/components/instagram-icon/index.ts",
+      "types": "./src/components/instagram-icon/index.ts"
+    },
+    "./markdown": {
+      "import": "./src/components/markdown/index.ts",
+      "types": "./src/components/markdown/index.ts"
+    },
+    "./error-boundary": {
+      "import": "./src/components/error-boundary/index.ts",
+      "types": "./src/components/error-boundary/index.ts"
+    },
+    "./event-status-chip": {
+      "import": "./src/components/event-status-chip/index.ts",
+      "types": "./src/components/event-status-chip/index.ts"
+    },
+    "./theme-toggle": {
+      "import": "./src/components/theme-toggle/index.ts",
+      "types": "./src/components/theme-toggle/index.ts"
+    },
+    "./palette-switcher": {
+      "import": "./src/components/palette-switcher/index.ts",
+      "types": "./src/components/palette-switcher/index.ts"
+    },
+    "./image-card": {
+      "import": "./src/components/image-card/index.ts",
+      "types": "./src/components/image-card/index.ts"
+    },
+    "./quote": {
+      "import": "./src/components/quote/index.ts",
+      "types": "./src/components/quote/index.ts"
+    },
+    "./vision": {
+      "import": "./src/components/vision/index.ts",
+      "types": "./src/components/vision/index.ts"
+    },
+    "./file-attachment": {
+      "import": "./src/components/file-attachment/index.ts",
+      "types": "./src/components/file-attachment/index.ts"
+    },
+    "./support-option": {
+      "import": "./src/components/support-option/index.ts",
+      "types": "./src/components/support-option/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "lint": "eslint src",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.5.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "framer-motion": "^12.0.0",
+    "lucide-react": "^0.400.0",
+    "react-markdown": "^10.0.0",
+    "remark-gfm": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "framer-motion": {
+      "optional": true
+    },
+    "lucide-react": {
+      "optional": true
+    },
+    "react-markdown": {
+      "optional": true
+    },
+    "remark-gfm": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@eslint/js": "catalog:",
+    "@total-typescript/ts-reset": "catalog:",
+    "@types/react": "catalog:",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:"
+  }
+}

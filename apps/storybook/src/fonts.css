@@ -1,0 +1,60 @@
+/* Font face declarations for Storybook
+   Fonts are loaded from the web app's public directory via static serving */
+
+/* Montserrat - Variable Font */
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/Montserrat/Montserrat-VariableFont_wght.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/Montserrat/Montserrat-Italic-VariableFont_wght.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Vollkorn SC - Static Fonts */
+@font-face {
+  font-family: "Vollkorn SC";
+  src: url("/fonts/Vollkorn_SC/VollkornSC-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Vollkorn SC";
+  src: url("/fonts/Vollkorn_SC/VollkornSC-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Vollkorn SC";
+  src: url("/fonts/Vollkorn_SC/VollkornSC-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Vollkorn SC";
+  src: url("/fonts/Vollkorn_SC/VollkornSC-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Import design system tokens */
+@import "@chimborazo/ui/tokens/styles.css";
