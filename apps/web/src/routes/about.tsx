@@ -1,10 +1,13 @@
 import Container from "@/components/Container/container";
+import GetInvolved from "@/components/GetInvolved/get-involved";
 import PageHero from "@/components/PageHero/page-hero";
 import { PortableText } from "@/components/PortableText/portable-text";
+import { SanityImage } from "@/components/SanityImage/sanity-image";
+import SectionHeader from "@/components/SectionHeader/section-header";
 import { getIsPreviewMode } from "@/lib/preview";
 import { queryKeys } from "@/lib/query-keys";
 import { getSanityClient } from "@/lib/sanity";
-import type { SanityAboutPage } from "@/lib/sanity-types";
+import type { SanityAboutPage, SanityBoardMember, SanityHighlight } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { getAboutPageQuery } from "@chimborazo/sanity-config";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
@@ -40,7 +43,7 @@ export const Route = createFileRoute("/about")({
     meta: generateMetaTags({
       title: "About the Chimborazo Park Conservancy",
       description:
-        "Explore the rich and complex history of Chimborazo Park, from its role as a Civil War hospital to the emancipated community that called it home during Reconstruction.",
+        "Learn about the Chimborazo Park Conservancy, a 501(c)(3) nonprofit dedicated to the restoration, beautification, and preservation of historic Chimborazo Park in Richmond, Virginia.",
       type: "website",
       url: `${SITE_CONFIG.url}/about`,
     }),
@@ -61,19 +64,183 @@ function AboutPage() {
         sanityImage: pageData.pageHero.image,
       }
     : {
-        title: "About the Chimborazo Park Conservancy",
+        title: "About the Conservancy",
         subtitle:
-          "Learn about the mission, history, and vision of the Chimborazo Park Conservancy, dedicated to preserving and celebrating the rich history of Chimborazo Park.",
+          "A 501(c)(3) nonprofit dedicated to the restoration, beautification, and preservation of historic Chimborazo Park.",
       };
+
   return (
     <div>
-      <PageHero {...heroData} height="small" />
+      <PageHero {...heroData} height="small" priority={true} />
 
-      <Container spacing="xl" className="py-16 pb-24">
-        <article className="mx-auto max-w-3xl">
-          <PortableText value={pageData?.content || []} />
-        </article>
+      <Container spacing="xl" className="space-y-16 py-16 pb-24 md:space-y-24">
+        {/* Mission & Vision */}
+        {(pageData?.mission || pageData?.vision) && (
+          <div className="space-y-8 md:space-y-10">
+            <p className="max-w-4xl font-body text-xl leading-snug font-medium md:text-2xl dark:text-grey-100">
+              {pageData?.mission}
+            </p>
+            <p className="mt-4 max-w-4xl font-body text-grey-800 md:text-lg dark:text-grey-100">
+              {pageData?.vision}
+            </p>
+          </div>
+        )}
+
+        {/* Highlights */}
+        {pageData?.highlights && pageData.highlights.length > 0 && (
+          <Highlights items={pageData.highlights} />
+        )}
+
+        {/* Story Image */}
+        {pageData?.storyImage?.asset && (
+          <div className="overflow-hidden rounded-2xl shadow-md">
+            <SanityImage
+              image={pageData.storyImage}
+              alt={pageData.storyImage.alt || ""}
+              className="h-64 w-full object-cover md:h-80 lg:h-96"
+              sizes="(max-width: 1200px) 100vw, 1200px"
+              maxWidth={1200}
+              fit="crop"
+            />
+          </div>
+        )}
+
+        {/* Body Content */}
+        {pageData?.content && pageData.content.length > 0 && (
+          <article className="mx-auto max-w-5xl">
+            <PortableText value={pageData.content} />
+          </article>
+        )}
+
+        {/* Callout Image */}
+        {pageData?.calloutImage?.asset && (
+          <div className="overflow-hidden rounded-2xl shadow-md">
+            <SanityImage
+              image={pageData.calloutImage}
+              alt={pageData.calloutImage.alt || ""}
+              className="h-64 w-full object-cover md:h-80 lg:h-96"
+              sizes="(max-width: 1200px) 100vw, 1200px"
+              maxWidth={1200}
+              fit="crop"
+            />
+          </div>
+        )}
+
+        {/* Board Members */}
+        {pageData?.boardMembers && pageData.boardMembers.length > 0 && (
+          <BoardSection members={pageData.boardMembers} />
+        )}
       </Container>
+
+      {/* Get Involved CTA */}
+      <Container spacing="xl" className="pb-24">
+        <GetInvolved
+          title="Join the Effort"
+          description="Whether you donate, volunteer, or simply spread the word, every contribution helps us preserve and enhance Chimborazo Park for future generations."
+          gutter="none"
+        />
+      </Container>
+    </div>
+  );
+}
+
+const highlightColors = [
+  {
+    value: "text-primary-800 dark:text-primary-300",
+    bg: "bg-primary-100 border-primary-200 dark:bg-primary-900/50 dark:border-primary-800/70",
+  },
+  {
+    value: "text-accent-700 dark:text-accent-300",
+    bg: "bg-accent-100 border-accent-200 dark:bg-accent-900/50 dark:border-accent-800/70",
+  },
+  {
+    value: "text-terra-700 dark:text-terra-300",
+    bg: "bg-terra-100 border-terra-200 dark:bg-terra-900/50 dark:border-terra-800/70",
+  },
+  {
+    value: "text-heather-700 dark:text-heather-300",
+    bg: "bg-heather-100 border-heather-200 dark:bg-heather-900/50 dark:border-heather-800/70",
+  },
+];
+
+function Highlights({ items }: { items: SanityHighlight[] }) {
+  return (
+    <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4">
+      {items.map((item, i) => {
+        const color = highlightColors[i % highlightColors.length];
+        return (
+          <div
+            key={item._key}
+            className={`rounded-xl border px-4 py-5 text-center md:px-6 md:py-7 ${color.bg}`}
+          >
+            <p className={`font-display text-4xl md:text-5xl ${color.value}`}>{item.value}</p>
+            <p className="mt-1 font-body text-lg font-medium text-grey-600 dark:text-grey-300">
+              {item.label}
+            </p>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function BoardSection({ members }: { members: SanityBoardMember[] }) {
+  return (
+    <div>
+      <SectionHeader title="Board of Directors" size="large" />
+      <p className="mt-4 mb-12 max-w-5xl font-body text-grey-700 md:text-lg dark:text-grey-300">
+        The Conservancy is governed by a volunteer board of directors committed to preserving and
+        enhancing Chimborazo Park for the community.
+      </p>
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {members.map((member) => (
+          <MemberCard key={member._key} member={member} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MemberCard({ member }: { member: SanityBoardMember }) {
+  const initials = member.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("");
+
+  return (
+    <div className="rounded-xl border border-primary-200/50 bg-gradient-to-br from-primary-50/60 to-white p-6 shadow-sm transition-shadow hover:shadow-md dark:border-primary-700/40 dark:from-primary-900/20 dark:to-primary-950">
+      <div className="flex items-center gap-4">
+        {member.image?.asset ? (
+          <div className="h-16 w-16 shrink-0 overflow-hidden rounded-full">
+            <SanityImage
+              image={member.image}
+              alt={member.image.alt || member.name}
+              className="h-full w-full object-cover"
+              sizes="56px"
+              maxWidth={112}
+            />
+          </div>
+        ) : (
+          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary-600 to-primary-700 dark:from-primary-700 dark:to-primary-800">
+            <span className="font-display text-base text-primary-100" aria-hidden="true">
+              {initials}
+            </span>
+          </div>
+        )}
+        <div className="min-w-0">
+          <h3 className="font-display text-lg text-grey-900 dark:text-grey-100">{member.name}</h3>
+          {member.role && (
+            <span className="mt-1 inline-block rounded-full bg-accent-100 px-3 py-0.5 font-body text-xs font-medium text-accent-800 dark:bg-primary-800 dark:text-primary-300">
+              {member.role}
+            </span>
+          )}
+        </div>
+      </div>
+      {member.bio && (
+        <p className="mt-4 font-body text-sm leading-relaxed text-grey-700 dark:text-grey-300">
+          {member.bio}
+        </p>
+      )}
     </div>
   );
 }

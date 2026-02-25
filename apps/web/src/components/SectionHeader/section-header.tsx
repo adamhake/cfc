@@ -19,7 +19,7 @@ export default function SectionHeader({
 
   return (
     <Component
-      className={`font-display text-primary-700 dark:text-primary-400 ${sizeClasses[size]}`}
+      className={`font-display text-primary-800 dark:text-primary-400 ${sizeClasses[size]}`}
     >
       {title}
     </Component>

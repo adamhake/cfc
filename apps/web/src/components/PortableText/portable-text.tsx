@@ -27,12 +27,12 @@ const components: PortableTextComponents = {
 
     // Headings
     h2: ({ children }) => (
-      <h2 className="mt-8 mb-4 font-display text-3xl font-bold text-primary-800 dark:text-primary-400">
+      <h2 className="mt-8 mb-4 font-display text-2xl font-normal text-primary-800 md:text-3xl lg:text-4xl dark:text-primary-400">
         {children}
       </h2>
     ),
     h3: ({ children }) => (
-      <h3 className="mt-6 mb-3 font-display text-2xl font-bold text-primary-700 dark:text-primary-400">
+      <h3 className="mt-6 mb-3 font-display text-xl font-normal text-primary-800 md:text-2xl dark:text-primary-400">
         {children}
       </h3>
     ),
