@@ -22,8 +22,12 @@ interface TurnstileResponse {
 
 /**
  * Simple in-memory rate limiter
- * Note: This resets on server restart. For production at scale,
- * consider using Redis or a distributed rate limiting service.
+ *
+ * NOTE: In-memory rate limiting is not reliable on serverless platforms (Netlify)
+ * as each cold start gets a fresh Map. Cloudflare Turnstile verification (below)
+ * serves as the primary abuse prevention mechanism.
+ *
+ * For production at scale, consider using Redis or a distributed rate limiting service.
  */
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute

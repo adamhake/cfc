@@ -2,7 +2,7 @@ import { defineQuery } from "groq"
 import { imageFieldProjection } from "./imageProjections"
 
 export const getHomePageQuery = defineQuery(`
-  *[_type == "homePage"][0]{
+  *[_type == "homePage" && !(_id in path("drafts.**"))][0]{
     hero{
       heading,
       subheading,

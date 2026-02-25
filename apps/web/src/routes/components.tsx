@@ -29,6 +29,14 @@ function ComponentPlayground() {
   const { palette } = usePalette();
   const currentMeta = PALETTE_METADATA[palette];
 
+  if (!import.meta.env.DEV) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <p className="text-lg text-neutral-600">Page not found</p>
+      </div>
+    );
+  }
+
   // Helper to get primary, accent, and neutral color CSS variables
   const primary = (shade: number) => `var(--color-primary-${shade})`;
   const accent = (shade: number) => `var(--color-accent-${shade})`;

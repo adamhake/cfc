@@ -13,7 +13,7 @@ import { getSanityClient } from "@/lib/sanity";
 import type { SanityGetInvolvedPage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { getGetInvolvedPageQuery } from "@chimborazo/sanity-config";
-import { queryOptions } from "@tanstack/react-query";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Image } from "@unpic/react";
 import {
@@ -52,10 +52,8 @@ export const Route = createFileRoute("/get-involved")({
     const preview = await getIsPreviewMode();
 
     // Prefetch get-involved page content on the server
-    const pageData = await context.queryClient.ensureQueryData(
-      getInvolvedPageQueryOptions(preview),
-    );
-    return { pageData, preview };
+    await context.queryClient.ensureQueryData(getInvolvedPageQueryOptions(preview));
+    return { preview };
   },
   head: () => ({
     meta: generateMetaTags({
@@ -73,7 +71,8 @@ export const Route = createFileRoute("/get-involved")({
 
 function GetInvolvedPage() {
   const { data: siteSettings } = useSiteSettings();
-  const { pageData } = Route.useLoaderData();
+  const { preview } = Route.useLoaderData();
+  const { data: pageData } = useSuspenseQuery(getInvolvedPageQueryOptions(preview));
 
   // Extract social media handles from URLs
   const facebookHandle =

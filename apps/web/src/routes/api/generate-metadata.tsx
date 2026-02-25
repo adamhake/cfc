@@ -38,13 +38,15 @@ const ALLOWED_ORIGINS = [
 // Sanity CDN URL pattern for SSRF protection
 const SANITY_CDN_PATTERN = /^https:\/\/cdn\.sanity\.io\//;
 
-function getCorsHeaders(request: Request): Record<string, string> {
+function getCorsHeaders(request: Request): Record<string, string> | null {
   const origin = request.headers.get("Origin") || "";
-  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  if (!ALLOWED_ORIGINS.includes(origin)) {
+    return null;
+  }
 
   return {
-    "Access-Control-Allow-Origin": allowedOrigin,
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Origin": origin,
+    "Access-Control-Allow-Headers": "Content-Type, X-API-Key",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
   };
 }
@@ -53,13 +55,8 @@ export const Route = createFileRoute("/api/generate-metadata")({
   server: {
     handlers: {
       GET: async () => {
-        // Return service status info for GET requests
         return new Response(
-          JSON.stringify({
-            service: "AI Metadata Generator",
-            status: "active",
-            configured: Boolean(process.env.ANTHROPIC_API_KEY),
-          }),
+          JSON.stringify({ status: "ok" }),
           {
             status: 200,
             headers: { "Content-Type": "application/json" },
@@ -70,6 +67,26 @@ export const Route = createFileRoute("/api/generate-metadata")({
       POST: async ({ request }) => {
         console.log("API route invoked");
         const corsHeaders = getCorsHeaders(request);
+
+        // Reject requests from disallowed origins
+        if (!corsHeaders) {
+          return new Response(JSON.stringify({ error: "Forbidden" }), {
+            status: 403,
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+
+        // Authenticate via API key
+        const requestApiKey = request.headers.get("x-api-key");
+        if (!requestApiKey || requestApiKey !== process.env.ADMIN_API_KEY) {
+          return new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+            headers: {
+              "Content-Type": "application/json",
+              ...corsHeaders,
+            },
+          });
+        }
 
         try {
           // Parse request body
@@ -257,6 +274,9 @@ Return ONLY valid JSON with no additional text, in this exact format:
       // Handle CORS preflight
       OPTIONS: async ({ request }) => {
         const corsHeaders = getCorsHeaders(request);
+        if (!corsHeaders) {
+          return new Response(null, { status: 403 });
+        }
         return new Response(null, {
           status: 204,
           headers: corsHeaders,

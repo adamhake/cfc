@@ -1,3 +1,4 @@
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { Image } from "@unpic/react";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useState } from "react";
@@ -37,6 +38,8 @@ export default function ImageCarousel({
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop });
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const [isPlaying, setIsPlaying] = useState(autoPlay);
+  const prefersReducedMotion = useReducedMotion();
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -76,16 +79,50 @@ export default function ImageCarousel({
     };
   }, [emblaApi, onSelect]);
 
-  // Auto-play functionality
+  // Auto-play functionality - stops when reduced motion is preferred
   useEffect(() => {
-    if (!emblaApi || !autoPlay) return;
+    if (!emblaApi || !autoPlay || !isPlaying || prefersReducedMotion) return;
 
     const interval = setInterval(() => {
       emblaApi.scrollNext();
     }, autoPlayInterval);
 
     return () => clearInterval(interval);
-  }, [emblaApi, autoPlay, autoPlayInterval]);
+  }, [emblaApi, autoPlay, autoPlayInterval, isPlaying, prefersReducedMotion]);
+
+  // Keyboard navigation
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!emblaApi) return;
+
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      scrollPrev();
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      scrollNext();
+    }
+  };
+
+  // Pause auto-play on hover
+  const handleMouseEnter = () => {
+    if (autoPlay) setIsPlaying(false);
+  };
+
+  const handleMouseLeave = () => {
+    if (autoPlay) setIsPlaying(true);
+  };
+
+  // Pause auto-play on focus within
+  const handleFocusIn = () => {
+    if (autoPlay) setIsPlaying(false);
+  };
+
+  const handleFocusOut = (e: React.FocusEvent) => {
+    // Only resume if focus has left the carousel entirely
+    if (autoPlay && !e.currentTarget.contains(e.relatedTarget)) {
+      setIsPlaying(true);
+    }
+  };
 
   const getAspectClass = () => {
     switch (aspectRatio) {
@@ -101,11 +138,28 @@ export default function ImageCarousel({
   };
 
   return (
-    <div className="relative">
+    <div
+      className="relative"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label={`Image carousel with ${images.length} slides`}
+      onKeyDown={handleKeyDown}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onFocus={handleFocusIn}
+      onBlur={handleFocusOut}
+      tabIndex={0}
+    >
       <div className="relative overflow-hidden rounded-2xl" ref={emblaRef}>
         <div className="flex">
           {images.map((image, index) => (
-            <div key={index} className="min-w-0 flex-[0_0_100%]">
+            <div
+              key={index}
+              className="min-w-0 flex-[0_0_100%]"
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`Slide ${index + 1} of ${images.length}`}
+            >
               <div className={`relative ${getAspectClass()}`}>
                 <Image
                   src={image.src}
@@ -152,6 +206,12 @@ export default function ImageCarousel({
           ))}
         </div>
 
+        {/* Screen reader announcements */}
+        <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+          Slide {selectedIndex + 1} of {images.length}
+          {images[selectedIndex]?.alt && `: ${images[selectedIndex].alt}`}
+        </div>
+
         {/* Navigation arrows */}
         {showNavigation && images.length > 1 && (
           <div className="absolute right-6 bottom-6 z-10 flex gap-2 md:right-8 md:bottom-8">
@@ -159,6 +219,7 @@ export default function ImageCarousel({
               onClick={scrollPrev}
               className="rounded-full bg-white/90 p-2 text-primary-900 shadow-lg transition-all duration-200 hover:scale-110 hover:bg-white focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:outline-none dark:bg-grey-800/90 dark:text-primary-100 dark:hover:bg-grey-800"
               aria-label="Previous slide"
+              type="button"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -173,6 +234,7 @@ export default function ImageCarousel({
               onClick={scrollNext}
               className="rounded-full bg-white/90 p-2 text-primary-900 shadow-lg transition-all duration-200 hover:scale-110 hover:bg-white focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:outline-none dark:bg-grey-800/90 dark:text-primary-100 dark:hover:bg-grey-800"
               aria-label="Next slide"
+              type="button"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -193,13 +255,15 @@ export default function ImageCarousel({
           {scrollSnaps.map((_, index) => (
             <button
               key={index}
+              type="button"
               onClick={() => scrollTo(index)}
               className={`h-2.5 rounded-full transition-all duration-200 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:outline-none ${
                 index === selectedIndex
                   ? "w-8 bg-accent-600 dark:bg-accent-400"
                   : "w-2.5 bg-neutral-300 hover:bg-neutral-400 dark:bg-neutral-600 dark:hover:bg-neutral-500"
               }`}
-              aria-label={`Go to slide ${index + 1}`}
+              aria-label={`Go to slide ${index + 1} of ${images.length}`}
+              aria-current={index === selectedIndex ? "true" : undefined}
             />
           ))}
         </div>

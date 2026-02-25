@@ -1,8 +1,7 @@
 import Container from "@/components/Container/container";
-import { FacebookIcon } from "@/components/FacebookIcon/facebook-icon";
-import { InstagramIcon } from "@/components/InstagramIcon/instagram-icon";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image";
+import { SocialLinks } from "@/components/SocialLinks/social-links";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { AnimatePresence, motion } from "framer-motion";
@@ -49,10 +48,8 @@ export default function GetInvolved({
       .filter((img): img is SanityImageObject => img != null) || [];
 
   useEffect(() => {
-    // Only cycle images if user hasn't requested reduced motion
-    if (prefersReducedMotion) {
-      return;
-    }
+    // Only cycle images if user hasn't requested reduced motion and there are multiple images
+    if (prefersReducedMotion || images.length <= 1) return;
 
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % images.length);
@@ -113,32 +110,11 @@ export default function GetInvolved({
               <h3 className="mb-3 font-display text-lg font-medium dark:text-grey-100">
                 Follow us online
               </h3>
-              <div className="flex gap-4">
-                <a
-                  href={
-                    siteSettings?.socialMedia?.facebook ||
-                    "https://www.facebook.com/friendsofchimborazopark"
-                  }
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Follow us on Facebook (opens in new window)"
-                  className="rounded-lg bg-white p-3 shadow-sm transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:border dark:border-accent-600/30 dark:bg-transparent"
-                >
-                  <FacebookIcon className="h-6 w-6 fill-accent-700 dark:fill-accent-400" />
-                </a>
-                <a
-                  href={
-                    siteSettings?.socialMedia?.instagram ||
-                    "https://www.instagram.com/friendsofchimborazopark/"
-                  }
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Follow us on Instagram (opens in new window)"
-                  className="rounded-lg bg-white p-3 shadow-sm transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:border dark:border-accent-600/30 dark:bg-transparent"
-                >
-                  <InstagramIcon className="h-6 w-6 fill-accent-700 dark:fill-accent-400" />
-                </a>
-              </div>
+              <SocialLinks
+                className="flex gap-4"
+                linkClassName="rounded-lg bg-white p-3 shadow-sm transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:border dark:border-accent-600/30 dark:bg-transparent"
+                iconClassName="h-6 w-6 fill-accent-700 dark:fill-accent-400"
+              />
             </div>
           </div>
         </div>

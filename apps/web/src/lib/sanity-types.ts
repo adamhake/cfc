@@ -258,6 +258,7 @@ export interface SanityAboutPage {
     description?: string;
     image?: SanityImage;
   };
+  content?: PortableTextBlock[];
 }
 
 export interface SanityDonatePage {

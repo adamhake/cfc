@@ -1,5 +1,5 @@
-import { defineArrayMember, defineField, defineType } from "sanity"
-import React from "react"
+import { defineField, defineType } from "sanity"
+import { createIntroductionField } from "./shared"
 
 export default defineType({
   name: "projectsPage",
@@ -32,71 +32,7 @@ export default defineType({
       ],
       validation: (rule) => rule.required(),
     }),
-    defineField({
-      name: "introduction",
-      title: "Introduction",
-      type: "array",
-      description: "Rich text content for the page introduction",
-      of: [
-        defineArrayMember({
-          type: "block",
-          styles: [
-            { title: "Normal", value: "normal" },
-            {
-              title: "Leading",
-              value: "leading",
-              component: ({ children }: { children?: React.ReactNode }) =>
-                React.createElement(
-                  "p",
-                  { style: { fontSize: "1rem", lineHeight: "1.6" } },
-                  children
-                ),
-            },
-            {
-              title: "Leading Large",
-              value: "leading-lg",
-              component: ({ children }: { children?: React.ReactNode }) =>
-                React.createElement(
-                  "p",
-                  { style: { fontSize: "1.25rem", lineHeight: "1.6" } },
-                  children
-                ),
-            },
-            { title: "H2", value: "h2" },
-            { title: "H3", value: "h3" },
-          ],
-          lists: [
-            { title: "Bullet", value: "bullet" },
-            { title: "Numbered", value: "number" },
-          ],
-          marks: {
-            decorators: [
-              { title: "Strong", value: "strong" },
-              { title: "Emphasis", value: "em" },
-            ],
-            annotations: [
-              {
-                name: "link",
-                type: "object",
-                title: "Link",
-                fields: [
-                  {
-                    name: "href",
-                    type: "url",
-                    title: "URL",
-                    validation: (rule) =>
-                      rule.uri({
-                        allowRelative: true,
-                        scheme: ["http", "https", "mailto", "tel"],
-                      }),
-                  },
-                ],
-              },
-            ],
-          },
-        }),
-      ],
-    }),
+    defineField(createIntroductionField()),
   ],
   preview: {
     prepare() {

@@ -65,6 +65,8 @@ export const queryKeys = {
 
   historyPage: () => ["historyPage"] as const,
 
+  aboutPage: () => ["aboutPage"] as const,
+
   getInvolvedPage: () => ["getInvolvedPage"] as const,
 } as const;
 

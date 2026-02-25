@@ -71,10 +71,14 @@ export function Markdown({ content }: MarkdownProps) {
               className="inline-flex items-center gap-1 font-medium text-accent-700 underline decoration-accent-500/30 underline-offset-2 transition-all hover:text-accent-800 hover:decoration-accent-600 active:opacity-70 dark:text-accent-400 dark:decoration-accent-400/30 dark:hover:text-accent-300 dark:hover:decoration-accent-400"
               target={isExternal ? "_blank" : undefined}
               rel={isExternal ? "noopener noreferrer" : undefined}
-              aria-label={isExternal ? `${children} (opens in new window)` : undefined}
             >
               {children}
-              {isExternal && <ExternalLink className="inline h-4 w-4" aria-hidden="true" />}
+              {isExternal && (
+                <>
+                  <span className="sr-only"> (opens in new window)</span>
+                  <ExternalLink className="ml-1 inline h-3.5 w-3.5" aria-hidden="true" />
+                </>
+              )}
             </a>
           );
         },

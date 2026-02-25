@@ -26,7 +26,7 @@ export default defineConfig([
   js.configs.recommended,
   tseslint.configs.recommended,
   reactHooks.configs.flat.recommended,
-  reactRefresh.configs.recommended,
+  reactRefresh.configs.vite,
   ...pluginRouter.configs["flat/recommended"],
   {
     files: ["**/*.{ts,tsx}"],
@@ -38,7 +38,12 @@ export default defineConfig([
     },
     rules: {
       "@typescript-eslint/no-empty-function": "off",
-      "react-refresh/only-export-components": "warn",
+    },
+  },
+  {
+    files: ["src/routes/**/*.{ts,tsx}", "src/integrations/**/*.{ts,tsx}"],
+    rules: {
+      "react-refresh/only-export-components": "off",
     },
   },
 ]);

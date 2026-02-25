@@ -86,8 +86,11 @@ export const createGenerateMetadataAction = (
         // Format: https://cdn.sanity.io/images/{projectId}/{dataset}/{assetId}-{width}x{height}.{format}
         const assetId = assetRef
         // These env vars are validated at build time via T3 Env in apps/studio/src/env.ts
-        const projectId = process.env.SANITY_STUDIO_PROJECT_ID
-        const dataset = process.env.SANITY_STUDIO_DATASET
+        // Sanity Studio runs inside Vite, so env vars are accessed via import.meta.env
+        const viteEnv = (import.meta as ImportMeta & { env: Record<string, string | undefined> })
+          .env
+        const projectId = viteEnv.SANITY_STUDIO_PROJECT_ID
+        const dataset = viteEnv.SANITY_STUDIO_DATASET
 
         if (!projectId) {
           throw new Error("SANITY_STUDIO_PROJECT_ID is not configured")
@@ -107,9 +110,6 @@ export const createGenerateMetadataAction = (
         // The apiUrl is injected via the factory config from the Studio's env configuration
         const apiUrl = config.apiUrl
 
-        console.log("Calling API at:", apiUrl)
-        console.log("Image URL:", imageUrl)
-
         const response = await fetch(apiUrl, {
           method: "POST",
           headers: {
@@ -117,9 +117,6 @@ export const createGenerateMetadataAction = (
           },
           body: JSON.stringify({ imageUrl }),
         })
-
-        console.log("Response status:", response.status)
-        console.log("Response ok:", response.ok)
 
         if (!response.ok) {
           let errorData: { error?: string } | undefined
@@ -132,7 +129,6 @@ export const createGenerateMetadataAction = (
         }
 
         const metadata = (await response.json()) as ImageMetadata
-        console.log("Received metadata:", metadata)
 
         // Patch the document with the generated metadata
         patch.execute([

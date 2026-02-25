@@ -9,7 +9,7 @@ import { getSanityClient } from "@/lib/sanity";
 import type { SanityProject, SanityProjectsPage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { allProjectsQuery, getProjectsPageQuery } from "@chimborazo/sanity-config";
-import { queryOptions } from "@tanstack/react-query";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
 // Query options for TanStack Query - accept preview flag for Visual Editing
@@ -50,11 +50,11 @@ export const Route = createFileRoute("/projects/")({
     const preview = await getIsPreviewMode();
 
     // Prefetch both projects data and page content on the server
-    const [projects, pageData] = await Promise.all([
+    await Promise.all([
       context.queryClient.ensureQueryData(projectsQueryOptions(preview)),
       context.queryClient.ensureQueryData(projectsPageQueryOptions(preview)),
     ]);
-    return { projects, pageData, preview };
+    return { preview };
   },
   headers: ({ loaderData }) => {
     return generateCacheHeaders({
@@ -84,7 +84,9 @@ export const Route = createFileRoute("/projects/")({
 });
 
 function Projects() {
-  const { projects, pageData } = Route.useLoaderData();
+  const { preview } = Route.useLoaderData();
+  const { data: projects } = useSuspenseQuery(projectsQueryOptions(preview));
+  const { data: pageData } = useSuspenseQuery(projectsPageQueryOptions(preview));
 
   // Prepare hero data from Sanity or use fallbacks
   const heroData = pageData?.pageHero?.image
