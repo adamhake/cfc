@@ -62,7 +62,9 @@
       "Bash(pnpm list:*)",
       "Bash(pnpm why:*)",
       "WebFetch(domain:github.com)",
-      "mcp__context7__get-library-docs"
+      "mcp__context7__get-library-docs",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_navigate"
     ],
     "deny": [],
     "ask": []
