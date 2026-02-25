@@ -10,5 +10,51 @@ export const getAboutPageQuery = defineQuery(`
         ${imageFieldProjection}
       }
     },
+    mission,
+    vision,
+    highlights[]{
+      _key,
+      value,
+      label
+    },
+    "storyImage": storyImage{
+      ${imageFieldProjection}
+    },
+    content[]{
+      ...,
+      _type == "image" => {
+        ...,
+        asset->{
+          _id,
+          url,
+          metadata{
+            dimensions,
+            lqip
+          }
+        }
+      }
+    },
+    "calloutImage": calloutImage{
+      ${imageFieldProjection}
+    },
+    boardMembers[]{
+      _key,
+      name,
+      role,
+      bio,
+      image{
+        asset->{
+          _id,
+          url,
+          metadata{
+            dimensions,
+            lqip
+          }
+        },
+        alt,
+        hotspot,
+        crop
+      }
+    }
   }
 `)
