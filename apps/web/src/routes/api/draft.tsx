@@ -19,8 +19,9 @@ export const Route = createFileRoute("/api/draft")({
         }
 
         // Enable draft mode by setting a cookie
-        // Ensure redirectTo is an absolute URL
-        const redirectUrl = new URL(redirectTo, url.origin).toString();
+        // Ensure redirectTo is a safe relative path to prevent open redirects
+        const safeRedirect = redirectTo.startsWith("/") ? redirectTo : "/";
+        const redirectUrl = new URL(safeRedirect, url.origin).toString();
 
         // Add Secure flag in production to ensure cookie is only sent over HTTPS
         const isProduction = process.env.NODE_ENV === "production";

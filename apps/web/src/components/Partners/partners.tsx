@@ -34,14 +34,8 @@ export default function Partners({ partners }: PartnersProps) {
   return (
     <Container spacing="none">
       <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
-        {partners.map((partner) => (
-          <a
-            key={partner.name}
-            href={partner.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative overflow-hidden rounded-2xl border border-accent-600/20 bg-gradient-to-br from-grey-50 to-grey-100/90 p-8 shadow-sm transition-all duration-300 hover:shadow-md lg:p-12 dark:border-primary-600 dark:from-primary-900 dark:to-primary-900/80"
-          >
+        {partners.map((partner) => {
+          const cardContent = (
             <div className="relative space-y-6">
               {/* Logo */}
               <div className="flex items-center justify-center rounded-xl bg-white p-6 shadow-sm transition-transform duration-300 group-hover:scale-105 dark:border dark:border-primary-500/50 dark:bg-grey-200">
@@ -71,7 +65,9 @@ export default function Partners({ partners }: PartnersProps) {
                 <h3 className="font-display text-xl text-grey-900 transition-colors group-hover:text-accent-700 md:text-2xl dark:text-grey-100 dark:group-hover:text-accent-400">
                   {partner.name}
                 </h3>
-                <ExternalLink className="h-5 w-5 stroke-accent-600 opacity-0 transition-opacity group-hover:opacity-100 dark:stroke-accent-400" />
+                {partner.url && (
+                  <ExternalLink className="h-5 w-5 stroke-accent-600 opacity-0 transition-opacity group-hover:opacity-100 dark:stroke-accent-400" />
+                )}
               </div>
 
               {/* Description */}
@@ -79,8 +75,27 @@ export default function Partners({ partners }: PartnersProps) {
                 {partner.description}
               </p>
             </div>
-          </a>
-        ))}
+          );
+
+          const sharedClassName =
+            "group relative overflow-hidden rounded-2xl border border-accent-600/20 bg-gradient-to-br from-grey-50 to-grey-100/90 p-8 shadow-sm transition-all duration-300 hover:shadow-md lg:p-12 dark:border-primary-600 dark:from-primary-900 dark:to-primary-900/80";
+
+          return partner.url ? (
+            <a
+              key={partner.name}
+              href={partner.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={sharedClassName}
+            >
+              {cardContent}
+            </a>
+          ) : (
+            <div key={partner.name} className={sharedClassName}>
+              {cardContent}
+            </div>
+          );
+        })}
       </div>
     </Container>
   );

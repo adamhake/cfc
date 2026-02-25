@@ -6,7 +6,7 @@ import { getSanityClient } from "@/lib/sanity";
 import type { SanityDonatePage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { getDonatePageQuery } from "@chimborazo/sanity-config";
-import { queryOptions, useQuery } from "@tanstack/react-query";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
@@ -53,7 +53,7 @@ export const Route = createFileRoute("/donate")({
 
 function Donate() {
   const { preview } = Route.useLoaderData();
-  const { data: donatePageData } = useQuery(donatePageQueryOptions(preview));
+  const { data: donatePageData } = useSuspenseQuery(donatePageQueryOptions(preview));
   const [isIframeLoaded, setIsIframeLoaded] = useState(false);
 
   // Prepare hero data from Sanity or use defaults

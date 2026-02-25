@@ -33,14 +33,12 @@ export default function AmenityCard({
     : icon;
 
   useEffect(() => {
-    // Only cycle images if user hasn't requested reduced motion
-    if (prefersReducedMotion) {
-      return;
-    }
+    // Only cycle images if user hasn't requested reduced motion and there are multiple images
+    if (prefersReducedMotion || images.length <= 1) return;
 
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % images.length);
-    }, 4000); // Change image every 5 seconds
+    }, 4000); // Change image every 4 seconds
 
     return () => clearInterval(interval);
   }, [prefersReducedMotion, images.length]);

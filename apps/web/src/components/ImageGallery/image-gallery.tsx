@@ -1,5 +1,5 @@
 import { SanityImage, type SanityImageObject } from "@/components/SanityImage";
-import Masonry from "@mui/lab/Masonry";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -64,6 +64,34 @@ function getImageKey(image: GalleryImage | SanityGalleryImage, index: number): s
   return `legacy-${index}-${image.src}`;
 }
 
+/**
+ * Hook to determine column count based on current viewport width.
+ * Uses the columns config prop to return the appropriate column count.
+ */
+function useResponsiveColumns(columns: ImageGalleryProps["columns"] = {}) {
+  const [columnCount, setColumnCount] = useState(columns.default || 1);
+
+  useEffect(() => {
+    const getColumns = () => {
+      const width = window.innerWidth;
+      if (width >= 1024 && columns.lg) return columns.lg;
+      if (width >= 768 && columns.md) return columns.md;
+      if (width >= 640 && columns.sm) return columns.sm;
+      return columns.default || 1;
+    };
+
+    const handleResize = () => {
+      setColumnCount(getColumns());
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [columns.default, columns.sm, columns.md, columns.lg]);
+
+  return columnCount;
+}
+
 export default function ImageGallery({
   images,
   variant = "grid",
@@ -77,20 +105,63 @@ export default function ImageGallery({
   const [captionHovered, setCaptionHovered] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const columnCount = useResponsiveColumns(columns);
 
-  // Prevent body scroll when modal is open
+  const gapClass = gap === "sm" ? "gap-2" : gap === "md" ? "gap-4" : "gap-6";
+  const gapSize = gap === "sm" ? "0.5rem" : gap === "md" ? "1rem" : "1.5rem";
+
+  // Prevent body scroll when modal is open, and manage focus
   useEffect(() => {
     if (selectedImage !== null) {
+      // Store the element that had focus before the modal opened
+      previouslyFocusedRef.current = document.activeElement as HTMLElement;
       document.body.style.overflow = "hidden";
       // Focus the close button for accessibility
       closeButtonRef.current?.focus();
     } else {
       document.body.style.overflow = "";
+      // Restore focus when modal closes
+      previouslyFocusedRef.current?.focus();
+      previouslyFocusedRef.current = null;
     }
 
     return () => {
       document.body.style.overflow = "";
     };
+  }, [selectedImage]);
+
+  // Focus trap for modal
+  useEffect(() => {
+    if (selectedImage === null || !modalRef.current) return;
+
+    const modalElement = modalRef.current;
+
+    const handleTabKey = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+
+      const focusableElements = modalElement.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      );
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement?.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement?.focus();
+        }
+      }
+    };
+
+    modalElement.addEventListener("keydown", handleTabKey);
+    return () => modalElement.removeEventListener("keydown", handleTabKey);
   }, [selectedImage]);
 
   // Keyboard navigation for modal
@@ -137,95 +208,258 @@ export default function ImageGallery({
     [images.length],
   );
 
-  if (variant === "masonry") {
-    // MUI Masonry layout - preserves image positions when new images are added
+  // Shared image card renderer
+  const renderImageCard = (image: GalleryImage | SanityGalleryImage, index: number) => {
+    if (!isSanityImage(image)) return null;
+    const props = getImageProps(image);
     return (
-      <>
-        <Masonry
-          columns={{
-            xs: columns.default || 1,
-            sm: columns.sm || 2,
-            md: columns.md || 3,
-            lg: columns.lg || 4,
+      <button
+        className="group relative w-full cursor-pointer overflow-hidden rounded-2xl shadow-sm transition-shadow hover:shadow-xl focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:outline-none"
+        onClick={() => handleImageClick(index)}
+        aria-label={`View ${props.alt}${props.caption ? `: ${props.caption}` : ""}`}
+        type="button"
+      >
+        <SanityImage
+          image={image}
+          alt={props.alt}
+          className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          breakpoints={[320, 480, 640, 800]}
+          maxWidth={800}
+        />
+        {showCaptions && captionPosition === "hover" && props.caption && (
+          <div
+            className={`absolute inset-0 flex items-end bg-black/85 p-4 backdrop-blur-sm transition-opacity duration-300 ${
+              hoveredIndex === index ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <p className="line-clamp-3 font-body text-sm text-white md:text-base">
+              {props.caption}
+            </p>
+          </div>
+        )}
+        {showCaptions && captionPosition === "below" && props.caption && (
+          <div className="absolute inset-x-0 bottom-0 bg-black/85 p-4 backdrop-blur-sm">
+            <p className="line-clamp-2 font-body text-sm font-medium text-white drop-shadow-lg md:text-base">
+              {props.caption}
+            </p>
+          </div>
+        )}
+      </button>
+    );
+  };
+
+  // Render the lightbox modal
+  const renderModal = () => (
+    <AnimatePresence>
+      {selectedImage !== null && (
+        <motion.div
+          ref={modalRef}
+          className="fixed top-0 right-0 bottom-0 left-0 z-50 flex h-full min-h-[100dvh] w-full flex-col overflow-hidden bg-black/95"
+          style={{
+            paddingTop: "env(safe-area-inset-top)",
+            paddingBottom: "env(safe-area-inset-bottom)",
           }}
-          spacing={gap === "sm" ? 1 : gap === "md" ? 2 : 3}
-          sequential
+          initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0 }}
+          transition={prefersReducedMotion ? { duration: 0 } : undefined}
+          onClick={handleCloseModal}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="gallery-modal-title"
         >
-          {images.map((image, index) => {
-            if (!isSanityImage(image)) return null;
-            const props = getImageProps(image);
-            return (
-              <div
-                key={getImageKey(image, index)}
-                className={props.showOnMobile === false ? "hidden sm:block" : ""}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-              >
+          {/* Screen reader heading for modal context */}
+          <h2 id="gallery-modal-title" className="sr-only">
+            Image Viewer
+          </h2>
+          <button
+            ref={closeButtonRef}
+            className="absolute top-4 right-4 z-10 rounded-full bg-white/10 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:ring-2 focus:ring-white focus:outline-none"
+            onClick={handleCloseModal}
+            aria-label="Close image viewer"
+            type="button"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+          <div className="flex h-full flex-1 items-center justify-center p-4 pb-20 md:pb-4">
+            <div
+              className="relative flex flex-col items-center gap-4 md:max-h-[90vh] md:flex-row"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Previous button - hidden on mobile, shown on desktop */}
+              {selectedImage > 0 && (
                 <button
-                  className="group relative w-full cursor-pointer overflow-hidden rounded-2xl shadow-sm transition-shadow hover:shadow-xl focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:outline-none"
-                  onClick={() => handleImageClick(index)}
-                  aria-label={`View ${props.alt}${props.caption ? `: ${props.caption}` : ""}`}
+                  className="hidden rounded-full bg-primary-700/80 p-3 text-white backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:outline-none md:block"
+                  onClick={handlePrevImage}
+                  aria-label="Previous image"
                   type="button"
                 >
-                  <SanityImage
-                    image={image}
-                    alt={props.alt}
-                    className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    breakpoints={[320, 480, 640, 800]}
-                    maxWidth={800}
-                  />
-                  {showCaptions && captionPosition === "hover" && props.caption && (
-                    <div
-                      className={`absolute inset-0 flex items-end bg-black/85 p-4 backdrop-blur-sm transition-opacity duration-300 ${
-                        hoveredIndex === index ? "opacity-100" : "opacity-0"
-                      }`}
-                    >
-                      <p className="line-clamp-3 font-body text-sm text-white md:text-base">
-                        {props.caption}
-                      </p>
-                    </div>
-                  )}
-                  {showCaptions && captionPosition === "below" && props.caption && (
-                    <div className="absolute inset-x-0 bottom-0 bg-black/85 p-4 backdrop-blur-sm">
-                      <p className="line-clamp-2 font-body text-sm font-medium text-white drop-shadow-lg md:text-base">
-                        {props.caption}
-                      </p>
-                    </div>
-                  )}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 19l-7-7 7-7"
+                    />
+                  </svg>
                 </button>
+              )}
+              {/* Image container */}
+              <div className="flex max-w-7xl flex-col items-center gap-4 md:gap-0">
+                <div className="relative inline-block">
+                  {isSanityImage(images[selectedImage]) ? (
+                    <SanityImage
+                      image={images[selectedImage]}
+                      alt={getImageProps(images[selectedImage]).alt}
+                      className="h-auto max-h-[calc(100vh-24rem)] w-auto max-w-[85vw] rounded-lg md:max-h-[calc(90vh-16rem)] md:max-w-5xl"
+                      priority={true}
+                      sizes="(max-width: 768px) 85vw, (max-width: 1280px) 80vw, 1280px"
+                      maxWidth={1920}
+                    />
+                  ) : (
+                    <img
+                      src={images[selectedImage].src}
+                      alt={images[selectedImage].alt}
+                      className="h-auto max-h-[calc(100vh-24rem)] w-auto max-w-[85vw] rounded-lg md:max-h-[calc(90vh-16rem)] md:max-w-5xl"
+                      loading="eager"
+                    />
+                  )}
+                  {/* Desktop: Hotspot indicator and caption overlay */}
+                  {getImageProps(images[selectedImage]).caption && (
+                    <>
+                      {/* Hotspot circle with info icon */}
+                      <motion.div
+                        className="absolute bottom-4 left-4 hidden h-10 w-10 cursor-help items-center justify-center rounded-full bg-primary-700/80 backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-primary-700 md:flex"
+                        onMouseEnter={() => setCaptionHovered(true)}
+                        onMouseLeave={() => setCaptionHovered(false)}
+                        aria-label="Show caption"
+                        animate={
+                          prefersReducedMotion
+                            ? {}
+                            : {
+                                scale: [1, 1.1, 1],
+                                opacity: [0.8, 1, 0.8],
+                              }
+                        }
+                        transition={
+                          prefersReducedMotion
+                            ? {}
+                            : {
+                                duration: 2,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                              }
+                        }
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 text-white"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </motion.div>
+                      {/* Caption overlay - shown on hotspot hover */}
+                      <AnimatePresence>
+                        {captionHovered && (
+                          <motion.div
+                            className="absolute inset-0 hidden rounded-lg bg-black/85 p-6 backdrop-blur-sm md:flex md:items-end"
+                            onMouseEnter={() => setCaptionHovered(true)}
+                            onMouseLeave={() => setCaptionHovered(false)}
+                            initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
+                            transition={
+                              prefersReducedMotion
+                                ? { duration: 0 }
+                                : {
+                                    duration: 0.3,
+                                    ease: "easeOut",
+                                  }
+                            }
+                          >
+                            <p className="max-h-full overflow-y-auto pb-6 font-body text-base leading-relaxed text-white drop-shadow-lg md:text-lg">
+                              {getImageProps(images[selectedImage]).caption}
+                            </p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </>
+                  )}
+                </div>
+                {/* Mobile: Caption below image */}
+                {getImageProps(images[selectedImage]).caption && (
+                  <div className="max-h-32 w-full max-w-2xl overflow-y-auto rounded-lg bg-black/40 p-4 backdrop-blur-sm md:hidden">
+                    <p className="font-body text-sm leading-relaxed text-white">
+                      {getImageProps(images[selectedImage]).caption}
+                    </p>
+                  </div>
+                )}
               </div>
-            );
-          })}
-        </Masonry>
-
-        {/* Lightbox Modal */}
-        {selectedImage !== null && (
-          <motion.div
-            ref={modalRef}
-            className="fixed top-0 right-0 bottom-0 left-0 z-50 flex h-full min-h-[100dvh] w-full flex-col overflow-hidden bg-black/95"
-            style={{
-              paddingTop: "env(safe-area-inset-top)",
-              paddingBottom: "env(safe-area-inset-bottom)",
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={handleCloseModal}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="gallery-modal-title"
+              {/* Next button - hidden on mobile, shown on desktop */}
+              {selectedImage < images.length - 1 && (
+                <button
+                  className="hidden rounded-full bg-primary-700/80 p-3 text-white backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:outline-none md:block"
+                  onClick={handleNextImage}
+                  aria-label="Next image"
+                  type="button"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </button>
+              )}
+            </div>
+          </div>
+          {/* Mobile navigation buttons - positioned at bottom */}
+          <div
+            className="fixed inset-x-0 bottom-0 flex justify-center gap-4 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-6 pb-8 md:hidden"
+            onClick={(e) => e.stopPropagation()}
           >
-            {/* Screen reader heading for modal context */}
-            <h2 id="gallery-modal-title" className="sr-only">
-              Image Viewer
-            </h2>
             <button
-              ref={closeButtonRef}
-              className="absolute top-4 right-4 z-10 rounded-full bg-white/10 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:ring-2 focus:ring-white focus:outline-none"
-              onClick={handleCloseModal}
-              aria-label="Close image viewer"
+              className={`rounded-full bg-primary-700/80 p-4 text-white backdrop-blur-sm transition-all duration-300 hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:outline-none ${selectedImage === 0 ? "cursor-not-allowed opacity-50" : ""}`}
+              onClick={handlePrevImage}
+              aria-label="Previous image"
               type="button"
+              disabled={selectedImage === 0}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -238,205 +472,93 @@ export default function ImageGallery({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
+                  d="M15 19l-7-7 7-7"
                 />
               </svg>
             </button>
-            <div className="flex h-full flex-1 items-center justify-center p-4 pb-20 md:pb-4">
-              <div
-                className="relative flex flex-col items-center gap-4 md:max-h-[90vh] md:flex-row"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {/* Previous button - hidden on mobile, shown on desktop */}
-                {selectedImage > 0 && (
-                  <button
-                    className="hidden rounded-full bg-primary-700/80 p-3 text-white backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:outline-none md:block"
-                    onClick={handlePrevImage}
-                    aria-label="Previous image"
-                    type="button"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 19l-7-7 7-7"
-                      />
-                    </svg>
-                  </button>
-                )}
-                {/* Image container */}
-                <div className="flex max-w-7xl flex-col items-center gap-4 md:gap-0">
-                  <div className="relative inline-block">
-                    {isSanityImage(images[selectedImage]) ? (
-                      <SanityImage
-                        image={images[selectedImage]}
-                        alt={getImageProps(images[selectedImage]).alt}
-                        className="h-auto max-h-[calc(100vh-24rem)] w-auto max-w-[85vw] rounded-lg md:max-h-[calc(90vh-16rem)] md:max-w-5xl"
-                        priority={true}
-                        sizes="(max-width: 768px) 85vw, (max-width: 1280px) 80vw, 1280px"
-                        maxWidth={1920}
-                      />
-                    ) : (
-                      <img
-                        src={images[selectedImage].src}
-                        alt={images[selectedImage].alt}
-                        className="h-auto max-h-[calc(100vh-24rem)] w-auto max-w-[85vw] rounded-lg md:max-h-[calc(90vh-16rem)] md:max-w-5xl"
-                        loading="eager"
-                      />
-                    )}
-                    {/* Desktop: Hotspot indicator and caption overlay */}
-                    {getImageProps(images[selectedImage]).caption && (
-                      <>
-                        {/* Hotspot circle with info icon */}
-                        <motion.div
-                          className="absolute bottom-4 left-4 hidden h-10 w-10 cursor-help items-center justify-center rounded-full bg-primary-700/80 backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-primary-700 md:flex"
-                          onMouseEnter={() => setCaptionHovered(true)}
-                          onMouseLeave={() => setCaptionHovered(false)}
-                          aria-label="Show caption"
-                          animate={{
-                            scale: [1, 1.1, 1],
-                            opacity: [0.8, 1, 0.8],
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                          }}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5 text-white"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                          </svg>
-                        </motion.div>
-                        {/* Caption overlay - shown on hotspot hover */}
-                        <AnimatePresence>
-                          {captionHovered && (
-                            <motion.div
-                              className="absolute inset-0 hidden rounded-lg bg-black/85 p-6 backdrop-blur-sm md:flex md:items-end"
-                              onMouseEnter={() => setCaptionHovered(true)}
-                              onMouseLeave={() => setCaptionHovered(false)}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: 10 }}
-                              transition={{
-                                duration: 0.3,
-                                ease: "easeOut",
-                              }}
-                            >
-                              <p className="max-h-full overflow-y-auto pb-6 font-body text-base leading-relaxed text-white drop-shadow-lg md:text-lg">
-                                {getImageProps(images[selectedImage]).caption}
-                              </p>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </>
-                    )}
-                  </div>
-                  {/* Mobile: Caption below image */}
-                  {getImageProps(images[selectedImage]).caption && (
-                    <div className="max-h-32 w-full max-w-2xl overflow-y-auto rounded-lg bg-black/40 p-4 backdrop-blur-sm md:hidden">
-                      <p className="font-body text-sm leading-relaxed text-white">
-                        {getImageProps(images[selectedImage]).caption}
-                      </p>
-                    </div>
-                  )}
-                </div>
-                {/* Next button - hidden on mobile, shown on desktop */}
-                {selectedImage < images.length - 1 && (
-                  <button
-                    className="hidden rounded-full bg-primary-700/80 p-3 text-white backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:outline-none md:block"
-                    onClick={handleNextImage}
-                    aria-label="Next image"
-                    type="button"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </button>
-                )}
-              </div>
-            </div>
-            {/* Mobile navigation buttons - positioned at bottom */}
-            <div
-              className="fixed inset-x-0 bottom-0 flex justify-center gap-4 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-6 pb-8 md:hidden"
-              onClick={(e) => e.stopPropagation()}
+            <button
+              className={`rounded-full bg-primary-700/80 p-4 text-white backdrop-blur-sm transition-all duration-300 hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:outline-none ${selectedImage === images.length - 1 ? "cursor-not-allowed opacity-50" : ""}`}
+              onClick={handleNextImage}
+              aria-label="Next image"
+              type="button"
+              disabled={selectedImage === images.length - 1}
             >
-              <button
-                className={`rounded-full bg-primary-700/80 p-4 text-white backdrop-blur-sm transition-all duration-300 hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:outline-none ${selectedImage === 0 ? "cursor-not-allowed opacity-50" : ""}`}
-                onClick={handlePrevImage}
-                aria-label="Previous image"
-                type="button"
-                disabled={selectedImage === 0}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </button>
-              <button
-                className={`rounded-full bg-primary-700/80 p-4 text-white backdrop-blur-sm transition-all duration-300 hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:outline-none ${selectedImage === images.length - 1 ? "cursor-not-allowed opacity-50" : ""}`}
-                onClick={handleNextImage}
-                aria-label="Next image"
-                type="button"
-                disabled={selectedImage === images.length - 1}
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+
+  if (variant === "grid") {
+    // CSS Grid layout
+    return (
+      <>
+        <div
+          className={`grid ${gapClass}`}
+          style={{
+            gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`,
+          }}
+        >
+          {images.map((image, index) => {
+            const props = getImageProps(image);
+            return (
+              <div
+                key={getImageKey(image, index)}
+                className={props.showOnMobile === false ? "hidden sm:block" : ""}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </button>
-            </div>
-          </motion.div>
-        )}
+                {renderImageCard(image, index)}
+              </div>
+            );
+          })}
+        </div>
+        {renderModal()}
       </>
     );
   }
+
+  // Masonry and staggered variants both use CSS columns layout
+  // "staggered" falls back to the same masonry layout
+  return (
+    <>
+      <div
+        style={{
+          columns: columnCount,
+          columnGap: gapSize,
+        }}
+      >
+        {images.map((image, index) => {
+          const props = getImageProps(image);
+          return (
+            <div
+              key={getImageKey(image, index)}
+              className={props.showOnMobile === false ? "hidden sm:block" : ""}
+              style={{ breakInside: "avoid", marginBottom: gapSize }}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
+              {renderImageCard(image, index)}
+            </div>
+          );
+        })}
+      </div>
+      {renderModal()}
+    </>
+  );
 }

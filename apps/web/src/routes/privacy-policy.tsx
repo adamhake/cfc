@@ -34,12 +34,7 @@ function PrivacyPolicy() {
       <Container className="py-16 md:py-24">
         <div className="prose-grey prose max-w-4xl dark:prose-invert">
           <p className="font-body text-grey-700 dark:text-grey-300">
-            <strong>Effective Date:</strong>{" "}
-            {new Date().toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
+            <strong>Effective Date:</strong> January 1, 2025
           </p>
 
           <div className="mt-8 space-y-8">

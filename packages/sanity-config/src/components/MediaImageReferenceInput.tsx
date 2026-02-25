@@ -2,7 +2,8 @@ import { Card, Flex, Grid, Stack, Text } from "@sanity/ui"
 import { Reference, SanityDocument } from "@sanity/types"
 import { set, unset } from "sanity"
 import { ObjectInputProps, useClient } from "sanity"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import imageUrlBuilder from "@sanity/image-url"
 
 interface MediaImageDocument extends SanityDocument {
   _type: "mediaImage"
@@ -23,6 +24,8 @@ export function MediaImageReferenceInput(props: ObjectInputProps) {
   const [loading, setLoading] = useState(true)
 
   const selectedRef = (value as Reference)?._ref
+
+  const builder = useMemo(() => imageUrlBuilder(client), [client])
 
   useEffect(() => {
     const fetchMediaImages = async () => {
@@ -79,10 +82,12 @@ export function MediaImageReferenceInput(props: ObjectInputProps) {
         {mediaImages.map((image) => {
           const isSelected = image._id === selectedRef
           const assetRef = image.image?.asset?._ref
-          const imageUrl =
-            assetRef && client.config().dataset
-              ? `https://cdn.sanity.io/images/${client.config().projectId}/${client.config().dataset}/${assetRef.replace("image-", "").replace("-jpg", ".jpg").replace("-png", ".png").replace("-webp", ".webp")}`
-              : undefined
+          const imageUrl = assetRef
+            ? builder
+                .image({ _type: "image", asset: { _ref: assetRef } })
+                .width(400)
+                .url()
+            : undefined
 
           return (
             <Card
