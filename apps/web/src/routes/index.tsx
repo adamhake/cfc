@@ -23,11 +23,51 @@ import {
   getHomePageQuery,
   recentEventsQuery,
 } from "@chimborazo/sanity-config";
+import type { PortableTextComponents } from "@portabletext/react";
+import { PortableText } from "@portabletext/react";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Image } from "@unpic/react";
 
-// Query options for TanStack Query - accept preview flag for Visual Editing
+// ─── Portable Text renderers for section-specific styling ───
+
+const introBodyComponents: PortableTextComponents = {
+  block: {
+    normal: ({ children }) => (
+      <p className="mt-4 max-w-4xl font-body text-grey-800 md:text-lg dark:text-grey-100">
+        {children}
+      </p>
+    ),
+  },
+};
+
+const parkBodyComponents: PortableTextComponents = {
+  block: {
+    normal: ({ children }) => (
+      <p className="font-body text-grey-800 md:text-lg dark:text-grey-200">{children}</p>
+    ),
+  },
+};
+
+const parkCalloutComponents: PortableTextComponents = {
+  block: {
+    normal: ({ children }) => (
+      <p className="font-body text-lg leading-relaxed font-medium text-grey-800 md:text-xl dark:text-grey-100">
+        {children}
+      </p>
+    ),
+  },
+  marks: {
+    strong: ({ children }) => (
+      <strong className="font-display text-xl font-semibold text-primary-800 md:text-2xl dark:text-primary-200">
+        {children}
+      </strong>
+    ),
+  },
+};
+
+// ─── Query options ───
+
 const homePageQueryOptions = (preview = false) =>
   queryOptions({
     queryKey: [...queryKeys.homePage(), { preview }],
@@ -106,10 +146,80 @@ export const Route = createFileRoute("/")({
     }),
     links: generateLinkTags({
       canonical: SITE_CONFIG.url,
-      // Note: Hero image is now loaded from Sanity CMS, no static preload needed
     }),
   }),
 });
+
+// ─── Fallback content ───
+
+const FALLBACKS = {
+  intro: {
+    heading:
+      "The Chimborazo Park Conservancy and Friends of Chimborazo Park preserve and enhance this Church Hill landmark through community stewardship.",
+    body: [
+      "Established in 2023 as a 501(c)(3) non-profit, the conservancy was formed out of the Friends of Chimborazo Park to address the broader needs of this historic greenspace as it continues to recover and thrive.",
+      "Since then, we've been putting down roots\u2014engaging volunteers and partners on environmental projects while planning for the future. Together, we're building a sustainable foundation for a healthier, more beautiful park that serves our community for generations to come.",
+    ],
+  },
+  vision: {
+    title: "Our Vision",
+    description:
+      "Our mission is built on four core pillars. Explore each to see how we're working to make Chimborazo Park a cherished landmark for generations to come.",
+    pillars: [
+      {
+        title: "Restoration",
+        pillar: "restoration" as const,
+        description: [
+          "Revitalizing and preserving the park's environmental character through the recovery and expansion of our natural spaces and habitats.",
+          "Restoring and repairing the park's unique cultural heritage elements.",
+        ],
+      },
+      {
+        title: "Recreation",
+        pillar: "recreation" as const,
+        description:
+          "Providing vibrant play spaces, natural areas, and a dog park where neighbors of all ages\u2014and their pets\u2014can gather and stay active.",
+      },
+      {
+        title: "Connection",
+        pillar: "connection" as const,
+        description:
+          "Building an inclusive, welcoming park through volunteer stewardship and partnerships that strengthen our Church Hill neighborhood.",
+      },
+      {
+        title: "Preservation",
+        pillar: "preservation" as const,
+        description:
+          "Honoring all chapters of Chimborazo's rich history and ensuring its complete story is shared and understood by future generations.",
+      },
+    ],
+  },
+  projects: {
+    title: "Projects",
+    description:
+      "Learn about our current initiatives and how they're transforming Chimborazo Park for the entire community.",
+  },
+  park: {
+    title: "The Park",
+    intro: "Chimborazo Hill's story reaches back centuries\u2014from the indigenous Powhatan people to its pivotal role in the Civil War. In 1874, as Richmond rebuilt, the city transformed this storied site into a public park for all residents to enjoy.",
+    body: [
+      "City engineer Wilfred Cutshaw spent decades in the late 1800s designing winding cobbled carriage roads that embraced the steep terrain, revealing breathtaking vistas at every turn. These paths connected Church Hill with the traditionally African American Fulton neighborhood below, creating vital links between communities.",
+      "By the turn of the 20th century, Chimborazo had become Richmond's beloved suburban retreat. Visitors arrived by streetcar to enjoy the bandstand, refreshment pavilion, and sweeping 180-degree views of the James River and downtown\u2014a golden era that lasted through World War II.",
+    ],
+    today:
+      "Today, the park includes scenic trails, a dog park, the historic Round House, a picnic gazebo, and an eight-foot Statue of Liberty replica erected by Boy Scouts in the 1950s.",
+  },
+  events: {
+    title: "Events",
+    description:
+      "Join us for seasonal clean-ups, tree plantings, educational presentations, and community gatherings that help preserve and enhance our historic park.",
+  },
+  partners: {
+    title: "Partners",
+    description:
+      "We're grateful to partner with local organizations that share our commitment to preserving and enhancing Chimborazo Park for the entire community.",
+  },
+};
 
 function Home() {
   // Get preview mode from loader data
@@ -147,6 +257,15 @@ function Home() {
       ?.filter((img) => img?.image?.asset?.url) // Filter out any images without assets
       .map((img) => img.image) || [];
 
+  // CMS section data with fallbacks
+  const intro = homePageData?.introSection;
+  const vision = homePageData?.visionSection;
+  const projectsHeader = homePageData?.projectsSectionHeader;
+  const park = homePageData?.parkSection;
+  const eventsHeader = homePageData?.eventsSectionHeader;
+  const getInvolved = homePageData?.getInvolvedSection;
+  const partnersHeader = homePageData?.partnersSectionHeader;
+
   return (
     <div className="space-y-24 pb-24 text-grey-900 dark:text-grey-100">
       <Hero {...heroData} />
@@ -155,21 +274,21 @@ function Home() {
       <div className="text-grey-900">
         <Container spacing="md">
           <p className="max-w-4xl font-body text-2xl leading-snug font-medium md:text-3xl dark:text-grey-100">
-            The Chimborazo Park Conservancy and Friends of Chimborazo Park preserve and enhance this
-            Church Hill landmark through community stewardship.
-          </p>
-          <p className="mt-4 max-w-4xl font-body text-grey-800 md:text-lg dark:text-grey-100">
-            Established in 2023 as a 501(c)(3) non-profit, the conservancy was formed out of the
-            Friends of Chimborazo Park to address the broader needs of this historic greenspace as
-            it continues to recover and thrive.
+            {intro?.heading || FALLBACKS.intro.heading}
           </p>
 
-          <p className="mt-4 max-w-4xl font-body text-grey-800 md:text-lg dark:text-grey-100">
-            Since then, we've been putting down roots—engaging volunteers and partners on
-            environmental projects while planning for the future. Together, we're building a
-            sustainable foundation for a healthier, more beautiful park that serves our community
-            for generations to come.
-          </p>
+          {intro?.body ? (
+            <PortableText value={intro.body} components={introBodyComponents} />
+          ) : (
+            FALLBACKS.intro.body.map((text, i) => (
+              <p
+                key={i}
+                className="mt-4 max-w-4xl font-body text-grey-800 md:text-lg dark:text-grey-100"
+              >
+                {text}
+              </p>
+            ))
+          )}
 
           <div className="mt-12">
             <ImageGallery
@@ -186,35 +305,28 @@ function Home() {
       {/* Our Vision */}
       <div>
         <Container spacing="md">
-          <SectionHeader title="Our Vision" size="large" />
+          <SectionHeader title={vision?.title || FALLBACKS.vision.title} size="large" />
           <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
-            Our mission is built on <strong>four core pillars</strong>. Explore each to see how
-            we're working to make Chimborazo Park a cherished landmark for generations to come.
+            {vision?.description || FALLBACKS.vision.description}
           </p>
           <div className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-14">
-            <Vision
-              title="Restoration"
-              pillar="restoration"
-              description={[
-                "Revitalizing and preserving the park's environmental character through the recovery and expansion of our natural spaces and habitats.",
-                "Restoring and repairing the park's unique cultural heritage elements.",
-              ]}
-            />
-            <Vision
-              title="Recreation"
-              pillar="recreation"
-              description="Providing vibrant play spaces, natural areas, and a dog park where neighbors of all ages—and their pets—can gather and stay active."
-            />
-            <Vision
-              title="Connection"
-              pillar="connection"
-              description="Building an inclusive, welcoming park through volunteer stewardship and partnerships that strengthen our Church Hill neighborhood."
-            />
-            <Vision
-              title="Preservation"
-              pillar="preservation"
-              description="Honoring all chapters of Chimborazo's rich history and ensuring its complete story is shared and understood by future generations."
-            />
+            {vision?.pillars && vision.pillars.length > 0
+              ? vision.pillars.map((pillar) => (
+                  <Vision
+                    key={pillar._key}
+                    title={pillar.title}
+                    pillar={pillar.pillar}
+                    content={pillar.description}
+                  />
+                ))
+              : FALLBACKS.vision.pillars.map((pillar) => (
+                  <Vision
+                    key={pillar.pillar}
+                    title={pillar.title}
+                    pillar={pillar.pillar}
+                    description={pillar.description}
+                  />
+                ))}
           </div>
         </Container>
       </div>
@@ -223,10 +335,12 @@ function Home() {
       {featuredProjects && featuredProjects.length > 0 && (
         <div>
           <Container>
-            <SectionHeader title="Projects" size="large" />
+            <SectionHeader
+              title={projectsHeader?.title || FALLBACKS.projects.title}
+              size="large"
+            />
             <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
-              Learn about our current initiatives and how they're transforming Chimborazo Park for
-              the entire community.
+              {projectsHeader?.description || FALLBACKS.projects.description}
             </p>
 
             <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
@@ -264,13 +378,11 @@ function Home() {
       {/* The Park */}
       <div className="text-grey-900 dark:text-grey-100">
         <Container spacing="md">
-          <SectionHeader title="The Park" size="large" />
+          <SectionHeader title={park?.title || FALLBACKS.park.title} size="large" />
 
           {/* Enhanced opening with larger text */}
           <p className="font-body text-xl leading-relaxed font-medium text-grey-800 md:text-2xl dark:text-grey-200">
-            Chimborazo Hill's story reaches back centuries—from the indigenous Powhatan people to
-            its pivotal role in the Civil War. In 1874, as Richmond rebuilt, the city transformed
-            this storied site into a public park for all residents to enjoy.
+            {park?.intro || FALLBACKS.park.intro}
           </p>
 
           {/* Content with subtle background and integrated image */}
@@ -278,19 +390,18 @@ function Home() {
             <div className="grid gap-8 md:grid-cols-2 md:gap-10 lg:gap-12">
               {/* Text content */}
               <div className="space-y-6">
-                <p className="font-body text-grey-800 md:text-lg dark:text-grey-200">
-                  City engineer Wilfred Cutshaw spent decades in the late 1800s designing winding
-                  cobbled carriage roads that embraced the steep terrain, revealing breathtaking
-                  vistas at every turn. These paths connected Church Hill with the traditionally
-                  African American Fulton neighborhood below, creating vital links between
-                  communities.
-                </p>
-                <p className="font-body text-grey-800 md:text-lg dark:text-grey-200">
-                  By the turn of the 20th century, Chimborazo had become Richmond's beloved suburban
-                  retreat. Visitors arrived by streetcar to enjoy the bandstand, refreshment
-                  pavilion, and sweeping 180-degree views of the James River and downtown—a golden
-                  era that lasted through World War II.
-                </p>
+                {park?.body ? (
+                  <PortableText value={park.body} components={parkBodyComponents} />
+                ) : (
+                  FALLBACKS.park.body.map((text, i) => (
+                    <p
+                      key={i}
+                      className="font-body text-grey-800 md:text-lg dark:text-grey-200"
+                    >
+                      {text}
+                    </p>
+                  ))
+                )}
               </div>
 
               {/* Historic images - rotating gallery */}
@@ -325,26 +436,30 @@ function Home() {
             {/* Continued text */}
             <div className="mt-8 space-y-6">
               <p className="font-body text-grey-800 md:text-lg dark:text-grey-200">
-                Today, the park includes scenic trails, a dog park, the historic Round House, a
-                picnic gazebo, and an eight-foot Statue of Liberty replica erected by Boy Scouts in
-                the 1950s.
+                {park?.today || FALLBACKS.park.today}
               </p>
 
               {/* Call-out final paragraph */}
               <div className="space-y-6 rounded-2xl border border-primary-200/50 bg-gradient-to-br from-primary-100/60 to-primary-50/40 p-6 md:p-8 dark:border-primary-700/30 dark:from-primary-900/30 dark:to-primary-800/20">
-                <p className="font-body text-lg leading-relaxed font-medium text-grey-800 md:text-xl dark:text-grey-100">
-                  Time and reduced funding have taken their toll&mdash;many of the park's original
-                  features have fallen into disrepair. Invasive species and climate change have
-                  further diminished its native plantings and natural areas.
-                </p>
-                <p className="font-body text-lg leading-relaxed font-medium text-grey-800 md:text-xl dark:text-grey-100">
-                  <strong className="font-display text-xl font-semibold text-primary-800 md:text-2xl dark:text-primary-200">
-                    We're changing that.
-                  </strong>{" "}
-                  The Chimborazo Park Conservancy is restoring, repairing, and enhancing this
-                  treasured greenspace to ensure it remains beautiful, safe, and inclusive for
-                  generations to come.
-                </p>
+                {park?.callout ? (
+                  <PortableText value={park.callout} components={parkCalloutComponents} />
+                ) : (
+                  <>
+                    <p className="font-body text-lg leading-relaxed font-medium text-grey-800 md:text-xl dark:text-grey-100">
+                      Time and reduced funding have taken their toll&mdash;many of the park&apos;s
+                      original features have fallen into disrepair. Invasive species and climate
+                      change have further diminished its native plantings and natural areas.
+                    </p>
+                    <p className="font-body text-lg leading-relaxed font-medium text-grey-800 md:text-xl dark:text-grey-100">
+                      <strong className="font-display text-xl font-semibold text-primary-800 md:text-2xl dark:text-primary-200">
+                        We&apos;re changing that.
+                      </strong>{" "}
+                      The Chimborazo Park Conservancy is restoring, repairing, and enhancing this
+                      treasured greenspace to ensure it remains beautiful, safe, and inclusive for
+                      generations to come.
+                    </p>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -354,10 +469,9 @@ function Home() {
       {/* Events */}
       <div>
         <Container>
-          <SectionHeader title="Events" size="large" />
+          <SectionHeader title={eventsHeader?.title || FALLBACKS.events.title} size="large" />
           <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
-            Join us for seasonal clean-ups, tree plantings, educational presentations, and community
-            gatherings that help preserve and enhance our historic park.
+            {eventsHeader?.description || FALLBACKS.events.description}
           </p>
 
           <div className="mt-10 space-y-10">
@@ -403,16 +517,21 @@ function Home() {
 
       {/* Get Involved */}
       <div>
-        <GetInvolved />
+        <GetInvolved
+          title={getInvolved?.title}
+          description={getInvolved?.description}
+        />
       </div>
 
       {/* Partners */}
       <div>
         <Container>
-          <SectionHeader title="Partners" size="large" />
+          <SectionHeader
+            title={partnersHeader?.title || FALLBACKS.partners.title}
+            size="large"
+          />
           <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
-            We're grateful to partner with local organizations that share our commitment to
-            preserving and enhancing Chimborazo Park for the entire community.
+            {partnersHeader?.description || FALLBACKS.partners.description}
           </p>
           <div className="mt-12">
             <Partners

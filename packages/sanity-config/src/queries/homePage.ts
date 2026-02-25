@@ -11,6 +11,43 @@ export const getHomePageQuery = defineQuery(`
       },
       ctaButton
     },
+    introSection{
+      heading,
+      body
+    },
+    visionSection{
+      title,
+      description,
+      pillars[]{
+        _key,
+        title,
+        pillar,
+        description
+      }
+    },
+    projectsSectionHeader{
+      title,
+      description
+    },
+    parkSection{
+      title,
+      intro,
+      body,
+      today,
+      callout
+    },
+    eventsSectionHeader{
+      title,
+      description
+    },
+    getInvolvedSection{
+      title,
+      description
+    },
+    partnersSectionHeader{
+      title,
+      description
+    },
     "partners": featuredPartners[]->{
       _id,
       name,
