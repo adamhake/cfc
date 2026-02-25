@@ -1,2 +1,1 @@
-export { default } from "./chip";
-export type { ChipProps, ChipVariant } from "./chip";
+export { Chip as default, Chip, type ChipProps, type ChipVariant } from "@chimborazo/ui/chip";
