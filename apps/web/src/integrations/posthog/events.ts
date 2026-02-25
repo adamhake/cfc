@@ -1,16 +1,18 @@
-import posthog from "posthog-js";
 import type { NewsletterSource } from "@/types/newsletter";
 
 /**
  * PostHog custom event helpers.
  *
  * These rely on `posthog-js` being initialised by the `PostHogProvider`.
- * Calling them before initialisation (or on the server) is a no-op because
- * posthog-js guards against captures when uninitialised.
+ * The dynamic import() ensures posthog-js is never loaded during SSR/prerender,
+ * which would crash the server since it accesses browser-only APIs.
  */
 
-function canCapture(): boolean {
-  return typeof window !== "undefined";
+function capture(event: string, properties: Record<string, unknown>) {
+  if (typeof window === "undefined") return;
+  void import("posthog-js").then(({ default: posthog }) => {
+    posthog.capture(event, properties);
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -23,7 +25,7 @@ export function trackCtaClick(props: {
   cta_location: string;
   cta_variant?: string;
 }) {
-  if (canCapture()) posthog.capture("cta_clicked", props);
+  capture("cta_clicked", props);
 }
 
 // ---------------------------------------------------------------------------
@@ -31,12 +33,12 @@ export function trackCtaClick(props: {
 // ---------------------------------------------------------------------------
 
 export function trackNewsletterSignup(props: { source: NewsletterSource }) {
-  if (canCapture()) posthog.capture("newsletter_signup", props);
+  capture("newsletter_signup", props);
 }
 
 export function trackNewsletterSignupFailed(props: {
   source: NewsletterSource;
   error: string;
 }) {
-  if (canCapture()) posthog.capture("newsletter_signup_failed", props);
+  capture("newsletter_signup_failed", props);
 }
