@@ -148,6 +148,18 @@ export interface SanityGallery {
   images: SanityGalleryImage[];
 }
 
+export interface SanitySectionHeader {
+  title?: string;
+  description?: string;
+}
+
+export interface SanityVisionPillar {
+  _key: string;
+  title: string;
+  pillar: "restoration" | "recreation" | "connection" | "preservation";
+  description?: PortableTextBlock[];
+}
+
 export interface SanityHomePage {
   hero: {
     heading: string;
@@ -158,6 +170,26 @@ export interface SanityHomePage {
       link: string;
     };
   };
+  introSection?: {
+    heading?: string;
+    body?: PortableTextBlock[];
+  };
+  visionSection?: {
+    title?: string;
+    description?: string;
+    pillars?: SanityVisionPillar[];
+  };
+  projectsSectionHeader?: SanitySectionHeader;
+  parkSection?: {
+    title?: string;
+    intro?: string;
+    body?: PortableTextBlock[];
+    today?: string;
+    callout?: PortableTextBlock[];
+  };
+  eventsSectionHeader?: SanitySectionHeader;
+  getInvolvedSection?: SanitySectionHeader;
+  partnersSectionHeader?: SanitySectionHeader;
   partners?: SanityPartner[];
   quote?: SanityQuote;
   gallery?: SanityGallery;
@@ -252,13 +284,33 @@ export interface SanityMediaPage {
   };
 }
 
+export interface SanityBoardMember {
+  _key: string;
+  name: string;
+  role?: string;
+  bio?: string;
+  image?: SanityImage;
+}
+
+export interface SanityHighlight {
+  _key: string;
+  value: string;
+  label: string;
+}
+
 export interface SanityAboutPage {
   pageHero: {
     title: string;
     description?: string;
     image?: SanityImage;
   };
+  mission?: string;
+  vision?: string;
+  highlights?: SanityHighlight[];
+  storyImage?: SanityImage;
   content?: PortableTextBlock[];
+  calloutImage?: SanityImage;
+  boardMembers?: SanityBoardMember[];
 }
 
 export interface SanityDonatePage {

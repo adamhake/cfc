@@ -1,14 +1,37 @@
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { cn } from "@/utils/cn";
+import type { PortableTextBlock, PortableTextComponents } from "@portabletext/react";
+import { PortableText } from "@portabletext/react";
 import { BookOpenText, HeartHandshake, LeafyGreen, Trees } from "lucide-react";
 
 type Pillar = "restoration" | "preservation" | "connection" | "recreation";
 
 interface VisionProps {
   title: string;
-  description: string | string[];
+  description?: string | string[];
+  content?: PortableTextBlock[];
   pillar: Pillar;
 }
+
+const descriptionComponents: PortableTextComponents = {
+  block: {
+    normal: ({ children }) => (
+      <p className="font-body text-base leading-relaxed text-grey-700 md:text-lg dark:text-grey-300">
+        {children}
+      </p>
+    ),
+  },
+  list: {
+    bullet: ({ children }) => (
+      <ul className="list-disc space-y-2 pl-5 font-body text-base leading-relaxed text-grey-700 md:text-lg dark:text-grey-300">
+        {children}
+      </ul>
+    ),
+  },
+  listItem: {
+    bullet: ({ children }) => <li>{children}</li>,
+  },
+};
 
 function getIcon(pillar: Pillar) {
   switch (pillar) {
@@ -31,7 +54,6 @@ function getIcon(pillar: Pillar) {
         </div>
       );
     case "preservation":
-      // bg-terra-100 text-terra-800 dark:bg-terra-900 dark:text-terra-200
       return (
         <div className="mb-6 inline-flex rounded-full bg-terra-100 p-3 dark:bg-terra-800">
           <BookOpenText className="h-8 w-8 stroke-terra-800 md:h-10 md:w-10 dark:stroke-terra-200" />
@@ -41,7 +63,7 @@ function getIcon(pillar: Pillar) {
       return null;
   }
 }
-export default function Vision({ title, description, pillar }: VisionProps) {
+export default function Vision({ title, description, content, pillar }: VisionProps) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
@@ -62,7 +84,9 @@ export default function Vision({ title, description, pillar }: VisionProps) {
           {title}
         </h3>
 
-        {Array.isArray(description) ? (
+        {content ? (
+          <PortableText value={content} components={descriptionComponents} />
+        ) : Array.isArray(description) ? (
           <ul className="list-disc space-y-2 pl-5 font-body text-base leading-relaxed text-grey-700 md:text-lg dark:text-grey-300">
             {description.map((item, index) => (
               <li key={index}>{item}</li>
