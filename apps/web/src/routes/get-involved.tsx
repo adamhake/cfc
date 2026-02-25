@@ -212,10 +212,10 @@ function GetInvolvedPage() {
                         announcements.
                       </p>
                       <div className="flex flex-col gap-4 pt-2 md:flex-row md:gap-6">
-                        <Button as="a" variant="accent" size="small" href="/events">
+                        <Button as="a" variant="accent" size="small" href="/events" trackingLocation="get-involved-volunteer">
                           View Upcoming Events
                         </Button>
-                        <Button as="a" variant="outline" size="small" hash="stay-connected">
+                        <Button as="a" variant="outline" size="small" hash="stay-connected" trackingLocation="get-involved-volunteer">
                           Sign Up for Updates
                         </Button>
                       </div>
@@ -261,7 +261,7 @@ function GetInvolvedPage() {
                         bring our neighborhood together.
                       </p>
                       <div className="pt-2">
-                        <Button as="a" variant="accent" size="small" href="/donate">
+                        <Button as="a" variant="accent" size="small" href="/donate" trackingLocation="get-involved-donate">
                           Make a Donation
                         </Button>
                       </div>
