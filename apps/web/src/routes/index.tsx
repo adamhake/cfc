@@ -310,8 +310,8 @@ function Home() {
               ) : (
                 <div className="overflow-hidden rounded-2xl">
                   <Image
-                    src="/chimbo_prom.webp"
-                    alt="Historic view of Chimborazo Park promenade"
+                    src="/chimbo_arial.webp"
+                    alt="Aerial view of Chimborazo Park"
                     width={1600}
                     height={1200}
                     className="h-full w-full object-cover"

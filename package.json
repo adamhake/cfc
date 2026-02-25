@@ -12,13 +12,18 @@
     "type-check": "turbo run type-check"
   },
   "devDependencies": {
-    "prettier": "^3.8.1",
+    "prettier": "catalog:",
     "turbo": "^2.8.10",
-    "typescript": "^5.9.3"
+    "typescript": "catalog:"
   },
   "packageManager": "pnpm@10.25.0",
   "engines": {
-    "node": ">=22.0.0",
-    "npm": ">=10.0.0"
+    "node": ">=22.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@sanity/types": "^5.11.0",
+      "@sanity/client": "^7.16.0"
+    }
   }
 }

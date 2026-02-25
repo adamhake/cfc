@@ -18,7 +18,9 @@ export default function FlowingSection({
   children,
   topWave = false,
   bottomWave = false,
-  waveColor = "bg-grey-50 dark:bg-green-900",
+  // NOTE: Callers that pass custom waveColor values using bg-* classes will need
+  // to be updated to use fill-* classes instead, since SVG <path> uses fill, not background-color.
+  waveColor = "fill-grey-50 dark:fill-green-900",
   backgroundColor = "bg-white dark:bg-grey-800",
   className = "",
 }: FlowingSectionProps) {

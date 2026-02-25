@@ -1,9 +1,7 @@
-import { FacebookIcon } from "@/components/FacebookIcon/facebook-icon";
 import IconLogo from "@/components/IconLogo/icon-logo";
-import { InstagramIcon } from "@/components/InstagramIcon/instagram-icon";
+import { SocialLinks } from "@/components/SocialLinks/social-links";
 import { useProject } from "@/hooks/useProject";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useClickAway } from "@uidotdev/usehooks";
 import { AnimatePresence, motion } from "framer-motion";
@@ -35,7 +33,6 @@ export default function Header() {
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
   const currentHash = routerState.location.hash;
-  const { data: siteSettings } = useSiteSettings();
   const { data: featuredProject } = useProject("parkwide-native-tree-planting");
   const prefersReducedMotion = useReducedMotion();
 
@@ -122,6 +119,8 @@ export default function Header() {
             variant="outline"
             size="small"
             className="hidden w-28 items-center gap-2 border tracking-normal normal-case md:flex"
+            aria-expanded={menuOpen}
+            aria-controls="desktop-menu"
           >
             {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             <span>{menuOpen ? "Close" : "Menu"}</span>
@@ -153,6 +152,8 @@ export default function Header() {
             variant="secondary"
             className="flex h-12 w-12 items-center justify-center border p-0 shadow-md md:hidden dark:border-grey-800 dark:bg-grey-900"
             aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
           >
             <Menu className="h-6 w-6" />
           </Button>
@@ -173,6 +174,7 @@ export default function Header() {
         <AnimatePresence mode="wait">
           {menuOpen && (
             <motion.div
+              id="desktop-menu"
               key="mainMenu"
               initial={prefersReducedMotion ? {} : { opacity: 0, y: -8 }}
               animate={{
@@ -304,32 +306,11 @@ export default function Header() {
 
                   {/* Social Media Links */}
                   <div className="mt-6">
-                    <div className="flex gap-3">
-                      <a
-                        href={
-                          siteSettings?.socialMedia?.facebook ||
-                          "https://www.facebook.com/friendsofchimborazopark"
-                        }
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Follow us on Facebook (opens in new window)"
-                        className="transition-transform active:scale-90"
-                      >
-                        <FacebookIcon className="h-6 w-6 fill-grey-700 transition hover:fill-accent-600 dark:fill-primary-400 dark:hover:fill-accent-400" />
-                      </a>
-                      <a
-                        href={
-                          siteSettings?.socialMedia?.instagram ||
-                          "https://www.instagram.com/friendsofchimborazopark/"
-                        }
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Follow us on Instagram (opens in new window)"
-                        className="transition-transform active:scale-90"
-                      >
-                        <InstagramIcon className="h-6 w-6 fill-grey-700 transition hover:fill-accent-600 dark:fill-primary-400 dark:hover:fill-accent-400" />
-                      </a>
-                    </div>
+                    <SocialLinks
+                      className="flex gap-3"
+                      linkClassName="transition-transform active:scale-90"
+                      iconClassName="h-6 w-6 fill-grey-700 transition hover:fill-accent-600 dark:fill-primary-400 dark:hover:fill-accent-400"
+                    />
                   </div>
                 </nav>
                 {featuredProject && (
@@ -353,6 +334,7 @@ export default function Header() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
+            id="mobile-menu"
             ref={mobileMenuRef}
             initial={prefersReducedMotion ? {} : { opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -490,32 +472,11 @@ export default function Header() {
 
               {/* Social Media Links */}
               <div className="mt-6">
-                <div className="flex gap-3">
-                  <a
-                    href={
-                      siteSettings?.socialMedia?.facebook ||
-                      "https://www.facebook.com/friendsofchimborazopark"
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Follow us on Facebook (opens in new window)"
-                    className="transition-transform active:scale-90"
-                  >
-                    <FacebookIcon className="h-6 w-6 fill-grey-700 transition hover:fill-accent-700 dark:fill-primary-400 dark:hover:fill-accent-400" />
-                  </a>
-                  <a
-                    href={
-                      siteSettings?.socialMedia?.instagram ||
-                      "https://www.instagram.com/friendsofchimborazopark/"
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Follow us on Instagram (opens in new window)"
-                    className="transition-transform active:scale-90"
-                  >
-                    <InstagramIcon className="h-6 w-6 fill-grey-700 transition hover:fill-accent-700 dark:fill-primary-400 dark:hover:fill-accent-400" />
-                  </a>
-                </div>
+                <SocialLinks
+                  className="flex gap-3"
+                  linkClassName="transition-transform active:scale-90"
+                  iconClassName="h-6 w-6 fill-grey-700 transition hover:fill-accent-700 dark:fill-primary-400 dark:hover:fill-accent-400"
+                />
               </div>
 
               {/* Footer CTA */}

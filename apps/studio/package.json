@@ -15,7 +15,6 @@
     "clean": "rm -rf dist .sanity"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.78.0",
     "@sanity/icons": "^3.7.4",
     "@sanity/ui": "^3.1.11",
     "@sanity/vision": "^5.11.0",
@@ -30,11 +29,11 @@
   "devDependencies": {
     "@chimborazo/sanity-config": "workspace:*",
     "@sanity/eslint-config-studio": "^6.0.0",
-    "@total-typescript/ts-reset": "^0.6.1",
-    "@types/react": "^19.2.14",
+    "@total-typescript/ts-reset": "catalog:",
+    "@types/react": "catalog:",
     "@types/styled-components": "^5.1.36",
-    "eslint": "^10.0.1",
-    "prettier": "^3.8.1",
-    "typescript": "^5.9.3"
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
   }
 }

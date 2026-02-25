@@ -7,7 +7,7 @@ import { getSanityClient } from "@/lib/sanity";
 import type { SanityHistoryPage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { getHistoryPageQuery } from "@chimborazo/sanity-config";
-import { queryOptions } from "@tanstack/react-query";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
 // Query options for history page content - accept preview flag for Visual Editing
@@ -35,8 +35,8 @@ export const Route = createFileRoute("/history")({
     const preview = await getIsPreviewMode();
 
     // Prefetch history page content on the server
-    const pageData = await context.queryClient.ensureQueryData(historyPageQueryOptions(preview));
-    return { pageData, preview };
+    await context.queryClient.ensureQueryData(historyPageQueryOptions(preview));
+    return { preview };
   },
   head: () => ({
     meta: generateMetaTags({
@@ -53,7 +53,8 @@ export const Route = createFileRoute("/history")({
 });
 
 function HistoryPage() {
-  const { pageData } = Route.useLoaderData();
+  const { preview } = Route.useLoaderData();
+  const { data: pageData } = useSuspenseQuery(historyPageQueryOptions(preview));
 
   const heroData = pageData?.pageHero?.image
     ? {

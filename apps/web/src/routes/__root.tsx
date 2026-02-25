@@ -50,18 +50,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         name: "description",
         content: SITE_CONFIG.description,
       },
-      {
-        property: "og:site_name",
-        content: SITE_CONFIG.name,
-      },
-      {
-        property: "og:locale",
-        content: SITE_CONFIG.locale,
-      },
-      {
-        name: "twitter:card",
-        content: "summary_large_image",
-      },
     ],
     links: [
       {
@@ -127,6 +115,9 @@ function RootComponent() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const structuredData = generateOrganizationStructuredData();
+  const safeStructuredDataJson = JSON.stringify(structuredData)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e");
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -160,7 +151,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+          dangerouslySetInnerHTML={{ __html: safeStructuredDataJson }}
         />
       </head>
       <body className="bg-grey-50 dark:bg-primary-900" suppressHydrationWarning>

@@ -134,7 +134,14 @@ function EventPage() {
   const { data } = useSuspenseQuery(eventBySlugQueryOptions(slug, preview));
   const { event, isSanityEvent, markdownContent } = data;
 
-  const isPast = new Date(event.date) < new Date();
+  const isPast = (() => {
+    const eventDate = new Date(event.date);
+    const now = new Date();
+    // Compare dates only (ignore time), treating both as the same day boundary
+    const eventDay = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    return eventDay < today;
+  })();
 
   // Check if event has recap content (for past events)
   const sanityEvent = isSanityEvent ? (event as SanityEvent) : null;
@@ -193,12 +200,16 @@ function EventPage() {
     isSanityEvent && "heroImage" in event ? (event as SanityEvent).heroImage : null;
   const staticImageData = !isSanityEvent ? (event as StaticEvent).image : null;
 
+  const safeStructuredDataJson = JSON.stringify(structuredData)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e");
+
   return (
     <>
       {/* Event Structured Data */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        dangerouslySetInnerHTML={{ __html: safeStructuredDataJson }}
       />
 
       <div className="min-h-screen">

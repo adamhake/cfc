@@ -13,7 +13,7 @@ import {
   mediaImagesCountQuery,
   paginatedMediaImagesQuery,
 } from "@chimborazo/sanity-config";
-import { queryOptions, useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { queryOptions, useInfiniteQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
 const PAGE_SIZE = 9;
@@ -98,7 +98,7 @@ export const Route = createFileRoute("/media")({
 
 function Media() {
   const { preview } = Route.useLoaderData();
-  const { data: mediaPageData } = useQuery(mediaPageQueryOptions(preview));
+  const { data: mediaPageData } = useSuspenseQuery(mediaPageQueryOptions(preview));
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useInfiniteQuery({
     queryKey: [...queryKeys.media.paginated(), { preview }],
     queryFn: ({ pageParam }) => fetchMediaPage(pageParam, preview),

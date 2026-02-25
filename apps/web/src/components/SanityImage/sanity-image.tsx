@@ -176,10 +176,11 @@ export function SanityImage({
         }
       : {};
 
-  // Combined styles
+  // Combined styles - include aspectRatio when dimensions aren't available to prevent CLS
   const combinedStyle: CSSProperties = {
     ...placeholderStyle,
     ...hotspotStyle,
+    ...(aspectRatio && !dimensions?.width && { aspectRatio: aspectRatio.toString() }),
     ...style,
   };
 
@@ -196,9 +197,6 @@ export function SanityImage({
       className={className}
       style={combinedStyle}
       onLoad={onLoad}
-      // Add aspect ratio to prevent layout shift even if dimensions aren't available
-      {...(aspectRatio &&
-        !dimensions?.width && { style: { ...combinedStyle, aspectRatio: aspectRatio.toString() } })}
     />
   );
 }

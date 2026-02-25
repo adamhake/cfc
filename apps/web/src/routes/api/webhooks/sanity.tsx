@@ -38,17 +38,8 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
   server: {
     handlers: {
       GET: async () => {
-        // Return webhook status info for GET requests
         return new Response(
-          JSON.stringify({
-            service: "Sanity Webhook Handler",
-            status: "active",
-            configured: Boolean(
-              process.env.SANITY_WEBHOOK_SECRET &&
-              process.env.NETLIFY_AUTH_TOKEN &&
-              process.env.NETLIFY_SITE_ID,
-            ),
-          }),
+          JSON.stringify({ status: "ok" }),
           {
             status: 200,
             headers: { "Content-Type": "application/json" },

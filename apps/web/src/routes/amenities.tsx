@@ -10,7 +10,7 @@ import { getSanityClient } from "@/lib/sanity";
 import type { SanityAmenitiesPage } from "@/lib/sanity-types";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { getAmenitiesPageQuery } from "@chimborazo/sanity-config";
-import { queryOptions, useQuery } from "@tanstack/react-query";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Building2,
@@ -95,7 +95,7 @@ export const Route = createFileRoute("/amenities")({
 
 function RouteComponent() {
   const { preview } = Route.useLoaderData();
-  const { data: amenitiesPageData } = useQuery(amenitiesPageQueryOptions(preview));
+  const { data: amenitiesPageData } = useSuspenseQuery(amenitiesPageQueryOptions(preview));
 
   // Prepare hero data from Sanity or use defaults
   const heroData = amenitiesPageData?.pageHero?.image

@@ -34,7 +34,13 @@ export function createSanityClient(config: SanityConfig) {
   })
 }
 
+const imageUrlBuilderCache = new Map<string, ReturnType<typeof sanityImageUrlBuilder>>()
+
 export function createImageUrlBuilder(config: Pick<SanityConfig, "projectId" | "dataset">) {
+  const cacheKey = `${config.projectId}:${config.dataset}`
+  const cached = imageUrlBuilderCache.get(cacheKey)
+  if (cached) return cached
+
   const client = createClient({
     projectId: config.projectId,
     dataset: config.dataset,
@@ -42,7 +48,9 @@ export function createImageUrlBuilder(config: Pick<SanityConfig, "projectId" | "
     useCdn: true,
   })
 
-  return sanityImageUrlBuilder(client)
+  const builder = sanityImageUrlBuilder(client)
+  imageUrlBuilderCache.set(cacheKey, builder)
+  return builder
 }
 
 export function urlForImage(
