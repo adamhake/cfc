@@ -10,7 +10,13 @@ import { getIsPreviewMode } from "@/lib/preview";
 import { queryKeys } from "@/lib/query-keys";
 import { getSanityClient } from "@/lib/sanity";
 import type { SanityProject } from "@/lib/sanity-types";
-import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
+import { JsonLd } from "@/components/JsonLd/json-ld";
+import {
+  generateBreadcrumbStructuredData,
+  generateLinkTags,
+  generateMetaTags,
+  SITE_CONFIG,
+} from "@/utils/seo";
 import { formatDateString } from "@/utils/time";
 import { projectBySlugQuery } from "@chimborazo/sanity-config";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
@@ -112,8 +118,16 @@ function ProjectPage() {
       ? formatDateString(project.completionDate)
       : null;
 
+  const projectUrl = `${SITE_CONFIG.url}/projects/${project.slug.current}`;
+  const breadcrumbData = generateBreadcrumbStructuredData([
+    { name: "Home", url: SITE_CONFIG.url },
+    { name: "Projects", url: `${SITE_CONFIG.url}/projects` },
+    { name: project.title, url: projectUrl },
+  ]);
+
   return (
     <>
+      <JsonLd data={breadcrumbData} />
       <div className="min-h-screen">
         {/* Hero Section */}
         <PageHero

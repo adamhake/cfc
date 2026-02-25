@@ -1,4 +1,5 @@
 import Container from "@/components/Container/container";
+import { FAQSection } from "@/components/FAQSection/faq-section";
 import PageHero from "@/components/PageHero/page-hero";
 import { getIsPreviewMode } from "@/lib/preview";
 import { queryKeys } from "@/lib/query-keys";
@@ -9,6 +10,34 @@ import { getDonatePageQuery } from "@chimborazo/sanity-config";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+
+const DONATE_FAQS = [
+  {
+    question: "Is my donation tax-deductible?",
+    answer:
+      "Yes. The Chimborazo Park Conservancy is a registered 501(c)(3) non-profit organization. Your contribution is tax-deductible to the fullest extent permitted by law. You will receive a receipt from Zeffy for your tax records.",
+  },
+  {
+    question: "Are there any processing fees on my donation?",
+    answer:
+      "No. We use Zeffy, a donation platform that offers 100% free payment processing for nonprofits. Zeffy never charges us fees, so the full amount of your donation goes directly to park improvements. Zeffy may ask you for an optional tip to support their platform, but it is not required.",
+  },
+  {
+    question: "How will my donation be used?",
+    answer:
+      "Donations directly fund park restoration and improvements, including repairing historic structures like the Round House and gazebo, maintaining trails, planting trees and flowers, organizing community events, and general park maintenance. As a grassroots nonprofit, we rely entirely on community donations and volunteer support.",
+  },
+  {
+    question: "Can I make a recurring donation?",
+    answer:
+      "Yes. Through our Zeffy donation form, you can set up a one-time or recurring monthly donation. Recurring donations help us plan ahead and provide consistent support for ongoing park maintenance and projects.",
+  },
+  {
+    question: "Are there other ways to support the park besides a financial donation?",
+    answer:
+      "Absolutely. You can volunteer at seasonal clean-up days and trail maintenance sessions, adopt a park feature like a bench or tree, donate spring bulbs, or help spread the word on social media. Visit our Get Involved page for all the ways to contribute.",
+  },
+];
 
 // Query options for donate page content - accept preview flag for Visual Editing
 const donatePageQueryOptions = (preview = false) =>
@@ -163,6 +192,9 @@ function Donate() {
               a receipt from Zeffy for your records.
             </p>
           </div>
+
+          {/* FAQ Section */}
+          <FAQSection faqs={DONATE_FAQS} title="Donation FAQs" className="mt-16" />
         </Container>
       </div>
     </div>
