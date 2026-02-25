@@ -20,3 +20,7 @@ todos.json
 
 storybook-static
 *.tsbuildinfo
+
+
+.claude
+.playwright-mcp
