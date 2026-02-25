@@ -6,6 +6,7 @@ import { Button } from "@/components/Button/button";
 import { useNewsletterSignup } from "@/hooks/useNewsletterSignup";
 import type { NewsletterSource } from "@/types/newsletter";
 import { env } from "@/env";
+import { trackNewsletterSignup, trackNewsletterSignupFailed } from "@/integrations/posthog/events";
 import { cn } from "@/utils/cn";
 
 export interface NewsletterFormProps {
@@ -89,19 +90,28 @@ export function NewsletterForm({
         return;
       }
 
-      const result = await mutation.mutateAsync({
-        email: value.email,
-        source,
-        turnstileToken: tokenToSend,
-      });
+      try {
+        const result = await mutation.mutateAsync({
+          email: value.email,
+          source,
+          turnstileToken: tokenToSend,
+        });
 
-      setSuccessMessage(result.message);
-      form.reset();
-      onSuccess?.();
-
-      // Reset Turnstile for next submission
-      turnstileRef.current?.reset();
-      setTurnstileToken(null);
+        setSuccessMessage(result.message);
+        trackNewsletterSignup({ source });
+        form.reset();
+        onSuccess?.();
+      } catch (error) {
+        trackNewsletterSignupFailed({
+          source,
+          error: error instanceof Error ? error.message : "Unknown error",
+        });
+        throw error;
+      } finally {
+        // Reset Turnstile for next submission
+        turnstileRef.current?.reset();
+        setTurnstileToken(null);
+      }
     },
   });
 

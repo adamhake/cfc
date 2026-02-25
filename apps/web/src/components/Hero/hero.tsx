@@ -71,7 +71,7 @@ export default function HeroSoftGradientDivider({
             {subheading}
           </p>
           <div className="pb-4">
-            <Button variant="secondary" size="small" as="a" href={ctaLink}>
+            <Button variant="secondary" size="small" as="a" href={ctaLink} trackingLocation="hero">
               {ctaText}
             </Button>
           </div>

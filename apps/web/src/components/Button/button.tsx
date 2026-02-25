@@ -1,3 +1,4 @@
+import { trackCtaClick } from "@/integrations/posthog/events";
 import { cn } from "@/utils/cn";
 import { Link } from "@tanstack/react-router";
 import type React from "react";
@@ -83,6 +84,12 @@ export interface ButtonProps {
    * Note: Using specific data attribute typing instead of index signature for better type safety
    */
   "data-zeffy-form-link"?: string;
+
+  /**
+   * When set, fires a PostHog "cta_clicked" event on click.
+   * The value describes where the CTA lives (e.g. "header", "hero", "get-involved").
+   */
+  trackingLocation?: string;
 }
 
 /**
@@ -115,6 +122,7 @@ export const Button: React.FC<ButtonProps> = ({
   download,
   "aria-label": ariaLabel,
   "data-zeffy-form-link": zeffyFormLink,
+  trackingLocation,
 }) => {
   const baseStyles =
     "cursor-pointer rounded-xl border-2 font-body font-semibold tracking-wider uppercase transition-all duration-150 no-underline";
@@ -165,6 +173,22 @@ export const Button: React.FC<ButtonProps> = ({
     className,
   );
 
+  const handleClick = () => {
+    if (trackingLocation) {
+      const text =
+        typeof children === "string"
+          ? children
+          : (ariaLabel ?? "unknown");
+      trackCtaClick({
+        cta_text: text,
+        cta_url: href,
+        cta_location: trackingLocation,
+        cta_variant: variant,
+      });
+    }
+    onClick?.();
+  };
+
   // Build optional props object for clean rendering
   const dataProps = zeffyFormLink ? { "data-zeffy-form-link": zeffyFormLink } : {};
 
@@ -173,7 +197,7 @@ export const Button: React.FC<ButtonProps> = ({
       <Link
         hash={hash}
         to={href}
-        onClick={onClick}
+        onClick={handleClick}
         target={target}
         rel={rel}
         download={download}
@@ -189,7 +213,7 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <button
       type={type}
-      onClick={onClick}
+      onClick={handleClick}
       disabled={disabled}
       aria-label={ariaLabel}
       className={combinedClassName}

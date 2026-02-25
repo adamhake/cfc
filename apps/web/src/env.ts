@@ -19,6 +19,9 @@ export const env = createEnv({
     RESEND_API_KEY: z.string().optional(),
     RESEND_SEGMENT_ID: z.string().optional(),
     TURNSTILE_SECRET_KEY: z.string().optional(),
+    // PostHog server-side analytics (uses same project API key)
+    POSTHOG_API_KEY: z.string().optional(),
+    POSTHOG_HOST: z.string().url().optional(),
     ADMIN_EMAIL: z.string().email().optional().default("info@chimborazopark.org"),
     NEWSLETTER_FROM_EMAIL: z.string().email().optional().default("noreply@chimborazopark.org"),
     // Verified email domain for admin notifications (must match Resend domain)
@@ -40,6 +43,9 @@ export const env = createEnv({
     VITE_SANITY_STUDIO_URL: z.string().url().optional(),
     // Newsletter signup
     VITE_TURNSTILE_SITE_KEY: z.string().optional(),
+    // PostHog client-side analytics
+    VITE_POSTHOG_KEY: z.string().optional(),
+    VITE_POSTHOG_HOST: z.string().url().optional(),
   },
 
   /**
@@ -57,6 +63,8 @@ export const env = createEnv({
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_SEGMENT_ID: process.env.RESEND_SEGMENT_ID,
     TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
+    POSTHOG_API_KEY: process.env.POSTHOG_API_KEY,
+    POSTHOG_HOST: process.env.POSTHOG_HOST,
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,
     NEWSLETTER_FROM_EMAIL: process.env.NEWSLETTER_FROM_EMAIL,
     VERIFIED_EMAIL_DOMAIN: process.env.VERIFIED_EMAIL_DOMAIN,
@@ -67,6 +75,8 @@ export const env = createEnv({
     VITE_SANITY_API_VERSION: import.meta.env.VITE_SANITY_API_VERSION,
     VITE_SANITY_STUDIO_URL: import.meta.env.VITE_SANITY_STUDIO_URL,
     VITE_TURNSTILE_SITE_KEY: import.meta.env.VITE_TURNSTILE_SITE_KEY,
+    VITE_POSTHOG_KEY: import.meta.env.VITE_POSTHOG_KEY,
+    VITE_POSTHOG_HOST: import.meta.env.VITE_POSTHOG_HOST,
   },
 
   /**
