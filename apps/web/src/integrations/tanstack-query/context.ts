@@ -1,4 +1,9 @@
-import type { PaletteMode } from "@/utils/palette";
+import {
+  APPEARANCE_COOKIES,
+  buildAppearanceCookie,
+  DEFAULT_APPEARANCE,
+} from "@/lib/appearance-shared";
+import { PALETTE_KEY, type PaletteMode, validatePalette } from "@/utils/palette";
 import {
   type ResolvedTheme,
   type ThemeMode,
@@ -17,7 +22,11 @@ class ThemeStateManager {
 
   constructor() {
     this.currentTheme = getStoredTheme();
-    this.currentResolved = resolveTheme(this.currentTheme);
+    if (typeof document !== "undefined" && this.currentTheme === "system") {
+      this.currentResolved = document.documentElement.classList.contains("dark") ? "dark" : "light";
+    } else {
+      this.currentResolved = resolveTheme(this.currentTheme);
+    }
   }
 
   getTheme(): ThemeMode {
@@ -33,6 +42,15 @@ class ThemeStateManager {
     this.currentResolved = resolveTheme(newTheme);
     storeTheme(newTheme);
     applyTheme(this.currentResolved);
+
+    if (typeof document !== "undefined") {
+      document.documentElement.style.colorScheme = this.currentResolved;
+      document.cookie = buildAppearanceCookie(APPEARANCE_COOKIES.THEME, newTheme);
+      document.cookie = buildAppearanceCookie(
+        APPEARANCE_COOKIES.RESOLVED_THEME,
+        this.currentResolved,
+      );
+    }
 
     // Notify all listeners
     this.listeners.forEach((listener) => listener(this.currentTheme, this.currentResolved));
@@ -50,22 +68,24 @@ class PaletteStateManager {
   private currentPalette: PaletteMode;
 
   constructor() {
-    // Default to "olive" (Warm Olive + Blue-Grey) - will be updated on client
-    this.currentPalette = "olive";
+    this.currentPalette = DEFAULT_APPEARANCE.palette;
 
-    // Only access localStorage on the client after construction
     if (typeof window !== "undefined") {
+      const domPalette = document.documentElement.getAttribute("data-palette");
+      if (domPalette) {
+        this.currentPalette = validatePalette(domPalette);
+      }
+
       try {
-        const stored = localStorage.getItem("palette-preference");
+        const stored = localStorage.getItem(PALETTE_KEY);
         if (stored) {
-          const validPalettes: PaletteMode[] = ["green", "olive", "green-terra", "green-navy"];
-          if (validPalettes.includes(stored as PaletteMode)) {
-            this.currentPalette = stored as PaletteMode;
-          }
+          this.currentPalette = validatePalette(stored);
         }
       } catch {
-        // Ignore localStorage errors
+        // Ignore storage errors
       }
+
+      this.applyPaletteToDom(this.currentPalette);
     }
   }
 
@@ -74,24 +94,17 @@ class PaletteStateManager {
   }
 
   setPalette(newPalette: PaletteMode) {
-    this.currentPalette = newPalette;
+    this.currentPalette = validatePalette(newPalette);
 
-    // Only access localStorage and DOM on client
     if (typeof window !== "undefined") {
-      // Store preference
       try {
-        localStorage.setItem("palette-preference", newPalette);
+        localStorage.setItem(PALETTE_KEY, this.currentPalette);
       } catch (error) {
         console.error("Failed to store palette preference:", error);
       }
 
-      // Apply to DOM
-      const html = document.documentElement;
-      if (newPalette === "green") {
-        html.removeAttribute("data-palette");
-      } else {
-        html.setAttribute("data-palette", newPalette);
-      }
+      this.applyPaletteToDom(this.currentPalette);
+      document.cookie = buildAppearanceCookie(APPEARANCE_COOKIES.PALETTE, this.currentPalette);
     }
 
     // Notify all listeners
@@ -101,6 +114,19 @@ class PaletteStateManager {
   subscribe(listener: (palette: PaletteMode) => void) {
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);
+  }
+
+  private applyPaletteToDom(palette: PaletteMode) {
+    if (typeof document === "undefined") {
+      return;
+    }
+
+    if (palette === DEFAULT_APPEARANCE.palette) {
+      document.documentElement.removeAttribute("data-palette");
+      return;
+    }
+
+    document.documentElement.setAttribute("data-palette", palette);
   }
 }
 
