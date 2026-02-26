@@ -1,4 +1,5 @@
 import { env } from "@/env";
+import { getSafeRedirectPath } from "@/lib/safe-redirect";
 import { sanityPreviewClient } from "@/lib/sanity";
 import { validatePreviewUrl } from "@sanity/preview-url-secret";
 import { createFileRoute } from "@tanstack/react-router";
@@ -37,9 +38,9 @@ export const Route = createFileRoute("/api/draft")({
 
         console.log("[Draft Mode] Secret valid, enabling preview. Redirecting to:", redirectTo);
 
-        // Enable draft mode by setting a cookie
-        // Ensure redirectTo is a safe relative path to prevent open redirects
-        const safeRedirect = redirectTo.startsWith("/") ? redirectTo : "/";
+        // Enable draft mode by setting a cookie.
+        // Ensure redirectTo stays on this origin to prevent open redirects.
+        const safeRedirect = getSafeRedirectPath(redirectTo);
         const redirectUrl = new URL(safeRedirect, url.origin).toString();
 
         // In production, use SameSite=None so the cookie works inside the

@@ -78,8 +78,8 @@ export const Route = createFileRoute("/get-involved")({
 });
 
 function GetInvolvedPage() {
-  const { data: siteSettings } = useSiteSettings();
   const { preview } = Route.useLoaderData();
+  const { data: siteSettings } = useSiteSettings(preview);
   const { data: pageData } = useSuspenseQuery(getInvolvedPageQueryOptions(preview));
 
   // Extract social media handles from URLs

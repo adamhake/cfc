@@ -119,7 +119,7 @@ export const Route = createFileRoute("/")({
     // Block on critical above-the-fold data
     await Promise.all([
       context.queryClient.ensureQueryData(homePageQueryOptions(preview)),
-      context.queryClient.ensureQueryData(siteSettingsQueryOptions),
+      context.queryClient.ensureQueryData(siteSettingsQueryOptions(preview)),
     ]);
 
     // Stream below-the-fold data (fire-and-forget, no await)
@@ -518,6 +518,7 @@ function Home() {
       {/* Get Involved */}
       <div>
         <GetInvolved
+          preview={preview}
           title={getInvolved?.title}
           description={getInvolved?.description}
         />

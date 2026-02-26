@@ -2,7 +2,7 @@ import { defineQuery } from "groq"
 import { imageFieldProjection } from "./imageProjections"
 
 export const getQuotesQuery = defineQuery(`
-  *[_type == "quote" && !(_id in path("drafts.**"))] | order(_createdAt desc){
+  *[_type == "quote"] | order(_createdAt desc){
     _id,
     quoteText,
     attribution,
@@ -15,7 +15,7 @@ export const getQuotesQuery = defineQuery(`
 `)
 
 export const getFeaturedQuoteQuery = defineQuery(`
-  *[_type == "quote" && featured == true && !(_id in path("drafts.**"))][0]{
+  *[_type == "quote" && featured == true][0]{
     _id,
     quoteText,
     attribution,
@@ -27,7 +27,7 @@ export const getFeaturedQuoteQuery = defineQuery(`
 `)
 
 export const getQuotesByCategoryQuery = defineQuery(`
-  *[_type == "quote" && category == $category && !(_id in path("drafts.**"))] | order(_createdAt desc){
+  *[_type == "quote" && category == $category] | order(_createdAt desc){
     _id,
     quoteText,
     attribution,

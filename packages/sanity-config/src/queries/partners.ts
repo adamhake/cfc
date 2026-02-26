@@ -1,7 +1,7 @@
 import { defineQuery } from "groq"
 
 export const getPartnersQuery = defineQuery(`
-  *[_type == "partner" && !(_id in path("drafts.**"))] | order(order asc){
+  *[_type == "partner"] | order(order asc){
     _id,
     name,
     slug,
@@ -24,7 +24,7 @@ export const getPartnersQuery = defineQuery(`
 `)
 
 export const getFeaturedPartnersQuery = defineQuery(`
-  *[_type == "partner" && featured == true && !(_id in path("drafts.**"))] | order(order asc){
+  *[_type == "partner" && featured == true] | order(order asc){
     _id,
     name,
     slug,
@@ -46,7 +46,7 @@ export const getFeaturedPartnersQuery = defineQuery(`
 `)
 
 export const getPartnerBySlugQuery = defineQuery(`
-  *[_type == "partner" && slug.current == $slug && !(_id in path("drafts.**"))][0]{
+  *[_type == "partner" && slug.current == $slug][0]{
     _id,
     name,
     slug,

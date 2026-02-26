@@ -1,3 +1,4 @@
+import { getSafeRedirectPath } from "@/lib/safe-redirect";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/api/draft/disable")({
@@ -7,8 +8,8 @@ export const Route = createFileRoute("/api/draft/disable")({
         const url = new URL(request.url);
         const redirectTo = url.searchParams.get("redirect") || "/";
 
-        // Ensure redirect is a relative path to prevent open redirect
-        const safeRedirect = redirectTo.startsWith("/") ? redirectTo : "/";
+        // Ensure redirect stays on this origin to prevent open redirects.
+        const safeRedirect = getSafeRedirectPath(redirectTo);
 
         // Clear the preview cookie (must match SameSite attribute from /api/draft)
         const isProduction = process.env.NODE_ENV === "production";

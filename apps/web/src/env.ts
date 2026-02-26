@@ -19,6 +19,7 @@ export const env = createEnv({
     RESEND_API_KEY: z.string().optional(),
     RESEND_SEGMENT_ID: z.string().optional(),
     TURNSTILE_SECRET_KEY: z.string().optional(),
+    TURNSTILE_EXPECTED_HOSTNAME: z.string().optional(),
     // PostHog server-side analytics (uses same project API key)
     POSTHOG_API_KEY: z.string().optional(),
     POSTHOG_HOST: z.string().url().optional(),
@@ -63,6 +64,7 @@ export const env = createEnv({
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_SEGMENT_ID: process.env.RESEND_SEGMENT_ID,
     TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
+    TURNSTILE_EXPECTED_HOSTNAME: process.env.TURNSTILE_EXPECTED_HOSTNAME,
     POSTHOG_API_KEY: process.env.POSTHOG_API_KEY,
     POSTHOG_HOST: process.env.POSTHOG_HOST,
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,

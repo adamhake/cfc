@@ -2,7 +2,7 @@ import { defineQuery } from "groq"
 import { imageFieldProjection } from "./imageProjections"
 
 export const getEventsPageQuery = defineQuery(`
-  *[_type == "eventsPage" && !(_id in path("drafts.**"))][0]{
+  *[_type == "eventsPage"][0]{
     pageHero{
       title,
       description,

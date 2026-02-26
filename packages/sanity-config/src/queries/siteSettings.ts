@@ -2,7 +2,7 @@ import { defineQuery } from "groq"
 import { imageFieldProjection } from "./imageProjections"
 
 export const getSiteSettingsQuery = defineQuery(`
-  *[_type == "siteSettings" && !(_id in path("drafts.**"))][0]{
+  *[_type == "siteSettings"][0]{
     organizationName,
     alternativeName,
     description,

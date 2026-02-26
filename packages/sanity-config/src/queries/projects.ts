@@ -26,35 +26,35 @@ export const projectFields = `
 
 // Get all published projects
 export const allProjectsQuery = `
-  *[_type == "project" && !(_id in path("drafts.**"))] | order(startDate desc) {
+  *[_type == "project"] | order(startDate desc) {
     ${projectFields}
   }
 `
 
 // Get active projects
 export const activeProjectsQuery = `
-  *[_type == "project" && !(_id in path("drafts.**")) && status == "active"] | order(startDate desc) {
+  *[_type == "project" && status == "active"] | order(startDate desc) {
     ${projectFields}
   }
 `
 
 // Get featured project (single)
 export const featuredProjectQuery = `
-  *[_type == "project" && !(_id in path("drafts.**")) && featured == true] | order(startDate desc) [0] {
+  *[_type == "project" && featured == true] | order(startDate desc) [0] {
     ${projectFields}
   }
 `
 
 // Get all featured projects
 export const featuredProjectsQuery = `
-  *[_type == "project" && !(_id in path("drafts.**")) && featured == true] | order(startDate desc) {
+  *[_type == "project" && featured == true] | order(startDate desc) {
     ${projectFields}
   }
 `
 
 // Get project by slug with full details and relationships
 export const projectBySlugQuery = `
-  *[_type == "project" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
+  *[_type == "project" && slug.current == $slug][0] {
     ${projectFields},
     body[]{
       ...,
@@ -125,7 +125,7 @@ export const projectBySlugQuery = `
 
 // Get project slugs for static paths
 export const projectSlugsQuery = `
-  *[_type == "project" && !(_id in path("drafts.**"))] {
+  *[_type == "project"] {
     "slug": slug.current
   }
 `

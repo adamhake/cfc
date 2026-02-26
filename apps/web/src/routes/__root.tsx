@@ -121,6 +121,7 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const { preview } = Route.useLoaderData();
   const structuredData = generateOrganizationStructuredData();
 
   return (
@@ -164,9 +165,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             Skip to main content
           </a>
           <ErrorBoundary>
-            <Header />
+            <Header preview={preview} />
             <main id="main-content">{children}</main>
-            <Footer />
+            <Footer preview={preview} />
           </ErrorBoundary>
         </PostHogProvider>
         <Scripts />
