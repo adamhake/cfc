@@ -104,7 +104,7 @@ function AboutPage() {
           <div className="overflow-hidden rounded-2xl shadow-md">
             <SanityImage
               image={pageData.storyImage}
-              alt={pageData.storyImage.alt || ""}
+              alt={pageData.storyImage.alt || "About the Chimborazo Park Conservancy"}
               className="h-64 w-full object-cover md:h-80 lg:h-96"
               sizes="(max-width: 1200px) 100vw, 1200px"
               maxWidth={1200}
@@ -125,7 +125,7 @@ function AboutPage() {
           <div className="overflow-hidden rounded-2xl shadow-md">
             <SanityImage
               image={pageData.calloutImage}
-              alt={pageData.calloutImage.alt || ""}
+              alt={pageData.calloutImage.alt || "Chimborazo Park community"}
               className="h-64 w-full object-cover md:h-80 lg:h-96"
               sizes="(max-width: 1200px) 100vw, 1200px"
               maxWidth={1200}

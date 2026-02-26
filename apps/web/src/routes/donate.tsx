@@ -7,11 +7,12 @@ import { CACHE_PRESETS } from "@/lib/query-config";
 import { queryKeys } from "@/lib/query-keys";
 import { getSanityClient } from "@/lib/sanity";
 import type { SanityDonatePage } from "@/lib/sanity-types";
-import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
+import { generateFAQStructuredData, generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { getDonatePageQuery } from "@chimborazo/sanity-config";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { JsonLd } from "@/components/JsonLd/json-ld";
 
 const DONATE_FAQS = [
   {
@@ -108,8 +109,11 @@ function Donate() {
         imageHeight: 1262,
       };
 
+  const faqStructuredData = generateFAQStructuredData(DONATE_FAQS);
+
   return (
     <div>
+      <JsonLd data={faqStructuredData} />
       <PageHero {...heroData} height="medium" priority={true} />
       <div>
         <Container spacing="xl" className="py-24">
