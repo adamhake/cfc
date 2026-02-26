@@ -6,7 +6,7 @@
   ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- apps/web packages/sanity-config"
 
 [build.environment]
-  NODE_VERSION = "22"
+  NODE_VERSION = "24"
   PNPM_FLAGS = "--frozen-lockfile --prefer-offline"
 
 # Allow Sanity Studio to embed the site in an iframe (Presentation tool)
