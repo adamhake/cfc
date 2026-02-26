@@ -1,11 +1,11 @@
+import {
+  sanityApiTokenSchema,
+  sanityApiVersionSchema,
+  sanityDatasetSchema,
+  sanityProjectIdSchema,
+} from "@chimborazo/sanity-config";
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
-import {
-  sanityProjectIdSchema,
-  sanityDatasetSchema,
-  sanityApiVersionSchema,
-  sanityApiTokenSchema,
-} from "@chimborazo/sanity-config";
 
 export const env = createEnv({
   server: {
@@ -23,7 +23,7 @@ export const env = createEnv({
     // PostHog server-side analytics (uses same project API key)
     POSTHOG_API_KEY: z.string().optional(),
     POSTHOG_HOST: z.string().url().optional(),
-    ADMIN_EMAIL: z.string().email().optional().default("info@chimborazopark.org"),
+    ADMIN_EMAIL: z.string().email().optional().default("info@chimborazoparkconservancy.org"),
     NEWSLETTER_FROM_EMAIL: z.string().email().optional().default("noreply@chimborazopark.org"),
     // Verified email domain for admin notifications (must match Resend domain)
     VERIFIED_EMAIL_DOMAIN: z.string().optional().default("@chimborazopark.org"),
