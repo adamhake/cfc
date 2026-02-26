@@ -52,7 +52,7 @@
   "devDependencies": {
     "@eslint/js": "catalog:",
     "@total-typescript/ts-reset": "catalog:",
-    "@types/node": "^25.3.0",
+    "@types/node": "^25.3.1",
     "@types/react": "catalog:",
     "eslint": "catalog:",
     "prettier": "catalog:",
