@@ -32,7 +32,7 @@ export default function Quote({
           <SanityImage
             image={backgroundImage as SanityImageObject}
             alt={(backgroundImage as SanityImageObject).alt || "Background image"}
-            className="absolute inset-0 h-full w-full"
+            className="absolute inset-0 h-full w-full object-cover"
             sizes="(max-width: 1280px) 100vw, 1152px"
             maxWidth={1152}
             breakpoints={[640, 768, 896, 1024, 1152]}
