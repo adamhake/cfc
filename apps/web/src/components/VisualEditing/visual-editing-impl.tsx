@@ -1,4 +1,5 @@
 import { enableVisualEditing, type HistoryUpdate } from "@sanity/visual-editing";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
 
@@ -11,6 +12,7 @@ import { useEffect } from "react";
  */
 export default function VisualEditingImpl() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     console.log("[VisualEditing] Calling enableVisualEditing()");
@@ -33,10 +35,18 @@ export default function VisualEditingImpl() {
           }
         },
       },
+      // Refresh preview when Studio notifies of document changes.
+      // Without this, the default is location.reload() which is unreliable
+      // inside the Presentation tool iframe and loses React state.
+      refresh: (payload) => {
+        console.log("[VisualEditing] Refresh event:", payload.source);
+        // Invalidate all queries so TanStack Query refetches with updated data
+        return queryClient.invalidateQueries();
+      },
     });
 
     return cleanup;
-  }, [router]);
+  }, [router, queryClient]);
 
   return null;
 }
