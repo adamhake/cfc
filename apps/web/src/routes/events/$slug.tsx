@@ -33,11 +33,17 @@ const markdownFiles = import.meta.glob<{ default: string }>("../../data/events/*
   import: "default",
 });
 
+interface EventQueryResult {
+  event: SanityEvent | StaticEvent;
+  isSanityEvent: boolean;
+  markdownContent: string | null;
+}
+
 // Query options for fetching event by slug with caching - accept preview flag for Visual Editing
 const eventBySlugQueryOptions = (slug: string, preview = false) =>
   queryOptions({
     queryKey: [...queryKeys.events.detail(slug), { preview }],
-    queryFn: async () => {
+    queryFn: async (): Promise<EventQueryResult> => {
       // Try to fetch from Sanity first (primary source)
       try {
         const sanityEvent = await getSanityClient(preview).fetch<SanityEvent | null>(
@@ -95,12 +101,17 @@ export const Route = createFileRoute("/events/$slug")({
     // Check if we're in preview mode for Visual Editing
     const preview = await getIsPreviewMode();
 
-    // Use TanStack Query for caching and return the data for head()
+    // Prefetch query data; extract only primitives for head()/headers()
+    // to avoid PortableTextBlock type incompatibility with router inference
     const eventData = await context.queryClient.ensureQueryData(
       eventBySlugQueryOptions(params.slug, preview),
     );
 
-    return { preview, eventData };
+    return {
+      preview,
+      eventTitle: eventData.event.title,
+      eventDescription: eventData.event.description,
+    };
   },
   headers: ({ loaderData }) => {
     return generateCacheHeaders({
@@ -111,9 +122,9 @@ export const Route = createFileRoute("/events/$slug")({
   },
   head: ({ params, loaderData }) => {
     const eventUrl = `${SITE_CONFIG.url}/events/${params.slug}`;
-    const title = loaderData?.eventData?.event?.title ?? "Event Details";
+    const title = loaderData?.eventTitle ?? "Event Details";
     const description =
-      loaderData?.eventData?.event?.description ??
+      loaderData?.eventDescription ??
       "Join us for this Chimborazo Park event. Check out the details and RSVP.";
 
     return {

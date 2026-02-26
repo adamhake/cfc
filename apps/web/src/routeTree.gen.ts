@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as MediaRouteImport } from './routes/media'
 import { Route as HistoryRouteImport } from './routes/history'
@@ -27,6 +28,11 @@ import { Route as ApiDraftRouteImport } from './routes/api/draft'
 import { Route as ApiWebhooksSanityRouteImport } from './routes/api/webhooks/sanity'
 import { Route as ApiDraftDisableRouteImport } from './routes/api/draft/disable'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
   id: '/privacy-policy',
   path: '/privacy-policy',
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/history': typeof HistoryRoute
   '/media': typeof MediaRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/draft': typeof ApiDraftRouteWithChildren
   '/api/generate-metadata': typeof ApiGenerateMetadataRoute
   '/events/$slug': typeof EventsSlugRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByTo {
   '/history': typeof HistoryRoute
   '/media': typeof MediaRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/draft': typeof ApiDraftRouteWithChildren
   '/api/generate-metadata': typeof ApiGenerateMetadataRoute
   '/events/$slug': typeof EventsSlugRoute
@@ -162,6 +170,7 @@ export interface FileRoutesById {
   '/history': typeof HistoryRoute
   '/media': typeof MediaRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/draft': typeof ApiDraftRouteWithChildren
   '/api/generate-metadata': typeof ApiGenerateMetadataRoute
   '/events/$slug': typeof EventsSlugRoute
@@ -183,6 +192,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/media'
     | '/privacy-policy'
+    | '/sitemap.xml'
     | '/api/draft'
     | '/api/generate-metadata'
     | '/events/$slug'
@@ -202,6 +212,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/media'
     | '/privacy-policy'
+    | '/sitemap.xml'
     | '/api/draft'
     | '/api/generate-metadata'
     | '/events/$slug'
@@ -221,6 +232,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/media'
     | '/privacy-policy'
+    | '/sitemap.xml'
     | '/api/draft'
     | '/api/generate-metadata'
     | '/events/$slug'
@@ -241,6 +253,7 @@ export interface RootRouteChildren {
   HistoryRoute: typeof HistoryRoute
   MediaRoute: typeof MediaRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiDraftRoute: typeof ApiDraftRouteWithChildren
   ApiGenerateMetadataRoute: typeof ApiGenerateMetadataRoute
   EventsSlugRoute: typeof EventsSlugRoute
@@ -252,6 +265,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/privacy-policy': {
       id: '/privacy-policy'
       path: '/privacy-policy'
@@ -396,6 +416,7 @@ const rootRouteChildren: RootRouteChildren = {
   HistoryRoute: HistoryRoute,
   MediaRoute: MediaRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiDraftRoute: ApiDraftRouteWithChildren,
   ApiGenerateMetadataRoute: ApiGenerateMetadataRoute,
   EventsSlugRoute: EventsSlugRoute,
