@@ -1,6 +1,6 @@
 import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image";
 import { cn } from "@/utils/cn";
-import { Image } from "@unpic/react";
+import { Image } from "@/components/OptimizedImage/optimized-image";
 import { ReactNode } from "react";
 
 interface PageHeroProps {

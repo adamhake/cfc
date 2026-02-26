@@ -1,6 +1,7 @@
 import Container from "@/components/Container/container";
+import { Image } from "@/components/OptimizedImage/optimized-image";
 import type { SanityImageObject } from "@/components/SanityImage/sanity-image";
-import { SanityBackgroundImage } from "@/components/SanityImage/sanity-image";
+import { SanityImage } from "@/components/SanityImage/sanity-image";
 import { QuoteIcon } from "lucide-react";
 
 interface QuoteProps {
@@ -28,19 +29,26 @@ export default function Quote({
     <Container spacing="none">
       <div className="relative w-full overflow-hidden rounded-2xl bg-primary-800 p-8 lg:p-16 dark:bg-primary-900">
         {isSanityImage ? (
-          <SanityBackgroundImage
+          <SanityImage
             image={backgroundImage as SanityImageObject}
+            alt={(backgroundImage as SanityImageObject).alt || "Background image"}
             className="absolute inset-0 h-full w-full"
+            sizes="100vw"
             maxWidth={1536}
             quality={85}
             useHotspotPosition
           />
         ) : backgroundImage && "src" in backgroundImage ? (
-          <img
+          <Image
             src={backgroundImage.src}
             alt={backgroundImage.alt}
+            width={backgroundImage.width}
+            height={backgroundImage.height}
             className="absolute inset-0 h-full w-full object-cover"
-            loading="eager"
+            layout="constrained"
+            loading="lazy"
+            sizes="100vw"
+            breakpoints={[640, 1024, 1536]}
           />
         ) : null}
         <div className="absolute top-0 left-0 h-full w-full bg-primary-800/55 dark:bg-primary-900/60"></div>
