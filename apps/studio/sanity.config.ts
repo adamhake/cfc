@@ -137,6 +137,7 @@ export default defineConfig({
         "http://localhost:3000",
         "https://chimborazoparkconservancy.org",
         "https://*.chimborazoparkconservancy.org",
+        "https://*.netlify.app",
       ],
       resolve: {
         mainDocuments: defineDocuments([
