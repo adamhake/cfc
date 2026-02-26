@@ -8,3 +8,9 @@
 [build.environment]
   NODE_VERSION = "22"
   PNPM_FLAGS = "--frozen-lockfile --prefer-offline"
+
+# Allow Sanity Studio to embed the site in an iframe (Presentation tool)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "frame-ancestors 'self' https://chimborazo-park-conservancy.sanity.studio https://studio.chimborazoparkconservancy.org https://*.sanity.build"
