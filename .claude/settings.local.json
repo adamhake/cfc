@@ -66,7 +66,8 @@
       "mcp__playwright__browser_take_screenshot",
       "mcp__playwright__browser_navigate",
       "WebFetch(domain:posthog.com)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "mcp__context7__query-docs"
     ],
     "deny": [],
     "ask": []

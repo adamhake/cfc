@@ -13,6 +13,7 @@ import "./studio.css"
 // Get environment variables from validated env config
 const projectId = env.SANITY_STUDIO_PROJECT_ID
 const dataset = env.SANITY_STUDIO_DATASET
+const apiVersion = env.SANITY_STUDIO_API_VERSION
 const apiUrl = env.SANITY_STUDIO_API_URL
 
 if (!apiUrl) {
@@ -114,6 +115,7 @@ export default defineConfig({
 
   projectId,
   dataset,
+  apiVersion,
 
   studio: {
     components: {

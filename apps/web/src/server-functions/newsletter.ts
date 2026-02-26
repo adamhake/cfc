@@ -76,8 +76,12 @@ export const subscribeToNewsletter = createServerFn({ method: "POST" })
     }
 
     // Verify Turnstile token
+    const isDevBypassToken =
+      process.env.NODE_ENV !== "production" && data.turnstileToken === "dev-bypass";
     const turnstileSecret = env.TURNSTILE_SECRET_KEY;
-    if (turnstileSecret) {
+    if (isDevBypassToken) {
+      console.info("[Newsletter] Using dev bypass token, skipping Turnstile verification");
+    } else if (turnstileSecret) {
       const turnstileResponse = await fetch(
         "https://challenges.cloudflare.com/turnstile/v0/siteverify",
         {

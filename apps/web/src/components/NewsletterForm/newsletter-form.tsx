@@ -8,6 +8,7 @@ import type { NewsletterSource } from "@/types/newsletter";
 import { env } from "@/env";
 import { trackNewsletterSignup, trackNewsletterSignupFailed } from "@/integrations/posthog/events";
 import { cn } from "@/utils/cn";
+import { shouldEnableTurnstile } from "./turnstile";
 
 export interface NewsletterFormProps {
   /**
@@ -48,6 +49,7 @@ export function NewsletterForm({
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [turnstileError, setTurnstileError] = useState<string | null>(null);
+  const [hostname, setHostname] = useState<string>();
   const turnstileRef = useRef<TurnstileInstance>(null);
   const successRef = useRef<HTMLDivElement>(null);
 
@@ -61,6 +63,15 @@ export function NewsletterForm({
   const mutation = useNewsletterSignup();
   const turnstileSiteKey = env.VITE_TURNSTILE_SITE_KEY;
   const isDevelopment = import.meta.env.DEV;
+  const isTurnstileEnabled = shouldEnableTurnstile({
+    siteKey: turnstileSiteKey,
+    isDevelopment,
+    hostname,
+  });
+
+  useEffect(() => {
+    setHostname(window.location.hostname);
+  }, []);
 
   const form = useForm({
     defaultValues: {
@@ -72,12 +83,12 @@ export function NewsletterForm({
 
       // In production, Turnstile token is required
       // In development, allow bypass if Turnstile is not configured
-      if (turnstileSiteKey && !turnstileToken) {
+      if (isTurnstileEnabled && !turnstileToken) {
         setTurnstileError("Please complete the security verification");
         return;
       }
 
-      if (!turnstileSiteKey && !isDevelopment) {
+      if (!isTurnstileEnabled && !isDevelopment) {
         setTurnstileError("Security verification is not available. Please try again later.");
         return;
       }
@@ -208,10 +219,10 @@ export function NewsletterForm({
       </div>
 
       {/* Turnstile widget - invisible mode */}
-      {turnstileSiteKey && (
+      {isTurnstileEnabled && (
         <Turnstile
           ref={turnstileRef}
-          siteKey={turnstileSiteKey}
+          siteKey={turnstileSiteKey!}
           onSuccess={setTurnstileToken}
           onError={() => {
             setTurnstileToken(null);
