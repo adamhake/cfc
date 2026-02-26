@@ -12,6 +12,7 @@ import { getSanityClient } from "@/lib/sanity";
 import type { SanityProject } from "@/lib/sanity-types";
 import { JsonLd } from "@/components/JsonLd/json-ld";
 import {
+  generateArticleStructuredData,
   generateBreadcrumbStructuredData,
   generateLinkTags,
   generateMetaTags,
@@ -119,6 +120,16 @@ function ProjectPage() {
       : null;
 
   const projectUrl = `${SITE_CONFIG.url}/projects/${project.slug.current}`;
+  const imageUrl = project.heroImage?.asset?.url;
+
+  const articleData = generateArticleStructuredData({
+    headline: project.title,
+    description: project.description,
+    image: imageUrl || `${SITE_CONFIG.url}/bike_sunset.webp`,
+    datePublished: project.startDate,
+    dateModified: project.completionDate || project.startDate,
+  });
+
   const breadcrumbData = generateBreadcrumbStructuredData([
     { name: "Home", url: SITE_CONFIG.url },
     { name: "Projects", url: `${SITE_CONFIG.url}/projects` },
@@ -127,6 +138,7 @@ function ProjectPage() {
 
   return (
     <>
+      <JsonLd data={articleData} />
       <JsonLd data={breadcrumbData} />
       <div className="min-h-screen">
         {/* Hero Section */}
