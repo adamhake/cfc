@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 
 const posthogKey = import.meta.env.VITE_POSTHOG_KEY;
 const posthogHost = import.meta.env.VITE_POSTHOG_HOST || "https://us.i.posthog.com";
@@ -39,7 +39,16 @@ const LazyPostHogProvider = lazy(() =>
 );
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
-  if (!posthogKey || typeof window === "undefined") {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Render children directly during SSR and initial hydration to avoid
+  // a tree mismatch (server renders no Suspense, client would add one).
+  // After hydration, mount the lazy PostHog provider.
+  if (!posthogKey || !mounted) {
     return <>{children}</>;
   }
 
