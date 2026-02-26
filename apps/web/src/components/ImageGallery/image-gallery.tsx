@@ -198,9 +198,10 @@ export default function ImageGallery({
           image={image}
           alt={props.alt}
           className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          breakpoints={[320, 480, 640, 800]}
-          maxWidth={800}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+          breakpoints={[320, 480, 640, 720]}
+          maxWidth={720}
+          quality={70}
         />
         {showCaptions && captionPosition === "hover" && props.caption && (
           <div

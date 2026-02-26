@@ -235,7 +235,13 @@ function ProjectPage() {
                   </h2>
                   <div className="grid grid-cols-1 gap-6">
                     {project.relatedEvents.map((event) => (
-                      <Event key={event._id} {...event} />
+                      <Event
+                        key={event._id}
+                        {...event}
+                        imageSizes="(max-width: 768px) 100vw, 768px"
+                        imageMaxWidth={1024}
+                        imageBreakpoints={[320, 480, 640, 768, 896, 1024]}
+                      />
                     ))}
                   </div>
                 </div>

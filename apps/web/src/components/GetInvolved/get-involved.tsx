@@ -80,9 +80,12 @@ export default function GetInvolved({
                     <SanityImage
                       image={images[currentImageIndex]}
                       alt={images[currentImageIndex].alt || ""}
-                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      sizes="(max-width: 1024px) 100vw, 576px"
                       className="h-full w-full object-cover"
                       priority={currentImageIndex === 0}
+                      maxWidth={1024}
+                      breakpoints={[320, 480, 640, 768, 896, 1024]}
+                      quality={70}
                     />
                   </motion.div>
                 </AnimatePresence>

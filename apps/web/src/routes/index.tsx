@@ -410,8 +410,9 @@ function Home() {
                   images={parkGalleryData}
                   className="h-full overflow-hidden rounded-2xl"
                   imageClassName="h-full w-full object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  maxWidth={1920}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 576px"
+                  maxWidth={1024}
+                  quality={70}
                   interval={5000}
                   showCaptions={true}
                   captionStyle="hotspot"
@@ -477,7 +478,13 @@ function Home() {
           <div className="mt-10 space-y-10">
             {/* Featured Event - Full Width */}
             {recentEvents.slice(0, 1).map((event) => (
-              <Event key={`event-featured-${event._id}`} {...event} />
+              <Event
+                key={`event-featured-${event._id}`}
+                {...event}
+                imageSizes="(max-width: 768px) 100vw, 1152px"
+                imageMaxWidth={1280}
+                imageBreakpoints={[320, 480, 640, 768, 896, 1024, 1152, 1280]}
+              />
             ))}
 
             {/* Recent Events Grid */}

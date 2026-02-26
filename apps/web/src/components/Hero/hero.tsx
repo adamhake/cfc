@@ -40,9 +40,9 @@ export default function HeroSoftGradientDivider({
           className="absolute inset-0 h-full w-full object-cover"
           priority={true}
           sizes="100vw"
-          maxWidth={2000}
-          breakpoints={[640, 1024, 1536, 2000]}
-          quality={85}
+          maxWidth={1920}
+          breakpoints={[640, 768, 960, 1200, 1536, 1920]}
+          quality={70}
         />
       ) : (
         <Image

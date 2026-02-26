@@ -33,9 +33,10 @@ export default function Quote({
             image={backgroundImage as SanityImageObject}
             alt={(backgroundImage as SanityImageObject).alt || "Background image"}
             className="absolute inset-0 h-full w-full"
-            sizes="100vw"
-            maxWidth={1536}
-            quality={85}
+            sizes="(max-width: 1280px) 100vw, 1152px"
+            maxWidth={1152}
+            breakpoints={[640, 768, 896, 1024, 1152]}
+            quality={70}
             useHotspotPosition
           />
         ) : backgroundImage && "src" in backgroundImage ? (
@@ -47,8 +48,8 @@ export default function Quote({
             className="absolute inset-0 h-full w-full object-cover"
             layout="constrained"
             loading="lazy"
-            sizes="100vw"
-            breakpoints={[640, 1024, 1536]}
+            sizes="(max-width: 1280px) 100vw, 1152px"
+            breakpoints={[640, 768, 896, 1024, 1152]}
           />
         ) : null}
         <div className="absolute top-0 left-0 h-full w-full bg-primary-800/55 dark:bg-primary-900/60"></div>
