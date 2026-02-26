@@ -48,9 +48,16 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
       },
 
       POST: async ({ request }) => {
+        const startTime = Date.now();
+
         try {
           // Read the raw body for signature verification
           const body = await request.text();
+
+          console.log("[Sanity Webhook] Received POST request", {
+            contentLength: body.length,
+            userAgent: request.headers.get("user-agent"),
+          });
 
           // Verify webhook signature
           const secret = process.env.SANITY_WEBHOOK_SECRET;
@@ -86,7 +93,7 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
           // Verify the signature matches
           const isValid = isValidSignature(body, signature, secret);
           if (!isValid) {
-            console.warn("[Sanity Webhook] Invalid signature");
+            console.warn("[Sanity Webhook] Invalid signature - rejecting request");
             return new Response(
               JSON.stringify({
                 error: "Unauthorized",
@@ -102,20 +109,33 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
           // Parse the webhook payload
           const payload = JSON.parse(body) as SanityWebhookPayload;
 
-          console.log(`[Sanity Webhook] Received event for ${payload._type}:`, {
+          console.log(`[Sanity Webhook] Validated payload`, {
             id: payload._id,
             type: payload._type,
+            rev: payload._rev,
             slug: payload.slug?.current,
           });
 
           // Determine cache tags to purge based on document type
           const cacheTags = getCacheTagsForDocumentType(payload._type);
 
+          console.log(`[Sanity Webhook] Purging cache tags: [${cacheTags.join(", ")}]`);
+
           // Purge Netlify cache using the determined cache tags
+          const purgeStartTime = Date.now();
           const purgeResult = await purgeNetlifyCache(cacheTags);
+          const purgeDuration = Date.now() - purgeStartTime;
 
           if (!purgeResult.success) {
-            console.error("[Sanity Webhook] Failed to purge cache:", purgeResult.error);
+            const totalDuration = Date.now() - startTime;
+            console.error("[Sanity Webhook] Cache purge FAILED", {
+              error: purgeResult.error,
+              tags: cacheTags,
+              docType: payload._type,
+              docId: payload._id,
+              purgeDurationMs: purgeDuration,
+              totalDurationMs: totalDuration,
+            });
             return new Response(
               JSON.stringify({
                 error: "Cache purge failed",
@@ -128,7 +148,15 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
             );
           }
 
-          console.log(`[Sanity Webhook] Successfully purged cache for tags:`, cacheTags);
+          const totalDuration = Date.now() - startTime;
+          console.log(`[Sanity Webhook] Cache purge SUCCESS`, {
+            docType: payload._type,
+            docId: payload._id,
+            slug: payload.slug?.current,
+            tags: cacheTags,
+            purgeDurationMs: purgeDuration,
+            totalDurationMs: totalDuration,
+          });
 
           return new Response(
             JSON.stringify({
@@ -136,6 +164,7 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
               message: "Cache purged successfully",
               type: payload._type,
               tags: cacheTags,
+              durationMs: totalDuration,
             }),
             {
               status: 200,
@@ -143,7 +172,12 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
             },
           );
         } catch (error) {
-          console.error("[Sanity Webhook] Error processing webhook:", error);
+          const totalDuration = Date.now() - startTime;
+          console.error("[Sanity Webhook] Unhandled error", {
+            error: error instanceof Error ? error.message : "Unknown error",
+            stack: error instanceof Error ? error.stack : undefined,
+            totalDurationMs: totalDuration,
+          });
 
           return new Response(
             JSON.stringify({
@@ -208,6 +242,31 @@ function getCacheTagsForDocumentType(docType: string): CacheTag[] {
     case "mediaPage":
       // Media page content affects media gallery
       tags.push(CACHE_TAGS.MEDIA);
+      break;
+
+    case "aboutPage":
+      tags.push(CACHE_TAGS.ABOUT);
+      break;
+
+    case "historyPage":
+      tags.push(CACHE_TAGS.HISTORY);
+      break;
+
+    case "donatePage":
+      tags.push(CACHE_TAGS.DONATE);
+      break;
+
+    case "getInvolvedPage":
+      tags.push(CACHE_TAGS.GET_INVOLVED);
+      break;
+
+    case "amenitiesPage":
+      tags.push(CACHE_TAGS.AMENITIES);
+      break;
+
+    case "siteSettings":
+      // Site settings (org name, social links, etc.) appear in header/footer on every page
+      tags.push(...Object.values(CACHE_TAGS));
       break;
 
     case "partner":

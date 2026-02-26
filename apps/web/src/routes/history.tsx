@@ -1,7 +1,9 @@
 import Container from "@/components/Container/container";
 import PageHero from "@/components/PageHero/page-hero";
 import { PortableText } from "@/components/PortableText/portable-text";
+import { CACHE_TAGS, generateCacheHeaders } from "@/lib/cache-headers";
 import { getIsPreviewMode } from "@/lib/preview";
+import { CACHE_PRESETS } from "@/lib/query-config";
 import { queryKeys } from "@/lib/query-keys";
 import { getSanityClient } from "@/lib/sanity";
 import type { SanityHistoryPage } from "@/lib/sanity-types";
@@ -24,8 +26,7 @@ const historyPageQueryOptions = (preview = false) =>
         return null;
       }
     },
-    staleTime: 30 * 60 * 1000, // 30 minutes
-    gcTime: 60 * 60 * 1000, // 1 hour
+    ...CACHE_PRESETS.CURATED_CONTENT,
   });
 
 export const Route = createFileRoute("/history")({
@@ -37,6 +38,13 @@ export const Route = createFileRoute("/history")({
     // Prefetch history page content on the server
     await context.queryClient.ensureQueryData(historyPageQueryOptions(preview));
     return { preview };
+  },
+  headers: ({ loaderData }) => {
+    return generateCacheHeaders({
+      preset: "CURATED_CONTENT",
+      tags: [CACHE_TAGS.HISTORY],
+      isPreview: loaderData?.preview ?? false,
+    });
   },
   head: () => ({
     meta: generateMetaTags({

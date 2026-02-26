@@ -4,6 +4,7 @@ import PageHero from "@/components/PageHero/page-hero";
 import { PortableText } from "@/components/PortableText/portable-text";
 import { CACHE_TAGS, generateCacheHeaders } from "@/lib/cache-headers";
 import { getIsPreviewMode } from "@/lib/preview";
+import { CACHE_PRESETS } from "@/lib/query-config";
 import { queryKeys } from "@/lib/query-keys";
 import { getSanityClient } from "@/lib/sanity";
 import type { SanityEvent, SanityEventsPage } from "@/lib/sanity-types";
@@ -24,9 +25,7 @@ const eventsQueryOptions = (preview = false) =>
         return [];
       }
     },
-    // Events list changes occasionally - cache for 5 minutes
-    staleTime: 5 * 60 * 1000,
-    gcTime: 15 * 60 * 1000,
+    ...CACHE_PRESETS.EVENTS_LIST,
   });
 
 const eventsPageQueryOptions = (preview = false) =>
@@ -40,8 +39,7 @@ const eventsPageQueryOptions = (preview = false) =>
         return null;
       }
     },
-    staleTime: 30 * 60 * 1000,
-    gcTime: 60 * 60 * 1000,
+    ...CACHE_PRESETS.CURATED_CONTENT,
   });
 
 export const Route = createFileRoute("/events/")({

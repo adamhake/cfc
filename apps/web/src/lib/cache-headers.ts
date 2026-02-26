@@ -30,6 +30,12 @@ export const CACHE_TAGS = {
   PROJECTS_LIST: "projects-list",
   PROJECT_DETAIL: "project-detail",
   MEDIA: "media",
+  ABOUT: "about",
+  HISTORY: "history",
+  DONATE: "donate",
+  GET_INVOLVED: "get-involved",
+  AMENITIES: "amenities",
+  SITE_SETTINGS: "site-settings",
 } as const;
 
 export type CacheTag = (typeof CACHE_TAGS)[keyof typeof CACHE_TAGS];
@@ -46,11 +52,17 @@ interface CacheHeaderOptions {
 }
 
 /**
- * Generates Cache-Control headers for Netlify ISR
+ * Generates Cache-Control headers for ISR (Incremental Static Regeneration)
  *
- * Uses Netlify-CDN-Cache-Control for CDN-specific caching that won't
- * affect browser caching, combined with Netlify-Cache-Tag for granular
- * purging via webhooks.
+ * Uses a layered caching strategy:
+ * 1. Standard Cache-Control with s-maxage for broad CDN compatibility
+ *    (works with any CDN/proxy, as recommended by TanStack Start docs)
+ * 2. Netlify-CDN-Cache-Control for Netlify-specific features (durable cache)
+ * 3. Netlify-Cache-Tag for granular tag-based invalidation via webhooks
+ *
+ * When both Cache-Control and Netlify-CDN-Cache-Control are present,
+ * Netlify's CDN uses the Netlify-specific header and forwards the
+ * standard Cache-Control to the browser.
  *
  * @example
  * ```typescript
@@ -79,9 +91,10 @@ export function generateCacheHeaders(options: CacheHeaderOptions): Record<string
   const swrSeconds = maxAgeSeconds * swrMultiplier;
 
   const headers: Record<string, string> = {
-    // Browser cache: always revalidate with server, let CDN handle caching
-    "Cache-Control": "public, max-age=0, must-revalidate",
-    // CDN cache: use preset timing with stale-while-revalidate for ISR
+    // Standard Cache-Control: browser gets max-age=0 (always revalidate),
+    // shared caches (CDNs/proxies) get s-maxage for ISR compatibility
+    "Cache-Control": `public, max-age=0, s-maxage=${maxAgeSeconds}, must-revalidate, stale-while-revalidate=${swrSeconds}`,
+    // Netlify-specific CDN cache: overrides standard Cache-Control for Netlify's CDN
     // "durable" flag ensures cache survives deploys
     "Netlify-CDN-Cache-Control": `public, max-age=${maxAgeSeconds}, stale-while-revalidate=${swrSeconds}, durable`,
   };
