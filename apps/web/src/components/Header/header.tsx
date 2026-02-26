@@ -394,6 +394,19 @@ export default function Header({ preview = false }: { preview?: boolean }) {
                   <motion.li
                     initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: prefersReducedMotion ? 0 : 0.01 }}
+                  >
+                    <Link
+                      to="/about"
+                      onClick={() => setMenuOpen(false)}
+                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/about" && !currentHash ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
+                    >
+                      About Us
+                    </Link>
+                  </motion.li>
+                  <motion.li
+                    initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: prefersReducedMotion ? 0 : 0.02 }}
                   >
                     <Link
