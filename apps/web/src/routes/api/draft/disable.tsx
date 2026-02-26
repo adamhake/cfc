@@ -10,9 +10,10 @@ export const Route = createFileRoute("/api/draft/disable")({
         // Ensure redirect is a relative path to prevent open redirect
         const safeRedirect = redirectTo.startsWith("/") ? redirectTo : "/";
 
-        // Clear the preview cookie
+        // Clear the preview cookie (must match SameSite attribute from /api/draft)
         const isProduction = process.env.NODE_ENV === "production";
-        const cookieValue = `sanity-preview=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${isProduction ? "; Secure" : ""}`;
+        const sameSite = isProduction ? "None" : "Lax";
+        const cookieValue = `sanity-preview=; Path=/; HttpOnly; SameSite=${sameSite}; Max-Age=0${isProduction ? "; Secure" : ""}`;
 
         return new Response(null, {
           status: 307,

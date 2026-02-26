@@ -13,6 +13,8 @@ export default function VisualEditingImpl() {
   const router = useRouter();
 
   useEffect(() => {
+    console.log("[VisualEditing] Calling enableVisualEditing()");
+
     // Enable visual editing with TanStack Router history integration
     const cleanup = enableVisualEditing({
       history: {
