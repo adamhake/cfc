@@ -5,6 +5,18 @@ import { Calendar, Clock, MapPin } from "lucide-react";
 import Chip from "../Chip/chip";
 import { SanityImage } from "../SanityImage/sanity-image";
 
+const DEFAULT_EVENT_IMAGE_SIZES = "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 576px";
+const DEFAULT_EVENT_IMAGE_MAX_WIDTH = 1024;
+const DEFAULT_EVENT_IMAGE_BREAKPOINTS = [320, 480, 576, 640, 768, 896, 1024];
+const DEFAULT_EVENT_IMAGE_QUALITY = 70;
+
+interface EventProps extends SanityEvent {
+  imageSizes?: string;
+  imageMaxWidth?: number;
+  imageBreakpoints?: number[];
+  imageQuality?: number;
+}
+
 export default function Event({
   title,
   slug,
@@ -13,7 +25,11 @@ export default function Event({
   time,
   location,
   heroImage,
-}: SanityEvent) {
+  imageSizes = DEFAULT_EVENT_IMAGE_SIZES,
+  imageMaxWidth = DEFAULT_EVENT_IMAGE_MAX_WIDTH,
+  imageBreakpoints = DEFAULT_EVENT_IMAGE_BREAKPOINTS,
+  imageQuality = DEFAULT_EVENT_IMAGE_QUALITY,
+}: EventProps) {
   const isPast = new Date(date) < new Date();
   const fmtDate = formatDateString(date, "short");
 
@@ -27,7 +43,10 @@ export default function Event({
         image={heroImage}
         alt={heroImage.alt}
         className="absolute inset-0 h-full w-full object-cover transition-opacity group-hover:opacity-0"
-        sizes="(max-width: 768px) 100vw, 50vw"
+        sizes={imageSizes}
+        maxWidth={imageMaxWidth}
+        breakpoints={imageBreakpoints}
+        quality={imageQuality}
         useHotspotPosition
       />
       <div className="absolute top-0 left-0 h-full w-full bg-primary-900/55 dark:bg-primary-950/60"></div>

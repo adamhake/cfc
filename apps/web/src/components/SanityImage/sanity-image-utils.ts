@@ -1,4 +1,4 @@
-const DEFAULT_BREAKPOINTS = [640, 1024, 1536];
+export const DEFAULT_BREAKPOINTS = [320, 480, 640, 768, 896, 1024, 1280, 1536];
 
 /**
  * Builds sorted, unique srcset widths and caps them when maxWidth is provided.
@@ -12,15 +12,19 @@ export function getResponsiveWidths(breakpoints: number[], maxWidth?: number): n
     ),
   ).sort((a, b) => a - b);
 
+  const cap = typeof maxWidth === "number" && maxWidth > 0 ? Math.round(maxWidth) : undefined;
+  const cappedDefaults = cap
+    ? DEFAULT_BREAKPOINTS.filter((width) => width <= cap)
+    : DEFAULT_BREAKPOINTS;
+
   if (normalized.length === 0) {
-    if (typeof maxWidth === "number" && maxWidth > 0) {
-      return [Math.round(maxWidth)];
+    if (cappedDefaults.length > 0) {
+      return cappedDefaults;
     }
-    return DEFAULT_BREAKPOINTS;
+    return cap ? [cap] : DEFAULT_BREAKPOINTS;
   }
 
-  if (typeof maxWidth === "number" && maxWidth > 0) {
-    const cap = Math.round(maxWidth);
+  if (cap) {
     const capped = normalized.filter((width) => width <= cap);
     return capped.length > 0 ? capped : [cap];
   }
