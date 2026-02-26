@@ -1,4 +1,5 @@
 import { SanityImage, type SanityImageObject } from "@/components/SanityImage";
+import { Image } from "@/components/OptimizedImage/optimized-image";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -311,11 +312,16 @@ export default function ImageGallery({
                       maxWidth={1920}
                     />
                   ) : (
-                    <img
+                    <Image
                       src={images[selectedImage].src}
                       alt={images[selectedImage].alt}
+                      width={getImageProps(images[selectedImage]).width}
+                      height={getImageProps(images[selectedImage]).height}
                       className="h-auto max-h-[calc(100vh-24rem)] w-auto max-w-[85vw] rounded-lg md:max-h-[calc(90vh-16rem)] md:max-w-5xl"
+                      layout="constrained"
                       loading="eager"
+                      breakpoints={[640, 1024, 1536]}
+                      sizes="(max-width: 768px) 85vw, (max-width: 1280px) 80vw, 1280px"
                     />
                   )}
                   {/* Desktop: Hotspot indicator and caption overlay */}

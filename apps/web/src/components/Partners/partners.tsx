@@ -1,6 +1,6 @@
 import Container from "@/components/Container/container";
 import { SanityImage, type SanityImageObject } from "@/components/SanityImage";
-import { Image } from "@unpic/react";
+import { Image } from "@/components/OptimizedImage/optimized-image";
 import { ExternalLink } from "lucide-react";
 
 interface PartnerLogo {

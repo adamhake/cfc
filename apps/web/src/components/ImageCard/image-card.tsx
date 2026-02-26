@@ -1,4 +1,4 @@
-import { Image } from "@unpic/react";
+import { Image } from "@/components/OptimizedImage/optimized-image";
 import { Button } from "../Button/button";
 
 interface ImageCardProps {

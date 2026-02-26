@@ -17,7 +17,7 @@ import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { getGetInvolvedPageQuery } from "@chimborazo/sanity-config";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { Image } from "@unpic/react";
+import { Image } from "@/components/OptimizedImage/optimized-image";
 import {
   CalendarDays,
   HandHeart,

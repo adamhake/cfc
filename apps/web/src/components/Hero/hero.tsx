@@ -1,3 +1,4 @@
+import { Image } from "@/components/OptimizedImage/optimized-image";
 import { SanityImage, type SanityImageObject } from "../SanityImage/sanity-image";
 import { Button } from "../Button/button";
 
@@ -44,14 +45,16 @@ export default function HeroSoftGradientDivider({
           quality={85}
         />
       ) : (
-        <img
+        <Image
           src={imageSrc}
           alt={imageAlt}
           width={imageWidth}
           height={imageHeight}
           className="absolute inset-0 h-full w-full object-cover"
-          loading="eager"
-          fetchPriority="high"
+          layout="constrained"
+          priority
+          sizes="100vw"
+          breakpoints={[640, 1024, 1536, 2000]}
         />
       )}
 
