@@ -27,7 +27,7 @@ import type { PortableTextComponents } from "@portabletext/react";
 import { PortableText } from "@portabletext/react";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Image } from "@unpic/react";
+import { Image } from "@/components/OptimizedImage/optimized-image";
 
 // ─── Portable Text renderers for section-specific styling ───
 

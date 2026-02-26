@@ -2,7 +2,7 @@ import { Event as EventData } from "@/data/events";
 import { formatDateString } from "@/utils/time";
 import { Link } from "@tanstack/react-router";
 import { Calendar } from "lucide-react";
-import { Image } from "@unpic/react";
+import { Image } from "@/components/OptimizedImage/optimized-image";
 
 export default function EventCardCondensed({
   title,
