@@ -15,7 +15,7 @@ const config = defineConfig({
     netlify(),
     tanstackStart({
       prerender: {
-        enabled: true,
+        enabled: false,
       },
       sitemap: {
         enabled: true,
