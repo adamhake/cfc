@@ -43,6 +43,8 @@ const config = defineConfig({
       prerender: {
         enabled: true,
         crawlLinks: false,
+        retryCount: 3,
+        retryDelay: 750,
         filter: ({ path }) => path !== "/components",
         onSuccess: () => {
           clearTimeout(prerenderExitTimer);
@@ -102,6 +104,10 @@ const config = defineConfig({
         },
       },
     },
+  },
+  preview: {
+    // Force IPv4 loopback in prerender preview to avoid ::1 resolution issues in CI.
+    host: "127.0.0.1",
   },
 });
 
