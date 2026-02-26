@@ -1,3 +1,4 @@
+import { APPEARANCE_COOKIES, buildAppearanceCookie } from "@/lib/appearance-shared";
 import {
   type ResolvedTheme,
   type ThemeMode,
@@ -61,6 +62,9 @@ export function useTheme(): UseThemeReturn {
       // If user has system preference enabled, update resolved theme
       if (theme === "system") {
         applyTheme(newPreference);
+        setResolvedTheme(newPreference);
+        document.documentElement.style.colorScheme = newPreference;
+        document.cookie = buildAppearanceCookie(APPEARANCE_COOKIES.RESOLVED_THEME, newPreference);
       }
     };
 

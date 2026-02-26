@@ -16,7 +16,7 @@ export function usePalette(): UsePaletteReturn {
   const context = router.options.context;
 
   // Subscribe to palette changes for reactive updates
-  const [palette, setPaletteState] = useState<PaletteMode>(context.palette || "green");
+  const [palette, setPaletteState] = useState<PaletteMode>(context.palette || "olive");
 
   // Subscribe to palette manager updates
   useEffect(() => {

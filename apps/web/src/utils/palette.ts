@@ -4,7 +4,7 @@
  */
 
 export type PaletteMode =
-  | "green" // Default: Current cool-toned green
+  | "green" // Classic cool-toned green
   | "olive" // Warm olive + blue-grey accents
   | "green-terra" // Green + Terracotta accents
   | "green-navy"; // Green + Navy accents
@@ -117,7 +117,7 @@ export class PaletteManager {
   private listeners: Set<(palette: PaletteMode) => void> = new Set();
   private currentPalette: PaletteMode;
 
-  constructor(initialPalette: PaletteMode = "green") {
+  constructor(initialPalette: PaletteMode = "olive") {
     this.currentPalette = initialPalette;
   }
 
