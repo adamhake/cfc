@@ -1,7 +1,6 @@
 import { lazy, Suspense, useSyncExternalStore } from "react";
 
 const posthogKey = import.meta.env.VITE_POSTHOG_KEY;
-const posthogHost = import.meta.env.VITE_POSTHOG_HOST || "https://us.i.posthog.com";
 
 /**
  * Lazy-load the actual PostHog provider so posthog-js is never imported
@@ -13,7 +12,8 @@ const LazyPostHogProvider = lazy(() =>
       <PostHogProvider
         apiKey={posthogKey!}
         options={{
-          api_host: posthogHost,
+          api_host: "/ph",
+          ui_host: "https://us.posthog.com",
           person_profiles: "identified_only",
 
           // Web Analytics

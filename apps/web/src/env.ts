@@ -46,7 +46,6 @@ export const env = createEnv({
     VITE_TURNSTILE_SITE_KEY: z.string().optional(),
     // PostHog client-side analytics
     VITE_POSTHOG_KEY: z.string().optional(),
-    VITE_POSTHOG_HOST: z.string().url().optional(),
   },
 
   /**
@@ -78,7 +77,6 @@ export const env = createEnv({
     VITE_SANITY_STUDIO_URL: import.meta.env.VITE_SANITY_STUDIO_URL,
     VITE_TURNSTILE_SITE_KEY: import.meta.env.VITE_TURNSTILE_SITE_KEY,
     VITE_POSTHOG_KEY: import.meta.env.VITE_POSTHOG_KEY,
-    VITE_POSTHOG_HOST: import.meta.env.VITE_POSTHOG_HOST,
   },
 
   /**
