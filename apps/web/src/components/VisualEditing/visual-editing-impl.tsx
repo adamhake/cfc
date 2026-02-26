@@ -38,10 +38,17 @@ export default function VisualEditingImpl() {
       // Refresh preview when Studio notifies of document changes.
       // Without this, the default is location.reload() which is unreliable
       // inside the Presentation tool iframe and loses React state.
+      //
+      // We can't use queryClient.invalidateQueries() directly because that
+      // triggers client-side refetches, and the preview Sanity client requires
+      // SANITY_API_TOKEN (a server-only env var). Instead, mark queries as
+      // stale and re-run route loaders on the server via router.invalidate().
       refresh: (payload) => {
         console.log("[VisualEditing] Refresh event:", payload.source);
-        // Invalidate all queries so TanStack Query refetches with updated data
-        return queryClient.invalidateQueries();
+        // Mark cached data as stale without triggering client-side refetches
+        queryClient.invalidateQueries({ refetchType: "none" });
+        // Re-run route loaders on the server (loaders have access to server env vars)
+        return router.invalidate();
       },
     });
 
