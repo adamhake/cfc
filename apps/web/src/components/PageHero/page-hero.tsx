@@ -55,6 +55,8 @@ export default function PageHero({
     standard: "text-5xl md:text-6xl",
     large: "text-4xl md:text-5xl lg:text-6xl",
   };
+  const staticImageWidth = imageWidth ?? 1920;
+  const staticImageHeight = imageHeight ?? 1080;
 
   const classes = cn("relative flex w-full flex-col overflow-visible", {
     "min-h-[400px] sm:min-h-[480px] md:min-h-[520px]": selectedHeight == "auto",
@@ -76,17 +78,19 @@ export default function PageHero({
           maxWidth={1920}
           useHotspotPosition
         />
-      ) : (
+      ) : imageSrc ? (
         <Image
-          src={imageSrc!}
-          alt={imageAlt!}
-          width={imageWidth!}
-          height={imageHeight!}
+          src={imageSrc}
+          alt={imageAlt || ""}
+          width={staticImageWidth}
+          height={staticImageHeight}
           className="absolute inset-0 h-full w-full object-cover"
           loading={priority ? "eager" : "lazy"}
           fetchpriority={priority ? "high" : undefined}
           breakpoints={[320, 640, 1280, 1920]}
         />
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-800 via-primary-700 to-primary-600 dark:from-primary-900 dark:via-primary-800 dark:to-primary-700" />
       )}
       <div
         className="absolute inset-0 bg-gradient-to-br from-primary-900/60 via-primary-800/40 to-primary-700/20 dark:from-grey-900/70 dark:via-grey-900/50 dark:to-grey-800/30"
