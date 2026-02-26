@@ -2,6 +2,7 @@ import { SanityImage, type SanityImageObject } from "@/components/SanityImage";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { getResponsiveColumnClasses } from "./image-gallery-utils";
 
 export interface GalleryImage {
   src: string;
@@ -64,34 +65,6 @@ function getImageKey(image: GalleryImage | SanityGalleryImage, index: number): s
   return `legacy-${index}-${image.src}`;
 }
 
-/**
- * Hook to determine column count based on current viewport width.
- * Uses the columns config prop to return the appropriate column count.
- */
-function useResponsiveColumns(columns: ImageGalleryProps["columns"] = {}) {
-  const [columnCount, setColumnCount] = useState(columns.default || 1);
-
-  useEffect(() => {
-    const getColumns = () => {
-      const width = window.innerWidth;
-      if (width >= 1024 && columns.lg) return columns.lg;
-      if (width >= 768 && columns.md) return columns.md;
-      if (width >= 640 && columns.sm) return columns.sm;
-      return columns.default || 1;
-    };
-
-    const handleResize = () => {
-      setColumnCount(getColumns());
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [columns.default, columns.sm, columns.md, columns.lg]);
-
-  return columnCount;
-}
-
 export default function ImageGallery({
   images,
   variant = "grid",
@@ -107,7 +80,8 @@ export default function ImageGallery({
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const prefersReducedMotion = useReducedMotion();
-  const columnCount = useResponsiveColumns(columns);
+
+  const { gridClassNames, masonryClassNames } = getResponsiveColumnClasses(columns);
 
   const gapClass = gap === "sm" ? "gap-2" : gap === "md" ? "gap-4" : "gap-6";
   const gapSize = gap === "sm" ? "0.5rem" : gap === "md" ? "1rem" : "1.5rem";
@@ -508,12 +482,7 @@ export default function ImageGallery({
     // CSS Grid layout
     return (
       <>
-        <div
-          className={`grid ${gapClass}`}
-          style={{
-            gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`,
-          }}
-        >
+        <div className={`grid ${gridClassNames} ${gapClass}`}>
           {images.map((image, index) => {
             const props = getImageProps(image);
             return (
@@ -537,12 +506,7 @@ export default function ImageGallery({
   // "staggered" falls back to the same masonry layout
   return (
     <>
-      <div
-        style={{
-          columns: columnCount,
-          columnGap: gapSize,
-        }}
-      >
+      <div className={masonryClassNames} style={{ columnGap: gapSize }}>
         {images.map((image, index) => {
           const props = getImageProps(image);
           return (

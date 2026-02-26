@@ -40,14 +40,13 @@ const fetchPreviewQuery = createServerFn({ method: "POST" })
     return await sanityPreviewClient().fetch(data.query, data.params);
   });
 
-// Production client (uses CDN, excludes drafts via query filters)
-// Using "raw" perspective with draft filters in queries to show all non-draft content
+// Production client (uses CDN, published perspective excludes drafts automatically)
 export const sanityClient = createSanityClient({
   projectId: env.VITE_SANITY_PROJECT_ID,
   dataset: env.VITE_SANITY_DATASET,
   apiVersion: env.VITE_SANITY_API_VERSION,
   useCdn: true,
-  perspective: "raw",
+  perspective: "published",
 });
 
 // Preview client (no CDN, includes drafts, stega enabled) - for draft/preview mode

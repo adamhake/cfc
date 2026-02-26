@@ -60,28 +60,28 @@ export const updateFieldsExtended = `
 
 // Get all published updates
 export const allUpdatesQuery = `
-  *[_type == "update" && !(_id in path("drafts.**"))] | order(publishedAt desc) {
+  *[_type == "update"] | order(publishedAt desc) {
     ${updateFields}
   }
 `
 
 // Get featured updates (for homepage)
 export const featuredUpdatesQuery = `
-  *[_type == "update" && !(_id in path("drafts.**"))] | order(featured desc, publishedAt desc) [0...3] {
+  *[_type == "update"] | order(featured desc, publishedAt desc) [0...3] {
     ${updateFields}
   }
 `
 
 // Get updates by category slug
 export const updatesByCategoryQuery = `
-  *[_type == "update" && !(_id in path("drafts.**")) && category->slug.current == $categorySlug] | order(publishedAt desc) {
+  *[_type == "update" && category->slug.current == $categorySlug] | order(publishedAt desc) {
     ${updateFields}
   }
 `
 
 // Get update by slug (for detail page)
 export const updateBySlugQuery = `
-  *[_type == "update" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
+  *[_type == "update" && slug.current == $slug][0] {
     ${updateFieldsExtended},
     body[]{
       ...,
@@ -103,28 +103,28 @@ export const updateBySlugQuery = `
 
 // Get update slugs for static paths
 export const updateSlugsQuery = `
-  *[_type == "update" && !(_id in path("drafts.**"))] {
+  *[_type == "update"] {
     "slug": slug.current
   }
 `
 
 // Get updates that reference a specific event
 export const updatesByEventQuery = `
-  *[_type == "update" && !(_id in path("drafts.**")) && references($eventId)] | order(publishedAt desc) {
+  *[_type == "update" && references($eventId)] | order(publishedAt desc) {
     ${updateFields}
   }
 `
 
 // Get updates that reference a specific project
 export const updatesByProjectQuery = `
-  *[_type == "update" && !(_id in path("drafts.**")) && references($projectId)] | order(publishedAt desc) {
+  *[_type == "update" && references($projectId)] | order(publishedAt desc) {
     ${updateFields}
   }
 `
 
 // Get all update categories
 export const updateCategoriesQuery = `
-  *[_type == "updateCategory" && !(_id in path("drafts.**"))] | order(title asc) {
+  *[_type == "updateCategory"] | order(title asc) {
     _id,
     title,
     slug,
@@ -135,12 +135,12 @@ export const updateCategoriesQuery = `
 // Get previous and next updates for navigation
 export const updateNavigationQuery = `
   {
-    "previous": *[_type == "update" && !(_id in path("drafts.**")) && publishedAt < $publishedAt] | order(publishedAt desc) [0] {
+    "previous": *[_type == "update" && publishedAt < $publishedAt] | order(publishedAt desc) [0] {
       _id,
       title,
       slug
     },
-    "next": *[_type == "update" && !(_id in path("drafts.**")) && publishedAt > $publishedAt] | order(publishedAt asc) [0] {
+    "next": *[_type == "update" && publishedAt > $publishedAt] | order(publishedAt asc) [0] {
       _id,
       title,
       slug
@@ -150,7 +150,7 @@ export const updateNavigationQuery = `
 
 // Updates page singleton
 export const updatesPageQuery = `
-  *[_type == "updatesPage" && !(_id in path("drafts.**"))][0] {
+  *[_type == "updatesPage"][0] {
     pageHero{
       title,
       description,

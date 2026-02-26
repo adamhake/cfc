@@ -16,7 +16,7 @@ export const mediaImageFields = `
 
 // Get all media images
 export const allMediaImagesQuery = `
-  *[_type == "mediaImage" && defined(imageV2.asset) && !(_id in path("drafts.**")) && hideFromMediaPage != true] | order(uploadedAt desc) {
+  *[_type == "mediaImage" && defined(imageV2.asset) && hideFromMediaPage != true] | order(uploadedAt desc) {
     ${mediaImageFields}
   }
 `
@@ -26,7 +26,6 @@ export const mediaImagesByCategoryQuery = `
   *[
     _type == "mediaImage" &&
     defined(imageV2.asset) &&
-    !(_id in path("drafts.**")) &&
     hideFromMediaPage != true &&
     imageV2.category == $category
   ] | order(uploadedAt desc) {
@@ -36,14 +35,14 @@ export const mediaImagesByCategoryQuery = `
 
 // Get featured media images
 export const featuredMediaImagesQuery = `
-  *[_type == "mediaImage" && defined(imageV2.asset) && !(_id in path("drafts.**")) && hideFromMediaPage != true && featured == true] | order(uploadedAt desc) {
+  *[_type == "mediaImage" && defined(imageV2.asset) && hideFromMediaPage != true && featured == true] | order(uploadedAt desc) {
     ${mediaImageFields}
   }
 `
 
 // Get media image by ID
 export const mediaImageByIdQuery = `
-  *[_type == "mediaImage" && defined(imageV2.asset) && _id == $id && !(_id in path("drafts.**"))][0] {
+  *[_type == "mediaImage" && defined(imageV2.asset) && _id == $id][0] {
     ${mediaImageFields}
   }
 `
@@ -51,12 +50,12 @@ export const mediaImageByIdQuery = `
 // Paginated media images query
 // Uses slice-based pagination with limit and offset
 export const paginatedMediaImagesQuery = `
-  *[_type == "mediaImage" && defined(imageV2.asset) && !(_id in path("drafts.**")) && hideFromMediaPage != true] | order(uploadedAt desc) [$start...$end] {
+  *[_type == "mediaImage" && defined(imageV2.asset) && hideFromMediaPage != true] | order(uploadedAt desc) [$start...$end] {
     ${mediaImageFields}
   }
 `
 
 // Get total count of media images
 export const mediaImagesCountQuery = `
-  count(*[_type == "mediaImage" && defined(imageV2.asset) && !(_id in path("drafts.**")) && hideFromMediaPage != true])
+  count(*[_type == "mediaImage" && defined(imageV2.asset) && hideFromMediaPage != true])
 `
