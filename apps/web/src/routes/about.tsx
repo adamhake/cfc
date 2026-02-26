@@ -155,7 +155,7 @@ function AboutPage() {
 function Highlights({ items }: { items: SanityHighlight[] }) {
   return (
     <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4">
-      {items.map((item, i) => {
+      {items.map((item) => {
         return (
           <div
             key={item._key}

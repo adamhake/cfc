@@ -50,11 +50,21 @@ export const Route = createFileRoute("/projects/$slug")({
     // Check if we're in preview mode for Visual Editing
     const preview = await getIsPreviewMode();
 
-    // Use TanStack Query for caching
+    // Prefetch query data; extract only primitives for head()/headers()
+    // to avoid PortableTextBlock type incompatibility with router inference
     const project = await context.queryClient.ensureQueryData(
       projectBySlugQueryOptions(params.slug, preview),
     );
-    return { project, preview };
+    return {
+      preview,
+      projectTitle: project.title,
+      projectDescription: project.description,
+      projectSlug: project.slug.current,
+      projectImageUrl: project.heroImage?.asset?.url,
+      projectImageWidth: project.heroImage?.asset?.metadata?.dimensions?.width,
+      projectImageHeight: project.heroImage?.asset?.metadata?.dimensions?.height,
+      projectImageAlt: project.heroImage?.alt,
+    };
   },
   headers: ({ loaderData }) => {
     return generateCacheHeaders({
@@ -64,7 +74,7 @@ export const Route = createFileRoute("/projects/$slug")({
     });
   },
   head: ({ loaderData }) => {
-    if (!loaderData?.project) {
+    if (!loaderData?.projectTitle) {
       return {
         meta: generateMetaTags({
           title: "Project Not Found",
@@ -73,22 +83,20 @@ export const Route = createFileRoute("/projects/$slug")({
       };
     }
 
-    const { project } = loaderData;
-    const projectUrl = `${SITE_CONFIG.url}/projects/${project.slug.current}`;
-    const imageUrl = project.heroImage?.asset?.url;
+    const projectUrl = `${SITE_CONFIG.url}/projects/${loaderData.projectSlug}`;
 
     return {
       meta: generateMetaTags({
-        title: project.title,
-        description: project.description,
+        title: loaderData.projectTitle,
+        description: loaderData.projectDescription,
         type: "article",
         url: projectUrl,
-        image: imageUrl
+        image: loaderData.projectImageUrl
           ? {
-              url: imageUrl,
-              width: project.heroImage?.asset?.metadata?.dimensions?.width || 1200,
-              height: project.heroImage?.asset?.metadata?.dimensions?.height || 630,
-              alt: project.heroImage?.alt || project.title,
+              url: loaderData.projectImageUrl,
+              width: loaderData.projectImageWidth || 1200,
+              height: loaderData.projectImageHeight || 630,
+              alt: loaderData.projectImageAlt || loaderData.projectTitle,
             }
           : undefined,
       }),
