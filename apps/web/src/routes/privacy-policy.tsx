@@ -1,10 +1,16 @@
 import Container from "@/components/Container/container";
 import PageHero from "@/components/PageHero/page-hero";
+import { generateCacheHeaders } from "@/lib/cache-headers";
 import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/privacy-policy")({
   component: PrivacyPolicy,
+  headers: () => {
+    return generateCacheHeaders({
+      preset: "STATIC_CONTENT",
+    });
+  },
   head: () => ({
     meta: generateMetaTags({
       title: "Privacy Policy",

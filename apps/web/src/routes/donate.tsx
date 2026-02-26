@@ -1,7 +1,9 @@
 import Container from "@/components/Container/container";
 import { FAQSection } from "@/components/FAQSection/faq-section";
 import PageHero from "@/components/PageHero/page-hero";
+import { CACHE_TAGS, generateCacheHeaders } from "@/lib/cache-headers";
 import { getIsPreviewMode } from "@/lib/preview";
+import { CACHE_PRESETS } from "@/lib/query-config";
 import { queryKeys } from "@/lib/query-keys";
 import { getSanityClient } from "@/lib/sanity";
 import type { SanityDonatePage } from "@/lib/sanity-types";
@@ -51,8 +53,7 @@ const donatePageQueryOptions = (preview = false) =>
         return null;
       }
     },
-    staleTime: 30 * 60 * 1000,
-    gcTime: 60 * 60 * 1000,
+    ...CACHE_PRESETS.CURATED_CONTENT,
   });
 
 export const Route = createFileRoute("/donate")({
@@ -65,6 +66,13 @@ export const Route = createFileRoute("/donate")({
     await context.queryClient.ensureQueryData(donatePageQueryOptions(preview));
 
     return { preview };
+  },
+  headers: ({ loaderData }) => {
+    return generateCacheHeaders({
+      preset: "CURATED_CONTENT",
+      tags: [CACHE_TAGS.DONATE],
+      isPreview: loaderData?.preview ?? false,
+    });
   },
   head: () => ({
     meta: generateMetaTags({

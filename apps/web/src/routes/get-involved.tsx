@@ -7,7 +7,9 @@ import PageHero from "@/components/PageHero/page-hero";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import SupportOption from "@/components/SupportOption/support-option";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { CACHE_TAGS, generateCacheHeaders } from "@/lib/cache-headers";
 import { getIsPreviewMode } from "@/lib/preview";
+import { CACHE_PRESETS } from "@/lib/query-config";
 import { queryKeys } from "@/lib/query-keys";
 import { getSanityClient } from "@/lib/sanity";
 import type { SanityGetInvolvedPage } from "@/lib/sanity-types";
@@ -41,8 +43,7 @@ const getInvolvedPageQueryOptions = (preview = false) =>
         return null;
       }
     },
-    staleTime: 30 * 60 * 1000, // 30 minutes
-    gcTime: 60 * 60 * 1000, // 1 hour
+    ...CACHE_PRESETS.CURATED_CONTENT,
   });
 
 export const Route = createFileRoute("/get-involved")({
@@ -54,6 +55,13 @@ export const Route = createFileRoute("/get-involved")({
     // Prefetch get-involved page content on the server
     await context.queryClient.ensureQueryData(getInvolvedPageQueryOptions(preview));
     return { preview };
+  },
+  headers: ({ loaderData }) => {
+    return generateCacheHeaders({
+      preset: "CURATED_CONTENT",
+      tags: [CACHE_TAGS.GET_INVOLVED],
+      isPreview: loaderData?.preview ?? false,
+    });
   },
   head: () => ({
     meta: generateMetaTags({
