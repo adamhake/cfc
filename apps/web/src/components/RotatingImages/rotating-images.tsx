@@ -23,12 +23,12 @@ export interface RotatingImagesProps {
   imageClassName?: string;
   /**
    * Sizes attribute for responsive images
-   * @default "(max-width: 768px) 100vw, 50vw"
+   * @default "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 576px"
    */
   sizes?: string;
   /**
    * Image quality (1-100)
-   * @default 80
+   * @default 72
    */
   quality?: number;
   /**
@@ -102,8 +102,8 @@ export default function RotatingImages({
   interval = 5000,
   className = "",
   imageClassName = "",
-  sizes = "(max-width: 768px) 100vw, 50vw",
-  quality = 80,
+  sizes = "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 576px",
+  quality = 72,
   maxWidth,
   transitionDuration = 0.8,
   showCaptions = false,

@@ -5,6 +5,8 @@ import { Calendar, MapPin, Target } from "lucide-react";
 import Chip from "../Chip/chip";
 import { SanityImage } from "../SanityImage/sanity-image";
 
+const PROJECT_IMAGE_SIZES = "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 576px";
+
 export interface ProjectProps {
   project: SanityProject;
 }
@@ -34,8 +36,10 @@ export default function Project({ project }: ProjectProps) {
         image={heroImage}
         alt={heroImage.alt}
         className="absolute inset-0 h-full w-full object-cover transition-opacity group-hover:opacity-0"
-        sizes="(max-width: 768px) 100vw, 50vw"
-        priority={false}
+        sizes={PROJECT_IMAGE_SIZES}
+        maxWidth={1024}
+        breakpoints={[320, 480, 576, 640, 768, 896, 1024]}
+        quality={70}
       />
       <div className="absolute top-0 left-0 h-full w-full bg-primary-900/55 dark:bg-grey-900/60"></div>
       <div className="relative z-10 space-y-6 p-8 md:space-y-8">

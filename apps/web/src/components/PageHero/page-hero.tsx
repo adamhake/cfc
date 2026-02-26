@@ -73,9 +73,11 @@ export default function PageHero({
           image={sanityImage}
           alt={imageAlt || sanityImage.alt || ""}
           className="absolute inset-0 h-full w-full object-cover"
-          sizes="100vw"
+          sizes="(max-width: 1600px) 100vw, 1600px"
           priority={priority}
-          maxWidth={1920}
+          maxWidth={1600}
+          breakpoints={[640, 768, 960, 1200, 1440, 1600]}
+          quality={70}
           useHotspotPosition
         />
       ) : imageSrc ? (

@@ -2,7 +2,7 @@ import { urlForImage } from "@/lib/sanity";
 import type { SanityImage as SanityImageType } from "@/lib/sanity-types";
 import type { SanityImageSource } from "@sanity/image-url";
 import type { CSSProperties } from "react";
-import { getResponsiveWidths } from "./sanity-image-utils";
+import { DEFAULT_BREAKPOINTS, getResponsiveWidths } from "./sanity-image-utils";
 
 // Re-export types for external use
 // These are derived from the centralized SanityImage type in sanity-types.ts
@@ -41,12 +41,12 @@ export interface SanityImageProps {
   priority?: boolean;
   /**
    * Image width breakpoints for srcset generation
-   * @default [640, 1024, 1536, 1920]
+   * @default [320, 480, 640, 768, 896, 1024, 1280, 1536]
    */
   breakpoints?: number[];
   /**
    * Image quality (1-100)
-   * @default 80
+   * @default 72
    */
   quality?: number;
   /**
@@ -84,8 +84,7 @@ export interface SanityImageProps {
   useHotspotPosition?: boolean;
 }
 
-const DEFAULT_BREAKPOINTS = [640, 1024, 1536];
-const DEFAULT_QUALITY = 80;
+const DEFAULT_QUALITY = 72;
 
 /**
  * Optimized image component for Sanity CMS images
