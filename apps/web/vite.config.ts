@@ -2,6 +2,7 @@ import netlify from "@netlify/vite-plugin-tanstack-start";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
+import { shouldPrerenderPath } from "./src/lib/prerender-filter";
 import type { Plugin } from "vite";
 import { defineConfig } from "vite";
 import viteTsConfigPaths from "vite-tsconfig-paths";
@@ -45,7 +46,8 @@ const config = defineConfig({
         crawlLinks: false,
         retryCount: 3,
         retryDelay: 750,
-        filter: ({ path }) => path !== "/components",
+        // Unified strategy: no page prerendering so route headers always apply.
+        filter: ({ path }) => shouldPrerenderPath(path),
         onSuccess: () => {
           clearTimeout(prerenderExitTimer);
           prerenderExitTimer = setTimeout(() => process.exit(0), 5000);

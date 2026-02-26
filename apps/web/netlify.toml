@@ -15,8 +15,6 @@
   [headers.values]
     Content-Security-Policy = "frame-ancestors 'self' https://chimborazo-park-conservancy.sanity.studio https://studio.chimborazoparkconservancy.org https://*.sanity.build"
 
-# Homepage cache headers are generated into public/_headers from CACHE_PRESETS.
-
 # PostHog reverse proxy — static assets rule must come before the catch-all
 # Cache headers for /ph/static/* are set by the ph-cache edge function.
 [[redirects]]

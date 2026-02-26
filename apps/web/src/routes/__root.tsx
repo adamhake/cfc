@@ -4,6 +4,8 @@ import Header from "@/components/Header/header";
 import { NotFound } from "@/components/NotFound/not-found";
 import { DisablePreview, VisualEditing } from "@/components/VisualEditing";
 import { PostHogProvider } from "@/integrations/posthog/provider";
+import { getInitialAppearance } from "@/lib/appearance-server";
+import { getAppearanceBootstrapScript } from "@/lib/appearance-shared";
 import { getIsPreviewMode } from "@/lib/preview";
 import type { PaletteMode } from "@/utils/palette";
 import { JsonLd } from "@/components/JsonLd/json-ld";
@@ -29,9 +31,9 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: RootComponent,
   notFoundComponent: NotFound,
   loader: async () => {
-    // Detect preview mode for Visual Editing
-    const preview = await getIsPreviewMode();
-    return { preview };
+    // Detect preview mode for Visual Editing and fetch first-paint appearance
+    const [preview, appearance] = await Promise.all([getIsPreviewMode(), getInitialAppearance()]);
+    return { preview, appearance };
   },
   head: () => ({
     meta: [
@@ -121,36 +123,22 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const { preview } = Route.useLoaderData();
+  const { preview, appearance } = Route.useLoaderData();
   const structuredData = generateOrganizationStructuredData();
+  const appearanceBootstrapScript = getAppearanceBootstrapScript(appearance);
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      className={appearance.resolvedTheme === "dark" ? "dark" : undefined}
+      data-palette={appearance.palette === "olive" ? undefined : appearance.palette}
+      style={{ colorScheme: appearance.resolvedTheme }}
+      suppressHydrationWarning
+    >
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  // Apply theme
-                  const stored = localStorage.getItem('theme');
-                  const preference = stored || 'system';
-                  const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                  const shouldBeDark = preference === 'dark' || (preference === 'system' && systemDark);
-                  if (shouldBeDark) {
-                    document.documentElement.classList.add('dark');
-                  }
-
-                  // Apply palette (default is now 'olive')
-                  const palette = localStorage.getItem('palette-preference');
-                  if (palette && palette !== 'olive') {
-                    document.documentElement.setAttribute('data-palette', palette);
-                  }
-                } catch (e) {
-                  // Ignore localStorage errors
-                }
-              })();
-            `,
+            __html: appearanceBootstrapScript,
           }}
         />
         <HeadContent />
