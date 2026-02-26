@@ -54,6 +54,15 @@ export const CACHE_PRESETS = {
   },
 
   /**
+   * Static/rarely-changing pages (privacy policy, legal, etc.)
+   * No Sanity data or very infrequently updated content
+   */
+  STATIC_CONTENT: {
+    staleTime: 60 * MINUTE, // 1 hour
+    gcTime: 120 * MINUTE, // 2 hours
+  },
+
+  /**
    * Real-time or frequently changing data
    * Use sparingly - most content benefits from caching
    */

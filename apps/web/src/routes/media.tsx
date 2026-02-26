@@ -4,6 +4,7 @@ import ImageGallery, { type SanityGalleryImage } from "@/components/ImageGallery
 import PageHero from "@/components/PageHero/page-hero";
 import { CACHE_TAGS, generateCacheHeaders } from "@/lib/cache-headers";
 import { getIsPreviewMode } from "@/lib/preview";
+import { CACHE_PRESETS } from "@/lib/query-config";
 import { queryKeys } from "@/lib/query-keys";
 import { getSanityClient } from "@/lib/sanity";
 import type { SanityMediaImage, SanityMediaPage } from "@/lib/sanity-types";
@@ -30,8 +31,7 @@ const mediaPageQueryOptions = (preview = false) =>
         return null;
       }
     },
-    staleTime: 30 * 60 * 1000,
-    gcTime: 60 * 60 * 1000,
+    ...CACHE_PRESETS.CURATED_CONTENT,
   });
 
 interface MediaPageData {

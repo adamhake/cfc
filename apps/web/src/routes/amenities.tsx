@@ -4,7 +4,9 @@ import GetInvolved from "@/components/GetInvolved/get-involved";
 import PageHero from "@/components/PageHero/page-hero";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import SupportOption from "@/components/SupportOption/support-option";
+import { CACHE_TAGS, generateCacheHeaders } from "@/lib/cache-headers";
 import { getIsPreviewMode } from "@/lib/preview";
+import { CACHE_PRESETS } from "@/lib/query-config";
 import { queryKeys } from "@/lib/query-keys";
 import { getSanityClient } from "@/lib/sanity";
 import type { SanityAmenitiesPage } from "@/lib/sanity-types";
@@ -64,8 +66,7 @@ const amenitiesPageQueryOptions = (preview = false) =>
         return null;
       }
     },
-    staleTime: 30 * 60 * 1000,
-    gcTime: 60 * 60 * 1000,
+    ...CACHE_PRESETS.CURATED_CONTENT,
   });
 
 export const Route = createFileRoute("/amenities")({
@@ -78,6 +79,13 @@ export const Route = createFileRoute("/amenities")({
     await context.queryClient.ensureQueryData(amenitiesPageQueryOptions(preview));
 
     return { preview };
+  },
+  headers: ({ loaderData }) => {
+    return generateCacheHeaders({
+      preset: "CURATED_CONTENT",
+      tags: [CACHE_TAGS.AMENITIES],
+      isPreview: loaderData?.preview ?? false,
+    });
   },
   head: () => ({
     meta: generateMetaTags({
