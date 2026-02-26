@@ -144,7 +144,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
         <JsonLd data={structuredData} />
       </head>
-      <body className="bg-grey-50 dark:bg-primary-900" suppressHydrationWarning>
+      <body className="min-h-screen bg-grey-50 dark:bg-primary-900" suppressHydrationWarning>
         <PostHogProvider>
           <a
             href="#main-content"
@@ -152,11 +152,15 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           >
             Skip to main content
           </a>
-          <ErrorBoundary>
-            <Header preview={preview} />
-            <main id="main-content">{children}</main>
-            <Footer preview={preview} />
-          </ErrorBoundary>
+          <div className="flex min-h-screen flex-col">
+            <ErrorBoundary>
+              <Header preview={preview} />
+              <main id="main-content" className="flex-1">
+                {children}
+              </main>
+              <Footer preview={preview} />
+            </ErrorBoundary>
+          </div>
         </PostHogProvider>
         <Scripts />
       </body>
