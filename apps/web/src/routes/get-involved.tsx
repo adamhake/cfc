@@ -3,6 +3,7 @@ import Container from "@/components/Container/container";
 import { FacebookIcon } from "@/components/FacebookIcon/facebook-icon";
 import { InstagramIcon } from "@/components/InstagramIcon/instagram-icon";
 import { NewsletterForm } from "@/components/NewsletterForm";
+import { Image } from "@/components/OptimizedImage/optimized-image";
 import PageHero from "@/components/PageHero/page-hero";
 import SectionHeader from "@/components/SectionHeader/section-header";
 import SupportOption from "@/components/SupportOption/support-option";
@@ -17,7 +18,6 @@ import { generateLinkTags, generateMetaTags, SITE_CONFIG } from "@/utils/seo";
 import { getGetInvolvedPageQuery } from "@chimborazo/sanity-config";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { Image } from "@/components/OptimizedImage/optimized-image";
 import {
   CalendarDays,
   HandHeart,
@@ -37,7 +37,9 @@ const getInvolvedPageQueryOptions = (preview = false) =>
     queryKey: [...queryKeys.getInvolvedPage(), { preview }],
     queryFn: async (): Promise<SanityGetInvolvedPage | null> => {
       try {
-        return (await getSanityClient(preview).fetch(getGetInvolvedPageQuery)) as SanityGetInvolvedPage | null;
+        return (await getSanityClient(preview).fetch(
+          getGetInvolvedPageQuery,
+        )) as SanityGetInvolvedPage | null;
       } catch (error) {
         console.warn("Failed to fetch get-involved page from Sanity:", error);
         return null;
@@ -220,10 +222,22 @@ function GetInvolvedPage() {
                         announcements.
                       </p>
                       <div className="flex flex-col gap-4 pt-2 md:flex-row md:gap-6">
-                        <Button as="a" variant="accent" size="small" href="/events" trackingLocation="get-involved-volunteer">
+                        <Button
+                          as="a"
+                          variant="accent"
+                          size="small"
+                          href="/events"
+                          trackingLocation="get-involved-volunteer"
+                        >
                           View Upcoming Events
                         </Button>
-                        <Button as="a" variant="outline" size="small" hash="stay-connected" trackingLocation="get-involved-volunteer">
+                        <Button
+                          as="a"
+                          variant="outline"
+                          size="small"
+                          hash="stay-connected"
+                          trackingLocation="get-involved-volunteer"
+                        >
                           Sign Up for Updates
                         </Button>
                       </div>
@@ -269,7 +283,13 @@ function GetInvolvedPage() {
                         bring our neighborhood together.
                       </p>
                       <div className="pt-2">
-                        <Button as="a" variant="accent" size="small" href="/donate" trackingLocation="get-involved-donate">
+                        <Button
+                          as="a"
+                          variant="accent"
+                          size="small"
+                          href="/donate"
+                          trackingLocation="get-involved-donate"
+                        >
                           Make a Donation
                         </Button>
                       </div>
@@ -347,10 +367,10 @@ function GetInvolvedPage() {
                       <p className="font-body text-sm text-grey-700 dark:text-grey-300">
                         Contact us at{" "}
                         <a
-                          href="mailto:info@chimborazopark.org"
+                          href="mailto:info@chimborazoparkconservancy.org"
                           className="font-semibold text-accent-700 underline decoration-accent-300 decoration-2 underline-offset-2 transition-colors hover:text-accent-800 hover:decoration-accent-500 dark:text-accent-400 dark:decoration-accent-600 dark:hover:text-accent-300"
                         >
-                          info@chimborazopark.org
+                          info@chimborazoparkconservancy.org
                         </a>{" "}
                         to learn more about adoption opportunities and pricing.
                       </p>
@@ -460,10 +480,10 @@ function GetInvolvedPage() {
               <p className="font-body text-grey-800 dark:text-grey-200">
                 Email us at{" "}
                 <a
-                  href="mailto:info@chimborazopark.org"
+                  href="mailto:info@chimborazoparkconservancy.org"
                   className="font-semibold text-accent-700 underline decoration-accent-300 decoration-2 underline-offset-2 transition-colors hover:text-accent-800 hover:decoration-accent-500 dark:text-accent-400 dark:decoration-accent-600 dark:hover:text-accent-300"
                 >
-                  info@chimborazopark.org
+                  info@chimborazoparkconservancy.org
                 </a>
               </p>
             </div>
