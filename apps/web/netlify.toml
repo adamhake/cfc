@@ -14,3 +14,24 @@
   for = "/*"
   [headers.values]
     Content-Security-Policy = "frame-ancestors 'self' https://chimborazo-park-conservancy.sanity.studio https://studio.chimborazoparkconservancy.org https://*.sanity.build"
+
+# Cache PostHog static assets (JS SDK files) for 1 year
+[[headers]]
+  for = "/ph/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# PostHog reverse proxy — static assets rule must come before the catch-all
+[[redirects]]
+  from = "/ph/static/*"
+  to = "https://us-assets.i.posthog.com/static/:splat"
+  host = "us-assets.i.posthog.com"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/ph/*"
+  to = "https://us.i.posthog.com/:splat"
+  host = "us.i.posthog.com"
+  status = 200
+  force = true
