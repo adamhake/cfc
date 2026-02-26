@@ -12,6 +12,8 @@ interface SocialLinksProps {
   iconClassName?: string;
   /** className applied to each anchor element */
   linkClassName?: string;
+  /** Whether to fetch draft content in Sanity preview mode */
+  preview?: boolean;
 }
 
 /**
@@ -34,8 +36,9 @@ export function SocialLinks({
   className = "flex gap-3",
   iconClassName = "h-6 w-6",
   linkClassName,
+  preview = false,
 }: SocialLinksProps) {
-  const { data: siteSettings } = useSiteSettings();
+  const { data: siteSettings } = useSiteSettings(preview);
 
   const links = [
     {

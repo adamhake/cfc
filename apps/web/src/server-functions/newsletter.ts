@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { Resend } from "resend";
 import { env } from "@/env";
+import { verifyTurnstileToken } from "@/server-functions/turnstile";
 import { subscribeRequestSchema, type SubscribeResponse } from "@/types/newsletter";
 
 /**
@@ -14,11 +15,6 @@ import { subscribeRequestSchema, type SubscribeResponse } from "@/types/newslett
  * - Optional admin email notification
  * - Simple rate limiting
  */
-
-interface TurnstileResponse {
-  success: boolean;
-  "error-codes"?: string[];
-}
 
 /**
  * Simple in-memory rate limiter
@@ -82,22 +78,15 @@ export const subscribeToNewsletter = createServerFn({ method: "POST" })
     if (isDevBypassToken) {
       console.info("[Newsletter] Using dev bypass token, skipping Turnstile verification");
     } else if (turnstileSecret) {
-      const turnstileResponse = await fetch(
-        "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams({
-            secret: turnstileSecret,
-            response: data.turnstileToken,
-          }),
-        },
-      );
-
-      const turnstileResult = (await turnstileResponse.json()) as TurnstileResponse;
+      const turnstileResult = await verifyTurnstileToken({
+        token: data.turnstileToken,
+        secret: turnstileSecret,
+        clientIp,
+        expectedHostname: env.TURNSTILE_EXPECTED_HOSTNAME,
+      });
 
       if (!turnstileResult.success) {
-        console.warn("[Newsletter] Turnstile verification failed:", turnstileResult["error-codes"]);
+        console.warn("[Newsletter] Turnstile verification failed:", turnstileResult.errorCodes);
         throw new Error("Security verification failed. Please try again.");
       }
     } else {

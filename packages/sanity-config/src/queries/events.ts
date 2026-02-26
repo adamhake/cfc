@@ -32,42 +32,42 @@ export const eventFields = `
 
 // Get all published events
 export const allEventsQuery = `
-  *[_type == "event" && !(_id in path("drafts.**"))] | order(date desc) {
+  *[_type == "event"] | order(date desc) {
     ${eventFields}
   }
 `
 
 // Get upcoming events
 export const upcomingEventsQuery = `
-  *[_type == "event" && !(_id in path("drafts.**")) && date >= now()] | order(date asc) {
+  *[_type == "event" && date >= now()] | order(date asc) {
     ${eventFields}
   }
 `
 
 // Get past events
 export const pastEventsQuery = `
-  *[_type == "event" && !(_id in path("drafts.**")) && date < now()] | order(date desc) {
+  *[_type == "event" && date < now()] | order(date desc) {
     ${eventFields}
   }
 `
 
 // Get featured events
 export const featuredEventsQuery = `
-  *[_type == "event" && !(_id in path("drafts.**")) && featured == true] | order(date desc) [0...3] {
+  *[_type == "event" && featured == true] | order(date desc) [0...3] {
     ${eventFields}
   }
 `
 
 // Get recent events (3 most recent by date)
 export const recentEventsQuery = `
-  *[_type == "event" && !(_id in path("drafts.**"))] | order(date desc) [0...3] {
+  *[_type == "event"] | order(date desc) [0...3] {
     ${eventFields}
   }
 `
 
 // Get event by slug
 export const eventBySlugQuery = `
-  *[_type == "event" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
+  *[_type == "event" && slug.current == $slug][0] {
     ${eventFields},
     body[]{
       ...,
@@ -114,7 +114,7 @@ export const eventBySlugQuery = `
 
 // Get event slugs for static paths
 export const eventSlugsQuery = `
-  *[_type == "event" && !(_id in path("drafts.**"))] {
+  *[_type == "event"] {
     "slug": slug.current
   }
 `

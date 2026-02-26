@@ -2,6 +2,7 @@ import { urlForImage } from "@/lib/sanity";
 import type { SanityImage as SanityImageType } from "@/lib/sanity-types";
 import type { SanityImageSource } from "@sanity/image-url";
 import type { CSSProperties } from "react";
+import { getResponsiveWidths } from "./sanity-image-utils";
 
 // Re-export types for external use
 // These are derived from the centralized SanityImage type in sanity-types.ts
@@ -132,9 +133,10 @@ export function SanityImage({
   const lqip = metadata?.lqip;
   const dimensions = metadata?.dimensions;
   const hotspot = imageObject?.hotspot;
+  const responsiveWidths = getResponsiveWidths(breakpoints, maxWidth);
 
   // Generate srcset with multiple widths
-  const srcset = breakpoints
+  const srcset = responsiveWidths
     .map((width) => {
       const url = urlForImage(image).width(width).fit(fit).quality(quality).auto("format").url();
       return `${url} ${width}w`;
@@ -142,7 +144,10 @@ export function SanityImage({
     .join(", ");
 
   // Generate the default src (use largest breakpoint or maxWidth)
-  const defaultWidth = maxWidth || breakpoints[breakpoints.length - 1];
+  const defaultWidth =
+    typeof maxWidth === "number" && maxWidth > 0
+      ? Math.round(maxWidth)
+      : responsiveWidths[responsiveWidths.length - 1];
   let srcBuilder = urlForImage(image).width(defaultWidth).fit(fit).quality(quality).auto("format");
 
   // Apply maxHeight if provided

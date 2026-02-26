@@ -2,7 +2,7 @@ import { defineQuery } from "groq"
 import { imageFieldProjection } from "./imageProjections"
 
 export const getAmenitiesPageQuery = defineQuery(`
-  *[_type == "amenitiesPage" && !(_id in path("drafts.**"))][0]{
+  *[_type == "amenitiesPage"][0]{
     pageHero{
       title,
       description,
@@ -28,7 +28,7 @@ export const getAmenitiesPageQuery = defineQuery(`
 `)
 
 export const getAmenitiesBySectionQuery = defineQuery(`
-  *[_type == "amenitiesPage" && !(_id in path("drafts.**"))][0]{
+  *[_type == "amenitiesPage"][0]{
     "upperParkAmenities": amenities[section == "upper-park" || section == "both"],
     "lowerParkAmenities": amenities[section == "lower-park" || section == "both"]
   }

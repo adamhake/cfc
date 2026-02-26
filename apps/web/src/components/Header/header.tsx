@@ -27,7 +27,7 @@ import { ThemeToggle } from "../ThemeToggle/theme-toggle";
  * <Header />
  * ```
  */
-export default function Header() {
+export default function Header({ preview = false }: { preview?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const routerState = useRouterState();
@@ -308,6 +308,7 @@ export default function Header() {
                   {/* Social Media Links */}
                   <div className="mt-6">
                     <SocialLinks
+                      preview={preview}
                       className="flex gap-3"
                       linkClassName="transition-transform active:scale-90"
                       iconClassName="h-6 w-6 fill-grey-700 transition hover:fill-accent-600 dark:fill-primary-400 dark:hover:fill-accent-400"
@@ -474,6 +475,7 @@ export default function Header() {
               {/* Social Media Links */}
               <div className="mt-6">
                 <SocialLinks
+                  preview={preview}
                   className="flex gap-3"
                   linkClassName="transition-transform active:scale-90"
                   iconClassName="h-6 w-6 fill-grey-700 transition hover:fill-accent-700 dark:fill-primary-400 dark:hover:fill-accent-400"

@@ -2,7 +2,7 @@ import { SocialLinks } from "@/components/SocialLinks/social-links";
 import { Link } from "@tanstack/react-router";
 import { ThemeToggle } from "../ThemeToggle/theme-toggle";
 
-export default function Footer() {
+export default function Footer({ preview = false }: { preview?: boolean }) {
   return (
     <footer className="relative bg-grey-50 pt-24 pb-8 text-grey-800 dark:bg-primary-900 dark:text-grey-100">
       {/* Curved divider at top */}
@@ -105,6 +105,7 @@ export default function Footer() {
               Connect
             </h3>
             <SocialLinks
+              preview={preview}
               className="flex gap-3"
               linkClassName="text-grey-600 transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-400 dark:hover:text-accent-400"
               iconClassName="h-6 w-6 fill-grey-600 transition hover:fill-accent-700 dark:fill-grey-400 dark:hover:fill-accent-400"

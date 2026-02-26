@@ -12,6 +12,7 @@ interface GetInvolvedProps {
   description?: string;
   gutter?: "default" | "none";
   id?: string;
+  preview?: boolean;
 }
 
 export default function GetInvolved({
@@ -19,9 +20,10 @@ export default function GetInvolved({
   description = "Join our community of volunteers and supporters. Get updates on park projects, upcoming events, and opportunities to make a difference in Chimborazo Park.",
   gutter = "default",
   id = "get-involved",
+  preview = false,
 }: GetInvolvedProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const { data: siteSettings } = useSiteSettings();
+  const { data: siteSettings } = useSiteSettings(preview);
   const prefersReducedMotion = useReducedMotion();
 
   // Get images from the gallery in site settings, or use empty array as fallback
@@ -111,6 +113,7 @@ export default function GetInvolved({
                 Follow us online
               </h3>
               <SocialLinks
+                preview={preview}
                 className="flex gap-4"
                 linkClassName="rounded-lg bg-white p-3 shadow-sm transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:border dark:border-accent-600/30 dark:bg-transparent"
                 iconClassName="h-6 w-6 fill-accent-700 dark:fill-accent-400"
