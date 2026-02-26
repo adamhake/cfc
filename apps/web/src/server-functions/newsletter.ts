@@ -1,9 +1,9 @@
-import { createServerFn } from "@tanstack/react-start";
-import { getRequest } from "@tanstack/react-start/server";
-import { Resend } from "resend";
 import { env } from "@/env";
 import { verifyTurnstileToken } from "@/server-functions/turnstile";
 import { subscribeRequestSchema, type SubscribeResponse } from "@/types/newsletter";
+import { createServerFn } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
+import { Resend } from "resend";
 
 /**
  * Newsletter subscription server function
@@ -123,7 +123,7 @@ export const subscribeToNewsletter = createServerFn({ method: "POST" })
     if (contactError) {
       console.error("[Newsletter] Failed to create contact:", contactError);
       throw new Error(
-        "We couldn't complete your subscription. Please check your email address and try again. If the problem persists, contact us at info@chimborazopark.org",
+        "We couldn't complete your subscription. Please check your email address and try again. If the problem persists, contact us at info@chimborazoparkconservancy.org",
       );
     }
 
