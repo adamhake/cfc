@@ -50,11 +50,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         title: SITE_CONFIG.name,
       },
       {
-        // TODO: Remove this tag when ready to launch publicly
-        name: "robots",
-        content: "noindex, nofollow",
-      },
-      {
         name: "description",
         content: SITE_CONFIG.description,
       },
