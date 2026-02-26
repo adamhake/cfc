@@ -11,6 +11,7 @@ import { generateOrganizationStructuredData, SITE_CONFIG } from "@/utils/seo";
 import type { ResolvedTheme, ThemeMode } from "@/utils/theme";
 import type { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import appCss from "../styles.css?url";
 
 interface MyRouterContext {
@@ -106,20 +107,23 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 /**
  * Root component that wraps all routes.
- * Conditionally renders Visual Editing components when in preview mode.
+ * Always loads Visual Editing when inside an iframe (Presentation tool)
+ * so the Studio can establish a communication channel before draft mode
+ * is enabled. DisablePreview is only shown once the preview cookie is set.
  */
 function RootComponent() {
   const { preview } = Route.useLoaderData();
+  const [inIframe, setInIframe] = useState(false);
+
+  useEffect(() => {
+    setInIframe(window.self !== window.top);
+  }, []);
 
   return (
     <>
       <Outlet />
-      {preview && (
-        <>
-          <VisualEditing />
-          <DisablePreview />
-        </>
-      )}
+      {(preview || inIframe) && <VisualEditing />}
+      {preview && <DisablePreview />}
     </>
   );
 }
