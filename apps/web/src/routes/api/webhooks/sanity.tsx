@@ -1,7 +1,10 @@
 import { CACHE_TAGS, type CacheTag } from "@/lib/cache-headers";
+import { getLogger } from "@/lib/logger";
 import { purgeCache } from "@netlify/functions";
 import { isValidSignature, SIGNATURE_HEADER_NAME } from "@sanity/webhook";
 import { createFileRoute } from "@tanstack/react-router";
+
+const logger = getLogger("sanity-webhook");
 
 /**
  * Sanity webhook endpoint for on-demand Netlify cache invalidation
@@ -54,14 +57,15 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
           // Read the raw body for signature verification
           const body = await request.text();
 
-          console.log("[Sanity Webhook] Received POST request", {
+          logger.info("Received POST request", {
             contentLength: body.length,
-            userAgent: request.headers.get("user-agent"),
+            userAgent: request.headers.get("user-agent") ?? "unknown",
           });
 
           // Verify webhook signature
           const secret = process.env.SANITY_WEBHOOK_SECRET;
           if (!secret) {
+            logger.error("SANITY_WEBHOOK_SECRET not configured");
             console.error("[Sanity Webhook] SANITY_WEBHOOK_SECRET not configured");
             return new Response(
               JSON.stringify({
@@ -77,6 +81,7 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
 
           const signature = request.headers.get(SIGNATURE_HEADER_NAME);
           if (!signature) {
+            logger.warn("Missing signature header");
             console.warn("[Sanity Webhook] Missing signature header");
             return new Response(
               JSON.stringify({
@@ -93,6 +98,7 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
           // Verify the signature matches
           const isValid = isValidSignature(body, signature, secret);
           if (!isValid) {
+            logger.warn("Invalid signature - rejecting request");
             console.warn("[Sanity Webhook] Invalid signature - rejecting request");
             return new Response(
               JSON.stringify({
@@ -109,7 +115,7 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
           // Parse the webhook payload
           const payload = JSON.parse(body) as SanityWebhookPayload;
 
-          console.log(`[Sanity Webhook] Validated payload`, {
+          logger.info("Validated payload", {
             id: payload._id,
             type: payload._type,
             rev: payload._rev,
@@ -119,7 +125,9 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
           // Determine cache tags to purge based on document type
           const cacheTags = getCacheTagsForDocumentType(payload._type);
 
-          console.log(`[Sanity Webhook] Purging cache tags: [${cacheTags.join(", ")}]`);
+          logger.info("Purging cache tags", {
+            tags: cacheTags.join(", "),
+          });
 
           // Purge Netlify cache using the determined cache tags
           const purgeStartTime = Date.now();
@@ -128,6 +136,14 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
 
           if (!purgeResult.success) {
             const totalDuration = Date.now() - startTime;
+            logger.error("Cache purge FAILED", {
+              error: purgeResult.error ?? "Unknown error",
+              tags: cacheTags.join(", "),
+              docType: payload._type,
+              docId: payload._id,
+              purgeDurationMs: purgeDuration,
+              totalDurationMs: totalDuration,
+            });
             console.error("[Sanity Webhook] Cache purge FAILED", {
               error: purgeResult.error,
               tags: cacheTags,
@@ -149,11 +165,11 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
           }
 
           const totalDuration = Date.now() - startTime;
-          console.log(`[Sanity Webhook] Cache purge SUCCESS`, {
+          logger.info("Cache purge SUCCESS", {
             docType: payload._type,
             docId: payload._id,
             slug: payload.slug?.current,
-            tags: cacheTags,
+            tags: cacheTags.join(", "),
             purgeDurationMs: purgeDuration,
             totalDurationMs: totalDuration,
           });
@@ -173,6 +189,11 @@ export const Route = createFileRoute("/api/webhooks/sanity")({
           );
         } catch (error) {
           const totalDuration = Date.now() - startTime;
+          logger.error("Unhandled error", {
+            error: error instanceof Error ? error.message : "Unknown error",
+            stack: error instanceof Error ? error.stack : undefined,
+            totalDurationMs: totalDuration,
+          });
           console.error("[Sanity Webhook] Unhandled error", {
             error: error instanceof Error ? error.message : "Unknown error",
             stack: error instanceof Error ? error.stack : undefined,
@@ -279,6 +300,7 @@ function getCacheTagsForDocumentType(docType: string): CacheTag[] {
     default:
       // Unknown types: log warning but don't purge everything
       // This prevents accidental full cache purges for new document types
+      logger.warn("Unknown document type", { docType });
       console.warn(`[Sanity Webhook] Unknown document type: ${docType}`);
       // Still purge homepage as a safe default since most content appears there
       tags.push(CACHE_TAGS.HOMEPAGE);
