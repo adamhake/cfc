@@ -8,7 +8,10 @@
  * consistency between client-side and CDN caching strategies.
  */
 
+import { getLogger } from "./logger";
 import { CACHE_PRESETS, type CachePreset } from "./query-config";
+
+const logger = getLogger("cdn-cache");
 
 /**
  * Convert milliseconds to seconds for Cache-Control headers
@@ -89,6 +92,16 @@ export function generateCacheHeaders(options: CacheHeaderOptions): Record<string
   const presetConfig = CACHE_PRESETS[preset];
   const maxAgeSeconds = msToSeconds(presetConfig.staleTime);
   const swrSeconds = maxAgeSeconds * swrMultiplier;
+
+  // Log origin hit for cache monitoring.
+  // Every call here means the CDN did not serve from cache (miss or SWR revalidation).
+  // Compare with PostHog client-side pageviews to derive cache hit rate.
+  logger.info("Origin request", {
+    preset,
+    tags: tags.join(","),
+    maxAgeSec: maxAgeSeconds,
+    swrSec: swrSeconds,
+  });
 
   const headers: Record<string, string> = {
     // Standard Cache-Control: browser gets max-age=0 (always revalidate),
