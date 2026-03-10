@@ -1,2 +1,26 @@
-# next-agents-md
+# Next.js build output
+.next/
+
+# Next.js auto-generated types
+next-env.d.ts
+
+# Next.js agents-md docs
 .next-docs/
+
+# Dependencies (also in root .gitignore)
+node_modules/
+
+# Environment
+.env
+.env*.local
+
+# Logs
+*.log
+
+# Vercel / Netlify
+.vercel
+.netlify
+
+# OS
+.DS_Store
+Thumbs.db

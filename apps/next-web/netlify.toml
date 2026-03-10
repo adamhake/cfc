@@ -1,7 +1,7 @@
 [build]
   # Build from monorepo root using Turborepo
   package = "apps/next-web"
-  command = "pnpm install --frozen-lockfile && pnpm run build --filter=@chimborazo/next-web"
+  command = "pnpm run build --filter=@chimborazo/next-web"
   publish = "apps/next-web/.next"
   ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- apps/next-web packages/sanity-config"
 
@@ -14,3 +14,16 @@
   for = "/*"
   [headers.values]
     Content-Security-Policy = "frame-ancestors 'self' https://chimborazo-park-conservancy.sanity.studio https://studio.chimborazoparkconservancy.org https://*.sanity.build"
+
+# PostHog reverse proxy — edge redirects are faster than Next.js rewrites
+[[redirects]]
+  from = "/ph/static/*"
+  to = "https://us-assets.i.posthog.com/static/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/ph/*"
+  to = "https://us.i.posthog.com/:splat"
+  status = 200
+  force = true
