@@ -40,16 +40,16 @@ export const metadata: Metadata = {
 };
 
 export default async function GetInvolvedPage() {
-  const [pageData, siteSettings] = await Promise.all([
-    sanityFetch<SanityGetInvolvedPage | null>({
+  const [{ data: pageData }, { data: siteSettings }] = (await Promise.all([
+    sanityFetch({
       query: getGetInvolvedPageQuery,
       tags: [CACHE_TAGS.GET_INVOLVED],
     }),
-    sanityFetch<SanitySiteSettings | null>({
+    sanityFetch({
       query: getSiteSettingsQuery,
       tags: [CACHE_TAGS.SITE_SETTINGS],
     }),
-  ]);
+  ])) as [{ data: SanityGetInvolvedPage | null }, { data: SanitySiteSettings | null }];
 
   // Extract social media handles from URLs
   const facebookHandle =

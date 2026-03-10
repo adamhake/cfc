@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { connection } from "next/server";
 import { sanityFetch, CACHE_TAGS } from "@/lib/sanity-fetch";
 import { sanityClient } from "@/lib/sanity";
 import type { SanityProject } from "@/lib/sanity-types";
@@ -32,11 +31,11 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const project = await sanityFetch<SanityProject | null>({
+  const { data: project } = (await sanityFetch({
     query: projectBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.PROJECT_DETAIL, CACHE_TAGS.PROJECTS],
-  });
+  })) as { data: SanityProject | null };
 
   if (!project) {
     return {
@@ -77,13 +76,12 @@ const categoryLabels = {
 } as const;
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  await connection();
   const { slug } = await params;
-  const project = await sanityFetch<SanityProject | null>({
+  const { data: project } = (await sanityFetch({
     query: projectBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.PROJECT_DETAIL, CACHE_TAGS.PROJECTS],
-  });
+  })) as { data: SanityProject | null };
 
   if (!project) {
     notFound();
@@ -118,11 +116,19 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleData) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleData)
+            .replace(/</g, "\\u003c")
+            .replace(/>/g, "\\u003e"),
+        }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbData)
+            .replace(/</g, "\\u003c")
+            .replace(/>/g, "\\u003e"),
+        }}
       />
       <div className="min-h-screen">
         {/* Hero Section */}
@@ -214,7 +220,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                       <Event
                         key={event._id}
                         {...event}
-                        isPast={new Date(event.date) < new Date()}
                         imageSizes="(max-width: 768px) 100vw, 768px"
                         imageMaxWidth={1024}
                         imageBreakpoints={[320, 480, 640, 768, 896, 1024]}

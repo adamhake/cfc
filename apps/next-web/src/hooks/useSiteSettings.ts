@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getSanityClient } from "@/lib/sanity";
+import { sanityClient } from "@/lib/sanity";
 import type { SanitySiteSettings } from "@/lib/sanity-types";
 import { getSiteSettingsQuery } from "@chimborazo/sanity-config/queries";
 
@@ -12,13 +12,12 @@ import { getSiteSettingsQuery } from "@chimborazo/sanity-config/queries";
  * Uses a simple fetch-on-mount pattern since TanStack Query is not
  * set up as a provider in the Next.js app.
  */
-export function useSiteSettings(preview = false) {
+export function useSiteSettings() {
   const [data, setData] = useState<SanitySiteSettings | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    const client = getSanityClient(preview);
-    client
+    sanityClient
       .fetch<SanitySiteSettings | null>(getSiteSettingsQuery)
       .then((result) => {
         if (!cancelled) setData(result);
@@ -29,7 +28,7 @@ export function useSiteSettings(preview = false) {
     return () => {
       cancelled = true;
     };
-  }, [preview]);
+  }, []);
 
   return { data };
 }

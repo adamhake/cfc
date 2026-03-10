@@ -22,10 +22,10 @@ export const metadata: Metadata = {
 };
 
 export default async function HistoryPage() {
-  const pageData = await sanityFetch<SanityHistoryPage | null>({
+  const { data: pageData } = (await sanityFetch({
     query: getHistoryPageQuery,
     tags: [CACHE_TAGS.HISTORY],
-  });
+  })) as { data: SanityHistoryPage | null };
 
   const heroData = pageData?.pageHero?.image
     ? {

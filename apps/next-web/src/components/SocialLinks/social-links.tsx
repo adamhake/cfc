@@ -1,8 +1,5 @@
-'use client';
-
 import { FacebookIcon } from "@/components/FacebookIcon/facebook-icon";
 import { InstagramIcon } from "@/components/InstagramIcon/instagram-icon";
-import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 const DEFAULT_FACEBOOK_URL = "https://www.facebook.com/friendsofchimborazopark";
 const DEFAULT_INSTAGRAM_URL = "https://www.instagram.com/friendsofchimborazopark/";
@@ -14,43 +11,34 @@ interface SocialLinksProps {
   iconClassName?: string;
   /** className applied to each anchor element */
   linkClassName?: string;
-  /** Whether to fetch draft content in Sanity preview mode */
-  preview?: boolean;
+  /** Facebook URL override (from site settings) */
+  facebookUrl?: string;
+  /** Instagram URL override (from site settings) */
+  instagramUrl?: string;
 }
 
 /**
  * Reusable social media links component.
  *
- * Renders Facebook and Instagram links using URLs from site settings (with
- * fallback defaults). Ensures consistent aria-labels with "(opens in new
- * window)" suffix across all usages.
- *
- * @example
- * ```tsx
- * <SocialLinks
- *   className="flex gap-3"
- *   iconClassName="h-6 w-6 fill-grey-700 dark:fill-primary-400"
- *   linkClassName="transition-transform active:scale-90"
- * />
- * ```
+ * Renders Facebook and Instagram links. Accepts URLs as props (fetched
+ * server-side) with fallback defaults.
  */
 export function SocialLinks({
   className = "flex gap-3",
   iconClassName = "h-6 w-6",
   linkClassName,
-  preview = false,
+  facebookUrl,
+  instagramUrl,
 }: SocialLinksProps) {
-  const { data: siteSettings } = useSiteSettings(preview);
-
   const links = [
     {
       name: "Facebook",
-      url: siteSettings?.socialMedia?.facebook || DEFAULT_FACEBOOK_URL,
+      url: facebookUrl || DEFAULT_FACEBOOK_URL,
       Icon: FacebookIcon,
     },
     {
       name: "Instagram",
-      url: siteSettings?.socialMedia?.instagram || DEFAULT_INSTAGRAM_URL,
+      url: instagramUrl || DEFAULT_INSTAGRAM_URL,
       Icon: InstagramIcon,
     },
   ];

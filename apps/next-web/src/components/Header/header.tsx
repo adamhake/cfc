@@ -2,8 +2,8 @@
 
 import IconLogo from "@/components/IconLogo/icon-logo";
 import { SocialLinks } from "@/components/SocialLinks/social-links";
-import { useProject } from "@/hooks/useProject";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import type { SanityProject } from "@/lib/sanity-types";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useClickAway } from "@uidotdev/usehooks";
@@ -30,20 +30,29 @@ import { ThemeToggle } from "../ThemeToggle/theme-toggle";
  * <Header />
  * ```
  */
-export default function Header({ preview = false }: { preview?: boolean }) {
+interface HeaderProps {
+  /** Featured project data, fetched server-side */
+  featuredProject?: SanityProject | null;
+  /** Social media URLs from site settings */
+  facebookUrl?: string;
+  instagramUrl?: string;
+}
+
+export default function Header({ featuredProject: featuredProjectProp, facebookUrl, instagramUrl }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const currentPath = pathname;
   // Read hash only after mount to avoid hydration mismatch
-  const [currentHash, setCurrentHash] = useState("");
+  const [currentHash, setCurrentHash] = useState(() =>
+    typeof window === "undefined" ? "" : window.location.hash.replace("#", ""),
+  );
   useEffect(() => {
-    setCurrentHash(window.location.hash.replace("#", ""));
     const onHashChange = () => setCurrentHash(window.location.hash.replace("#", ""));
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
-  const { data: featuredProject } = useProject("parkwide-native-tree-planting");
+  const featuredProject = featuredProjectProp;
   const prefersReducedMotion = useReducedMotion();
 
   const ref = useClickAway<HTMLElement>(() => {
@@ -239,10 +248,11 @@ export default function Header({ preview = false }: { preview?: boolean }) {
                   {/* Social Media Links */}
                   <div className="mt-6">
                     <SocialLinks
-                      preview={preview}
                       className="flex gap-3"
                       linkClassName="transition-transform active:scale-90"
                       iconClassName="h-6 w-6 fill-grey-700 transition hover:fill-accent-600 dark:fill-primary-400 dark:hover:fill-accent-400"
+                      facebookUrl={facebookUrl}
+                      instagramUrl={instagramUrl}
                     />
                   </div>
                 </nav>
@@ -419,10 +429,11 @@ export default function Header({ preview = false }: { preview?: boolean }) {
               {/* Social Media Links */}
               <div className="mt-6">
                 <SocialLinks
-                  preview={preview}
                   className="flex gap-3"
                   linkClassName="transition-transform active:scale-90"
                   iconClassName="h-6 w-6 fill-grey-700 transition hover:fill-accent-700 dark:fill-primary-400 dark:hover:fill-accent-400"
+                  facebookUrl={facebookUrl}
+                  instagramUrl={instagramUrl}
                 />
               </div>
 

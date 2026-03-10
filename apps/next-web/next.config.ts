@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  cacheLife: {
+    sanity: {
+      stale: 60,
+      revalidate: 1800,
+      expire: 7776000, // 90 days — Sanity Live handles on-demand revalidation
+    },
+  },
   images: {
     remotePatterns: [
       {

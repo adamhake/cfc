@@ -31,16 +31,16 @@ export const metadata: Metadata = {
 };
 
 export default async function ProjectsPage() {
-  const [projects, pageData] = await Promise.all([
-    sanityFetch<SanityProject[]>({
+  const [{ data: projects }, { data: pageData }] = (await Promise.all([
+    sanityFetch({
       query: allProjectsQuery,
       tags: [CACHE_TAGS.PROJECTS_LIST, CACHE_TAGS.PROJECTS],
     }),
-    sanityFetch<SanityProjectsPage | null>({
+    sanityFetch({
       query: getProjectsPageQuery,
       tags: [CACHE_TAGS.PROJECTS_LIST],
     }),
-  ]);
+  ])) as [{ data: SanityProject[] }, { data: SanityProjectsPage | null }];
 
   // Prepare hero data from Sanity or use fallbacks
   const heroData = pageData?.pageHero?.image

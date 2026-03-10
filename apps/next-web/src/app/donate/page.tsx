@@ -51,10 +51,10 @@ export const metadata: Metadata = {
 };
 
 export default async function DonatePage() {
-  const donatePageData = await sanityFetch<SanityDonatePage | null>({
+  const { data: donatePageData } = (await sanityFetch({
     query: getDonatePageQuery,
     tags: [CACHE_TAGS.DONATE],
-  });
+  })) as { data: SanityDonatePage | null };
 
   // Prepare hero data from Sanity or use defaults
   const heroData = donatePageData?.pageHero?.image

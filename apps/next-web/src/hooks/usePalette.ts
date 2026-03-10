@@ -19,7 +19,10 @@ export function usePalette() {
 }
 
 export function usePaletteState(initialPalette: PaletteMode) {
-  const [palette, setPaletteRaw] = useState<PaletteMode>(initialPalette);
+  const [palette, setPaletteRaw] = useState<PaletteMode>(() => {
+    if (typeof window === "undefined") return initialPalette;
+    return getStoredPalette() ?? initialPalette;
+  });
 
   const setPalette = useCallback((newPalette: PaletteMode) => {
     setPaletteRaw(newPalette);
@@ -28,12 +31,10 @@ export function usePaletteState(initialPalette: PaletteMode) {
     document.cookie = `${APPEARANCE_COOKIES.PALETTE}=${encodeURIComponent(newPalette)}; Path=/; Max-Age=${APPEARANCE_COOKIE_MAX_AGE}; SameSite=Lax`;
   }, []);
 
-  // Hydrate from localStorage on mount
+  // Apply stored palette on mount (side effect only, no setState)
   useEffect(() => {
-    const stored = getStoredPalette();
-    if (stored && stored !== palette) {
-      setPalette(stored);
-    }
+    applyPalette(palette);
+    storePalette(palette);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Multi-tab sync

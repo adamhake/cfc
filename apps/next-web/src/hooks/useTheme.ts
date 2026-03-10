@@ -29,8 +29,14 @@ export function useTheme() {
 }
 
 export function useThemeState(initialTheme: ThemeMode, initialResolved: ResolvedTheme) {
-  const [theme, setThemeRaw] = useState<ThemeMode>(initialTheme);
-  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(initialResolved);
+  const [theme, setThemeRaw] = useState<ThemeMode>(() => {
+    if (typeof window === "undefined") return initialTheme;
+    return getStoredTheme();
+  });
+  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(() => {
+    if (typeof window === "undefined") return initialResolved;
+    return resolveTheme(getStoredTheme());
+  });
 
   const setTheme = useCallback((newTheme: ThemeMode) => {
     setThemeRaw(newTheme);
@@ -43,12 +49,10 @@ export function useThemeState(initialTheme: ThemeMode, initialResolved: Resolved
     document.cookie = `${APPEARANCE_COOKIES.RESOLVED_THEME}=${encodeURIComponent(resolved)}; Path=/; Max-Age=${APPEARANCE_COOKIE_MAX_AGE}; SameSite=Lax`;
   }, []);
 
-  // Hydrate from localStorage on mount
+  // Apply stored theme on mount (side effect only, no setState)
   useEffect(() => {
-    const stored = getStoredTheme();
-    if (stored !== theme) {
-      setTheme(stored);
-    }
+    applyTheme(resolveTheme(theme));
+    storeTheme(theme);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Listen for system theme changes
