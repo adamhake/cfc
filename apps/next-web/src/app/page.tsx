@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { connection } from "next/server";
 import { PortableText } from "@portabletext/react";
 import type { PortableTextComponents } from "@portabletext/react";
 import { sanityFetch, CACHE_TAGS } from "@/lib/sanity-fetch";
+import { getSiteSettings } from "@/lib/site-settings";
 import type {
   SanityHomePage,
   SanityEvent,
   SanityProject,
   SanityImage as SanityImageType,
 } from "@/lib/sanity-types";
+import type { SanityImageObject } from "@/components/SanityImage/sanity-image";
 import { SITE_CONFIG } from "@/utils/seo";
 import {
   getHomePageQuery,
@@ -153,21 +154,26 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  await connection();
-  const [homePageData, featuredProjects, recentEvents] = await Promise.all([
-    sanityFetch<SanityHomePage | null>({
+  const [{ data: homePageData }, { data: featuredProjects }, { data: recentEvents }, siteSettings] = (await Promise.all([
+    sanityFetch({
       query: getHomePageQuery,
       tags: [CACHE_TAGS.HOMEPAGE],
     }),
-    sanityFetch<SanityProject[]>({
+    sanityFetch({
       query: featuredProjectsQuery,
       tags: [CACHE_TAGS.PROJECTS],
     }),
-    sanityFetch<SanityEvent[]>({
+    sanityFetch({
       query: recentEventsQuery,
       tags: [CACHE_TAGS.EVENTS],
     }),
-  ]);
+    getSiteSettings(),
+  ])) as [
+    { data: SanityHomePage | null },
+    { data: SanityProject[] },
+    { data: SanityEvent[] },
+    Awaited<ReturnType<typeof getSiteSettings>>,
+  ];
 
   // Prepare hero data from Sanity or use defaults
   const heroData = homePageData?.hero?.heroImage?.asset?.url
@@ -195,6 +201,28 @@ export default async function HomePage() {
     homePageData?.parkGallery?.images
       ?.filter((img) => img?.image?.asset?.url)
       .map((img) => img.image) || [];
+
+  // Prepare get-involved gallery images
+  const getInvolvedGalleryImages =
+    (
+      siteSettings as unknown as {
+        getInvolvedGallery?: {
+          images?: Array<{
+            image?:
+              | SanityImageObject
+              | {
+                  image?: SanityImageObject;
+                };
+          }>;
+        };
+      }
+    )?.getInvolvedGallery?.images
+      ?.map((item) => {
+        if (!item.image) return null;
+        if ("asset" in item.image) return item.image;
+        return item.image.image || null;
+      })
+      .filter((img): img is SanityImageObject => img != null) || [];
 
   // CMS section data with fallbacks
   const intro = homePageData?.introSection;
@@ -420,7 +448,6 @@ export default async function HomePage() {
               <Event
                 key={`event-featured-${event._id}`}
                 {...event}
-                isPast={new Date(event.date) < new Date()}
                 imageSizes="(max-width: 768px) 100vw, 1152px"
                 imageMaxWidth={1280}
                 imageBreakpoints={[320, 480, 640, 768, 896, 1024, 1152, 1280]}
@@ -431,7 +458,7 @@ export default async function HomePage() {
             {recentEvents.length > 1 && (
               <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
                 {recentEvents.slice(1, 3).map((event) => (
-                  <Event key={`event-${event._id}`} {...event} isPast={new Date(event.date) < new Date()} />
+                  <Event key={`event-${event._id}`} {...event} />
                 ))}
               </div>
             )}
@@ -468,6 +495,9 @@ export default async function HomePage() {
         <GetInvolved
           title={getInvolved?.title}
           description={getInvolved?.description}
+          galleryImages={getInvolvedGalleryImages}
+          facebookUrl={siteSettings?.socialMedia?.facebook}
+          instagramUrl={siteSettings?.socialMedia?.instagram}
         />
       </div>
 

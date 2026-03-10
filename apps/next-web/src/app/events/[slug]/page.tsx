@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { connection } from "next/server";
 import { sanityFetch, CACHE_TAGS } from "@/lib/sanity-fetch";
 import { sanityClient } from "@/lib/sanity";
 import type { SanityEvent } from "@/lib/sanity-types";
@@ -11,10 +10,11 @@ import { formatDateString } from "@/utils/time";
 import { eventBySlugQuery, eventSlugsQuery } from "@chimborazo/sanity-config/queries";
 import { ArrowLeft, Calendar, Clock, MapPin } from "lucide-react";
 import { Button } from "@/components/Button/button";
-import Chip from "@/components/Chip";
 import Container from "@/components/Container/container";
+import EventStatusChip from "@/components/EventStatusChip/event-status-chip";
 import PageHero from "@/components/PageHero/page-hero";
 import { PortableText } from "@/components/PortableText/portable-text";
+import { RegisterButton } from "@/components/RegisterButton/register-button";
 import EventDetailClient from "./event-detail-client";
 
 interface EventPageProps {
@@ -28,11 +28,11 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: EventPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const event = await sanityFetch<SanityEvent | null>({
+  const { data: event } = (await sanityFetch({
     query: eventBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.EVENT_DETAIL, CACHE_TAGS.EVENTS],
-  });
+  })) as { data: SanityEvent | null };
 
   if (!event) {
     return {
@@ -67,27 +67,18 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
 
 export default async function EventPage({ params }: EventPageProps) {
   const { slug } = await params;
-  const event = await sanityFetch<SanityEvent | null>({
+  const { data: event } = (await sanityFetch({
     query: eventBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.EVENT_DETAIL, CACHE_TAGS.EVENTS],
-  });
+  })) as { data: SanityEvent | null };
 
   if (!event) {
     notFound();
   }
 
-  await connection(); // Opt into dynamic rendering for new Date()
-  const isPast = (() => {
-    const eventDate = new Date(event.date);
-    const now = new Date();
-    const eventDay = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    return eventDay < today;
-  })();
-
+  // If a recap exists in Sanity, the event is past by definition
   const hasRecap =
-    isPast &&
     event.recap &&
     Array.isArray(event.recap) &&
     event.recap.length > 0;
@@ -136,11 +127,19 @@ export default async function EventPage({ params }: EventPageProps) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData)
+            .replace(/</g, "\\u003c")
+            .replace(/>/g, "\\u003e"),
+        }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbData)
+            .replace(/</g, "\\u003c")
+            .replace(/>/g, "\\u003e"),
+        }}
       />
 
       <div className="min-h-screen">
@@ -155,7 +154,7 @@ export default async function EventPage({ params }: EventPageProps) {
           titleSize="large"
         >
           <div className="mb-6 lg:mt-16">
-            <Chip label={isPast ? "Past" : "Upcoming"} variant={isPast ? "past" : "upcoming"} />
+            <EventStatusChip eventDate={event.date} />
           </div>
         </PageHero>
 
@@ -240,13 +239,7 @@ export default async function EventPage({ params }: EventPageProps) {
                       </div>
                     </div>
 
-                    {!isPast && (
-                      <div className="border-t border-accent-200 pt-6 dark:border-accent-700/30">
-                        <Button variant="accent" size="standard" className="w-full">
-                          Register for Event
-                        </Button>
-                      </div>
-                    )}
+                    <RegisterButton eventDate={event.date} />
                   </div>
                 </div>
 

@@ -1,16 +1,23 @@
-import { cn } from "@/utils/cn";
+"use client";
 
-export default function EventStatusChip({ isPast }: { isPast: boolean }) {
-  const classes = cn(
-    "inline-block rounded-xl border px-3 py-2 text-xs font-semibold tracking-wider uppercase shadow-sm",
-    isPast
-      ? "border-primary-300/50 bg-primary-800/60 text-primary-50 dark:border-primary-600/50 dark:bg-primary-700/50 dark:text-primary-100"
-      : "border-accent-400/60 bg-accent-500 text-white dark:border-accent-400/70 dark:bg-accent-500 dark:text-grey-900",
-  );
+import Chip from "@/components/Chip/chip";
 
-  return (
-    <div className={classes}>
-      <span>{isPast ? "Past" : "Upcoming"}</span>
-    </div>
-  );
+interface EventStatusChipProps {
+  /** ISO date string for the event */
+  eventDate: string;
+  className?: string;
+}
+
+/**
+ * Client component that renders a past/upcoming chip based on the current date.
+ * Used in server-rendered pages to avoid forcing dynamic rendering with connection().
+ */
+export default function EventStatusChip({ eventDate, className }: EventStatusChipProps) {
+  const eventDay = new Date(eventDate);
+  const today = new Date();
+  const isPast =
+    new Date(eventDay.getFullYear(), eventDay.getMonth(), eventDay.getDate()) <
+    new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+  return <Chip label={isPast ? "Past" : "Upcoming"} variant={isPast ? "past" : "upcoming"} className={className} />;
 }

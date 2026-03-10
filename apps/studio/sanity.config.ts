@@ -129,10 +129,9 @@ export default defineConfig({
     visionTool(),
     presentationTool({
       previewUrl: {
-        origin: env.SANITY_STUDIO_PREVIEW_URL,
-        draftMode: {
+        initial: env.SANITY_STUDIO_PREVIEW_URL,
+        previewMode: {
           enable: "/api/draft",
-          disable: "/api/draft/disable",
         },
       },
       allowOrigins: [

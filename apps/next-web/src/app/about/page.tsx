@@ -25,10 +25,10 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  const pageData = await sanityFetch<SanityAboutPage | null>({
+  const { data: pageData } = (await sanityFetch({
     query: getAboutPageQuery,
     tags: [CACHE_TAGS.ABOUT],
-  });
+  })) as { data: SanityAboutPage | null };
 
   const heroData = pageData?.pageHero?.image
     ? {

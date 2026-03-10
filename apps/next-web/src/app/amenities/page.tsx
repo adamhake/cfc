@@ -64,10 +64,10 @@ export const metadata: Metadata = {
 };
 
 export default async function AmenitiesPage() {
-  const amenitiesPageData = await sanityFetch<SanityAmenitiesPage | null>({
+  const { data: amenitiesPageData } = (await sanityFetch({
     query: getAmenitiesPageQuery,
     tags: [CACHE_TAGS.AMENITIES],
-  });
+  })) as { data: SanityAmenitiesPage | null };
 
   // Prepare hero data from Sanity or use defaults
   const heroData = amenitiesPageData?.pageHero?.image

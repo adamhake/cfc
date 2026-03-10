@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
+import { draftMode } from "next/headers";
 import {
   getAppearanceBootstrapScript,
 } from "@/lib/appearance-shared";
 import Header from "@/components/Header/header";
 import Footer from "@/components/Footer/footer";
+import { SanityLive } from "@/lib/sanity-live";
+import { VisualEditing } from "@/components/VisualEditing/visual-editing";
+import { DisablePreview } from "@/components/VisualEditing/disable-preview";
 import { generateOrganizationStructuredData, SITE_CONFIG } from "@/utils/seo";
+import { getSiteSettings } from "@/lib/site-settings";
+import { sanityFetch, CACHE_TAGS } from "@/lib/sanity-fetch";
+import type { SanityProject } from "@/lib/sanity-types";
+import { projectBySlugQuery } from "@chimborazo/sanity-config/queries";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -37,26 +45,31 @@ export const metadata: Metadata = {
   },
 };
 
-/**
- * Root layout - fully static shell.
- *
- * Appearance (theme/palette) is handled entirely client-side:
- * 1. The inline bootstrap script reads cookies and sets class/data attributes immediately (no FOUC)
- * 2. The Providers client component reads cookies client-side and syncs React state
- *
- * This avoids `cookies()` in the layout, keeping it statically renderable.
- */
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { isEnabled: isDraftMode } = await draftMode();
   const bootstrapScript = getAppearanceBootstrapScript({
     theme: "system",
     resolvedTheme: "light",
     palette: "olive",
   });
   const structuredData = generateOrganizationStructuredData();
+
+  // Fetch shared data server-side to avoid client-side waterfalls
+  const [siteSettings, { data: featuredProject }] = await Promise.all([
+    getSiteSettings(),
+    sanityFetch({
+      query: projectBySlugQuery,
+      params: { slug: "parkwide-native-tree-planting" },
+      tags: [CACHE_TAGS.PROJECTS],
+    }) as Promise<{ data: SanityProject | null }>,
+  ]);
+
+  const facebookUrl = siteSettings?.socialMedia?.facebook;
+  const instagramUrl = siteSettings?.socialMedia?.instagram;
 
   return (
     <html
@@ -94,13 +107,27 @@ export default function RootLayout({
             Skip to main content
           </a>
           <div className="flex min-h-screen flex-col">
-            <Header />
+            <Header
+              featuredProject={featuredProject}
+              facebookUrl={facebookUrl}
+              instagramUrl={instagramUrl}
+            />
             <main id="main-content" className="flex-1">
               {children}
             </main>
-            <Footer />
+            <Footer
+              facebookUrl={facebookUrl}
+              instagramUrl={instagramUrl}
+            />
           </div>
         </Providers>
+        <SanityLive />
+        {isDraftMode && (
+          <>
+            <VisualEditing />
+            <DisablePreview />
+          </>
+        )}
       </body>
     </html>
   );

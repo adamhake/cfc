@@ -1,10 +1,13 @@
-"use client";
-
 import { SocialLinks } from "@/components/SocialLinks/social-links";
 import Link from "next/link";
 import { ThemeToggle } from "../ThemeToggle/theme-toggle";
 
-export default function Footer({ preview = false }: { preview?: boolean }) {
+interface FooterProps {
+  facebookUrl?: string;
+  instagramUrl?: string;
+}
+
+export default function Footer({ facebookUrl, instagramUrl }: FooterProps) {
   return (
     <footer className="relative bg-grey-50 pt-24 pb-8 text-grey-800 dark:bg-primary-900 dark:text-grey-100">
       {/* Curved divider at top */}
@@ -37,7 +40,7 @@ export default function Footer({ preview = false }: { preview?: boolean }) {
             </h3>
             <p className="font-body text-sm leading-relaxed text-grey-700 dark:text-grey-300">
               A 501(c)(3) non-profit dedicated to preserving and enhancing Chimborazo Park in
-              Richmond, VA's Church Hill neighborhood.
+              Richmond, VA&apos;s Church Hill neighborhood.
             </p>
             <address className="font-body text-sm leading-relaxed text-grey-700 not-italic dark:text-grey-300">
               3215 E. Broad St. <br /> Richmond, VA 23223
@@ -107,10 +110,11 @@ export default function Footer({ preview = false }: { preview?: boolean }) {
               Connect
             </h3>
             <SocialLinks
-              preview={preview}
               className="flex gap-3"
               linkClassName="text-grey-600 transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-400 dark:hover:text-accent-400"
               iconClassName="h-6 w-6 fill-grey-600 transition hover:fill-accent-700 dark:fill-grey-400 dark:hover:fill-accent-400"
+              facebookUrl={facebookUrl}
+              instagramUrl={instagramUrl}
             />
             <div className="space-y-2 pt-4">
               <ThemeToggle variant="button" showLabel={true} />
@@ -120,9 +124,7 @@ export default function Footer({ preview = false }: { preview?: boolean }) {
 
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-grey-200 pt-8 md:flex-row dark:border-primary-700">
-          <p className="text-center font-body text-sm text-grey-600 md:text-left dark:text-grey-400">
-            &copy; {new Date().getFullYear()} Chimborazo Park Conservancy. All rights reserved.
-          </p>
+          <FooterCopyright />
           <div className="flex gap-6">
             <Link
               href="/privacy-policy"
@@ -134,5 +136,14 @@ export default function Footer({ preview = false }: { preview?: boolean }) {
         </div>
       </div>
     </footer>
+  );
+}
+
+/** Client component for dynamic copyright year */
+function FooterCopyright() {
+  return (
+    <p className="text-center font-body text-sm text-grey-600 md:text-left dark:text-grey-400">
+      &copy; {new Date().getFullYear()} Chimborazo Park Conservancy. All rights reserved.
+    </p>
   );
 }

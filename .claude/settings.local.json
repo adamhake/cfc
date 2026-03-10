@@ -70,7 +70,8 @@
       "mcp__context7__query-docs",
       "Bash(cd /Users/adamhake/chimbo-park-conservancy/apps/next-web && npx vitest run 2>&1 | tail -50)",
       "Bash(pnpm --filter @chimborazo/next-web build 2>&1 | tail -80)",
-      "Bash(cd /Users/adamhake/chimbo-park-conservancy/apps/next-web && pnpm test 2>&1)"
+      "Bash(cd /Users/adamhake/chimbo-park-conservancy/apps/next-web && pnpm test 2>&1)",
+      "Bash(ls -la \"/Users/adamhake/chimbo-park-conservancy/node_modules/.pnpm/next-sanity@12.1.1_@emotion+is-prop-valid@1.4.0_@sanity+client@7.16.0_@sanity+types@5.1_44bc6ab29d8209a74397e93bcb6d823d/node_modules/next-sanity/dist/\" | grep -E \"^d|\\\\.d\\\\.ts$|live|draft|visual\")"
     ],
     "deny": [],
     "ask": []

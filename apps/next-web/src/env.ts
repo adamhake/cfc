@@ -4,6 +4,7 @@ import { z } from "zod";
 export const env = createEnv({
   server: {
     SANITY_API_TOKEN: z.string().optional(),
+    SANITY_API_BROWSER_TOKEN: z.string().optional(),
     SANITY_WEBHOOK_SECRET: z.string().optional(),
     ANTHROPIC_API_KEY: z.string().optional(),
     RESEND_API_KEY: z.string().optional(),
@@ -26,6 +27,7 @@ export const env = createEnv({
   },
   runtimeEnv: {
     SANITY_API_TOKEN: process.env.SANITY_API_TOKEN,
+    SANITY_API_BROWSER_TOKEN: process.env.SANITY_API_BROWSER_TOKEN,
     SANITY_WEBHOOK_SECRET: process.env.SANITY_WEBHOOK_SECRET,
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     RESEND_API_KEY: process.env.RESEND_API_KEY,

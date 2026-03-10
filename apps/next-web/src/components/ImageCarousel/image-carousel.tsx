@@ -3,7 +3,7 @@
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { Image } from "@/components/OptimizedImage/optimized-image";
 import useEmblaCarousel from "embla-carousel-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 
 export interface CarouselImage {
   src: string;
@@ -38,10 +38,26 @@ export default function ImageCarousel({
   aspectRatio = "16/9",
 }: ImageCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop });
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
   const [isPlaying, setIsPlaying] = useState(autoPlay);
   const prefersReducedMotion = useReducedMotion();
+
+  // Sync selectedIndex with embla via useSyncExternalStore (no setState in effects)
+  const selectedIndex = useSyncExternalStore(
+    useCallback(
+      (callback) => {
+        if (!emblaApi) return () => {};
+        emblaApi.on("select", callback);
+        emblaApi.on("reInit", callback);
+        return () => {
+          emblaApi.off("select", callback);
+          emblaApi.off("reInit", callback);
+        };
+      },
+      [emblaApi],
+    ),
+    () => emblaApi?.selectedScrollSnap() ?? 0,
+    () => 0,
+  );
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -57,28 +73,6 @@ export default function ImageCarousel({
     },
     [emblaApi],
   );
-
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    // Initialize state from carousel API - this is a legitimate synchronization with external library
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-    setScrollSnaps(emblaApi.scrollSnapList());
-
-    // Set up event listeners
-    emblaApi.on("select", onSelect);
-    emblaApi.on("reInit", onSelect);
-
-    return () => {
-      emblaApi.off("select", onSelect);
-      emblaApi.off("reInit", onSelect);
-    };
-  }, [emblaApi, onSelect]);
 
   // Auto-play functionality - stops when reduced motion is preferred
   useEffect(() => {
@@ -253,7 +247,7 @@ export default function ImageCarousel({
       {/* Pagination dots */}
       {showDots && images.length > 1 && (
         <div className="mt-4 flex justify-center gap-2">
-          {scrollSnaps.map((_, index) => (
+          {images.map((_, index) => (
             <button
               key={index}
               type="button"

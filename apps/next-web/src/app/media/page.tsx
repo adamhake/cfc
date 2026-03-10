@@ -28,21 +28,25 @@ export const metadata: Metadata = {
 const PAGE_SIZE = 9;
 
 export default async function MediaPage() {
-  const [mediaPageData, initialImages, totalCount] = await Promise.all([
-    sanityFetch<SanityMediaPage | null>({
+  const [{ data: mediaPageData }, { data: initialImages }, { data: totalCount }] = (await Promise.all([
+    sanityFetch({
       query: getMediaPageQuery,
       tags: [CACHE_TAGS.MEDIA],
     }),
-    sanityFetch<SanityMediaImage[]>({
+    sanityFetch({
       query: paginatedMediaImagesQuery,
       params: { start: 0, end: PAGE_SIZE },
       tags: [CACHE_TAGS.MEDIA],
     }),
-    sanityFetch<number>({
+    sanityFetch({
       query: mediaImagesCountQuery,
       tags: [CACHE_TAGS.MEDIA],
     }),
-  ]);
+  ])) as [
+    { data: SanityMediaPage | null },
+    { data: SanityMediaImage[] },
+    { data: number },
+  ];
 
   // Prepare hero data from Sanity or use defaults
   const heroData = mediaPageData?.pageHero?.image

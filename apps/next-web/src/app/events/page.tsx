@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { connection } from "next/server";
 import { sanityFetch, CACHE_TAGS } from "@/lib/sanity-fetch";
 import type { SanityEvent, SanityEventsPage } from "@/lib/sanity-types";
 import { SITE_CONFIG } from "@/utils/seo";
@@ -32,17 +31,16 @@ export const metadata: Metadata = {
 };
 
 export default async function EventsPage() {
-  await connection();
-  const [events, pageData] = await Promise.all([
-    sanityFetch<SanityEvent[]>({
+  const [{ data: events }, { data: pageData }] = (await Promise.all([
+    sanityFetch({
       query: allEventsQuery,
       tags: [CACHE_TAGS.EVENTS_LIST, CACHE_TAGS.EVENTS],
     }),
-    sanityFetch<SanityEventsPage | null>({
+    sanityFetch({
       query: getEventsPageQuery,
       tags: [CACHE_TAGS.EVENTS_LIST],
     }),
-  ]);
+  ])) as [{ data: SanityEvent[] }, { data: SanityEventsPage | null }];
 
   // Prepare hero data from Sanity or use fallbacks
   const heroData = pageData?.pageHero?.image
@@ -88,10 +86,9 @@ export default async function EventsPage() {
         )}
 
         <div className="mt-20 grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
-          {sortedEvents.map((event) => {
-            const isPast = new Date(event.date) < new Date();
-            return <Event key={`event-${event._id}`} {...event} isPast={isPast} />;
-          })}
+          {sortedEvents.map((event) => (
+            <Event key={`event-${event._id}`} {...event} />
+          ))}
         </div>
       </Container>
     </div>
