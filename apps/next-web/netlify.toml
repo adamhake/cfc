@@ -1,0 +1,16 @@
+[build]
+  # Build from monorepo root using Turborepo
+  package = "apps/next-web"
+  command = "pnpm install --frozen-lockfile && pnpm run build --filter=@chimborazo/next-web"
+  publish = "apps/next-web/.next"
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- apps/next-web packages/sanity-config"
+
+[build.environment]
+  NODE_VERSION = "24"
+  PNPM_FLAGS = "--frozen-lockfile --prefer-offline"
+
+# Allow Sanity Studio to embed the site in an iframe (Presentation tool)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "frame-ancestors 'self' https://chimborazo-park-conservancy.sanity.studio https://studio.chimborazoparkconservancy.org https://*.sanity.build"

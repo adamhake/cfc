@@ -67,7 +67,10 @@
       "mcp__playwright__browser_navigate",
       "WebFetch(domain:posthog.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "mcp__context7__query-docs"
+      "mcp__context7__query-docs",
+      "Bash(cd /Users/adamhake/chimbo-park-conservancy/apps/next-web && npx vitest run 2>&1 | tail -50)",
+      "Bash(pnpm --filter @chimborazo/next-web build 2>&1 | tail -80)",
+      "Bash(cd /Users/adamhake/chimbo-park-conservancy/apps/next-web && pnpm test 2>&1)"
     ],
     "deny": [],
     "ask": []

@@ -1,0 +1,48 @@
+import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
+
+export const env = createEnv({
+  server: {
+    SANITY_API_TOKEN: z.string().optional(),
+    SANITY_WEBHOOK_SECRET: z.string().optional(),
+    ANTHROPIC_API_KEY: z.string().optional(),
+    RESEND_API_KEY: z.string().optional(),
+    RESEND_SEGMENT_ID: z.string().optional(),
+    TURNSTILE_SECRET_KEY: z.string().optional(),
+    TURNSTILE_EXPECTED_HOSTNAME: z.string().optional(),
+    POSTHOG_API_KEY: z.string().optional(),
+    POSTHOG_HOST: z.string().url().optional(),
+    ADMIN_EMAIL: z.string().email().optional().default("info@chimborazoparkconservancy.org"),
+    NEWSLETTER_FROM_EMAIL: z.string().email().optional().default("noreply@chimborazopark.org"),
+    VERIFIED_EMAIL_DOMAIN: z.string().optional().default("@chimborazopark.org"),
+  },
+  client: {
+    NEXT_PUBLIC_SANITY_PROJECT_ID: z.string().min(1),
+    NEXT_PUBLIC_SANITY_DATASET: z.string().default("production"),
+    NEXT_PUBLIC_SANITY_API_VERSION: z.string().default("2024-01-01"),
+    NEXT_PUBLIC_SANITY_STUDIO_URL: z.string().url().optional(),
+    NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
+    NEXT_PUBLIC_POSTHOG_KEY: z.string().optional(),
+  },
+  runtimeEnv: {
+    SANITY_API_TOKEN: process.env.SANITY_API_TOKEN,
+    SANITY_WEBHOOK_SECRET: process.env.SANITY_WEBHOOK_SECRET,
+    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
+    RESEND_SEGMENT_ID: process.env.RESEND_SEGMENT_ID,
+    TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
+    TURNSTILE_EXPECTED_HOSTNAME: process.env.TURNSTILE_EXPECTED_HOSTNAME,
+    POSTHOG_API_KEY: process.env.POSTHOG_API_KEY,
+    POSTHOG_HOST: process.env.POSTHOG_HOST,
+    ADMIN_EMAIL: process.env.ADMIN_EMAIL,
+    NEWSLETTER_FROM_EMAIL: process.env.NEWSLETTER_FROM_EMAIL,
+    VERIFIED_EMAIL_DOMAIN: process.env.VERIFIED_EMAIL_DOMAIN,
+    NEXT_PUBLIC_SANITY_PROJECT_ID: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+    NEXT_PUBLIC_SANITY_DATASET: process.env.NEXT_PUBLIC_SANITY_DATASET,
+    NEXT_PUBLIC_SANITY_API_VERSION: process.env.NEXT_PUBLIC_SANITY_API_VERSION,
+    NEXT_PUBLIC_SANITY_STUDIO_URL: process.env.NEXT_PUBLIC_SANITY_STUDIO_URL,
+    NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+    NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
+  },
+  emptyStringAsUndefined: true,
+});
