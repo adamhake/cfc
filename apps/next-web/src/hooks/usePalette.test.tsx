@@ -124,4 +124,25 @@ describe("usePaletteState", () => {
 
     expect(result.current.palette).toBe("olive")
   })
+
+  it("syncs from localStorage on mount when stored value exists", () => {
+    vi.mocked(getStoredPalette).mockReturnValue("green-terra")
+
+    const { result } = renderHook(() => usePaletteState("olive"))
+
+    // After mount effect runs, should sync to stored value
+    expect(result.current.palette).toBe("green-terra")
+    expect(applyPalette).toHaveBeenCalledWith("green-terra")
+    expect(storePalette).toHaveBeenCalledWith("green-terra")
+  })
+
+  it("falls back to initial palette when localStorage is empty", () => {
+    vi.mocked(getStoredPalette).mockReturnValue(null)
+
+    const { result } = renderHook(() => usePaletteState("green-navy"))
+
+    expect(result.current.palette).toBe("green-navy")
+    expect(applyPalette).toHaveBeenCalledWith("green-navy")
+    expect(storePalette).toHaveBeenCalledWith("green-navy")
+  })
 })

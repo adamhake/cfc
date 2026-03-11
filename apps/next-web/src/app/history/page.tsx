@@ -10,12 +10,12 @@ import { SITE_CONFIG } from "@/utils/seo"
 export const metadata: Metadata = {
   title: "History of Chimborazo Park",
   description:
-    "Explore the rich and complex history of Chimborazo Park, from its role as a Civil War hospital to the emancipated community that called it home during Reconstruction.",
+    "Discover Chimborazo Park's history, from Civil War hospital to the emancipated community of Reconstruction in Richmond, VA's Church Hill.",
   alternates: { canonical: `${SITE_CONFIG.url}/history` },
   openGraph: {
     title: "History of Chimborazo Park",
     description:
-      "Explore the rich and complex history of Chimborazo Park, from its role as a Civil War hospital to the emancipated community that called it home during Reconstruction.",
+      "Discover Chimborazo Park's history, from Civil War hospital to the emancipated community of Reconstruction in Richmond, VA's Church Hill.",
     type: "website",
     url: `${SITE_CONFIG.url}/history`,
   },

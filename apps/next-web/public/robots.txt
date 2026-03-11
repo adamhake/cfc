@@ -4,7 +4,6 @@
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /components/
 
 # AI Crawlers - explicitly allow for search and answering
 User-agent: GPTBot

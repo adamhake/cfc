@@ -1,5 +1,6 @@
 "use client"
 
+import { useMemo } from "react"
 import { PaletteContext, usePaletteState } from "@/hooks/usePalette"
 import { ThemeContext, useThemeState } from "@/hooks/useTheme"
 import type { PaletteMode } from "@/utils/palette"
@@ -18,12 +19,19 @@ export function Providers({
   initialResolvedTheme,
   initialPalette,
 }: ProvidersProps) {
-  const themeState = useThemeState(initialTheme, initialResolvedTheme)
-  const paletteState = usePaletteState(initialPalette)
+  const { theme, setTheme, resolvedTheme } = useThemeState(initialTheme, initialResolvedTheme)
+  const { palette, setPalette } = usePaletteState(initialPalette)
+
+  const themeValue = useMemo(
+    () => ({ theme, setTheme, resolvedTheme }),
+    [theme, setTheme, resolvedTheme],
+  )
+
+  const paletteValue = useMemo(() => ({ palette, setPalette }), [palette, setPalette])
 
   return (
-    <ThemeContext value={themeState}>
-      <PaletteContext value={paletteState}>{children}</PaletteContext>
+    <ThemeContext value={themeValue}>
+      <PaletteContext value={paletteValue}>{children}</PaletteContext>
     </ThemeContext>
   )
 }

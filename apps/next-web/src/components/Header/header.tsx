@@ -335,110 +335,71 @@ export default function Header({
               {/* Navigation */}
               <nav className="flex-1">
                 <motion.ul className="space-y-6">
-                  <motion.li
-                    initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: prefersReducedMotion ? 0 : 0.01 }}
-                  >
-                    <Link
-                      href="/"
-                      onClick={() => setMenuOpen(false)}
-                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/" && !currentHash ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
+                  {[
+                    {
+                      href: "/",
+                      label: "Home",
+                      isActive: currentPath === "/" && !currentHash,
+                      delay: 0.01,
+                    },
+                    {
+                      href: "/about",
+                      label: "About Us",
+                      isActive: currentPath === "/about" && !currentHash,
+                      delay: 0.01,
+                    },
+                    {
+                      href: "/amenities",
+                      label: "Amenities",
+                      isActive: currentPath === "/amenities",
+                      delay: 0.02,
+                    },
+                    {
+                      href: "/projects",
+                      label: "Projects",
+                      isActive: currentPath === "/projects",
+                      delay: 0.03,
+                    },
+                    {
+                      href: "/events",
+                      label: "Events",
+                      isActive: currentPath === "/events",
+                      delay: 0.03,
+                    },
+                    {
+                      href: "/get-involved",
+                      label: "Get Involved",
+                      isActive: currentPath === "/get-involved",
+                      delay: 0.04,
+                    },
+                    {
+                      href: "/history",
+                      label: "History",
+                      isActive: currentPath === "/history",
+                      delay: 0.045,
+                    },
+                    {
+                      href: "/media",
+                      label: "Media",
+                      isActive: currentPath === "/media",
+                      delay: 0.05,
+                    },
+                  ].map(({ href, label, isActive, delay }) => (
+                    <motion.li
+                      key={href}
+                      initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: prefersReducedMotion ? 0 : delay }}
                     >
-                      Home
-                    </Link>
-                  </motion.li>
-                  <motion.li
-                    initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: prefersReducedMotion ? 0 : 0.01 }}
-                  >
-                    <Link
-                      href="/about"
-                      onClick={() => setMenuOpen(false)}
-                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/about" && !currentHash ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
-                    >
-                      About Us
-                    </Link>
-                  </motion.li>
-                  <motion.li
-                    initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: prefersReducedMotion ? 0 : 0.02 }}
-                  >
-                    <Link
-                      href="/amenities"
-                      onClick={() => setMenuOpen(false)}
-                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/amenities" ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
-                    >
-                      Amenities
-                    </Link>
-                  </motion.li>
-                  <motion.li
-                    initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: prefersReducedMotion ? 0 : 0.03 }}
-                  >
-                    <Link
-                      href="/projects"
-                      onClick={() => setMenuOpen(false)}
-                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/projects" ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
-                    >
-                      Projects
-                    </Link>
-                  </motion.li>
-                  <motion.li
-                    initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: prefersReducedMotion ? 0 : 0.03 }}
-                  >
-                    <Link
-                      href="/events"
-                      onClick={() => setMenuOpen(false)}
-                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/events" ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
-                    >
-                      Events
-                    </Link>
-                  </motion.li>
-                  <motion.li
-                    initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: prefersReducedMotion ? 0 : 0.04 }}
-                  >
-                    <Link
-                      href="/get-involved"
-                      onClick={() => setMenuOpen(false)}
-                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/get-involved" ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
-                    >
-                      Get Involved
-                    </Link>
-                  </motion.li>
-                  <motion.li
-                    initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: prefersReducedMotion ? 0 : 0.045 }}
-                  >
-                    <Link
-                      href="/history"
-                      onClick={() => setMenuOpen(false)}
-                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/history" ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
-                    >
-                      History
-                    </Link>
-                  </motion.li>
-                  <motion.li
-                    initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: prefersReducedMotion ? 0 : 0.05 }}
-                  >
-                    <Link
-                      href="/media"
-                      onClick={() => setMenuOpen(false)}
-                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${currentPath === "/media" ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
-                    >
-                      Media
-                    </Link>
-                  </motion.li>
+                      <Link
+                        href={href}
+                        onClick={() => setMenuOpen(false)}
+                        className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${isActive ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
+                      >
+                        {label}
+                      </Link>
+                    </motion.li>
+                  ))}
                 </motion.ul>
               </nav>
 

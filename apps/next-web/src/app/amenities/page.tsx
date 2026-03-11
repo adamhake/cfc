@@ -52,12 +52,12 @@ const getIconComponent = (iconName: string) => {
 export const metadata: Metadata = {
   title: "Park Amenities",
   description:
-    "Discover Chimborazo Park's amenities including the historic Round House, gazebo, dog park, woodland trails, and Statue of Liberty. Open dawn to dusk at 3215 E. Broad Street.",
+    "Explore Chimborazo Park's Round House, gazebo, dog park, trails, and Statue of Liberty at 3215 E. Broad Street in Richmond, VA. Open dawn to dusk.",
   alternates: { canonical: `${SITE_CONFIG.url}/amenities` },
   openGraph: {
     title: "Park Amenities",
     description:
-      "Discover Chimborazo Park's amenities including the historic Round House, gazebo, dog park, woodland trails, and Statue of Liberty. Open dawn to dusk at 3215 E. Broad Street.",
+      "Explore Chimborazo Park's Round House, gazebo, dog park, trails, and Statue of Liberty at 3215 E. Broad Street in Richmond, VA. Open dawn to dusk.",
     type: "website",
     url: `${SITE_CONFIG.url}/amenities`,
   },

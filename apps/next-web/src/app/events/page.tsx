@@ -6,17 +6,17 @@ import PageHero from "@/components/PageHero/page-hero"
 import { PortableText } from "@/components/PortableText/portable-text"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityEvent, SanityEventsPage } from "@/lib/sanity-types"
-import { SITE_CONFIG } from "@/utils/seo"
+import { generateItemListStructuredData, SITE_CONFIG } from "@/utils/seo"
 
 export const metadata: Metadata = {
   title: "Events",
   description:
-    "Join us for park clean-ups, tree plantings, educational presentations, and community gatherings. Discover upcoming and past events at Chimborazo Park.",
+    "Join us for park clean-ups, tree plantings, and community gatherings in Richmond, VA. Discover upcoming and past events at Chimborazo Park.",
   alternates: { canonical: `${SITE_CONFIG.url}/events` },
   openGraph: {
     title: "Events",
     description:
-      "Join us for park clean-ups, tree plantings, educational presentations, and community gatherings. Discover upcoming and past events at Chimborazo Park.",
+      "Join us for park clean-ups, tree plantings, and community gatherings in Richmond, VA. Discover upcoming and past events at Chimborazo Park.",
     type: "website",
     url: `${SITE_CONFIG.url}/events`,
     images: [
@@ -63,8 +63,22 @@ export default async function EventsPage() {
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   )
 
+  const itemListData = generateItemListStructuredData(
+    sortedEvents.map((event) => ({
+      name: event.title,
+      url: `${SITE_CONFIG.url}/events/${event.slug.current}`,
+    })),
+  )
+
   return (
     <div className="space-y-24 pb-24">
+      <script
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(itemListData).replace(/</g, "\\u003c").replace(/>/g, "\\u003e"),
+        }}
+      />
       <PageHero {...heroData} height="medium" priority={true} />
 
       <Container spacing="md">

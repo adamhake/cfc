@@ -140,14 +140,16 @@ const FALLBACKS = {
 }
 
 export const metadata: Metadata = {
-  title: "Home",
+  title: {
+    absolute: "Chimborazo Park Conservancy | Preserving Richmond's Historic Park",
+  },
   description:
-    "The Chimborazo Park Conservancy preserves and enhances this Church Hill landmark through community stewardship. Join us in restoring Richmond's historic park.",
+    "Preserving and enhancing Chimborazo Park in Richmond, VA's Church Hill neighborhood through community stewardship. Join us in restoring this historic landmark.",
   alternates: { canonical: SITE_CONFIG.url },
   openGraph: {
-    title: "Home",
+    title: "Chimborazo Park Conservancy | Preserving Richmond's Historic Park",
     description:
-      "The Chimborazo Park Conservancy preserves and enhances this Church Hill landmark through community stewardship. Join us in restoring Richmond's historic park.",
+      "Preserving and enhancing Chimborazo Park in Richmond, VA's Church Hill neighborhood through community stewardship. Join us in restoring this historic landmark.",
     type: "website",
     url: SITE_CONFIG.url,
     images: [SITE_CONFIG.defaultImage],

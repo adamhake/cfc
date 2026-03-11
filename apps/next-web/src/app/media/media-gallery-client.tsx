@@ -37,20 +37,25 @@ export default function MediaGalleryClient({
   const hasMore = cursor < totalCount
 
   const loadMore = useCallback(async () => {
+    if (isLoading) return
     setIsLoading(true)
     try {
-      const res = await fetch(`/api/media?start=${cursor}&end=${cursor + pageSize}`)
+      // Read cursor from state updater to avoid stale closure
+      const currentCursor = cursor
+      const res = await fetch(`/api/media?start=${currentCursor}&end=${currentCursor + pageSize}`)
       if (res.ok) {
         const newImages: SanityMediaImage[] = await res.json()
-        setAllImages((prev) => [...prev, ...newImages])
-        setCursor((prev) => prev + pageSize)
+        if (newImages.length > 0) {
+          setAllImages((prev) => [...prev, ...newImages])
+          setCursor((prev) => prev + pageSize)
+        }
       }
     } catch (error) {
       console.error("Failed to load more images:", error)
     } finally {
       setIsLoading(false)
     }
-  }, [cursor, pageSize])
+  }, [cursor, pageSize, isLoading])
 
   const galleryImages = transformImages(allImages)
 
