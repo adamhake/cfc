@@ -1,5 +1,5 @@
-import { withPostHogConfig } from "@posthog/nextjs-config";
-import type { NextConfig } from "next";
+import { withPostHogConfig } from "@posthog/nextjs-config"
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   cacheLife: {
@@ -9,7 +9,6 @@ const nextConfig: NextConfig = {
       expire: 7776000, // 90 days — Sanity Live handles on-demand revalidation
     },
   },
-  productionBrowserSourceMaps: true,
   images: {
     remotePatterns: [
       {
@@ -19,14 +18,16 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-};
+}
+
+const hasPostHog = !!(process.env.POSTHOG_API_KEY && process.env.POSTHOG_PROJECT_ID)
 
 export default withPostHogConfig(nextConfig, {
   personalApiKey: process.env.POSTHOG_API_KEY ?? "",
-  projectId: process.env.POSTHOG_PROJECT_ID,
+  projectId: process.env.POSTHOG_PROJECT_ID ?? "0",
   sourcemaps: {
     releaseName: "chimborazo-next-web",
     deleteAfterUpload: true,
-    enabled: true,
+    enabled: hasPostHog,
   },
-});
+})
