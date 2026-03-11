@@ -37,7 +37,7 @@ export default function Project({ project }: ProjectProps) {
     >
       <SanityImage
         image={heroImage}
-        alt={heroImage.alt}
+        alt={heroImage?.alt || title}
         className="absolute inset-0 h-full w-full object-cover transition-opacity group-hover:opacity-0"
         sizes={PROJECT_IMAGE_SIZES}
         maxWidth={1024}
