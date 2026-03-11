@@ -4,10 +4,12 @@ import Container from "@/components/Container/container"
 import GetInvolved from "@/components/GetInvolved/get-involved"
 import PageHero from "@/components/PageHero/page-hero"
 import { PortableText } from "@/components/PortableText/portable-text"
+import type { SanityImageObject } from "@/components/SanityImage/sanity-image"
 import { SanityImage } from "@/components/SanityImage/sanity-image"
 import SectionHeader from "@/components/SectionHeader/section-header"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityAboutPage, SanityBoardMember, SanityHighlight } from "@/lib/sanity-types"
+import { getSiteSettings } from "@/lib/site-settings"
 import { SITE_CONFIG } from "@/utils/seo"
 
 export const metadata: Metadata = {
@@ -25,10 +27,34 @@ export const metadata: Metadata = {
 }
 
 export default async function AboutPage() {
-  const { data: pageData } = (await sanityFetch({
-    query: getAboutPageQuery,
-    tags: [CACHE_TAGS.ABOUT],
-  })) as { data: SanityAboutPage | null }
+  const [{ data: pageData }, siteSettings] = await Promise.all([
+    sanityFetch({
+      query: getAboutPageQuery,
+      tags: [CACHE_TAGS.ABOUT],
+    }) as Promise<{ data: SanityAboutPage | null }>,
+    getSiteSettings(),
+  ])
+
+  const getInvolvedGalleryImages =
+    (
+      siteSettings as unknown as {
+        getInvolvedGallery?: {
+          images?: Array<{
+            image?:
+              | SanityImageObject
+              | {
+                  image?: SanityImageObject
+                }
+          }>
+        }
+      }
+    )?.getInvolvedGallery?.images
+      ?.map((item) => {
+        if (!item.image) return null
+        if ("asset" in item.image) return item.image
+        return item.image.image || null
+      })
+      .filter((img): img is SanityImageObject => img != null) || []
 
   const heroData = pageData?.pageHero?.image
     ? {
@@ -110,6 +136,9 @@ export default async function AboutPage() {
         <GetInvolved
           title="Join the Effort"
           description="Whether you donate, volunteer, or simply spread the word, every contribution helps us preserve and enhance Chimborazo Park for future generations."
+          galleryImages={getInvolvedGalleryImages}
+          facebookUrl={siteSettings?.socialMedia?.facebook}
+          instagramUrl={siteSettings?.socialMedia?.instagram}
           gutter="none"
         />
       </Container>
