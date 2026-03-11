@@ -23,6 +23,10 @@ export default function Project({ project }: ProjectProps) {
     category,
     location,
   } = project;
+
+  // Skip rendering if project has no slug
+  if (!slug?.current) return null;
+
   // Use override text if provided, otherwise format the date
   const fmtDate = startDateOverride || formatDateString(startDate, "short");
 
@@ -34,7 +38,7 @@ export default function Project({ project }: ProjectProps) {
     >
       <SanityImage
         image={heroImage}
-        alt={heroImage.alt}
+        alt={heroImage?.alt || title}
         className="absolute inset-0 h-full w-full object-cover transition-opacity group-hover:opacity-0"
         sizes={PROJECT_IMAGE_SIZES}
         maxWidth={1024}
