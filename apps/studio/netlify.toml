@@ -1,14 +1,14 @@
 [build]
-    # Build from monorepo root using Turborepo
-    package = "apps/studio"
-    command = "pnpm run build --filter=@chimborazo/studio"
-    publish = "apps/studio/dist"
-    ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- apps/studio packages/sanity-config"
+# Build from monorepo root using Turborepo
+package = "apps/studio"
+command = "pnpm run build --filter=@chimborazo/studio && npx sanity schema deploy"
+publish = "apps/studio/dist"
+ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- apps/studio packages/sanity-config"
 
 [build.environment]
-    NODE_VERSION = "24"
+NODE_VERSION = "24"
 
 [[redirects]]
-    from = "/*"
-    to = "/index.html"
-    status = 200
+from = "/*"
+to = "/index.html"
+status = 200
