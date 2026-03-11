@@ -19,10 +19,13 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default async function config(): Promise<NextConfig> {
+export default async function config(
+  phase: string,
+  { defaultConfig }: { defaultConfig: NextConfig },
+): Promise<NextConfig> {
   if (process.env.POSTHOG_API_KEY && process.env.POSTHOG_PROJECT_ID) {
     const { withPostHogConfig } = await import("@posthog/nextjs-config")
-    return withPostHogConfig(nextConfig, {
+    const configFn = withPostHogConfig(nextConfig, {
       personalApiKey: process.env.POSTHOG_API_KEY,
       projectId: process.env.POSTHOG_PROJECT_ID,
       sourcemaps: {
@@ -30,7 +33,11 @@ export default async function config(): Promise<NextConfig> {
         deleteAfterUpload: true,
         enabled: true,
       },
-    })
+    }) as unknown as (
+      phase: string,
+      context: { defaultConfig: NextConfig },
+    ) => Promise<NextConfig>
+    return configFn(phase, { defaultConfig })
   }
   return nextConfig
 }
