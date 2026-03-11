@@ -1,4 +1,3 @@
-import { withPostHogConfig } from "@posthog/nextjs-config"
 import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
@@ -20,12 +19,20 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default withPostHogConfig(nextConfig, {
-  personalApiKey: process.env.POSTHOG_API_KEY ?? "",
-  projectId: process.env.POSTHOG_PROJECT_ID ?? "",
-  host: "https://d.chimborazoparkconservancy.org",
-  sourcemaps: {
-    releaseName: "chimbo-park-next-web",
-    deleteAfterUpload: true,
-  },
-})
+async function getConfig(): Promise<NextConfig> {
+  if (process.env.POSTHOG_API_KEY && process.env.POSTHOG_PROJECT_ID) {
+    const { withPostHogConfig } = await import("@posthog/nextjs-config")
+    return withPostHogConfig(nextConfig, {
+      personalApiKey: process.env.POSTHOG_API_KEY,
+      projectId: process.env.POSTHOG_PROJECT_ID,
+      host: "https://d.chimborazoparkconservancy.org",
+      sourcemaps: {
+        releaseName: "chimbo-park-next-web",
+        deleteAfterUpload: true,
+      },
+    })
+  }
+  return nextConfig
+}
+
+export default getConfig()
