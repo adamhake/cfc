@@ -1,23 +1,23 @@
-'use client';
+"use client"
 
-import Container from "@/components/Container/container";
-import { NewsletterForm } from "@/components/NewsletterForm";
-import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image";
-import { SocialLinks } from "@/components/SocialLinks/social-links";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion"
+import { useEffect, useState } from "react"
+import Container from "@/components/Container/container"
+import { NewsletterForm } from "@/components/NewsletterForm"
+import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image"
+import { SocialLinks } from "@/components/SocialLinks/social-links"
+import { useReducedMotion } from "@/hooks/useReducedMotion"
 
 interface GetInvolvedProps {
-  title?: string;
-  description?: string;
-  gutter?: "default" | "none";
-  id?: string;
+  title?: string
+  description?: string
+  gutter?: "default" | "none"
+  id?: string
   /** Gallery images fetched server-side */
-  galleryImages?: SanityImageObject[];
+  galleryImages?: SanityImageObject[]
   /** Social media URLs from site settings */
-  facebookUrl?: string;
-  instagramUrl?: string;
+  facebookUrl?: string
+  instagramUrl?: string
 }
 
 export default function GetInvolved({
@@ -29,21 +29,21 @@ export default function GetInvolved({
   facebookUrl,
   instagramUrl,
 }: GetInvolvedProps) {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const prefersReducedMotion = useReducedMotion();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const prefersReducedMotion = useReducedMotion()
 
-  const images = galleryImages;
+  const images = galleryImages
 
   useEffect(() => {
     // Only cycle images if user hasn't requested reduced motion and there are multiple images
-    if (prefersReducedMotion || images.length <= 1) return;
+    if (prefersReducedMotion || images.length <= 1) return
 
     const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % images.length);
-    }, 5000); // Change image every 5 seconds
+      setCurrentImageIndex((prev) => (prev + 1) % images.length)
+    }, 5000) // Change image every 5 seconds
 
-    return () => clearInterval(interval);
-  }, [prefersReducedMotion, images.length]);
+    return () => clearInterval(interval)
+  }, [prefersReducedMotion, images.length])
 
   return (
     <Container spacing="none" gutter={gutter} id={id}>
@@ -112,5 +112,5 @@ export default function GetInvolved({
         </div>
       </div>
     </Container>
-  );
+  )
 }

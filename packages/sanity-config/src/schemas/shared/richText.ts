@@ -65,21 +65,13 @@ export function createRichTextBlocks(options: CreateRichTextBlocksOptions = {}) 
       title: "Leading",
       value: "leading",
       component: ({ children }: { children?: React.ReactNode }) =>
-        React.createElement(
-          "p",
-          { style: { fontSize: "1rem", lineHeight: "1.6" } },
-          children
-        ),
+        React.createElement("p", { style: { fontSize: "1rem", lineHeight: "1.6" } }, children),
     },
     {
       title: "Leading Large",
       value: "leading-lg",
       component: ({ children }: { children?: React.ReactNode }) =>
-        React.createElement(
-          "p",
-          { style: { fontSize: "1.25rem", lineHeight: "1.6" } },
-          children
-        ),
+        React.createElement("p", { style: { fontSize: "1.25rem", lineHeight: "1.6" } }, children),
     },
     { title: "H2", value: "h2" },
     { title: "H3", value: "h3" },
@@ -213,9 +205,7 @@ export function createBodyField(options: CreateBodyFieldOptions = {}) {
     required = false,
   } = options
 
-  const ofArray: unknown[] = [
-    createRichTextBlocks({ includeBlockquote }),
-  ]
+  const ofArray: unknown[] = [createRichTextBlocks({ includeBlockquote })]
 
   if (includeImages) {
     ofArray.push(createInlineImage())
@@ -231,9 +221,7 @@ export function createBodyField(options: CreateBodyFieldOptions = {}) {
     of: ofArray,
     ...(description ? { description } : {}),
     ...(group ? { group } : {}),
-    ...(required
-      ? { validation: (rule: { required: () => unknown }) => rule.required() }
-      : {}),
+    ...(required ? { validation: (rule: { required: () => unknown }) => rule.required() } : {}),
   }
 }
 

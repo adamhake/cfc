@@ -1,5 +1,5 @@
-import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import { createEnv } from "@t3-oss/env-nextjs"
+import { z } from "zod"
 
 export const env = createEnv({
   server: {
@@ -11,8 +11,6 @@ export const env = createEnv({
     RESEND_SEGMENT_ID: z.string().optional(),
     TURNSTILE_SECRET_KEY: z.string().optional(),
     TURNSTILE_EXPECTED_HOSTNAME: z.string().optional(),
-    POSTHOG_API_KEY: z.string().optional(),
-    POSTHOG_HOST: z.string().url().optional(),
     ADMIN_EMAIL: z.string().email().optional().default("info@chimborazoparkconservancy.org"),
     NEWSLETTER_FROM_EMAIL: z.string().email().optional().default("noreply@chimborazopark.org"),
     VERIFIED_EMAIL_DOMAIN: z.string().optional().default("@chimborazopark.org"),
@@ -34,8 +32,6 @@ export const env = createEnv({
     RESEND_SEGMENT_ID: process.env.RESEND_SEGMENT_ID,
     TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
     TURNSTILE_EXPECTED_HOSTNAME: process.env.TURNSTILE_EXPECTED_HOSTNAME,
-    POSTHOG_API_KEY: process.env.POSTHOG_API_KEY,
-    POSTHOG_HOST: process.env.POSTHOG_HOST,
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,
     NEWSLETTER_FROM_EMAIL: process.env.NEWSLETTER_FROM_EMAIL,
     VERIFIED_EMAIL_DOMAIN: process.env.VERIFIED_EMAIL_DOMAIN,
@@ -47,4 +43,4 @@ export const env = createEnv({
     NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
   },
   emptyStringAsUndefined: true,
-});
+})

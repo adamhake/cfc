@@ -7,12 +7,13 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "format": "turbo run format",
+    "check": "turbo run check",
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules",
     "type-check": "turbo run type-check"
   },
   "devDependencies": {
-    "prettier": "catalog:",
+    "@biomejs/biome": "catalog:",
     "turbo": "^2.8.16",
     "typescript": "catalog:"
   },

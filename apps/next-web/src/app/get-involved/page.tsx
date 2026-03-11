@@ -1,8 +1,4 @@
-import type { Metadata } from "next";
-import { sanityFetch, CACHE_TAGS } from "@/lib/sanity-fetch";
-import type { SanityGetInvolvedPage, SanitySiteSettings } from "@/lib/sanity-types";
-import { SITE_CONFIG } from "@/utils/seo";
-import { getGetInvolvedPageQuery, getSiteSettingsQuery } from "@chimborazo/sanity-config/queries";
+import { getGetInvolvedPageQuery, getSiteSettingsQuery } from "@chimborazo/sanity-config/queries"
 import {
   CalendarDays,
   HandHeart,
@@ -13,17 +9,21 @@ import {
   Trees,
   Users,
   Wrench,
-} from "lucide-react";
-import { Button } from "@/components/Button/button";
-import Chip from "@/components/Chip/chip";
-import Container from "@/components/Container/container";
-import { FacebookIcon } from "@/components/FacebookIcon/facebook-icon";
-import { InstagramIcon } from "@/components/InstagramIcon/instagram-icon";
-import { NewsletterForm } from "@/components/NewsletterForm";
-import { Image } from "@/components/OptimizedImage/optimized-image";
-import PageHero from "@/components/PageHero/page-hero";
-import SectionHeader from "@/components/SectionHeader/section-header";
-import SupportOption from "@/components/SupportOption/support-option";
+} from "lucide-react"
+import type { Metadata } from "next"
+import { Button } from "@/components/Button/button"
+import Chip from "@/components/Chip/chip"
+import Container from "@/components/Container/container"
+import { FacebookIcon } from "@/components/FacebookIcon/facebook-icon"
+import { InstagramIcon } from "@/components/InstagramIcon/instagram-icon"
+import { NewsletterForm } from "@/components/NewsletterForm"
+import { Image } from "@/components/OptimizedImage/optimized-image"
+import PageHero from "@/components/PageHero/page-hero"
+import SectionHeader from "@/components/SectionHeader/section-header"
+import SupportOption from "@/components/SupportOption/support-option"
+import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import type { SanityGetInvolvedPage, SanitySiteSettings } from "@/lib/sanity-types"
+import { SITE_CONFIG } from "@/utils/seo"
 
 export const metadata: Metadata = {
   title: "Get Involved",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     type: "website",
     url: `${SITE_CONFIG.url}/get-involved`,
   },
-};
+}
 
 export default async function GetInvolvedPage() {
   const [{ data: pageData }, { data: siteSettings }] = (await Promise.all([
@@ -49,15 +49,15 @@ export default async function GetInvolvedPage() {
       query: getSiteSettingsQuery,
       tags: [CACHE_TAGS.SITE_SETTINGS],
     }),
-  ])) as [{ data: SanityGetInvolvedPage | null }, { data: SanitySiteSettings | null }];
+  ])) as [{ data: SanityGetInvolvedPage | null }, { data: SanitySiteSettings | null }]
 
   // Extract social media handles from URLs
   const facebookHandle =
     siteSettings?.socialMedia?.facebook?.split("facebook.com/")[1]?.replace(/\/$/, "") ||
-    "friendsofchimborazopark";
+    "friendsofchimborazopark"
   const instagramHandle =
     siteSettings?.socialMedia?.instagram?.split("instagram.com/")[1]?.replace(/\/$/, "") ||
-    "friendsofchimborazopark";
+    "friendsofchimborazopark"
 
   const heroData = pageData?.pageHero?.image
     ? {
@@ -72,7 +72,7 @@ export default async function GetInvolvedPage() {
         imageAlt: "Volunteers working at Chimborazo Park",
         imageWidth: 800,
         imageHeight: 600,
-      };
+      }
 
   return (
     <div>
@@ -458,5 +458,5 @@ export default async function GetInvolvedPage() {
         </Container>
       </div>
     </div>
-  );
+  )
 }

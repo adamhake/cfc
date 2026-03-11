@@ -1,21 +1,21 @@
-import type { SanityEvent } from "@/lib/sanity-types";
-import { formatDateString } from "@/utils/time";
-import Link from "next/link";
-import { Calendar, Clock, MapPin } from "lucide-react";
-import Chip from "../Chip/chip";
-import { SanityImage } from "../SanityImage/sanity-image";
+import { Calendar, Clock, MapPin } from "lucide-react"
+import Link from "next/link"
+import type { SanityEvent } from "@/lib/sanity-types"
+import { formatDateString } from "@/utils/time"
+import Chip from "../Chip/chip"
+import { SanityImage } from "../SanityImage/sanity-image"
 
-const DEFAULT_EVENT_IMAGE_SIZES = "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 576px";
-const DEFAULT_EVENT_IMAGE_MAX_WIDTH = 1024;
-const DEFAULT_EVENT_IMAGE_BREAKPOINTS = [320, 480, 576, 640, 768, 896, 1024];
-const DEFAULT_EVENT_IMAGE_QUALITY = 70;
+const DEFAULT_EVENT_IMAGE_SIZES = "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 576px"
+const DEFAULT_EVENT_IMAGE_MAX_WIDTH = 1024
+const DEFAULT_EVENT_IMAGE_BREAKPOINTS = [320, 480, 576, 640, 768, 896, 1024]
+const DEFAULT_EVENT_IMAGE_QUALITY = 70
 
 interface EventProps extends SanityEvent {
-  isPast?: boolean;
-  imageSizes?: string;
-  imageMaxWidth?: number;
-  imageBreakpoints?: number[];
-  imageQuality?: number;
+  isPast?: boolean
+  imageSizes?: string
+  imageMaxWidth?: number
+  imageBreakpoints?: number[]
+  imageQuality?: number
 }
 
 export default function Event({
@@ -32,8 +32,8 @@ export default function Event({
   imageBreakpoints = DEFAULT_EVENT_IMAGE_BREAKPOINTS,
   imageQuality = DEFAULT_EVENT_IMAGE_QUALITY,
 }: EventProps) {
-  const past = isPast ?? new Date(date) < new Date();
-  const fmtDate = formatDateString(date, "short");
+  const past = isPast ?? new Date(date) < new Date()
+  const fmtDate = formatDateString(date, "short")
 
   return (
     <Link
@@ -77,5 +77,5 @@ export default function Event({
         </div>
       </div>
     </Link>
-  );
+  )
 }

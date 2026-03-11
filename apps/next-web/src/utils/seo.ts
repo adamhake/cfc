@@ -27,29 +27,29 @@ export const SITE_CONFIG = {
     height: 1262,
     alt: "Chimborazo Park at sunset",
   },
-} as const;
+} as const
 
 /**
  * Type-safe metadata configuration
  */
 export interface PageMetadata {
-  title?: string;
-  description?: string;
+  title?: string
+  description?: string
   image?: {
-    url: string;
-    width?: number;
-    height?: number;
-    alt?: string;
-  };
-  type?: "website" | "article" | "profile";
-  url?: string;
-  publishedTime?: string;
-  modifiedTime?: string;
-  author?: string;
-  section?: string;
-  tags?: string[];
-  noIndex?: boolean;
-  canonical?: string;
+    url: string
+    width?: number
+    height?: number
+    alt?: string
+  }
+  type?: "website" | "article" | "profile"
+  url?: string
+  publishedTime?: string
+  modifiedTime?: string
+  author?: string
+  section?: string
+  tags?: string[]
+  noIndex?: boolean
+  canonical?: string
 }
 
 /**
@@ -57,9 +57,9 @@ export interface PageMetadata {
  */
 export function formatTitle(pageTitle?: string): string {
   if (!pageTitle) {
-    return SITE_CONFIG.name;
+    return SITE_CONFIG.name
   }
-  return `${pageTitle} | ${SITE_CONFIG.name}`;
+  return `${pageTitle} | ${SITE_CONFIG.name}`
 }
 
 /**
@@ -78,10 +78,10 @@ export function generateMetaTags(config: PageMetadata): Array<Record<string, str
     section,
     tags,
     noIndex = false,
-  } = config;
+  } = config
 
-  const formattedTitle = formatTitle(title);
-  const imageUrl = image.url.startsWith("http") ? image.url : `${SITE_CONFIG.url}${image.url}`;
+  const formattedTitle = formatTitle(title)
+  const imageUrl = image.url.startsWith("http") ? image.url : `${SITE_CONFIG.url}${image.url}`
 
   const meta: Array<Record<string, string>> = [
     // Primary Meta Tags
@@ -92,14 +92,14 @@ export function generateMetaTags(config: PageMetadata): Array<Record<string, str
       name: "description",
       content: description,
     },
-  ];
+  ]
 
   // Robots
   if (noIndex) {
     meta.push({
       name: "robots",
       content: "noindex, nofollow",
-    });
+    })
   }
 
   // Open Graph
@@ -132,26 +132,26 @@ export function generateMetaTags(config: PageMetadata): Array<Record<string, str
       property: "og:locale",
       content: SITE_CONFIG.locale,
     },
-  );
+  )
 
   // Optional Open Graph image dimensions
   if (image.width) {
     meta.push({
       property: "og:image:width",
       content: image.width.toString(),
-    });
+    })
   }
   if (image.height) {
     meta.push({
       property: "og:image:height",
       content: image.height.toString(),
-    });
+    })
   }
   if (image.alt) {
     meta.push({
       property: "og:image:alt",
       content: image.alt,
-    });
+    })
   }
 
   // Article-specific Open Graph tags
@@ -160,33 +160,33 @@ export function generateMetaTags(config: PageMetadata): Array<Record<string, str
       meta.push({
         property: "article:published_time",
         content: publishedTime,
-      });
+      })
     }
     if (modifiedTime) {
       meta.push({
         property: "article:modified_time",
         content: modifiedTime,
-      });
+      })
     }
     if (author) {
       meta.push({
         property: "article:author",
         content: author,
-      });
+      })
     }
     if (section) {
       meta.push({
         property: "article:section",
         content: section,
-      });
+      })
     }
     if (tags && tags.length > 0) {
       tags.forEach((tag) => {
         meta.push({
           property: "article:tag",
           content: tag,
-        });
-      });
+        })
+      })
     }
   }
 
@@ -208,40 +208,40 @@ export function generateMetaTags(config: PageMetadata): Array<Record<string, str
       name: "twitter:image",
       content: imageUrl,
     },
-  );
+  )
 
   if (image.alt) {
     meta.push({
       name: "twitter:image:alt",
       content: image.alt,
-    });
+    })
   }
 
   if (SITE_CONFIG.twitterHandle) {
     meta.push({
       name: "twitter:site",
       content: SITE_CONFIG.twitterHandle,
-    });
+    })
   }
 
-  return meta;
+  return meta
 }
 
 /**
  * Generates link tags including canonical URL
  */
 export function generateLinkTags(config: {
-  canonical?: string;
-  preloadImage?: string;
-  preloadImagePriority?: "high" | "low";
+  canonical?: string
+  preloadImage?: string
+  preloadImagePriority?: "high" | "low"
 }): Array<Record<string, string>> {
-  const links: Array<Record<string, string>> = [];
+  const links: Array<Record<string, string>> = []
 
   if (config.canonical) {
     links.push({
       rel: "canonical",
       href: config.canonical,
-    });
+    })
   }
 
   if (config.preloadImage) {
@@ -250,29 +250,29 @@ export function generateLinkTags(config: {
       as: "image",
       href: config.preloadImage,
       ...(config.preloadImagePriority && { fetchPriority: config.preloadImagePriority }),
-    });
+    })
   }
 
-  return links;
+  return links
 }
 
 /**
  * Generates JSON-LD structured data for an article/event
  */
 export function generateArticleStructuredData(config: {
-  headline: string;
-  description: string;
-  image: string | string[];
-  datePublished: string;
-  dateModified?: string;
+  headline: string
+  description: string
+  image: string | string[]
+  datePublished: string
+  dateModified?: string
   author?: {
-    name: string;
-    url?: string;
-  };
+    name: string
+    url?: string
+  }
   publisher?: {
-    name: string;
-    logo?: string;
-  };
+    name: string
+    logo?: string
+  }
 }) {
   return {
     "@context": "https://schema.org",
@@ -297,39 +297,39 @@ export function generateArticleStructuredData(config: {
       name: config.publisher?.name || SITE_CONFIG.name,
       logo: config.publisher?.logo || `${SITE_CONFIG.url}/logo512.png`,
     },
-  };
+  }
 }
 
 /**
  * Generates JSON-LD structured data for an event
  */
 export function generateEventStructuredData(config: {
-  name: string;
-  description: string;
-  image: string | string[];
-  startDate: string;
-  endDate?: string;
+  name: string
+  description: string
+  image: string | string[]
+  startDate: string
+  endDate?: string
   location: {
-    name: string;
+    name: string
     address?: {
-      streetAddress?: string;
-      addressLocality?: string;
-      addressRegion?: string;
-      postalCode?: string;
-      addressCountry?: string;
-    };
-  };
+      streetAddress?: string
+      addressLocality?: string
+      addressRegion?: string
+      postalCode?: string
+      addressCountry?: string
+    }
+  }
   organizer?: {
-    name: string;
-    url?: string;
-  };
-  url?: string;
+    name: string
+    url?: string
+  }
+  url?: string
   offers?: {
-    price: string;
-    priceCurrency: string;
-    availability: string;
-    url?: string;
-  };
+    price: string
+    priceCurrency: string
+    availability: string
+    url?: string
+  }
 }) {
   return {
     "@context": "https://schema.org",
@@ -356,7 +356,7 @@ export function generateEventStructuredData(config: {
     },
     ...(config.url && { url: config.url }),
     ...(config.offers && { offers: { "@type": "Offer", ...config.offers } }),
-  };
+  }
 }
 
 /**
@@ -383,15 +383,13 @@ export function generateOrganizationStructuredData() {
       name: "Church Hill, Richmond, Virginia",
     },
     sameAs: SITE_CONFIG.socialProfiles,
-  };
+  }
 }
 
 /**
  * Generates JSON-LD BreadcrumbList structured data
  */
-export function generateBreadcrumbStructuredData(
-  items: Array<{ name: string; url: string }>,
-) {
+export function generateBreadcrumbStructuredData(items: Array<{ name: string; url: string }>) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -401,15 +399,13 @@ export function generateBreadcrumbStructuredData(
       name: item.name,
       item: item.url,
     })),
-  };
+  }
 }
 
 /**
  * Generates JSON-LD FAQPage structured data
  */
-export function generateFAQStructuredData(
-  faqs: Array<{ question: string; answer: string }>,
-) {
+export function generateFAQStructuredData(faqs: Array<{ question: string; answer: string }>) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -421,5 +417,5 @@ export function generateFAQStructuredData(
         text: faq.answer,
       },
     })),
-  };
+  }
 }

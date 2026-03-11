@@ -1,5 +1,5 @@
 import { defineArrayMember, defineField, defineType } from "sanity"
-import { createRichTextBlocks, createInlineImage, createInlineFile } from "./shared"
+import { createInlineFile, createInlineImage, createRichTextBlocks } from "./shared"
 
 export default defineType({
   name: "aboutPage",
@@ -34,7 +34,7 @@ export default defineType({
           name: "imageV2",
           title: "Hero Image (Direct Upload)",
           type: "contentImage",
-          description: "Upload/select an image directly. Preferred for new content.",
+          description: "Upload/select an image.",
         }),
       ],
       validation: (rule) => rule.required(),
@@ -61,7 +61,7 @@ export default defineType({
       type: "array",
       group: "missionVision",
       description:
-        "Key facts or stats displayed as a banner (e.g., \"Founded 2023\", \"100% Volunteer-Run\"). 2–4 items work best.",
+        'Key facts or stats displayed as a banner (e.g., "Founded 2023", "100% Volunteer-Run"). 2–4 items work best.',
       validation: (rule) => rule.max(4),
       of: [
         defineArrayMember({

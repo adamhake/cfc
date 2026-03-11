@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
-import { sanityFetch, CACHE_TAGS } from "@/lib/sanity-fetch";
-import type { SanityEvent, SanityEventsPage } from "@/lib/sanity-types";
-import { SITE_CONFIG } from "@/utils/seo";
-import { allEventsQuery, getEventsPageQuery } from "@chimborazo/sanity-config/queries";
-import Container from "@/components/Container/container";
-import Event from "@/components/Event/event";
-import PageHero from "@/components/PageHero/page-hero";
-import { PortableText } from "@/components/PortableText/portable-text";
+import { allEventsQuery, getEventsPageQuery } from "@chimborazo/sanity-config/queries"
+import type { Metadata } from "next"
+import Container from "@/components/Container/container"
+import Event from "@/components/Event/event"
+import PageHero from "@/components/PageHero/page-hero"
+import { PortableText } from "@/components/PortableText/portable-text"
+import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import type { SanityEvent, SanityEventsPage } from "@/lib/sanity-types"
+import { SITE_CONFIG } from "@/utils/seo"
 
 export const metadata: Metadata = {
   title: "Events",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
       },
     ],
   },
-};
+}
 
 export default async function EventsPage() {
   const [{ data: events }, { data: pageData }] = (await Promise.all([
@@ -40,7 +40,7 @@ export default async function EventsPage() {
       query: getEventsPageQuery,
       tags: [CACHE_TAGS.EVENTS_LIST],
     }),
-  ])) as [{ data: SanityEvent[] }, { data: SanityEventsPage | null }];
+  ])) as [{ data: SanityEvent[] }, { data: SanityEventsPage | null }]
 
   // Prepare hero data from Sanity or use fallbacks
   const heroData = pageData?.pageHero?.image
@@ -56,12 +56,12 @@ export default async function EventsPage() {
         imageAlt: "Community volunteers at Chimborazo Park",
         imageWidth: 2000,
         imageHeight: 1333,
-      };
+      }
 
   // Sort events by date, newest first
   const sortedEvents = [...events].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-  );
+  )
 
   return (
     <div className="space-y-24 pb-24">
@@ -92,5 +92,5 @@ export default async function EventsPage() {
         </div>
       </Container>
     </div>
-  );
+  )
 }

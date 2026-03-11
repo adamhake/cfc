@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react"
 
 /**
  * FlowingSection - Content with organic curved dividers between sections
@@ -6,12 +6,12 @@ import { ReactNode } from "react";
  */
 
 interface FlowingSectionProps {
-  children: ReactNode;
-  topWave?: boolean;
-  bottomWave?: boolean;
-  waveColor?: string;
-  backgroundColor?: string;
-  className?: string;
+  children: ReactNode
+  topWave?: boolean
+  bottomWave?: boolean
+  waveColor?: string
+  backgroundColor?: string
+  className?: string
 }
 
 export default function FlowingSection({
@@ -34,6 +34,7 @@ export default function FlowingSection({
             preserveAspectRatio="none"
             className="relative block h-12 w-full lg:h-16"
             xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
           >
             <path d="M0,50 Q300,80 600,50 T1200,50 L1200,0 L0,0 Z" className={waveColor} />
           </svg>
@@ -53,11 +54,12 @@ export default function FlowingSection({
             preserveAspectRatio="none"
             className="relative block h-12 w-full lg:h-16"
             xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
           >
             <path d="M0,50 Q300,20 600,50 T1200,50 L1200,100 L0,100 Z" className={waveColor} />
           </svg>
         </div>
       )}
     </div>
-  );
+  )
 }

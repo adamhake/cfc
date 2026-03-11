@@ -1,7 +1,7 @@
+import { defineQuery } from "groq"
 import { imageFieldProjection } from "./imageProjections"
 
 // Base media image fields projection
-// Note: These are plain GROQ query strings
 export const mediaImageFields = `
   _id,
   _type,
@@ -9,53 +9,43 @@ export const mediaImageFields = `
   "image": imageV2{
     ${imageFieldProjection}
   },
-  "category": coalesce(imageV2.category, "park-views"),
-  featured,
-  uploadedAt
+  "category": coalesce(imageV2.category, "park-views")
 `
 
 // Get all media images
-export const allMediaImagesQuery = `
-  *[_type == "mediaImage" && defined(imageV2.asset) && hideFromMediaPage != true] | order(uploadedAt desc) {
+export const allMediaImagesQuery = defineQuery(`
+  *[_type == "mediaImage" && defined(imageV2.asset)] | order(_createdAt desc) {
     ${mediaImageFields}
   }
-`
+`)
 
 // Get media images by category
-export const mediaImagesByCategoryQuery = `
+export const mediaImagesByCategoryQuery = defineQuery(`
   *[
     _type == "mediaImage" &&
     defined(imageV2.asset) &&
-    hideFromMediaPage != true &&
     imageV2.category == $category
-  ] | order(uploadedAt desc) {
+  ] | order(_createdAt desc) {
     ${mediaImageFields}
   }
-`
-
-// Get featured media images
-export const featuredMediaImagesQuery = `
-  *[_type == "mediaImage" && defined(imageV2.asset) && hideFromMediaPage != true && featured == true] | order(uploadedAt desc) {
-    ${mediaImageFields}
-  }
-`
+`)
 
 // Get media image by ID
-export const mediaImageByIdQuery = `
+export const mediaImageByIdQuery = defineQuery(`
   *[_type == "mediaImage" && defined(imageV2.asset) && _id == $id][0] {
     ${mediaImageFields}
   }
-`
+`)
 
 // Paginated media images query
 // Uses slice-based pagination with limit and offset
-export const paginatedMediaImagesQuery = `
-  *[_type == "mediaImage" && defined(imageV2.asset) && hideFromMediaPage != true] | order(uploadedAt desc) [$start...$end] {
+export const paginatedMediaImagesQuery = defineQuery(`
+  *[_type == "mediaImage" && defined(imageV2.asset)] | order(_createdAt desc) [$start...$end] {
     ${mediaImageFields}
   }
-`
+`)
 
 // Get total count of media images
-export const mediaImagesCountQuery = `
-  count(*[_type == "mediaImage" && defined(imageV2.asset) && hideFromMediaPage != true])
-`
+export const mediaImagesCountQuery = defineQuery(`
+  count(*[_type == "mediaImage" && defined(imageV2.asset)])
+`)

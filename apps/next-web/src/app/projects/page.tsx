@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
-import { sanityFetch, CACHE_TAGS } from "@/lib/sanity-fetch";
-import type { SanityProject, SanityProjectsPage } from "@/lib/sanity-types";
-import { SITE_CONFIG } from "@/utils/seo";
-import { allProjectsQuery, getProjectsPageQuery } from "@chimborazo/sanity-config/queries";
-import Container from "@/components/Container/container";
-import PageHero from "@/components/PageHero/page-hero";
-import { PortableText } from "@/components/PortableText/portable-text";
-import Project from "@/components/Project/project";
+import { allProjectsQuery, getProjectsPageQuery } from "@chimborazo/sanity-config/queries"
+import type { Metadata } from "next"
+import Container from "@/components/Container/container"
+import PageHero from "@/components/PageHero/page-hero"
+import { PortableText } from "@/components/PortableText/portable-text"
+import Project from "@/components/Project/project"
+import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import type { SanityProject, SanityProjectsPage } from "@/lib/sanity-types"
+import { SITE_CONFIG } from "@/utils/seo"
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
       },
     ],
   },
-};
+}
 
 export default async function ProjectsPage() {
   const [{ data: projects }, { data: pageData }] = (await Promise.all([
@@ -40,7 +40,7 @@ export default async function ProjectsPage() {
       query: getProjectsPageQuery,
       tags: [CACHE_TAGS.PROJECTS_LIST],
     }),
-  ])) as [{ data: SanityProject[] }, { data: SanityProjectsPage | null }];
+  ])) as [{ data: SanityProject[] }, { data: SanityProjectsPage | null }]
 
   // Prepare hero data from Sanity or use fallbacks
   const heroData = pageData?.pageHero?.image
@@ -56,14 +56,14 @@ export default async function ProjectsPage() {
         imageAlt: "Projects at Chimborazo Park",
         imageWidth: 2000,
         imageHeight: 1333,
-      };
+      }
 
   // Sort projects: active first, then by startDate desc
   const sortedProjects = [...projects].sort((a, b) => {
-    if (a.status === "active" && b.status !== "active") return -1;
-    if (a.status !== "active" && b.status === "active") return 1;
-    return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
-  });
+    if (a.status === "active" && b.status !== "active") return -1
+    if (a.status !== "active" && b.status === "active") return 1
+    return new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
+  })
 
   return (
     <div className="space-y-24 pb-24">
@@ -105,5 +105,5 @@ export default async function ProjectsPage() {
         )}
       </Container>
     </div>
-  );
+  )
 }

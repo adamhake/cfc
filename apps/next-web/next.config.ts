@@ -1,4 +1,5 @@
-import type { NextConfig } from "next";
+import { withPostHogConfig } from "@posthog/nextjs-config"
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   cacheLife: {
@@ -17,18 +18,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  async rewrites() {
-    return [
-      {
-        source: "/ph/static/:path*",
-        destination: "https://us-assets.i.posthog.com/static/:path*",
-      },
-      {
-        source: "/ph/:path*",
-        destination: "https://us.i.posthog.com/:path*",
-      },
-    ];
-  },
-};
+}
 
-export default nextConfig;
+export default withPostHogConfig(nextConfig, {
+  personalApiKey: process.env.POSTHOG_API_KEY ?? "",
+  projectId: process.env.POSTHOG_PROJECT_ID ?? "",
+  host: "https://d.chimborazoparkconservancy.org",
+  sourcemaps: {
+    releaseName: "chimbo-park-next-web",
+    deleteAfterUpload: true,
+  },
+})

@@ -1,26 +1,26 @@
+import { cloneElement, isValidElement } from "react"
 import SanityImageCarousel, {
   type SanityImageObject,
-} from "@/components/SanityImageCarousel/sanity-image-carousel";
-import { cloneElement, isValidElement } from "react";
+} from "@/components/SanityImageCarousel/sanity-image-carousel"
 
 interface AmenitySectionProps {
-  title: string;
-  icon: React.ReactElement;
-  description: string;
-  details?: string[];
+  title: string
+  icon: React.ReactElement
+  description: string
+  details?: string[]
   link?: {
-    text: string;
-    url: string;
-  };
-  images: SanityImageObject[];
+    text: string
+    url: string
+  }
+  images: SanityImageObject[]
   /**
    * Whether to show the image on the left (default) or right side
    */
-  imagePosition?: "left" | "right";
+  imagePosition?: "left" | "right"
   /**
    * Whether this is the first section (for priority image loading)
    */
-  priority?: boolean;
+  priority?: boolean
 }
 
 export default function AmenitySection({
@@ -38,7 +38,7 @@ export default function AmenitySection({
     ? cloneElement(icon, {
         className: "h-7 w-7 stroke-primary-700 dark:stroke-primary-400",
       } as React.HTMLAttributes<HTMLElement>)
-    : icon;
+    : icon
 
   const imageContent = (
     <div
@@ -57,7 +57,7 @@ export default function AmenitySection({
         priority={priority}
       />
     </div>
-  );
+  )
 
   const contentSection = (
     <div
@@ -85,9 +85,9 @@ export default function AmenitySection({
 
         {/* Details */}
         {details && details.length > 0 && (
-          <ul className="space-y-2 font-body text-grey-700 dark:text-grey-300" role="list">
-            {details.map((detail, index) => (
-              <li key={index} className="flex items-start gap-2">
+          <ul className="space-y-2 font-body text-grey-700 dark:text-grey-300">
+            {details.map((detail) => (
+              <li key={detail} className="flex items-start gap-2">
                 <span
                   className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-600 dark:bg-accent-400"
                   aria-hidden="true"
@@ -114,12 +114,12 @@ export default function AmenitySection({
         )}
       </div>
     </div>
-  );
+  )
 
   return (
     <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
       {imageContent}
       {contentSection}
     </div>
-  );
+  )
 }

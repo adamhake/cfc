@@ -1,7 +1,7 @@
-export { SanityImage, SanityBackgroundImage } from "./sanity-image";
 export type {
-  SanityImageProps,
-  SanityImageObject,
   SanityImageAsset,
   SanityImageMetadata,
-} from "./sanity-image";
+  SanityImageObject,
+  SanityImageProps,
+} from "./sanity-image"
+export { SanityBackgroundImage, SanityImage } from "./sanity-image"

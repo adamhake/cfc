@@ -1,16 +1,16 @@
-"use client";
+"use client"
 
-import { usePathname } from "next/navigation";
+import { usePathname } from "next/navigation"
 
 /**
  * Button to exit preview mode.
  * Displayed when viewing the site with draft content enabled.
  */
 export function DisablePreview() {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   // Build the disable URL with redirect back to current page
-  const disableUrl = `/api/draft/disable?redirect=${encodeURIComponent(pathname)}`;
+  const disableUrl = `/api/draft/disable?redirect=${encodeURIComponent(pathname)}`
 
   return (
     <div className="fixed right-4 bottom-4 z-50">
@@ -36,5 +36,5 @@ export function DisablePreview() {
         Exit Preview
       </a>
     </div>
-  );
+  )
 }

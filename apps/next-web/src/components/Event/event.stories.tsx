@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import Event from "./event";
+import type { Meta, StoryObj } from "@storybook/react-vite"
+import Event from "./event"
 
 const meta = {
   title: "Components/Content/Event",
@@ -15,10 +15,10 @@ const meta = {
       </div>
     ),
   ],
-} satisfies Meta<typeof Event>;
+} satisfies Meta<typeof Event>
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 const mockEvent = {
   _id: "event-1",
@@ -45,11 +45,11 @@ const mockEvent = {
     alt: "Picnic in the park",
     hotspot: { x: 0.5, y: 0.5 },
   },
-};
+}
 
 export const Upcoming: Story = {
   args: mockEvent,
-};
+}
 
 export const Past: Story = {
   args: {
@@ -58,4 +58,4 @@ export const Past: Story = {
     title: "Past Event",
     date: new Date(Date.now() - 86400000).toISOString().split("T")[0], // Yesterday (date only)
   },
-};
+}

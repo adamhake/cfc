@@ -1,7 +1,8 @@
+import { defineQuery } from "groq"
 import { imageFieldProjection } from "./imageProjections"
+import { richTextProjection } from "./richTextProjection"
 
 // Base event fields projection
-// Note: These are plain GROQ query strings
 export const eventFields = `
   _id,
   _type,
@@ -9,19 +10,7 @@ export const eventFields = `
   slug,
   description,
   "heroImage": heroImage{
-    asset->{
-      _id,
-      url,
-      metadata{
-        dimensions,
-        lqip,
-        blurhash
-      }
-    },
-    alt,
-    caption,
-    hotspot,
-    crop
+    ${imageFieldProjection}
   },
   date,
   time,
@@ -31,73 +20,49 @@ export const eventFields = `
 `
 
 // Get all published events
-export const allEventsQuery = `
-  *[_type == "event"] | order(date desc) {
+export const allEventsQuery = defineQuery(`
+  *[_type == "event" && defined(slug.current)] | order(date desc) {
     ${eventFields}
   }
-`
+`)
 
 // Get upcoming events
-export const upcomingEventsQuery = `
-  *[_type == "event" && date >= now()] | order(date asc) {
+export const upcomingEventsQuery = defineQuery(`
+  *[_type == "event" && defined(slug.current) && date >= now()] | order(date asc) {
     ${eventFields}
   }
-`
+`)
 
 // Get past events
-export const pastEventsQuery = `
-  *[_type == "event" && date < now()] | order(date desc) {
+export const pastEventsQuery = defineQuery(`
+  *[_type == "event" && defined(slug.current) && date < now()] | order(date desc) {
     ${eventFields}
   }
-`
+`)
 
 // Get featured events
-export const featuredEventsQuery = `
-  *[_type == "event" && featured == true] | order(date desc) [0...3] {
+export const featuredEventsQuery = defineQuery(`
+  *[_type == "event" && defined(slug.current) && featured == true] | order(date desc) [0...3] {
     ${eventFields}
   }
-`
+`)
 
 // Get recent events (3 most recent by date)
-export const recentEventsQuery = `
-  *[_type == "event"] | order(date desc) [0...3] {
+export const recentEventsQuery = defineQuery(`
+  *[_type == "event" && defined(slug.current)] | order(date desc) [0...3] {
     ${eventFields}
   }
-`
+`)
 
 // Get event by slug
-export const eventBySlugQuery = `
+export const eventBySlugQuery = defineQuery(`
   *[_type == "event" && slug.current == $slug][0] {
     ${eventFields},
     body[]{
-      ...,
-      _type == "image" => {
-        ...,
-        asset->{
-          _id,
-          url,
-          metadata{
-            dimensions,
-            lqip,
-            blurhash
-          }
-        }
-      }
+      ${richTextProjection}
     },
     recap[]{
-      ...,
-      _type == "image" => {
-        ...,
-        asset->{
-          _id,
-          url,
-          metadata{
-            dimensions,
-            lqip,
-            blurhash
-          }
-        }
-      }
+      ${richTextProjection}
     },
     "recapGallery": recapGallery->{
       _id,
@@ -110,11 +75,11 @@ export const eventBySlugQuery = `
       }
     }
   }
-`
+`)
 
 // Get event slugs for static paths
-export const eventSlugsQuery = `
-  *[_type == "event"] {
+export const eventSlugsQuery = defineQuery(`
+  *[_type == "event" && defined(slug.current)] {
     "slug": slug.current
   }
-`
+`)

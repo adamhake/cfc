@@ -1,18 +1,18 @@
-import { Image } from "@/components/OptimizedImage/optimized-image";
-import { SanityImage, type SanityImageObject } from "../SanityImage/sanity-image";
-import { Button } from "../Button/button";
+import { Image } from "@/components/OptimizedImage/optimized-image"
+import { Button } from "../Button/button"
+import { SanityImage, type SanityImageObject } from "../SanityImage/sanity-image"
 
 interface HeroProps {
-  heading?: string;
-  subheading?: string;
-  heroImage?: SanityImageObject;
+  heading?: string
+  subheading?: string
+  heroImage?: SanityImageObject
   // Legacy support for static images
-  imageSrc?: string;
-  imageAlt?: string;
-  imageWidth?: number;
-  imageHeight?: number;
-  ctaText?: string;
-  ctaLink?: string;
+  imageSrc?: string
+  imageAlt?: string
+  imageWidth?: number
+  imageHeight?: number
+  ctaText?: string
+  ctaLink?: string
 }
 
 /**
@@ -87,6 +87,7 @@ export default function HeroSoftGradientDivider({
           className="relative block h-16 w-full lg:h-24"
           xmlns="http://www.w3.org/2000/svg"
           style={{ display: "block" }}
+          aria-hidden="true"
         >
           {/* Flowing natural curve - like rolling hills */}
           <path
@@ -102,5 +103,5 @@ export default function HeroSoftGradientDivider({
         </svg>
       </div>
     </div>
-  );
+  )
 }

@@ -1,14 +1,14 @@
-import type { SanityProject } from "@/lib/sanity-types";
-import Link from "next/link";
-import { SanityImage } from "../SanityImage/sanity-image";
+import Link from "next/link"
+import type { SanityProject } from "@/lib/sanity-types"
+import { SanityImage } from "../SanityImage/sanity-image"
 
 export interface ProjectCardCondensedProps {
-  project: SanityProject;
-  onClick?: () => void;
+  project: SanityProject
+  onClick?: () => void
 }
 
 export default function ProjectCardCondensed({ project, onClick }: ProjectCardCondensedProps) {
-  const { title, slug, description, heroImage } = project;
+  const { title, slug, description, heroImage } = project
 
   return (
     <Link
@@ -42,5 +42,5 @@ export default function ProjectCardCondensed({ project, onClick }: ProjectCardCo
         </span>
       </div>
     </Link>
-  );
+  )
 }

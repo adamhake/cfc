@@ -1,32 +1,32 @@
-import { urlForImage } from "@/lib/sanity";
-import type { SanityImage as SanityImageType } from "@/lib/sanity-types";
-import type { SanityImageSource } from "@sanity/image-url";
-import type { CSSProperties } from "react";
-import { DEFAULT_BREAKPOINTS, getResponsiveWidths } from "./sanity-image-utils";
+import type { SanityImageSource } from "@sanity/image-url"
+import type { CSSProperties } from "react"
+import { urlForImage } from "@/lib/sanity"
+import type { SanityImage as SanityImageType } from "@/lib/sanity-types"
+import { DEFAULT_BREAKPOINTS, getResponsiveWidths } from "./sanity-image-utils"
 
 // Re-export types for external use
 // These are derived from the centralized SanityImage type in sanity-types.ts
-export type SanityImageMetadata = NonNullable<SanityImageType["asset"]["metadata"]>;
-export type SanityImageAsset = SanityImageType["asset"];
+export type SanityImageMetadata = NonNullable<SanityImageType["asset"]["metadata"]>
+export type SanityImageAsset = SanityImageType["asset"]
 
 // Using SanityImage from sanity-types.ts with optional alt for component flexibility
 export interface SanityImageObject extends Omit<SanityImageType, "alt"> {
-  alt?: string; // Make alt optional since it may come from props instead
+  alt?: string // Make alt optional since it may come from props instead
 }
 
 export interface SanityImageProps {
   /**
    * Sanity image object with asset, alt, hotspot, and crop data
    */
-  image: SanityImageObject | SanityImageSource;
+  image: SanityImageObject | SanityImageSource
   /**
    * Alt text for the image (falls back to image.alt if available)
    */
-  alt?: string;
+  alt?: string
   /**
    * CSS classes to apply to the image element
    */
-  className?: string;
+  className?: string
   /**
    * Sizes attribute for responsive images
    * Examples:
@@ -34,57 +34,57 @@ export interface SanityImageProps {
    * - "100vw"
    * - "(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1920px"
    */
-  sizes?: string;
+  sizes?: string
   /**
    * Loading priority - set to true for above-the-fold images
    */
-  priority?: boolean;
+  priority?: boolean
   /**
    * Image width breakpoints for srcset generation
    * @default [320, 480, 640, 768, 896, 1024, 1280, 1536]
    */
-  breakpoints?: number[];
+  breakpoints?: number[]
   /**
    * Image quality (1-100)
    * @default 72
    */
-  quality?: number;
+  quality?: number
   /**
    * Max width for the image (for optimization)
    */
-  maxWidth?: number;
+  maxWidth?: number
   /**
    * Max height for the image (for optimization)
    */
-  maxHeight?: number;
+  maxHeight?: number
   /**
    * Fit mode for the image
    * @default "max"
    */
-  fit?: "clip" | "crop" | "fill" | "fillmax" | "max" | "scale" | "min";
+  fit?: "clip" | "crop" | "fill" | "fillmax" | "max" | "scale" | "min"
   /**
    * Whether to show the blur placeholder
    * @default true
    */
-  showPlaceholder?: boolean;
+  showPlaceholder?: boolean
   /**
    * Additional styles to apply to the image container
    */
-  style?: CSSProperties;
+  style?: CSSProperties
   /**
    * Callback when image loads
    */
-  onLoad?: () => void;
+  onLoad?: () => void
   /**
    * Apply hotspot data as CSS object-position
    * Useful for images using object-fit: cover where you want the hotspot
    * to determine the focal point of the crop
    * @default false
    */
-  useHotspotPosition?: boolean;
+  useHotspotPosition?: boolean
 }
 
-const DEFAULT_QUALITY = 72;
+const DEFAULT_QUALITY = 72
 
 /**
  * Optimized image component for Sanity CMS images
@@ -124,42 +124,44 @@ export function SanityImage({
   useHotspotPosition = false,
 }: SanityImageProps) {
   // Extract image data - handle both full SanityImageObject and simple SanityImageSource
-  const imageObject = image as SanityImageObject;
-  const hasAsset = imageObject?.asset;
+  const imageObject = image as SanityImageObject
+  const hasAsset = imageObject?.asset
 
-  const altText = alt || imageObject?.alt || "";
-  const metadata = hasAsset ? imageObject.asset.metadata : undefined;
-  const lqip = metadata?.lqip;
-  const dimensions = metadata?.dimensions;
-  const hotspot = imageObject?.hotspot;
-  const responsiveWidths = getResponsiveWidths(breakpoints, maxWidth);
+  const altText = alt || imageObject?.alt || ""
+  const metadata = hasAsset ? imageObject.asset.metadata : undefined
+  const lqip = metadata?.lqip
+  const dimensions = metadata?.dimensions
+  const hotspot = imageObject?.hotspot
+  const responsiveWidths = getResponsiveWidths(breakpoints, maxWidth)
 
   // Generate srcset with multiple widths
   const srcset = responsiveWidths
     .map((width) => {
-      const url = urlForImage(image).width(width).fit(fit).quality(quality).auto("format").url();
-      return `${url} ${width}w`;
+      // biome-ignore lint/suspicious/noFocusedTests: .fit() is Sanity image builder method, not a test
+      const url = urlForImage(image).width(width).fit(fit).quality(quality).auto("format").url()
+      return `${url} ${width}w`
     })
-    .join(", ");
+    .join(", ")
 
   // Generate the default src (use largest breakpoint or maxWidth)
   const defaultWidth =
     typeof maxWidth === "number" && maxWidth > 0
       ? Math.round(maxWidth)
-      : responsiveWidths[responsiveWidths.length - 1];
-  let srcBuilder = urlForImage(image).width(defaultWidth).fit(fit).quality(quality).auto("format");
+      : responsiveWidths[responsiveWidths.length - 1]
+  // biome-ignore lint/suspicious/noFocusedTests: .fit() is Sanity image builder method, not a test
+  let srcBuilder = urlForImage(image).width(defaultWidth).fit(fit).quality(quality).auto("format")
 
   // Apply maxHeight if provided
   if (maxHeight) {
-    srcBuilder = srcBuilder.height(maxHeight);
+    srcBuilder = srcBuilder.height(maxHeight)
   }
 
-  const src = srcBuilder.url();
+  const src = srcBuilder.url()
 
   // Calculate aspect ratio for layout
   const aspectRatio =
     dimensions?.aspectRatio ||
-    (dimensions?.width && dimensions?.height ? dimensions.width / dimensions.height : undefined);
+    (dimensions?.width && dimensions?.height ? dimensions.width / dimensions.height : undefined)
 
   // Blur placeholder styles
   const placeholderStyle: CSSProperties =
@@ -169,7 +171,7 @@ export function SanityImage({
           backgroundSize: "cover",
           backgroundPosition: "center",
         }
-      : {};
+      : {}
 
   // Calculate object-position from hotspot data
   // Hotspot x/y are values 0-1 representing the focal point (0,0 = top-left, 1,1 = bottom-right)
@@ -178,7 +180,7 @@ export function SanityImage({
       ? {
           objectPosition: `${hotspot.x * 100}% ${hotspot.y * 100}%`,
         }
-      : {};
+      : {}
 
   // Combined styles - include aspectRatio when dimensions aren't available to prevent CLS
   const combinedStyle: CSSProperties = {
@@ -186,9 +188,10 @@ export function SanityImage({
     ...hotspotStyle,
     ...(aspectRatio && !dimensions?.width && { aspectRatio: aspectRatio.toString() }),
     ...style,
-  };
+  }
 
   return (
+    // biome-ignore lint/performance/noImgElement: custom Sanity image component with srcset/sizes - Next.js Image does not support Sanity URL builder
     <img
       src={src}
       srcSet={srcset}
@@ -202,7 +205,7 @@ export function SanityImage({
       style={combinedStyle}
       onLoad={onLoad}
     />
-  );
+  )
 }
 
 /**
@@ -218,41 +221,42 @@ export function SanityBackgroundImage({
   style,
   useHotspotPosition = false,
 }: {
-  image: SanityImageObject | SanityImageSource;
-  className?: string;
-  quality?: number;
-  maxWidth?: number;
-  fit?: SanityImageProps["fit"];
-  children?: React.ReactNode;
-  style?: CSSProperties;
+  image: SanityImageObject | SanityImageSource
+  className?: string
+  quality?: number
+  maxWidth?: number
+  fit?: SanityImageProps["fit"]
+  children?: React.ReactNode
+  style?: CSSProperties
   /** Apply hotspot data as CSS background-position */
-  useHotspotPosition?: boolean;
+  useHotspotPosition?: boolean
 }) {
-  const url = urlForImage(image).width(maxWidth).fit(fit).quality(quality).auto("format").url();
+  // biome-ignore lint/suspicious/noFocusedTests: not a test - Sanity image URL builder chain
+  const url = urlForImage(image).width(maxWidth).fit(fit).quality(quality).auto("format").url()
 
-  const imageObject = image as SanityImageObject;
-  const lqip = imageObject?.asset?.metadata?.lqip;
-  const hotspot = imageObject?.hotspot;
+  const imageObject = image as SanityImageObject
+  const lqip = imageObject?.asset?.metadata?.lqip
+  const hotspot = imageObject?.hotspot
 
   // Calculate background-position from hotspot data
   const backgroundPosition =
-    useHotspotPosition && hotspot ? `${hotspot.x * 100}% ${hotspot.y * 100}%` : "center";
+    useHotspotPosition && hotspot ? `${hotspot.x * 100}% ${hotspot.y * 100}%` : "center"
 
   const backgroundStyle: CSSProperties = {
     backgroundImage: `url(${url})`,
     backgroundSize: "cover",
     backgroundPosition,
     ...style,
-  };
+  }
 
   // Add LQIP as fallback background (appears behind the main image)
   if (lqip) {
-    backgroundStyle.backgroundImage = `url(${url}), url(${lqip})`;
+    backgroundStyle.backgroundImage = `url(${url}), url(${lqip})`
   }
 
   return (
     <div className={className} style={backgroundStyle}>
       {children}
     </div>
-  );
+  )
 }

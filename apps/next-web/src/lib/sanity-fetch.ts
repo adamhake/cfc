@@ -1,4 +1,4 @@
-export { sanityFetch } from "./sanity-live";
+export { sanityFetch } from "./sanity-live"
 
 /**
  * Cache tag constants for Next.js revalidation
@@ -18,6 +18,6 @@ export const CACHE_TAGS = {
   GET_INVOLVED: "get-involved",
   AMENITIES: "amenities",
   SITE_SETTINGS: "site-settings",
-} as const;
+} as const
 
-export type CacheTag = (typeof CACHE_TAGS)[keyof typeof CACHE_TAGS];
+export type CacheTag = (typeof CACHE_TAGS)[keyof typeof CACHE_TAGS]

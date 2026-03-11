@@ -1,34 +1,34 @@
-import Container from "@/components/Container/container";
-import { SanityImage, type SanityImageObject } from "@/components/SanityImage";
-import { Image } from "@/components/OptimizedImage/optimized-image";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react"
+import Container from "@/components/Container/container"
+import { Image } from "@/components/OptimizedImage/optimized-image"
+import { SanityImage, type SanityImageObject } from "@/components/SanityImage"
 
 interface PartnerLogo {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
+  src: string
+  alt: string
+  width: number
+  height: number
 }
 
 interface Partner {
-  name: string;
-  url?: string;
-  logo: PartnerLogo | SanityImageObject;
-  description?: string;
+  name: string
+  url?: string
+  logo: PartnerLogo | SanityImageObject
+  description?: string
 }
 
 // Type guard to check if logo is a Sanity image
 function isSanityLogo(logo: PartnerLogo | SanityImageObject): logo is SanityImageObject {
-  return "asset" in logo && logo.asset !== undefined;
+  return "asset" in logo && logo.asset !== undefined
 }
 
 interface PartnersProps {
-  partners?: Partner[];
+  partners?: Partner[]
 }
 
 export default function Partners({ partners }: PartnersProps) {
   if (!partners || partners.length === 0) {
-    return null;
+    return null
   }
 
   return (
@@ -36,6 +36,7 @@ export default function Partners({ partners }: PartnersProps) {
       <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
         {partners.map((partner) => {
           const cardContent = (
+            // biome-ignore lint/correctness/useJsxKeyInIterable: key is on the parent a/div wrapper, not this intermediate variable
             <div className="relative space-y-6">
               {/* Logo */}
               <div className="flex items-center justify-center rounded-xl bg-white p-6 shadow-sm transition-transform duration-300 group-hover:scale-105 dark:border dark:border-primary-500/50 dark:bg-grey-200">
@@ -75,10 +76,10 @@ export default function Partners({ partners }: PartnersProps) {
                 {partner.description}
               </p>
             </div>
-          );
+          )
 
           const sharedClassName =
-            "group relative overflow-hidden rounded-2xl border border-accent-600/20 bg-gradient-to-br from-grey-50 to-grey-100/90 p-8 shadow-sm transition-all duration-300 hover:shadow-md lg:p-12 dark:border-primary-600 dark:from-primary-900 dark:to-primary-900/80";
+            "group relative overflow-hidden rounded-2xl border border-accent-600/20 bg-gradient-to-br from-grey-50 to-grey-100/90 p-8 shadow-sm transition-all duration-300 hover:shadow-md lg:p-12 dark:border-primary-600 dark:from-primary-900 dark:to-primary-900/80"
 
           return partner.url ? (
             <a
@@ -94,9 +95,9 @@ export default function Partners({ partners }: PartnersProps) {
             <div key={partner.name} className={sharedClassName}>
               {cardContent}
             </div>
-          );
+          )
         })}
       </div>
     </Container>
-  );
+  )
 }

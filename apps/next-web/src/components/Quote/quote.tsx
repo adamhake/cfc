@@ -1,20 +1,20 @@
-import Container from "@/components/Container/container";
-import { Image } from "@/components/OptimizedImage/optimized-image";
-import type { SanityImageObject } from "@/components/SanityImage/sanity-image";
-import { SanityImage } from "@/components/SanityImage/sanity-image";
-import { QuoteIcon } from "lucide-react";
+import { QuoteIcon } from "lucide-react"
+import Container from "@/components/Container/container"
+import { Image } from "@/components/OptimizedImage/optimized-image"
+import type { SanityImageObject } from "@/components/SanityImage/sanity-image"
+import { SanityImage } from "@/components/SanityImage/sanity-image"
 
 interface QuoteProps {
-  quoteText?: string;
-  attribution?: string;
+  quoteText?: string
+  attribution?: string
   backgroundImage?:
     | SanityImageObject
     | {
-        src: string;
-        alt: string;
-        width: number;
-        height: number;
-      };
+        src: string
+        alt: string
+        width: number
+        height: number
+      }
 }
 
 export default function Quote({
@@ -23,7 +23,7 @@ export default function Quote({
   backgroundImage,
 }: QuoteProps) {
   // Check if backgroundImage is a SanityImageObject (has 'asset' property)
-  const isSanityImage = backgroundImage && "asset" in backgroundImage;
+  const isSanityImage = backgroundImage && "asset" in backgroundImage
 
   return (
     <Container spacing="none">
@@ -60,5 +60,5 @@ export default function Quote({
         </div>
       </div>
     </Container>
-  );
+  )
 }

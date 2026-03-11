@@ -26,7 +26,7 @@ Chimborazo Park Conservancy website — a monorepo for a 501(c)(3) non-profit de
 
 - `pnpm dev` — Start all dev servers (next-web :3001, studio :3333)
 - `pnpm build` — Build all projects
-- `pnpm lint` / `pnpm format` / `pnpm test` / `pnpm type-check` — Run across all workspaces
+- `pnpm lint` / `pnpm format` / `pnpm check` / `pnpm test` / `pnpm type-check` — Run across all workspaces
 - `pnpm clean` — Clean build artifacts and node_modules
 
 ### Per-workspace
@@ -72,11 +72,20 @@ Shared Sanity schemas, GROQ queries, and client config used by next-web and stud
 - Shared base config in `tsconfig.base.json` (strict mode, ESM, bundler resolution)
 - Path aliases configured per workspace (`@/*` → `./src/*`)
 
+## Linting & Formatting
+
+- **Biome** for linting, formatting, and import sorting (replaces ESLint + Prettier)
+- Root `biome.json` defines shared config; workspace configs extend via `"extends": "//"`
+- `pnpm check` — lint + format + organize imports (combined)
+- `pnpm lint` / `pnpm format` — run individually
+- Tailwind v4 CSS directives enabled via `css.parser.tailwindDirectives`
+
 ## Turborepo Pipeline
 
 See `turbo.json`:
 
 - `build` — depends on upstream builds (`^build`)
 - `dev` — no caching, persistent
-- `lint`, `type-check`, `test` — depend on upstream builds
+- `lint`, `check`, `type-check`, `test` — depend on upstream builds
+- `format` — no caching
 - `clean` — no caching

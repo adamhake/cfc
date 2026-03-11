@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
-import { SITE_CONFIG } from "@/utils/seo";
-import Container from "@/components/Container/container";
-import PageHero from "@/components/PageHero/page-hero";
+import type { Metadata } from "next"
+import Container from "@/components/Container/container"
+import PageHero from "@/components/PageHero/page-hero"
+import { SITE_CONFIG } from "@/utils/seo"
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     type: "website",
     url: `${SITE_CONFIG.url}/privacy-policy`,
   },
-};
+}
 
 export default function PrivacyPolicyPage() {
   return (
@@ -259,5 +259,5 @@ export default function PrivacyPolicyPage() {
         </div>
       </Container>
     </div>
-  );
+  )
 }

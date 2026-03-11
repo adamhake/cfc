@@ -1,62 +1,62 @@
-'use client';
+"use client"
 
-import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion"
+import { useEffect, useState } from "react"
+import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image"
+import { useReducedMotion } from "@/hooks/useReducedMotion"
 
 export interface RotatingImagesProps {
   /**
    * Array of Sanity images to cycle through
    */
-  images: SanityImageObject[];
+  images: SanityImageObject[]
   /**
    * Interval between image changes in milliseconds
    * @default 5000
    */
-  interval?: number;
+  interval?: number
   /**
    * CSS classes to apply to the container
    */
-  className?: string;
+  className?: string
   /**
    * CSS classes to apply to each image
    */
-  imageClassName?: string;
+  imageClassName?: string
   /**
    * Sizes attribute for responsive images
    * @default "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 576px"
    */
-  sizes?: string;
+  sizes?: string
   /**
    * Image quality (1-100)
    * @default 72
    */
-  quality?: number;
+  quality?: number
   /**
    * Max width for the image (for optimization)
    */
-  maxWidth?: number;
+  maxWidth?: number
   /**
    * Transition duration in seconds
    * @default 0.8
    */
-  transitionDuration?: number;
+  transitionDuration?: number
   /**
    * Whether to show image captions
    * @default false
    */
-  showCaptions?: boolean;
+  showCaptions?: boolean
   /**
    * Caption display style
    * @default "overlay"
    */
-  captionStyle?: "overlay" | "below" | "hotspot";
+  captionStyle?: "overlay" | "below" | "hotspot"
   /**
    * Number of lines to clamp caption text to
    * @default 2
    */
-  captionLineClamp?: 1 | 2 | 3;
+  captionLineClamp?: 1 | 2 | 3
   /**
    * Make captions scrollable instead of truncating
    * Useful for long captions with limited space
@@ -64,14 +64,14 @@ export interface RotatingImagesProps {
    * For below style, uses maxCaptionHeight prop
    * @default false
    */
-  scrollableCaptions?: boolean;
+  scrollableCaptions?: boolean
   /**
    * Max height for scrollable captions in pixels
    * Only applies to "below" caption style when scrollableCaptions is true
    * overlay and hotspot styles use full image height
    * @default 120
    */
-  maxCaptionHeight?: number;
+  maxCaptionHeight?: number
 }
 
 export default function RotatingImages({
@@ -89,37 +89,37 @@ export default function RotatingImages({
   scrollableCaptions = false,
   maxCaptionHeight = 120,
 }: RotatingImagesProps) {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [captionHovered, setCaptionHovered] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [captionHovered, setCaptionHovered] = useState(false)
+  const [isPaused, setIsPaused] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
 
   // Get line clamp class based on prop (only used when not scrollable)
-  const lineClampClass = `line-clamp-${captionLineClamp}` as const;
+  const lineClampClass = `line-clamp-${captionLineClamp}` as const
 
   useEffect(() => {
     // Only cycle images if user hasn't requested reduced motion and we have multiple images
     if (prefersReducedMotion || images.length <= 1 || isPaused) {
-      return;
+      return
     }
 
     const intervalId = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % images.length);
-    }, interval);
+      setCurrentImageIndex((prev) => (prev + 1) % images.length)
+    }, interval)
 
-    return () => clearInterval(intervalId);
-  }, [prefersReducedMotion, images.length, interval, isPaused]);
+    return () => clearInterval(intervalId)
+  }, [prefersReducedMotion, images.length, interval, isPaused])
 
   // If no images, return null
   if (!images || images.length === 0) {
-    return null;
+    return null
   }
 
   // Render caption based on style
   const renderCaption = (image: SanityImageObject, index?: number) => {
-    if (!showCaptions || !image.caption) return null;
+    if (!showCaptions || !image.caption) return null
 
-    const key = index !== undefined ? index : "static";
+    const key = index !== undefined ? index : "static"
 
     if (captionStyle === "overlay") {
       return (
@@ -137,7 +137,7 @@ export default function RotatingImages({
             {image.caption}
           </div>
         </div>
-      );
+      )
     }
 
     if (captionStyle === "hotspot") {
@@ -166,6 +166,7 @@ export default function RotatingImages({
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
@@ -204,15 +205,15 @@ export default function RotatingImages({
             )}
           </AnimatePresence>
         </>
-      );
+      )
     }
 
-    return null;
-  };
+    return null
+  }
 
   // If only one image or reduced motion, just render static image
   if (images.length === 1 || prefersReducedMotion) {
-    const image = images[0];
+    const image = images[0]
     return (
       <div className="flex flex-col gap-2">
         <div className={`relative ${className}`}>
@@ -239,13 +240,14 @@ export default function RotatingImages({
           </div>
         )}
       </div>
-    );
+    )
   }
 
   // Multiple images - cycle through them
   return (
-    <div
+    <section
       className="flex flex-col gap-2"
+      aria-label="Rotating images"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
@@ -290,6 +292,6 @@ export default function RotatingImages({
           </motion.div>
         </AnimatePresence>
       )}
-    </div>
-  );
+    </section>
+  )
 }

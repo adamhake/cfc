@@ -1,14 +1,14 @@
-import type { SanityProject } from "@/lib/sanity-types";
-import { formatDateString } from "@/utils/time";
-import Link from "next/link";
-import { Calendar, MapPin, Target } from "lucide-react";
-import Chip from "../Chip/chip";
-import { SanityImage } from "../SanityImage/sanity-image";
+import { Calendar, MapPin, Target } from "lucide-react"
+import Link from "next/link"
+import type { SanityProject } from "@/lib/sanity-types"
+import { formatDateString } from "@/utils/time"
+import Chip from "../Chip/chip"
+import { SanityImage } from "../SanityImage/sanity-image"
 
-const PROJECT_IMAGE_SIZES = "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 576px";
+const PROJECT_IMAGE_SIZES = "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 576px"
 
 export interface ProjectProps {
-  project: SanityProject;
+  project: SanityProject
 }
 
 export default function Project({ project }: ProjectProps) {
@@ -22,13 +22,13 @@ export default function Project({ project }: ProjectProps) {
     startDateOverride,
     category,
     location,
-  } = project;
+  } = project
 
   // Skip rendering if project has no slug
-  if (!slug?.current) return null;
+  if (!slug?.current) return null
 
   // Use override text if provided, otherwise format the date
-  const fmtDate = startDateOverride || formatDateString(startDate, "short");
+  const fmtDate = startDateOverride || formatDateString(startDate, "short")
 
   return (
     <Link
@@ -78,5 +78,5 @@ export default function Project({ project }: ProjectProps) {
         </div>
       </div>
     </Link>
-  );
+  )
 }

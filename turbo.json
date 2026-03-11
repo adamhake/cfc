@@ -5,11 +5,7 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", ".sanity/**"],
-      "env": [
-        "SANITY_STUDIO_PROJECT_ID",
-        "SANITY_STUDIO_DATASET",
-        "SANITY_STUDIO_PREVIEW_URL"
-      ]
+      "env": ["SANITY_STUDIO_PROJECT_ID", "SANITY_STUDIO_DATASET", "SANITY_STUDIO_PREVIEW_URL"]
     },
     "dev": {
       "cache": false,
@@ -20,6 +16,9 @@
     },
     "format": {
       "cache": false
+    },
+    "check": {
+      "dependsOn": ["^build"]
     },
     "type-check": {
       "dependsOn": ["^build"]

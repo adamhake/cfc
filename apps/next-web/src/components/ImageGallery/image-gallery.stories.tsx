@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import ImageGallery from "./image-gallery";
+import type { Meta, StoryObj } from "@storybook/react-vite"
+import ImageGallery from "./image-gallery"
 
 const meta = {
   title: "Components/Media/ImageGallery",
@@ -8,10 +8,10 @@ const meta = {
     layout: "fullscreen",
   },
   tags: ["autodocs"],
-} satisfies Meta<typeof ImageGallery>;
+} satisfies Meta<typeof ImageGallery>
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 const sampleImages = [
   {
@@ -49,7 +49,7 @@ const sampleImages = [
     width: 1000,
     height: 600,
   },
-];
+]
 
 export const Grid: Story = {
   args: {
@@ -57,7 +57,7 @@ export const Grid: Story = {
     variant: "grid",
     columns: { default: 1, sm: 2, md: 3 },
   },
-};
+}
 
 export const Masonry: Story = {
   args: {
@@ -65,7 +65,7 @@ export const Masonry: Story = {
     variant: "masonry",
     columns: { default: 1, sm: 2, md: 3 },
   },
-};
+}
 
 export const Staggered: Story = {
   args: {
@@ -73,7 +73,7 @@ export const Staggered: Story = {
     variant: "staggered",
     columns: { default: 1, sm: 2, md: 3 },
   },
-};
+}
 
 export const CaptionBelow: Story = {
   args: {
@@ -82,7 +82,7 @@ export const CaptionBelow: Story = {
     captionPosition: "below",
     columns: { default: 1, sm: 2, md: 3 },
   },
-};
+}
 
 /**
  * Empty gallery state - useful for showing when no images are available
@@ -93,7 +93,7 @@ export const EmptyGallery: Story = {
     variant: "grid",
     columns: { default: 1, sm: 2, md: 3 },
   },
-};
+}
 
 /**
  * Single image in gallery
@@ -104,7 +104,7 @@ export const SingleImage: Story = {
     variant: "grid",
     columns: { default: 1, sm: 2, md: 3 },
   },
-};
+}
 
 /**
  * Large gallery with many images
@@ -127,4 +127,4 @@ export const LargeGallery: Story = {
     variant: "masonry",
     columns: { default: 2, sm: 3, md: 4 },
   },
-};
+}

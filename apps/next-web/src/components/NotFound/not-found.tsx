@@ -1,9 +1,9 @@
-'use client';
+"use client"
 
-import { Button } from "@/components/Button/button";
-import Container from "@/components/Container/container";
-import SectionHeader from "@/components/SectionHeader/section-header";
-import Link from "next/link";
+import Link from "next/link"
+import { Button } from "@/components/Button/button"
+import Container from "@/components/Container/container"
+import SectionHeader from "@/components/SectionHeader/section-header"
 
 export function NotFound() {
   const quickLinks = [
@@ -12,7 +12,13 @@ export function NotFound() {
       description: "Join us for park clean-ups, tree plantings, and community gatherings",
       href: "/events",
       icon: (
-        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -27,7 +33,13 @@ export function NotFound() {
       description: "Volunteer, donate, or become a member to support the park",
       href: "/get-involved",
       icon: (
-        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -42,7 +54,13 @@ export function NotFound() {
       description: "Explore photos and videos of the park and our activities",
       href: "/media",
       icon: (
-        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -57,7 +75,13 @@ export function NotFound() {
       description: "Learn about Chimborazo's rich history and our mission",
       href: "/#the-park",
       icon: (
-        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -67,7 +91,7 @@ export function NotFound() {
         </svg>
       ),
     },
-  ];
+  ]
 
   return (
     <div className="pt-24 pb-16">
@@ -111,6 +135,7 @@ export function NotFound() {
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
+                    aria-hidden="true"
                   >
                     <path
                       strokeLinecap="round"
@@ -133,6 +158,7 @@ export function NotFound() {
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
@@ -147,7 +173,7 @@ export function NotFound() {
             variant="outline"
             as="a"
             onClick={() => {
-              window.history.back();
+              window.history.back()
             }}
           >
             <svg
@@ -155,6 +181,7 @@ export function NotFound() {
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
@@ -168,5 +195,5 @@ export function NotFound() {
         </div>
       </Container>
     </div>
-  );
+  )
 }

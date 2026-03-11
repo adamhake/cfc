@@ -1,8 +1,8 @@
-import { Event as EventData } from "@/data/events";
-import { formatDateString } from "@/utils/time";
-import Link from "next/link";
-import { Calendar } from "lucide-react";
-import { Image } from "@/components/OptimizedImage/optimized-image";
+import { Calendar } from "lucide-react"
+import Link from "next/link"
+import { Image } from "@/components/OptimizedImage/optimized-image"
+import type { Event as EventData } from "@/data/events"
+import { formatDateString } from "@/utils/time"
 
 export default function EventCardCondensed({
   title,
@@ -10,7 +10,7 @@ export default function EventCardCondensed({
   date,
   image,
 }: Pick<EventData, "title" | "slug" | "date" | "image">) {
-  const fmtDate = formatDateString(date, "short");
+  const fmtDate = formatDateString(date, "short")
 
   return (
     <Link
@@ -46,5 +46,5 @@ export default function EventCardCondensed({
         </span>
       </div>
     </Link>
-  );
+  )
 }

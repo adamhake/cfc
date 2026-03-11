@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import { useState, useCallback } from "react";
-import { Button } from "@/components/Button/button";
-import ImageGallery, { type SanityGalleryImage } from "@/components/ImageGallery/image-gallery";
-import type { SanityMediaImage } from "@/lib/sanity-types";
+import { useCallback, useState } from "react"
+import { Button } from "@/components/Button/button"
+import ImageGallery, { type SanityGalleryImage } from "@/components/ImageGallery/image-gallery"
+import type { SanityMediaImage } from "@/lib/sanity-types"
 
 interface MediaGalleryClientProps {
-  initialImages: SanityMediaImage[];
-  totalCount: number;
-  pageSize: number;
+  initialImages: SanityMediaImage[]
+  totalCount: number
+  pageSize: number
 }
 
 function transformImages(images: SanityMediaImage[]): SanityGalleryImage[] {
@@ -22,7 +22,7 @@ function transformImages(images: SanityMediaImage[]): SanityGalleryImage[] {
     .map((img) => ({
       ...img.image,
       alt: img.image.alt || img.title || "Park image",
-    }));
+    }))
 }
 
 export default function MediaGalleryClient({
@@ -30,31 +30,29 @@ export default function MediaGalleryClient({
   totalCount,
   pageSize,
 }: MediaGalleryClientProps) {
-  const [allImages, setAllImages] = useState<SanityMediaImage[]>(initialImages);
-  const [isLoading, setIsLoading] = useState(false);
-  const [cursor, setCursor] = useState(pageSize);
+  const [allImages, setAllImages] = useState<SanityMediaImage[]>(initialImages)
+  const [isLoading, setIsLoading] = useState(false)
+  const [cursor, setCursor] = useState(pageSize)
 
-  const hasMore = cursor < totalCount;
+  const hasMore = cursor < totalCount
 
   const loadMore = useCallback(async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const res = await fetch(
-        `/api/media?start=${cursor}&end=${cursor + pageSize}`,
-      );
+      const res = await fetch(`/api/media?start=${cursor}&end=${cursor + pageSize}`)
       if (res.ok) {
-        const newImages: SanityMediaImage[] = await res.json();
-        setAllImages((prev) => [...prev, ...newImages]);
-        setCursor((prev) => prev + pageSize);
+        const newImages: SanityMediaImage[] = await res.json()
+        setAllImages((prev) => [...prev, ...newImages])
+        setCursor((prev) => prev + pageSize)
       }
     } catch (error) {
-      console.error("Failed to load more images:", error);
+      console.error("Failed to load more images:", error)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  }, [cursor, pageSize]);
+  }, [cursor, pageSize])
 
-  const galleryImages = transformImages(allImages);
+  const galleryImages = transformImages(allImages)
 
   if (totalCount === 0) {
     return (
@@ -66,7 +64,7 @@ export default function MediaGalleryClient({
           Check back soon for photos of our park and community events!
         </p>
       </div>
-    );
+    )
   }
 
   if (galleryImages.length === 0) {
@@ -80,7 +78,7 @@ export default function MediaGalleryClient({
           details.
         </p>
       </div>
-    );
+    )
   }
 
   return (
@@ -95,16 +93,11 @@ export default function MediaGalleryClient({
       />
       {hasMore && (
         <div className="flex justify-center">
-          <Button
-            onClick={loadMore}
-            variant="primary"
-            size="standard"
-            disabled={isLoading}
-          >
+          <Button onClick={loadMore} variant="primary" size="standard" disabled={isLoading}>
             {isLoading ? "Loading..." : "Load More Photos"}
           </Button>
         </div>
       )}
     </div>
-  );
+  )
 }

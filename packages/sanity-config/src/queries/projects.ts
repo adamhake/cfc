@@ -1,7 +1,8 @@
+import { defineQuery } from "groq"
 import { imageFieldProjection } from "./imageProjections"
+import { richTextProjection } from "./richTextProjection"
 
 // Base project fields projection
-// Note: These are plain GROQ query strings
 export const projectFields = `
   _id,
   _type,
@@ -25,63 +26,43 @@ export const projectFields = `
 `
 
 // Get all published projects
-export const allProjectsQuery = `
+export const allProjectsQuery = defineQuery(`
   *[_type == "project" && defined(slug.current)] | order(startDate desc) {
     ${projectFields}
   }
-`
+`)
 
 // Get active projects
-export const activeProjectsQuery = `
-  *[_type == "project" && status == "active"] | order(startDate desc) {
+export const activeProjectsQuery = defineQuery(`
+  *[_type == "project" && defined(slug.current) && status == "active"] | order(startDate desc) {
     ${projectFields}
   }
-`
+`)
 
 // Get featured project (single)
-export const featuredProjectQuery = `
-  *[_type == "project" && featured == true] | order(startDate desc) [0] {
+export const featuredProjectQuery = defineQuery(`
+  *[_type == "project" && defined(slug.current) && featured == true] | order(startDate desc) [0] {
     ${projectFields}
   }
-`
+`)
 
 // Get all featured projects
-export const featuredProjectsQuery = `
-  *[_type == "project" && featured == true] | order(startDate desc) {
+export const featuredProjectsQuery = defineQuery(`
+  *[_type == "project" && defined(slug.current) && featured == true] | order(startDate desc) {
     ${projectFields}
   }
-`
+`)
 
 // Get project by slug with full details and relationships
-export const projectBySlugQuery = `
+export const projectBySlugQuery = defineQuery(`
   *[_type == "project" && slug.current == $slug][0] {
     ${projectFields},
     body[]{
-      ...,
-      _type == "image" => {
-        ...,
-        asset->{
-          _id,
-          url,
-          metadata{
-            dimensions,
-            lqip,
-            blurhash
-          }
-        }
-      }
+      ${richTextProjection}
     },
     gallery[]{
       ...,
-      asset->{
-        _id,
-        url,
-        metadata{
-          dimensions,
-          lqip,
-          blurhash
-        }
-      }
+      ${imageFieldProjection}
     },
     "relatedEvents": relatedEvents[]->{
       _id,
@@ -90,19 +71,7 @@ export const projectBySlugQuery = `
       slug,
       description,
       "heroImage": heroImage{
-        asset->{
-          _id,
-          url,
-          metadata{
-            dimensions,
-            lqip,
-            blurhash
-          }
-        },
-        alt,
-        caption,
-        hotspot,
-        crop
+        ${imageFieldProjection}
       },
       date,
       time,
@@ -113,19 +82,15 @@ export const projectBySlugQuery = `
       _type,
       name,
       logo{
-        asset->{
-          _id,
-          url
-        },
-        alt
+        ${imageFieldProjection}
       }
     }
   }
-`
+`)
 
 // Get project slugs for static paths
-export const projectSlugsQuery = `
-  *[_type == "project"] {
+export const projectSlugsQuery = defineQuery(`
+  *[_type == "project" && defined(slug.current)] {
     "slug": slug.current
   }
-`
+`)

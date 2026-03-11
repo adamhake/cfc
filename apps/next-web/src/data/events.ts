@@ -1,18 +1,18 @@
 export interface Event {
-  id: number | string;
-  title: string;
-  slug: string;
-  description: string;
-  date: string;
-  time: string;
-  location: string;
+  id: number | string
+  title: string
+  slug: string
+  description: string
+  date: string
+  time: string
+  location: string
   image: {
-    src: string;
-    alt: string;
-    width: number;
-    height: number;
-  };
-  markdownFile?: string;
+    src: string
+    alt: string
+    width: number
+    height: number
+  }
+  markdownFile?: string
 }
 
 export const events: Event[] = [
@@ -115,4 +115,4 @@ export const events: Event[] = [
     },
     markdownFile: "chimborazo-park-community-tree-planting.md",
   },
-];
+]

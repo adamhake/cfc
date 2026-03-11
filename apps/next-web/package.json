@@ -6,15 +6,20 @@
     "dev": "next dev --turbopack -p 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "check": "biome check --write .",
     "type-check": "tsc --noEmit",
     "test": "vitest run"
   },
   "dependencies": {
     "@chimborazo/sanity-config": "workspace:*",
     "@marsidev/react-turnstile": "^1.4.2",
+    "@opentelemetry/api-logs": "^0.213.0",
+    "@opentelemetry/exporter-logs-otlp-http": "^0.213.0",
+    "@opentelemetry/resources": "^2.6.0",
+    "@opentelemetry/sdk-logs": "^0.213.0",
     "@portabletext/react": "^6.0.3",
-    "@posthog/react": "^1.8.2",
     "@sanity/client": "^7.17.0",
     "@sanity/image-url": "^2.0.3",
     "@sanity/preview-url-secret": "^4.0.3",
@@ -33,6 +38,7 @@
     "next": "^16.1.6",
     "next-sanity": "^12.1.1",
     "posthog-js": "^1.360.0",
+    "posthog-node": "^5.28.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-markdown": "^10.1.0",
@@ -43,17 +49,17 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@eslint/js": "catalog:",
+    "@biomejs/biome": "catalog:",
     "@netlify/plugin-nextjs": "^5.15.9",
+    "@posthog/nextjs-config": "^1.8.19",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^25.4.0",
     "@types/react": "catalog:",
     "@types/react-dom": "^19.2.3",
-    "eslint": "catalog:",
-    "eslint-plugin-react-hooks": "^7.0.1",
+    "jsdom": "^28.1.0",
     "typescript": "catalog:",
-    "typescript-eslint": "catalog:",
     "vitest": "^4.0.18"
   }
 }

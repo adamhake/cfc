@@ -1,47 +1,51 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { sanityFetch, CACHE_TAGS } from "@/lib/sanity-fetch";
-import { sanityClient } from "@/lib/sanity";
-import type { SanityEvent } from "@/lib/sanity-types";
-import type { SanityGalleryImage } from "@/components/ImageGallery/image-gallery";
-import { generateEventStructuredData, generateBreadcrumbStructuredData, SITE_CONFIG } from "@/utils/seo";
-import { formatDateString } from "@/utils/time";
-import { eventBySlugQuery, eventSlugsQuery } from "@chimborazo/sanity-config/queries";
-import { ArrowLeft, Calendar, Clock, MapPin } from "lucide-react";
-import { Button } from "@/components/Button/button";
-import Container from "@/components/Container/container";
-import EventStatusChip from "@/components/EventStatusChip/event-status-chip";
-import PageHero from "@/components/PageHero/page-hero";
-import { PortableText } from "@/components/PortableText/portable-text";
-import { RegisterButton } from "@/components/RegisterButton/register-button";
-import EventDetailClient from "./event-detail-client";
+import { eventBySlugQuery, eventSlugsQuery } from "@chimborazo/sanity-config/queries"
+import { ArrowLeft, Calendar, Clock, MapPin } from "lucide-react"
+import type { Metadata } from "next"
+import Link from "next/link"
+import { notFound } from "next/navigation"
+import { Button } from "@/components/Button/button"
+import Container from "@/components/Container/container"
+import EventStatusChip from "@/components/EventStatusChip/event-status-chip"
+import type { SanityGalleryImage } from "@/components/ImageGallery/image-gallery"
+import PageHero from "@/components/PageHero/page-hero"
+import { PortableText } from "@/components/PortableText/portable-text"
+import { RegisterButton } from "@/components/RegisterButton/register-button"
+import { sanityClient } from "@/lib/sanity"
+import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import type { SanityEvent } from "@/lib/sanity-types"
+import {
+  generateBreadcrumbStructuredData,
+  generateEventStructuredData,
+  SITE_CONFIG,
+} from "@/utils/seo"
+import { formatDateString } from "@/utils/time"
+import EventDetailClient from "./event-detail-client"
 
 interface EventPageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
-  const slugs = await sanityClient.fetch<Array<{ slug: string }>>(eventSlugsQuery);
-  return slugs.map(({ slug }) => ({ slug }));
+  const slugs = await sanityClient.fetch<Array<{ slug: string }>>(eventSlugsQuery)
+  return slugs.map(({ slug }) => ({ slug }))
 }
 
 export async function generateMetadata({ params }: EventPageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug } = await params
   const { data: event } = (await sanityFetch({
     query: eventBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.EVENT_DETAIL, CACHE_TAGS.EVENTS],
-  })) as { data: SanityEvent | null };
+  })) as { data: SanityEvent | null }
 
   if (!event) {
     return {
       title: "Event Not Found",
       description: "The requested event could not be found.",
-    };
+    }
   }
 
-  const eventUrl = `${SITE_CONFIG.url}/events/${event.slug.current}`;
+  const eventUrl = `${SITE_CONFIG.url}/events/${event.slug.current}`
   return {
     title: event.title,
     description: event.description,
@@ -62,26 +66,23 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
           ]
         : undefined,
     },
-  };
+  }
 }
 
 export default async function EventPage({ params }: EventPageProps) {
-  const { slug } = await params;
+  const { slug } = await params
   const { data: event } = (await sanityFetch({
     query: eventBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.EVENT_DETAIL, CACHE_TAGS.EVENTS],
-  })) as { data: SanityEvent | null };
+  })) as { data: SanityEvent | null }
 
   if (!event) {
-    notFound();
+    notFound()
   }
 
   // If a recap exists in Sanity, the event is past by definition
-  const hasRecap =
-    event.recap &&
-    Array.isArray(event.recap) &&
-    event.recap.length > 0;
+  const hasRecap = event.recap && Array.isArray(event.recap) && event.recap.length > 0
 
   // Transform recap gallery images for ImageGallery component
   const recapGalleryImages: SanityGalleryImage[] =
@@ -91,11 +92,11 @@ export default async function EventPage({ params }: EventPageProps) {
         ...item.image,
         alt: item.image.alt || "Event photo",
         showOnMobile: item.showOnMobile,
-      })) ?? [];
+      })) ?? []
 
   // Generate structured data
-  const imageUrl = event.heroImage?.asset?.url || `${SITE_CONFIG.url}/volunteers.webp`;
-  const eventUrl = `${SITE_CONFIG.url}/events/${event.slug.current}`;
+  const imageUrl = event.heroImage?.asset?.url || `${SITE_CONFIG.url}/volunteers.webp`
+  const eventUrl = `${SITE_CONFIG.url}/events/${event.slug.current}`
 
   const structuredData = generateEventStructuredData({
     name: event.title,
@@ -115,30 +116,28 @@ export default async function EventPage({ params }: EventPageProps) {
       url: SITE_CONFIG.url,
     },
     url: eventUrl,
-  });
+  })
 
   const breadcrumbData = generateBreadcrumbStructuredData([
     { name: "Home", url: SITE_CONFIG.url },
     { name: "Events", url: `${SITE_CONFIG.url}/events` },
     { name: event.title, url: eventUrl },
-  ]);
+  ])
 
   return (
     <>
       <script
         type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredData)
-            .replace(/</g, "\\u003c")
-            .replace(/>/g, "\\u003e"),
+          __html: JSON.stringify(structuredData).replace(/</g, "\\u003c").replace(/>/g, "\\u003e"),
         }}
       />
       <script
         type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbData)
-            .replace(/</g, "\\u003c")
-            .replace(/>/g, "\\u003e"),
+          __html: JSON.stringify(breadcrumbData).replace(/</g, "\\u003c").replace(/>/g, "\\u003e"),
         }}
       />
 
@@ -176,7 +175,7 @@ export default async function EventPage({ params }: EventPageProps) {
             <main className="lg:col-span-8">
               {hasRecap ? (
                 <EventDetailClient
-                  recap={event.recap!}
+                  recap={event.recap ?? []}
                   body={event.body}
                   recapGalleryImages={recapGalleryImages}
                 />
@@ -263,5 +262,5 @@ export default async function EventPage({ params }: EventPageProps) {
         </Container>
       </div>
     </>
-  );
+  )
 }

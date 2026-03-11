@@ -1,7 +1,7 @@
-import { FileAttachment } from "@/components/FileAttachment/file-attachment";
-import { SanityImage } from "@/components/SanityImage";
-import type { PortableTextBlock, PortableTextComponents } from "@portabletext/react";
-import { PortableText as BasePortableText } from "@portabletext/react";
+import type { PortableTextBlock, PortableTextComponents } from "@portabletext/react"
+import { PortableText as BasePortableText } from "@portabletext/react"
+import { FileAttachment } from "@/components/FileAttachment/file-attachment"
+import { SanityImage } from "@/components/SanityImage"
 
 // Custom components for rendering portable text blocks
 const components: PortableTextComponents = {
@@ -75,8 +75,8 @@ const components: PortableTextComponents = {
 
     // Links
     link: ({ children, value }) => {
-      const href = value?.href || "";
-      const isExternal = href.startsWith("http");
+      const href = value?.href || ""
+      const isExternal = href.startsWith("http")
 
       return (
         <a
@@ -87,14 +87,14 @@ const components: PortableTextComponents = {
         >
           {children}
         </a>
-      );
+      )
     },
   },
 
   types: {
     // Embedded images in portable text
     image: ({ value }) => {
-      if (!value?.asset) return null;
+      if (!value?.asset) return null
 
       return (
         <figure className="my-8">
@@ -112,31 +112,31 @@ const components: PortableTextComponents = {
             </figcaption>
           )}
         </figure>
-      );
+      )
     },
 
     // File attachments in portable text
     fileAttachment: ({ value }) => {
-      if (!value?.asset) return null;
+      if (!value?.asset) return null
 
       return (
         <FileAttachment asset={value.asset} title={value.title} description={value.description} />
-      );
+      )
     },
   },
-};
+}
 
 interface PortableTextProps {
-  value: PortableTextBlock[];
-  className?: string;
+  value: PortableTextBlock[]
+  className?: string
 }
 
 export function PortableText({ value, className = "" }: PortableTextProps) {
-  if (!value) return null;
+  if (!value) return null
 
   return (
     <div className={`prose max-w-none dark:prose-invert ${className}`}>
       <BasePortableText value={value} components={components} />
     </div>
-  );
+  )
 }

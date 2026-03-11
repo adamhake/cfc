@@ -1,50 +1,50 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { sanityFetch, CACHE_TAGS } from "@/lib/sanity-fetch";
-import { sanityClient } from "@/lib/sanity";
-import type { SanityProject } from "@/lib/sanity-types";
+import { projectBySlugQuery, projectSlugsQuery } from "@chimborazo/sanity-config/queries"
+import { ArrowLeft, Calendar, CheckCircle2, DollarSign, MapPin, Target } from "lucide-react"
+import type { Metadata } from "next"
+import Link from "next/link"
+import { notFound } from "next/navigation"
+import { Button } from "@/components/Button/button"
+import Chip from "@/components/Chip/chip"
+import Container from "@/components/Container/container"
+import Event from "@/components/Event/event"
+import PageHero from "@/components/PageHero/page-hero"
+import { PortableText } from "@/components/PortableText/portable-text"
+import { SanityImage } from "@/components/SanityImage/sanity-image"
+import { sanityClient } from "@/lib/sanity"
+import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import type { SanityProject } from "@/lib/sanity-types"
 import {
   generateArticleStructuredData,
   generateBreadcrumbStructuredData,
   SITE_CONFIG,
-} from "@/utils/seo";
-import { formatDateString } from "@/utils/time";
-import { projectBySlugQuery, projectSlugsQuery } from "@chimborazo/sanity-config/queries";
-import { ArrowLeft, Calendar, CheckCircle2, DollarSign, MapPin, Target } from "lucide-react";
-import { Button } from "@/components/Button/button";
-import Chip from "@/components/Chip/chip";
-import Container from "@/components/Container/container";
-import Event from "@/components/Event/event";
-import PageHero from "@/components/PageHero/page-hero";
-import { PortableText } from "@/components/PortableText/portable-text";
-import { SanityImage } from "@/components/SanityImage/sanity-image";
+} from "@/utils/seo"
+import { formatDateString } from "@/utils/time"
 
 interface ProjectPageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
-  const slugs = await sanityClient.fetch<Array<{ slug: string }>>(projectSlugsQuery);
-  return slugs.map(({ slug }) => ({ slug }));
+  const slugs = await sanityClient.fetch<Array<{ slug: string }>>(projectSlugsQuery)
+  return slugs.map(({ slug }) => ({ slug }))
 }
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug } = await params
   const { data: project } = (await sanityFetch({
     query: projectBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.PROJECT_DETAIL, CACHE_TAGS.PROJECTS],
-  })) as { data: SanityProject | null };
+  })) as { data: SanityProject | null }
 
   if (!project) {
     return {
       title: "Project Not Found",
       description: "The requested project could not be found.",
-    };
+    }
   }
 
-  const projectUrl = `${SITE_CONFIG.url}/projects/${project.slug.current}`;
+  const projectUrl = `${SITE_CONFIG.url}/projects/${project.slug.current}`
   return {
     title: project.title,
     description: project.description,
@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
           ]
         : undefined,
     },
-  };
+  }
 }
 
 const categoryLabels = {
@@ -73,30 +73,30 @@ const categoryLabels = {
   recreation: "Recreation",
   connection: "Connection",
   preservation: "Preservation",
-} as const;
+} as const
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  const { slug } = await params;
+  const { slug } = await params
   const { data: project } = (await sanityFetch({
     query: projectBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.PROJECT_DETAIL, CACHE_TAGS.PROJECTS],
-  })) as { data: SanityProject | null };
+  })) as { data: SanityProject | null }
 
   if (!project) {
-    notFound();
+    notFound()
   }
 
   // Use override text if provided, otherwise format the date
-  const fmtStartDate = project.startDateOverride || formatDateString(project.startDate);
+  const fmtStartDate = project.startDateOverride || formatDateString(project.startDate)
   const fmtCompletionDate = project.completionDateOverride
     ? project.completionDateOverride
     : project.completionDate
       ? formatDateString(project.completionDate)
-      : null;
+      : null
 
-  const projectUrl = `${SITE_CONFIG.url}/projects/${project.slug.current}`;
-  const imageUrl = project.heroImage?.asset?.url;
+  const projectUrl = `${SITE_CONFIG.url}/projects/${project.slug.current}`
+  const imageUrl = project.heroImage?.asset?.url
 
   const articleData = generateArticleStructuredData({
     headline: project.title,
@@ -104,30 +104,28 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     image: imageUrl || `${SITE_CONFIG.url}/bike_sunset.webp`,
     datePublished: project.startDate,
     dateModified: project.completionDate || project.startDate,
-  });
+  })
 
   const breadcrumbData = generateBreadcrumbStructuredData([
     { name: "Home", url: SITE_CONFIG.url },
     { name: "Projects", url: `${SITE_CONFIG.url}/projects` },
     { name: project.title, url: projectUrl },
-  ]);
+  ])
 
   return (
     <>
       <script
         type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(articleData)
-            .replace(/</g, "\\u003c")
-            .replace(/>/g, "\\u003e"),
+          __html: JSON.stringify(articleData).replace(/</g, "\\u003c").replace(/>/g, "\\u003e"),
         }}
       />
       <script
         type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbData)
-            .replace(/</g, "\\u003c")
-            .replace(/>/g, "\\u003e"),
+          __html: JSON.stringify(breadcrumbData).replace(/</g, "\\u003c").replace(/>/g, "\\u003e"),
         }}
       />
       <div className="min-h-screen">
@@ -196,7 +194,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   </h2>
                   <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     {project.gallery.map((image, index) => (
-                      <div key={index} className="overflow-hidden rounded-xl">
+                      <div
+                        key={image.asset?.url ?? `gallery-${index}`}
+                        className="overflow-hidden rounded-xl"
+                      >
                         <SanityImage
                           image={image}
                           alt={image.alt || `${project.title} gallery image ${index + 1}`}
@@ -339,5 +340,5 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </Container>
       </div>
     </>
-  );
+  )
 }

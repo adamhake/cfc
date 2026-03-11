@@ -1,4 +1,4 @@
-import { cn } from "@/utils/cn";
+import { cn } from "@/utils/cn"
 
 export type ChipVariant =
   // Project status
@@ -14,12 +14,12 @@ export type ChipVariant =
   | "upcoming"
   | "past"
   // General
-  | "comingSoon";
+  | "comingSoon"
 
 export interface ChipProps {
-  variant: ChipVariant;
-  label?: string;
-  className?: string;
+  variant: ChipVariant
+  label?: string
+  className?: string
 }
 
 const variantStyles: Record<ChipVariant, string> = {
@@ -40,7 +40,7 @@ const variantStyles: Record<ChipVariant, string> = {
 
   // General
   comingSoon: "bg-grey-200 text-grey-700 dark:bg-grey-700 dark:text-grey-200",
-};
+}
 
 const defaultLabels: Record<ChipVariant, string> = {
   // Project Status
@@ -60,10 +60,10 @@ const defaultLabels: Record<ChipVariant, string> = {
 
   // General
   comingSoon: "Coming Soon",
-};
+}
 
 export default function Chip({ variant, label, className }: ChipProps) {
-  const displayLabel = label ?? defaultLabels[variant];
+  const displayLabel = label ?? defaultLabels[variant]
 
   return (
     <span
@@ -75,5 +75,5 @@ export default function Chip({ variant, label, className }: ChipProps) {
     >
       {displayLabel}
     </span>
-  );
+  )
 }

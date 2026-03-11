@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
-import { sanityFetch, CACHE_TAGS } from "@/lib/sanity-fetch";
-import type { SanityMediaImage, SanityMediaPage } from "@/lib/sanity-types";
-import { SITE_CONFIG } from "@/utils/seo";
 import {
   getMediaPageQuery,
-  paginatedMediaImagesQuery,
   mediaImagesCountQuery,
-} from "@chimborazo/sanity-config/queries";
-import Container from "@/components/Container/container";
-import PageHero from "@/components/PageHero/page-hero";
-import MediaGalleryClient from "./media-gallery-client";
+  paginatedMediaImagesQuery,
+} from "@chimborazo/sanity-config/queries"
+import type { Metadata } from "next"
+import Container from "@/components/Container/container"
+import PageHero from "@/components/PageHero/page-hero"
+import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import type { SanityMediaImage, SanityMediaPage } from "@/lib/sanity-types"
+import { SITE_CONFIG } from "@/utils/seo"
+import MediaGalleryClient from "./media-gallery-client"
 
 export const metadata: Metadata = {
   title: "Media Gallery",
@@ -23,30 +23,27 @@ export const metadata: Metadata = {
     type: "website",
     url: `${SITE_CONFIG.url}/media`,
   },
-};
+}
 
-const PAGE_SIZE = 9;
+const PAGE_SIZE = 9
 
 export default async function MediaPage() {
-  const [{ data: mediaPageData }, { data: initialImages }, { data: totalCount }] = (await Promise.all([
-    sanityFetch({
-      query: getMediaPageQuery,
-      tags: [CACHE_TAGS.MEDIA],
-    }),
-    sanityFetch({
-      query: paginatedMediaImagesQuery,
-      params: { start: 0, end: PAGE_SIZE },
-      tags: [CACHE_TAGS.MEDIA],
-    }),
-    sanityFetch({
-      query: mediaImagesCountQuery,
-      tags: [CACHE_TAGS.MEDIA],
-    }),
-  ])) as [
-    { data: SanityMediaPage | null },
-    { data: SanityMediaImage[] },
-    { data: number },
-  ];
+  const [{ data: mediaPageData }, { data: initialImages }, { data: totalCount }] =
+    (await Promise.all([
+      sanityFetch({
+        query: getMediaPageQuery,
+        tags: [CACHE_TAGS.MEDIA],
+      }),
+      sanityFetch({
+        query: paginatedMediaImagesQuery,
+        params: { start: 0, end: PAGE_SIZE },
+        tags: [CACHE_TAGS.MEDIA],
+      }),
+      sanityFetch({
+        query: mediaImagesCountQuery,
+        tags: [CACHE_TAGS.MEDIA],
+      }),
+    ])) as [{ data: SanityMediaPage | null }, { data: SanityMediaImage[] }, { data: number }]
 
   // Prepare hero data from Sanity or use defaults
   const heroData = mediaPageData?.pageHero?.image
@@ -62,7 +59,7 @@ export default async function MediaPage() {
         imageAlt: "Chimborazo Park landscape",
         imageWidth: 2000,
         imageHeight: 1262,
-      };
+      }
 
   return (
     <div className="min-h-screen">
@@ -75,5 +72,5 @@ export default async function MediaPage() {
         />
       </Container>
     </div>
-  );
+  )
 }

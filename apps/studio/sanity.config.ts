@@ -2,7 +2,6 @@ import { createGenerateMetadataAction, schemas } from "@chimborazo/sanity-config
 import { CogIcon, DocumentTextIcon, HomeIcon } from "@sanity/icons"
 import { visionTool } from "@sanity/vision"
 import { defineConfig } from "sanity"
-import { media } from "sanity-plugin-media"
 import { defineDocuments, defineLocations, presentationTool } from "sanity/presentation"
 import type { StructureResolver } from "sanity/structure"
 import { structureTool } from "sanity/structure"
@@ -25,88 +24,103 @@ const generateMetadataAction = createGenerateMetadataAction({
   apiUrl: apiUrl ?? "",
 })
 
+// Singleton document types (managed as single instances, not lists)
+const singletonTypes = [
+  "siteSettings",
+  "homePage",
+  "aboutPage",
+  "amenitiesPage",
+  "eventsPage",
+  "projectsPage",
+  "updatesPage",
+  "mediaPage",
+  "donatePage",
+  "getInvolvedPage",
+  "historyPage",
+]
+
 // Define custom structure for organizing content
 const structure: StructureResolver = (S) =>
   S.list()
     .title("Content")
     .items([
-      // Settings group
+      // --- Homepage (most frequently edited) ---
       S.listItem()
-        .title("Settings")
-        .child(
-          S.list()
-            .title("Site Settings")
-            .items([
-              S.listItem()
-                .title("Site Settings")
-                .icon(CogIcon)
-                .child(S.document().schemaType("siteSettings").documentId("siteSettings")),
-            ])
-        ),
+        .title("Homepage")
+        .icon(HomeIcon)
+        .child(S.document().schemaType("homePage").documentId("homePage")),
+
       S.divider(),
-      // Pages group
+
+      // --- Content that drives pages ---
+      S.documentTypeListItem("event").title("Events"),
+      S.documentTypeListItem("project").title("Projects"),
+      S.documentTypeListItem("update").title("Updates"),
+
+      S.divider(),
+
+      // --- Informational pages ---
       S.listItem()
-        .title("Pages")
-        .child(
-          S.list()
-            .title("Pages")
-            .items([
-              S.listItem()
-                .title("Homepage")
-                .icon(HomeIcon)
-                .child(S.document().schemaType("homePage").documentId("homePage")),
-              S.listItem()
-                .title("About Page")
-                .icon(DocumentTextIcon)
-                .child(S.document().schemaType("aboutPage").documentId("aboutPage")),
-              S.listItem()
-                .title("Amenities Page")
-                .icon(DocumentTextIcon)
-                .child(S.document().schemaType("amenitiesPage").documentId("amenitiesPage")),
-              S.listItem()
-                .title("Events Page")
-                .icon(DocumentTextIcon)
-                .child(S.document().schemaType("eventsPage").documentId("eventsPage")),
-              S.listItem()
-                .title("History Page")
-                .icon(DocumentTextIcon)
-                .child(S.document().schemaType("historyPage").documentId("historyPage")),
-              S.listItem()
-                .title("Projects Page")
-                .icon(DocumentTextIcon)
-                .child(S.document().schemaType("projectsPage").documentId("projectsPage")),
-              S.listItem()
-                .title("Media Page")
-                .icon(DocumentTextIcon)
-                .child(S.document().schemaType("mediaPage").documentId("mediaPage")),
-              S.listItem()
-                .title("Donate Page")
-                .icon(DocumentTextIcon)
-                .child(S.document().schemaType("donatePage").documentId("donatePage")),
-              S.listItem()
-                .title("Get Involved Page")
-                .icon(DocumentTextIcon)
-                .child(S.document().schemaType("getInvolvedPage").documentId("getInvolvedPage")),
-            ])
-        ),
+        .title("About Page")
+        .icon(DocumentTextIcon)
+        .child(S.document().schemaType("aboutPage").documentId("aboutPage")),
+      S.listItem()
+        .title("History Page")
+        .icon(DocumentTextIcon)
+        .child(S.document().schemaType("historyPage").documentId("historyPage")),
+      S.listItem()
+        .title("Amenities Page")
+        .icon(DocumentTextIcon)
+        .child(S.document().schemaType("amenitiesPage").documentId("amenitiesPage")),
+      S.listItem()
+        .title("Get Involved Page")
+        .icon(DocumentTextIcon)
+        .child(S.document().schemaType("getInvolvedPage").documentId("getInvolvedPage")),
+
       S.divider(),
-      // Content types (excluding singletons)
-      ...S.documentTypeListItems().filter(
-        (listItem) =>
-          ![
-            "siteSettings",
-            "homePage",
-            "amenitiesPage",
-            "eventsPage",
-            "historyPage",
-            "projectsPage",
-            "getInvolvedPage",
-            "mediaPage",
-            "aboutPage",
-            "donatePage",
-            "media.tag",
-          ].includes(listItem.getId() ?? "")
-      ),
+
+      // --- Support & media pages ---
+      S.listItem()
+        .title("Donate Page")
+        .icon(DocumentTextIcon)
+        .child(S.document().schemaType("donatePage").documentId("donatePage")),
+      S.listItem()
+        .title("Media Page")
+        .icon(DocumentTextIcon)
+        .child(S.document().schemaType("mediaPage").documentId("mediaPage")),
+      S.documentTypeListItem("mediaImage").title("Media Images"),
+
+      S.divider(),
+
+      // --- Listing page configuration ---
+      S.listItem()
+        .title("Events Page")
+        .icon(DocumentTextIcon)
+        .child(S.document().schemaType("eventsPage").documentId("eventsPage")),
+      S.listItem()
+        .title("Projects Page")
+        .icon(DocumentTextIcon)
+        .child(S.document().schemaType("projectsPage").documentId("projectsPage")),
+      S.listItem()
+        .title("Updates Page")
+        .icon(DocumentTextIcon)
+        .child(S.document().schemaType("updatesPage").documentId("updatesPage")),
+
+      S.divider(),
+
+      // --- Shared content ---
+      S.documentTypeListItem("partner").title("Partners"),
+      S.documentTypeListItem("quote").title("Quotes"),
+      S.documentTypeListItem("gallery").title("Galleries"),
+      S.documentTypeListItem("updateCategory").title("Update Categories"),
+
+      S.divider(),
+
+      // --- Settings ---
+      S.listItem()
+        .title("Site Settings")
+        .icon(CogIcon)
+        .child(S.document().schemaType("siteSettings").documentId("siteSettings")),
     ])
 
 export default defineConfig({
@@ -125,7 +139,6 @@ export default defineConfig({
 
   plugins: [
     structureTool({ structure }),
-    media(),
     visionTool(),
     presentationTool({
       previewUrl: {
@@ -135,25 +148,25 @@ export default defineConfig({
         },
       },
       allowOrigins: [
-        "http://localhost:3000",
+        "http://localhost:3001",
         "https://chimborazoparkconservancy.org",
         "https://*.chimborazoparkconservancy.org",
         "https://*.netlify.app",
       ],
       resolve: {
         mainDocuments: defineDocuments([
-          // Singleton pages - match URL to document type
+          // Singleton pages
           { route: "/", type: "homePage" },
+          { route: "/about", type: "aboutPage" },
+          { route: "/history", type: "historyPage" },
+          { route: "/amenities", type: "amenitiesPage" },
+          { route: "/get-involved", type: "getInvolvedPage" },
+          { route: "/donate", type: "donatePage" },
+          { route: "/media", type: "mediaPage" },
           { route: "/events", type: "eventsPage" },
           { route: "/projects", type: "projectsPage" },
-          { route: "/amenities", type: "amenitiesPage" },
-          { route: "/projects", type: "projectsPage" },
-          { route: "/about", type: "aboutPage" },
-          { route: "/media", type: "mediaPage" },
-          { route: "/donate", type: "donatePage" },
-          { route: "/get-involved", type: "getInvolvedPage" },
-          { route: "/history", type: "historyPage" },
-          // Dynamic routes - use filter to match by slug
+          { route: "/updates", type: "updatesPage" },
+          // Dynamic routes
           {
             route: "/events/:slug",
             filter: `_type == "event" && slug.current == $slug`,
@@ -164,11 +177,38 @@ export default defineConfig({
           },
         ]),
         locations: {
-          // Singleton pages
+          // Homepage
           homePage: defineLocations({
             message: "This document controls the homepage content",
             locations: [{ title: "Homepage", href: "/" }],
           }),
+          // Informational pages
+          aboutPage: defineLocations({
+            message: "This document controls the About page",
+            locations: [{ title: "About", href: "/about" }],
+          }),
+          historyPage: defineLocations({
+            message: "This document controls the History page",
+            locations: [{ title: "History", href: "/history" }],
+          }),
+          amenitiesPage: defineLocations({
+            message: "This document controls the Amenities page",
+            locations: [{ title: "Amenities", href: "/amenities" }],
+          }),
+          getInvolvedPage: defineLocations({
+            message: "This document controls the Get Involved page",
+            locations: [{ title: "Get Involved", href: "/get-involved" }],
+          }),
+          // Support pages
+          donatePage: defineLocations({
+            message: "This document controls the Donate page",
+            locations: [{ title: "Donate", href: "/donate" }],
+          }),
+          mediaPage: defineLocations({
+            message: "This document controls the Media page",
+            locations: [{ title: "Media", href: "/media" }],
+          }),
+          // Listing pages
           eventsPage: defineLocations({
             message: "This document controls the Events listing page",
             locations: [{ title: "Events", href: "/events" }],
@@ -177,29 +217,9 @@ export default defineConfig({
             message: "This document controls the Projects listing page",
             locations: [{ title: "Projects", href: "/projects" }],
           }),
-          amenitiesPage: defineLocations({
-            message: "This document controls the Amenities page",
-            locations: [{ title: "Amenities", href: "/amenities" }],
-          }),
-          aboutPage: defineLocations({
-            message: "This document controls the About page",
-            locations: [{ title: "About", href: "/about" }],
-          }),
-          mediaPage: defineLocations({
-            message: "This document controls the Media page",
-            locations: [{ title: "Media", href: "/media" }],
-          }),
-          donatePage: defineLocations({
-            message: "This document controls the Donate page",
-            locations: [{ title: "Donate", href: "/donate" }],
-          }),
-          getInvolvedPage: defineLocations({
-            message: "This document controls the Get Involved page",
-            locations: [{ title: "Get Involved", href: "/get-involved" }],
-          }),
-          historyPage: defineLocations({
-            message: "This document controls the History page",
-            locations: [{ title: "History", href: "/history" }],
+          updatesPage: defineLocations({
+            message: "This document controls the Updates page",
+            locations: [{ title: "Updates", href: "/updates" }],
           }),
           // Dynamic content types
           event: defineLocations({
@@ -245,20 +265,30 @@ export default defineConfig({
   },
 
   document: {
-    // Customize document behavior
     productionUrl: async (prev, context) => {
       const { document } = context
       const baseUrl = env.SANITY_STUDIO_PREVIEW_URL
+      const slug = (document.slug as { current?: string })?.current
 
-      if (document._type === "event") {
-        return `${baseUrl}/events/${(document.slug as { current?: string })?.current}`
+      if (slug) {
+        if (document._type === "event") {
+          return `${baseUrl}/events/${slug}`
+        }
+        if (document._type === "project") {
+          return `${baseUrl}/projects/${slug}`
+        }
       }
 
       return prev
     },
-    // Add custom document actions
     actions: (prev, context) => {
-      // Add the AI metadata generation action for mediaImage documents
+      // Restrict actions for singleton documents
+      if (singletonTypes.includes(context.schemaType)) {
+        return prev.filter(
+          (action) => !["delete", "duplicate", "unpublish"].includes(action.action ?? ""),
+        )
+      }
+      // Add AI metadata generation action for mediaImage documents
       if (context.schemaType === "mediaImage") {
         return [...prev, generateMetadataAction]
       }

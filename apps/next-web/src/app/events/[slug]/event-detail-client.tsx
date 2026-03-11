@@ -1,15 +1,15 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import type { PortableTextBlock } from "@portabletext/react";
-import { Button } from "@/components/Button/button";
-import ImageGallery, { type SanityGalleryImage } from "@/components/ImageGallery/image-gallery";
-import { PortableText } from "@/components/PortableText/portable-text";
+import type { PortableTextBlock } from "@portabletext/react"
+import { useState } from "react"
+import { Button } from "@/components/Button/button"
+import ImageGallery, { type SanityGalleryImage } from "@/components/ImageGallery/image-gallery"
+import { PortableText } from "@/components/PortableText/portable-text"
 
 interface EventDetailClientProps {
-  recap: PortableTextBlock[];
-  body?: PortableTextBlock[];
-  recapGalleryImages: SanityGalleryImage[];
+  recap: PortableTextBlock[]
+  body?: PortableTextBlock[]
+  recapGalleryImages: SanityGalleryImage[]
 }
 
 export default function EventDetailClient({
@@ -17,21 +17,17 @@ export default function EventDetailClient({
   body,
   recapGalleryImages,
 }: EventDetailClientProps) {
-  const [showOriginalDetails, setShowOriginalDetails] = useState(false);
+  const [showOriginalDetails, setShowOriginalDetails] = useState(false)
 
   if (!showOriginalDetails) {
     return (
       <>
         <div className="mb-10 space-y-8 rounded-2xl border border-primary-700 p-8">
           <p className="font-body text-lg text-grey-900 dark:text-grey-100">
-            This event has passed, but read below for a recap. You can also view the
-            original event details here:{" "}
+            This event has passed, but read below for a recap. You can also view the original event
+            details here:{" "}
           </p>
-          <Button
-            variant="outline"
-            size="small"
-            onClick={() => setShowOriginalDetails(true)}
-          >
+          <Button variant="outline" size="small" onClick={() => setShowOriginalDetails(true)}>
             View original event details
           </Button>
         </div>
@@ -52,16 +48,12 @@ export default function EventDetailClient({
           </div>
         )}
         <div className="mt-8">
-          <Button
-            variant="outline"
-            size="small"
-            onClick={() => setShowOriginalDetails(true)}
-          >
+          <Button variant="outline" size="small" onClick={() => setShowOriginalDetails(true)}>
             View original event details
           </Button>
         </div>
       </>
-    );
+    )
   }
 
   return (
@@ -76,14 +68,10 @@ export default function EventDetailClient({
         </div>
       )}
       <div className="mt-8">
-        <Button
-          variant="outline"
-          size="small"
-          onClick={() => setShowOriginalDetails(false)}
-        >
+        <Button variant="outline" size="small" onClick={() => setShowOriginalDetails(false)}>
           View event recap
         </Button>
       </div>
     </>
-  );
+  )
 }

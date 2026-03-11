@@ -1,10 +1,10 @@
-import { SocialLinks } from "@/components/SocialLinks/social-links";
-import Link from "next/link";
-import { ThemeToggle } from "../ThemeToggle/theme-toggle";
+import Link from "next/link"
+import { SocialLinks } from "@/components/SocialLinks/social-links"
+import { ThemeToggle } from "../ThemeToggle/theme-toggle"
 
 interface FooterProps {
-  facebookUrl?: string;
-  instagramUrl?: string;
+  facebookUrl?: string
+  instagramUrl?: string
 }
 
 export default function Footer({ facebookUrl, instagramUrl }: FooterProps) {
@@ -17,6 +17,7 @@ export default function Footer({ facebookUrl, instagramUrl }: FooterProps) {
           preserveAspectRatio="none"
           className="relative block h-16 w-full rotate-180 lg:h-24"
           xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
         >
           <path
             d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60 L1200,120 L0,120 Z"
@@ -52,7 +53,10 @@ export default function Footer({ facebookUrl, instagramUrl }: FooterProps) {
             <h3 className="font-display text-lg font-semibold text-primary-800 dark:text-primary-400">
               Navigation
             </h3>
-            <nav aria-label="Footer navigation" className="grid grid-cols-1 gap-y-2 sm:grid-cols-2 sm:gap-x-6">
+            <nav
+              aria-label="Footer navigation"
+              className="grid grid-cols-1 gap-y-2 sm:grid-cols-2 sm:gap-x-6"
+            >
               <Link
                 href="/"
                 className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
@@ -136,7 +140,7 @@ export default function Footer({ facebookUrl, instagramUrl }: FooterProps) {
         </div>
       </div>
     </footer>
-  );
+  )
 }
 
 /** Client component for dynamic copyright year */
@@ -145,5 +149,5 @@ function FooterCopyright() {
     <p className="text-center font-body text-sm text-grey-600 md:text-left dark:text-grey-400">
       &copy; {new Date().getFullYear()} Chimborazo Park Conservancy. All rights reserved.
     </p>
-  );
+  )
 }

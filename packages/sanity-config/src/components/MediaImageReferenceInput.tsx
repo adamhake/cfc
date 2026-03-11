@@ -1,9 +1,8 @@
-import { Card, Flex, Grid, Stack, Text } from "@sanity/ui"
-import { Reference, SanityDocument } from "@sanity/types"
-import { set, unset } from "sanity"
-import { ObjectInputProps, useClient } from "sanity"
-import { useCallback, useEffect, useMemo, useState } from "react"
 import imageUrlBuilder from "@sanity/image-url"
+import type { Reference, SanityDocument } from "@sanity/types"
+import { Card, Flex, Grid, Stack, Text } from "@sanity/ui"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { type ObjectInputProps, set, unset, useClient } from "sanity"
 
 interface MediaImageDocument extends SanityDocument {
   _type: "mediaImage"
@@ -30,7 +29,7 @@ export function MediaImageReferenceInput(props: ObjectInputProps) {
   useEffect(() => {
     const fetchMediaImages = async () => {
       try {
-        const query = `*[_type == "mediaImage" && !(_id in path('drafts.**'))] | order(uploadedAt desc) {
+        const query = `*[_type == "mediaImage" && !(_id in path('drafts.**'))] | order(_createdAt desc) {
           _id,
           title,
           image,
@@ -58,11 +57,11 @@ export function MediaImageReferenceInput(props: ObjectInputProps) {
           set({
             _type: "reference",
             _ref: imageId,
-          })
+          }),
         )
       }
     },
-    [onChange, selectedRef]
+    [onChange, selectedRef],
   )
 
   if (loading) {

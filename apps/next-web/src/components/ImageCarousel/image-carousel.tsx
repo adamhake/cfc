@@ -1,29 +1,29 @@
-'use client';
+"use client"
 
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { Image } from "@/components/OptimizedImage/optimized-image";
-import useEmblaCarousel from "embla-carousel-react";
-import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import useEmblaCarousel from "embla-carousel-react"
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react"
+import { Image } from "@/components/OptimizedImage/optimized-image"
+import { useReducedMotion } from "@/hooks/useReducedMotion"
 
 export interface CarouselImage {
-  src: string;
-  alt: string;
-  caption?: string;
-  title?: string;
-  width: number;
-  height: number;
+  src: string
+  alt: string
+  caption?: string
+  title?: string
+  width: number
+  height: number
 }
 
 interface ImageCarouselProps {
-  images: CarouselImage[];
-  autoPlay?: boolean;
-  autoPlayInterval?: number;
-  showNavigation?: boolean;
-  showDots?: boolean;
-  showCaptions?: boolean;
-  captionPosition?: "overlay" | "below";
-  loop?: boolean;
-  aspectRatio?: "16/9" | "4/3" | "1/1" | "auto";
+  images: CarouselImage[]
+  autoPlay?: boolean
+  autoPlayInterval?: number
+  showNavigation?: boolean
+  showDots?: boolean
+  showCaptions?: boolean
+  captionPosition?: "overlay" | "below"
+  loop?: boolean
+  aspectRatio?: "16/9" | "4/3" | "1/1" | "auto"
 }
 
 export default function ImageCarousel({
@@ -37,105 +37,104 @@ export default function ImageCarousel({
   loop = true,
   aspectRatio = "16/9",
 }: ImageCarouselProps) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop });
-  const [isPlaying, setIsPlaying] = useState(autoPlay);
-  const prefersReducedMotion = useReducedMotion();
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop })
+  const [isPlaying, setIsPlaying] = useState(autoPlay)
+  const prefersReducedMotion = useReducedMotion()
 
   // Sync selectedIndex with embla via useSyncExternalStore (no setState in effects)
   const selectedIndex = useSyncExternalStore(
     useCallback(
       (callback) => {
-        if (!emblaApi) return () => {};
-        emblaApi.on("select", callback);
-        emblaApi.on("reInit", callback);
+        if (!emblaApi) return () => {}
+        emblaApi.on("select", callback)
+        emblaApi.on("reInit", callback)
         return () => {
-          emblaApi.off("select", callback);
-          emblaApi.off("reInit", callback);
-        };
+          emblaApi.off("select", callback)
+          emblaApi.off("reInit", callback)
+        }
       },
       [emblaApi],
     ),
     () => emblaApi?.selectedScrollSnap() ?? 0,
     () => 0,
-  );
+  )
 
   const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev();
-  }, [emblaApi]);
+    if (emblaApi) emblaApi.scrollPrev()
+  }, [emblaApi])
 
   const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext();
-  }, [emblaApi]);
+    if (emblaApi) emblaApi.scrollNext()
+  }, [emblaApi])
 
   const scrollTo = useCallback(
     (index: number) => {
-      if (emblaApi) emblaApi.scrollTo(index);
+      if (emblaApi) emblaApi.scrollTo(index)
     },
     [emblaApi],
-  );
+  )
 
   // Auto-play functionality - stops when reduced motion is preferred
   useEffect(() => {
-    if (!emblaApi || !autoPlay || !isPlaying || prefersReducedMotion) return;
+    if (!emblaApi || !autoPlay || !isPlaying || prefersReducedMotion) return
 
     const interval = setInterval(() => {
-      emblaApi.scrollNext();
-    }, autoPlayInterval);
+      emblaApi.scrollNext()
+    }, autoPlayInterval)
 
-    return () => clearInterval(interval);
-  }, [emblaApi, autoPlay, autoPlayInterval, isPlaying, prefersReducedMotion]);
+    return () => clearInterval(interval)
+  }, [emblaApi, autoPlay, autoPlayInterval, isPlaying, prefersReducedMotion])
 
   // Keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!emblaApi) return;
+    if (!emblaApi) return
 
     if (e.key === "ArrowLeft") {
-      e.preventDefault();
-      scrollPrev();
+      e.preventDefault()
+      scrollPrev()
     } else if (e.key === "ArrowRight") {
-      e.preventDefault();
-      scrollNext();
+      e.preventDefault()
+      scrollNext()
     }
-  };
+  }
 
   // Pause auto-play on hover
   const handleMouseEnter = () => {
-    if (autoPlay) setIsPlaying(false);
-  };
+    if (autoPlay) setIsPlaying(false)
+  }
 
   const handleMouseLeave = () => {
-    if (autoPlay) setIsPlaying(true);
-  };
+    if (autoPlay) setIsPlaying(true)
+  }
 
   // Pause auto-play on focus within
   const handleFocusIn = () => {
-    if (autoPlay) setIsPlaying(false);
-  };
+    if (autoPlay) setIsPlaying(false)
+  }
 
   const handleFocusOut = (e: React.FocusEvent) => {
     // Only resume if focus has left the carousel entirely
     if (autoPlay && !e.currentTarget.contains(e.relatedTarget)) {
-      setIsPlaying(true);
+      setIsPlaying(true)
     }
-  };
+  }
 
   const getAspectClass = () => {
     switch (aspectRatio) {
       case "16/9":
-        return "aspect-video";
+        return "aspect-video"
       case "4/3":
-        return "aspect-4/3";
+        return "aspect-4/3"
       case "1/1":
-        return "aspect-square";
+        return "aspect-square"
       default:
-        return "";
+        return ""
     }
-  };
+  }
 
   return (
-    <div
+    <section
       className="relative"
-      role="region"
       aria-roledescription="carousel"
       aria-label={`Image carousel with ${images.length} slides`}
       onKeyDown={handleKeyDown}
@@ -143,15 +142,13 @@ export default function ImageCarousel({
       onMouseLeave={handleMouseLeave}
       onFocus={handleFocusIn}
       onBlur={handleFocusOut}
-      tabIndex={0}
     >
       <div className="relative overflow-hidden rounded-2xl" ref={emblaRef}>
         <div className="flex">
           {images.map((image, index) => (
-            <div
-              key={index}
+            <section
+              key={image.src}
               className="min-w-0 flex-[0_0_100%]"
-              role="group"
               aria-roledescription="slide"
               aria-label={`Slide ${index + 1} of ${images.length}`}
             >
@@ -197,15 +194,15 @@ export default function ImageCarousel({
                   )}
                 </div>
               )}
-            </div>
+            </section>
           ))}
         </div>
 
         {/* Screen reader announcements */}
-        <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        <output className="sr-only" aria-live="polite" aria-atomic="true">
           Slide {selectedIndex + 1} of {images.length}
           {images[selectedIndex]?.alt && `: ${images[selectedIndex].alt}`}
-        </div>
+        </output>
 
         {/* Navigation arrows */}
         {showNavigation && images.length > 1 && (
@@ -216,7 +213,13 @@ export default function ImageCarousel({
               aria-label="Previous slide"
               type="button"
             >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -231,7 +234,13 @@ export default function ImageCarousel({
               aria-label="Next slide"
               type="button"
             >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -247,9 +256,9 @@ export default function ImageCarousel({
       {/* Pagination dots */}
       {showDots && images.length > 1 && (
         <div className="mt-4 flex justify-center gap-2">
-          {images.map((_, index) => (
+          {images.map((image, index) => (
             <button
-              key={index}
+              key={image.src}
               type="button"
               onClick={() => scrollTo(index)}
               className={`h-2.5 rounded-full transition-all duration-200 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:outline-none ${
@@ -263,6 +272,6 @@ export default function ImageCarousel({
           ))}
         </div>
       )}
-    </div>
-  );
+    </section>
+  )
 }

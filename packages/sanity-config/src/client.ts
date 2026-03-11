@@ -1,7 +1,7 @@
 import { createClient } from "@sanity/client"
 import {
-  createImageUrlBuilder as sanityImageUrlBuilder,
   type SanityImageSource,
+  createImageUrlBuilder as sanityImageUrlBuilder,
 } from "@sanity/image-url"
 
 export interface SanityConfig {
@@ -22,7 +22,7 @@ export function createSanityClient(config: SanityConfig) {
     projectId: config.projectId,
     dataset: config.dataset,
     apiVersion: config.apiVersion || "2024-01-01",
-    useCdn: config.useCdn ?? true,
+    useCdn: config.useCdn ?? !config.token,
     token: config.token,
     perspective: config.perspective || "published",
     stega: config.stega?.enabled
@@ -55,7 +55,7 @@ export function createImageUrlBuilder(config: Pick<SanityConfig, "projectId" | "
 
 export function urlForImage(
   source: SanityImageSource,
-  config: Pick<SanityConfig, "projectId" | "dataset">
+  config: Pick<SanityConfig, "projectId" | "dataset">,
 ) {
   return createImageUrlBuilder(config).image(source)
 }

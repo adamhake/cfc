@@ -134,12 +134,14 @@ const auditMediaUsage = async (client: {
   const mediaImageCount = await client.fetch<number>('count(*[_type == "mediaImage"])')
   console.log(`Media library docs: ${mediaImageCount}`)
 
-  const mediaImageDocs = await client.fetch<Array<{ _id: string; image?: ImageLike; imageV2?: ImageLike }>>(
-    '*[_type == "mediaImage"]{_id, image{asset}, imageV2{asset}}'
-  )
+  const mediaImageDocs = await client.fetch<
+    Array<{ _id: string; image?: ImageLike; imageV2?: ImageLike }>
+  >('*[_type == "mediaImage"]{_id, image{asset}, imageV2{asset}}')
   const mediaImageLegacyCount = mediaImageDocs.filter((doc) => hasV2Image(doc.image)).length
   const mediaImageV2Count = mediaImageDocs.filter((doc) => hasV2Image(doc.imageV2)).length
-  console.log(`Media image docs: legacy image=${mediaImageLegacyCount}, imageV2=${mediaImageV2Count}`)
+  console.log(
+    `Media image docs: legacy image=${mediaImageLegacyCount}, imageV2=${mediaImageV2Count}`,
+  )
   console.log("")
 
   const docsByType = new Map<string, GenericDoc[]>()
@@ -152,7 +154,9 @@ const auditMediaUsage = async (client: {
   console.log("Single-image fields")
   for (const config of SINGLE_FIELD_CONFIGS) {
     const docs = docsByType.get(config.type) || []
-    const legacyCount = docs.filter((doc) => hasLegacyReference(getByPath(doc, config.legacyPath))).length
+    const legacyCount = docs.filter((doc) =>
+      hasLegacyReference(getByPath(doc, config.legacyPath)),
+    ).length
     const v2Count = docs.filter((doc) => hasV2Image(getByPath(doc, config.v2Path))).length
 
     console.log(`- ${config.label}: legacy=${legacyCount}, v2=${v2Count}`)

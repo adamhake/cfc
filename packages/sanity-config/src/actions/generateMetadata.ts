@@ -53,17 +53,12 @@ type DialogState =
  * ```
  */
 export const createGenerateMetadataAction = (
-  config: GenerateMetadataActionConfig
+  config: GenerateMetadataActionConfig,
 ): DocumentActionComponent => {
   const GenerateMetadataAction: DocumentActionComponent = (props) => {
     const { type, draft, published, onComplete } = props
     const { patch } = useDocumentOperation(props.id, props.type)
     const [dialogState, setDialogState] = useState<DialogState>({ type: "none" })
-
-    // Only show this action for mediaImage documents
-    if (type !== "mediaImage") {
-      return null
-    }
 
     // Get the current document (draft or published)
     const doc = (draft || published) as MediaImageDocument | null
@@ -157,6 +152,11 @@ export const createGenerateMetadataAction = (
       setDialogState({ type: "none" })
       onComplete()
     }, [onComplete])
+
+    // Only show this action for mediaImage documents
+    if (type !== "mediaImage") {
+      return null
+    }
 
     // Build the dialog based on state
     const getDialog = () => {

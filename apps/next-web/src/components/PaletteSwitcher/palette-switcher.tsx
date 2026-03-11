@@ -1,26 +1,26 @@
-"use client";
+"use client"
 
-import { usePalette } from "@/hooks/usePalette";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { PALETTE_METADATA, type PaletteMode } from "@/utils/palette";
-import { useClickAway } from "@uidotdev/usehooks";
-import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Palette } from "lucide-react";
-import { useState } from "react";
+import { useClickAway } from "@uidotdev/usehooks"
+import { AnimatePresence, motion } from "framer-motion"
+import { ChevronDown, Palette } from "lucide-react"
+import { useState } from "react"
+import { usePalette } from "@/hooks/usePalette"
+import { useReducedMotion } from "@/hooks/useReducedMotion"
+import { PALETTE_METADATA, type PaletteMode } from "@/utils/palette"
 
 export interface PaletteSwitcherProps {
   /**
    * Visual variant of the switcher
    */
-  variant?: "button" | "compact";
+  variant?: "button" | "compact"
   /**
    * Whether to show text label alongside icon
    */
-  showLabel?: boolean;
+  showLabel?: boolean
   /**
    * Additional CSS classes
    */
-  className?: string;
+  className?: string
 }
 
 /**
@@ -31,22 +31,22 @@ export function PaletteSwitcher({
   showLabel = true,
   className = "",
 }: PaletteSwitcherProps) {
-  const { palette, setPalette } = usePalette();
-  const [isOpen, setIsOpen] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
+  const { palette, setPalette } = usePalette()
+  const [isOpen, setIsOpen] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
 
   const ref = useClickAway<HTMLDivElement>(() => {
-    setIsOpen(false);
-  });
+    setIsOpen(false)
+  })
 
-  const currentPaletteName = PALETTE_METADATA[palette].name;
+  const currentPaletteName = PALETTE_METADATA[palette].name
 
-  const palettes: PaletteMode[] = ["green", "olive", "green-terra", "green-navy"];
+  const palettes: PaletteMode[] = ["green", "olive", "green-terra", "green-navy"]
 
   const handleSelect = (newPalette: PaletteMode) => {
-    setPalette(newPalette);
-    setIsOpen(false);
-  };
+    setPalette(newPalette)
+    setIsOpen(false)
+  }
 
   if (variant === "compact") {
     return (
@@ -81,12 +81,13 @@ export function PaletteSwitcher({
               </div>
               <div className="space-y-1">
                 {palettes.map((paletteOption) => {
-                  const meta = PALETTE_METADATA[paletteOption];
-                  const isActive = palette === paletteOption;
+                  const meta = PALETTE_METADATA[paletteOption]
+                  const isActive = palette === paletteOption
 
                   return (
                     <button
                       key={paletteOption}
+                      type="button"
                       onClick={() => handleSelect(paletteOption)}
                       className={`w-full rounded-lg px-3 py-2 text-left transition ${
                         isActive
@@ -119,6 +120,7 @@ export function PaletteSwitcher({
                               strokeWidth="2"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
+                              aria-hidden="true"
                             >
                               <path d="M5 13l4 4L19 7" />
                             </svg>
@@ -126,14 +128,14 @@ export function PaletteSwitcher({
                         )}
                       </div>
                     </button>
-                  );
+                  )
                 })}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
-    );
+    )
   }
 
   return (
@@ -166,12 +168,13 @@ export function PaletteSwitcher({
             </div>
             <div className="space-y-2">
               {palettes.map((paletteOption) => {
-                const meta = PALETTE_METADATA[paletteOption];
-                const isActive = palette === paletteOption;
+                const meta = PALETTE_METADATA[paletteOption]
+                const isActive = palette === paletteOption
 
                 return (
                   <button
                     key={paletteOption}
+                    type="button"
                     onClick={() => handleSelect(paletteOption)}
                     className={`w-full rounded-lg px-3 py-3 text-left transition ${
                       isActive
@@ -204,6 +207,7 @@ export function PaletteSwitcher({
                             strokeWidth="2"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
+                            aria-hidden="true"
                           >
                             <path d="M5 13l4 4L19 7" />
                           </svg>
@@ -211,12 +215,12 @@ export function PaletteSwitcher({
                       )}
                     </div>
                   </button>
-                );
+                )
               })}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
     </div>
-  );
+  )
 }

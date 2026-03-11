@@ -26,7 +26,7 @@ export default defineType({
           name: "imageV2",
           title: "Hero Image (Direct Upload)",
           type: "contentImage",
-          description: "Upload/select an image directly. Preferred for new content.",
+          description: "Upload/select an image.",
         }),
       ],
       validation: (rule) => rule.required(),
