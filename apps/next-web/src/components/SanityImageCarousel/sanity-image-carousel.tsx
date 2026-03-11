@@ -70,14 +70,17 @@ export default function SanityImageCarousel({
   useEffect(() => {
     if (!emblaApi) return
 
-    // Initialize state from carousel API
-    setSelectedIndex(emblaApi.selectedScrollSnap())
-    setScrollSnaps(emblaApi.scrollSnapList())
+    // Defer layout-triggering reads to the next frame to avoid forced reflow
+    const frameId = requestAnimationFrame(() => {
+      setSelectedIndex(emblaApi.selectedScrollSnap())
+      setScrollSnaps(emblaApi.scrollSnapList())
+    })
 
     emblaApi.on("select", onSelect)
     emblaApi.on("reInit", onSelect)
 
     return () => {
+      cancelAnimationFrame(frameId)
       emblaApi.off("select", onSelect)
       emblaApi.off("reInit", onSelect)
     }

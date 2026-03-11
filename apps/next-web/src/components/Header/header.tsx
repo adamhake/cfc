@@ -62,8 +62,8 @@ export default function Header({
   const ref = useClickAway<HTMLElement>(() => {
     // Only close on click-away for desktop menu
     // Mobile menu has its own close handlers on links/buttons
-    const isMobile = window.innerWidth < 768 // md breakpoint
-    if (!isMobile) {
+    // Use matchMedia instead of window.innerWidth to avoid forced reflow
+    if (window.matchMedia("(min-width: 768px)").matches) {
       setMenuOpen(false)
     }
   })
