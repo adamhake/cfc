@@ -1,4 +1,5 @@
-import type { NextConfig } from "next"
+import { withPostHogConfig } from "@posthog/nextjs-config";
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   cacheLife: {
@@ -8,6 +9,7 @@ const nextConfig: NextConfig = {
       expire: 7776000, // 90 days — Sanity Live handles on-demand revalidation
     },
   },
+  productionBrowserSourceMaps: true,
   images: {
     remotePatterns: [
       {
@@ -17,27 +19,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-}
+};
 
-export default async function config(
-  phase: string,
-  { defaultConfig }: { defaultConfig: NextConfig },
-): Promise<NextConfig> {
-  if (process.env.POSTHOG_API_KEY && process.env.POSTHOG_PROJECT_ID) {
-    const { withPostHogConfig } = await import("@posthog/nextjs-config")
-    const configFn = withPostHogConfig(nextConfig, {
-      personalApiKey: process.env.POSTHOG_API_KEY,
-      projectId: process.env.POSTHOG_PROJECT_ID,
-      sourcemaps: {
-        releaseName: "chimborazo-next-web",
-        deleteAfterUpload: true,
-        enabled: true,
-      },
-    }) as unknown as (
-      phase: string,
-      context: { defaultConfig: NextConfig },
-    ) => Promise<NextConfig>
-    return configFn(phase, { defaultConfig })
-  }
-  return nextConfig
-}
+export default withPostHogConfig(nextConfig, {
+  personalApiKey: process.env.POSTHOG_API_KEY ?? "",
+  projectId: process.env.POSTHOG_PROJECT_ID,
+  host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+  sourcemaps: {
+    releaseName: "chimborazo-next-web",
+    deleteAfterUpload: true,
+    enabled: true,
+  },
+});
