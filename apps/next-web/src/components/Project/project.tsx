@@ -23,6 +23,10 @@ export default function Project({ project }: ProjectProps) {
     category,
     location,
   } = project;
+
+  // Skip rendering if project has no slug
+  if (!slug?.current) return null;
+
   // Use override text if provided, otherwise format the date
   const fmtDate = startDateOverride || formatDateString(startDate, "short");
 

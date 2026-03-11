@@ -26,7 +26,7 @@ export const projectFields = `
 
 // Get all published projects
 export const allProjectsQuery = `
-  *[_type == "project"] | order(startDate desc) {
+  *[_type == "project" && defined(slug.current)] | order(startDate desc) {
     ${projectFields}
   }
 `
