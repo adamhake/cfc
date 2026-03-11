@@ -3,6 +3,7 @@ import { imageFieldProjection } from "./imageProjections"
 
 export const getAmenitiesPageQuery = defineQuery(`
   *[_type == "amenitiesPage"][0]{
+    _id,
     pageHero{
       title,
       description,

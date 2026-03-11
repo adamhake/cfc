@@ -5,7 +5,7 @@ import {
 } from "@chimborazo/sanity-config/queries"
 import type { Metadata } from "next"
 import Container from "@/components/Container/container"
-import PageHero from "@/components/PageHero/page-hero"
+import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityMediaImage, SanityMediaPage } from "@/lib/sanity-types"
 import { SITE_CONFIG } from "@/utils/seo"
@@ -45,25 +45,21 @@ export default async function MediaPage() {
       }),
     ])) as [{ data: SanityMediaPage | null }, { data: SanityMediaImage[] }, { data: number }]
 
-  // Prepare hero data from Sanity or use defaults
-  const heroData = mediaPageData?.pageHero?.image
-    ? {
-        title: mediaPageData.pageHero.title,
-        subtitle: mediaPageData.pageHero.description,
-        sanityImage: mediaPageData.pageHero.image,
-      }
-    : {
-        title: "Media Gallery",
-        subtitle: "Explore photos of our park, community events, and restoration efforts",
-        imageSrc: "/bike_sunset.webp",
-        imageAlt: "Chimborazo Park landscape",
-        imageWidth: 2000,
-        imageHeight: 1262,
-      }
-
   return (
     <div className="min-h-screen">
-      <PageHero {...heroData} height="small" priority={true} />
+      <PageHeroOptimistic
+        document={mediaPageData}
+        fallback={{
+          title: "Media Gallery",
+          subtitle: "Explore photos of our park, community events, and restoration efforts",
+          imageSrc: "/bike_sunset.webp",
+          imageAlt: "Chimborazo Park landscape",
+          imageWidth: 2000,
+          imageHeight: 1262,
+        }}
+        height="small"
+        priority={true}
+      />
       <Container maxWidth="6xl" spacing="md" className="py-16 md:py-24">
         <MediaGalleryClient
           initialImages={initialImages}

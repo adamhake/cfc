@@ -1,15 +1,12 @@
 import { eventBySlugQuery, eventSlugsQuery } from "@chimborazo/sanity-config/queries"
-import { ArrowLeft, Calendar, Clock, MapPin } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { Button } from "@/components/Button/button"
 import Container from "@/components/Container/container"
-import EventStatusChip from "@/components/EventStatusChip/event-status-chip"
 import type { SanityGalleryImage } from "@/components/ImageGallery/image-gallery"
-import PageHero from "@/components/PageHero/page-hero"
 import { PortableText } from "@/components/PortableText/portable-text"
-import { RegisterButton } from "@/components/RegisterButton/register-button"
 import { sanityClient } from "@/lib/sanity"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityEvent } from "@/lib/sanity-types"
@@ -18,8 +15,9 @@ import {
   generateEventStructuredData,
   SITE_CONFIG,
 } from "@/utils/seo"
-import { formatDateString } from "@/utils/time"
 import EventDetailClient from "./event-detail-client"
+import EventHeroOptimistic from "./event-hero-optimistic"
+import EventSidebarOptimistic from "./event-sidebar-optimistic"
 
 interface EventPageProps {
   params: Promise<{ slug: string }>
@@ -143,19 +141,7 @@ export default async function EventPage({ params }: EventPageProps) {
 
       <div className="min-h-screen">
         {/* Hero Section */}
-        <PageHero
-          title={event.title}
-          subtitle={event.description}
-          sanityImage={event.heroImage ?? undefined}
-          height="auto"
-          priority={true}
-          alignment="bottom-mobile-center-desktop"
-          titleSize="large"
-        >
-          <div className="mb-6 lg:mt-16">
-            <EventStatusChip eventDate={event.date} />
-          </div>
-        </PageHero>
+        <EventHeroOptimistic event={event} />
 
         {/* Back Button */}
         <Container spacing="md" className="pt-8">
@@ -194,53 +180,7 @@ export default async function EventPage({ params }: EventPageProps) {
             {/* Sidebar */}
             <aside className="lg:col-span-4">
               <div className="sticky top-24 space-y-6">
-                {/* Event Details Card */}
-                <div className="overflow-hidden rounded-2xl border border-accent-200 bg-white shadow-sm dark:border-accent-700/30 dark:bg-primary-900">
-                  <div className="bg-gradient-to-br from-accent-50 to-accent-100/50 px-6 py-5 dark:from-primary-950/30 dark:to-primary-950/20">
-                    <h2 className="font-display text-xl font-semibold text-grey-900 md:text-2xl dark:text-grey-100">
-                      Event Details
-                    </h2>
-                  </div>
-                  <div className="space-y-6 p-6">
-                    <div className="space-y-4">
-                      <div className="flex items-start gap-3">
-                        <Calendar className="mt-1 h-5 w-5 flex-shrink-0 stroke-accent-600 dark:stroke-accent-400" />
-                        <div>
-                          <div className="font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
-                            Date
-                          </div>
-                          <div className="font-body font-medium text-grey-900 dark:text-grey-100">
-                            {formatDateString(event.date)}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <Clock className="mt-1 h-5 w-5 flex-shrink-0 stroke-accent-600 dark:stroke-accent-400" />
-                        <div>
-                          <div className="font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
-                            Time
-                          </div>
-                          <div className="font-body font-medium text-grey-900 dark:text-grey-100">
-                            {event.time}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <MapPin className="mt-1 h-5 w-5 flex-shrink-0 stroke-accent-600 dark:stroke-accent-400" />
-                        <div>
-                          <div className="font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
-                            Location
-                          </div>
-                          <div className="font-body font-medium text-grey-900 dark:text-grey-100">
-                            {event.location}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <RegisterButton eventDate={event.date} />
-                  </div>
-                </div>
+                <EventSidebarOptimistic event={event} />
 
                 {/* Call to Action */}
                 <div className="rounded-2xl border border-primary-200 bg-gradient-to-br from-primary-50 to-primary-100/50 p-6 dark:border-primary-700/30 dark:from-primary-900/20 dark:to-primary-800/10">

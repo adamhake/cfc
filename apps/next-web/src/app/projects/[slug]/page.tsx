@@ -1,13 +1,11 @@
 import { projectBySlugQuery, projectSlugsQuery } from "@chimborazo/sanity-config/queries"
-import { ArrowLeft, Calendar, CheckCircle2, DollarSign, MapPin, Target } from "lucide-react"
+import { ArrowLeft, Target } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { Button } from "@/components/Button/button"
-import Chip from "@/components/Chip/chip"
 import Container from "@/components/Container/container"
 import Event from "@/components/Event/event"
-import PageHero from "@/components/PageHero/page-hero"
 import { PortableText } from "@/components/PortableText/portable-text"
 import { SanityImage } from "@/components/SanityImage/sanity-image"
 import { sanityClient } from "@/lib/sanity"
@@ -18,7 +16,8 @@ import {
   generateBreadcrumbStructuredData,
   SITE_CONFIG,
 } from "@/utils/seo"
-import { formatDateString } from "@/utils/time"
+import ProjectHeroOptimistic from "./project-hero-optimistic"
+import ProjectSidebarOptimistic from "./project-sidebar-optimistic"
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>
@@ -68,13 +67,6 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   }
 }
 
-const categoryLabels = {
-  restoration: "Restoration",
-  recreation: "Recreation",
-  connection: "Connection",
-  preservation: "Preservation",
-} as const
-
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params
   const { data: project } = (await sanityFetch({
@@ -86,14 +78,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   if (!project) {
     notFound()
   }
-
-  // Use override text if provided, otherwise format the date
-  const fmtStartDate = project.startDateOverride || formatDateString(project.startDate)
-  const fmtCompletionDate = project.completionDateOverride
-    ? project.completionDateOverride
-    : project.completionDate
-      ? formatDateString(project.completionDate)
-      : null
 
   const projectUrl = `${SITE_CONFIG.url}/projects/${project.slug.current}`
   const imageUrl = project.heroImage?.asset?.url
@@ -130,19 +114,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       />
       <div className="min-h-screen">
         {/* Hero Section */}
-        <PageHero
-          title={project.title}
-          subtitle={project.description}
-          sanityImage={project.heroImage}
-          height="auto"
-          priority={true}
-          alignment="bottom-mobile-center-desktop"
-          titleSize="large"
-        >
-          <div className="mb-6 lg:mt-16">
-            <Chip variant={project.status} className="px-4 py-2" />
-          </div>
-        </PageHero>
+        <ProjectHeroOptimistic project={project} />
 
         {/* Back Button */}
         <Container spacing="md" className="pt-8">
@@ -234,90 +206,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             {/* Sidebar */}
             <aside className="lg:col-span-4">
               <div className="sticky top-24 space-y-6">
-                {/* Project Details Card */}
-                <div className="overflow-hidden rounded-2xl border border-accent-200 bg-white shadow-sm dark:border-accent-700/30 dark:bg-primary-950">
-                  <div className="bg-gradient-to-br from-accent-50 to-accent-100/50 px-6 py-5 dark:from-primary-900/30 dark:to-primary-800/20">
-                    <h2 className="font-display text-xl font-semibold text-grey-900 md:text-2xl dark:text-grey-100">
-                      Project Details
-                    </h2>
-                  </div>
-                  <div className="space-y-6 p-6">
-                    <div className="space-y-4">
-                      {/* Start Date */}
-                      <div className="flex items-start gap-3">
-                        <Calendar className="mt-1 h-5 w-5 flex-shrink-0 stroke-accent-600 dark:stroke-accent-400" />
-                        <div>
-                          <div className="font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
-                            Started
-                          </div>
-                          <div className="font-body font-medium text-grey-900 dark:text-grey-100">
-                            {fmtStartDate}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Completion Date */}
-                      {fmtCompletionDate && (
-                        <div className="flex items-start gap-3">
-                          <CheckCircle2 className="mt-1 h-5 w-5 flex-shrink-0 stroke-accent-600 dark:stroke-accent-400" />
-                          <div>
-                            <div className="font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
-                              Completed
-                            </div>
-                            <div className="font-body font-medium text-grey-900 dark:text-grey-100">
-                              {fmtCompletionDate}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Category */}
-                      {project.category && (
-                        <div className="flex items-start gap-3">
-                          <Target className="mt-1 h-5 w-5 flex-shrink-0 stroke-accent-600 dark:stroke-accent-400" />
-                          <div>
-                            <div className="font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
-                              Category
-                            </div>
-                            <div className="font-body font-medium text-grey-900 dark:text-grey-100">
-                              {categoryLabels[project.category]}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Location */}
-                      {project.location && (
-                        <div className="flex items-start gap-3">
-                          <MapPin className="mt-1 h-5 w-5 flex-shrink-0 stroke-accent-600 dark:stroke-accent-400" />
-                          <div>
-                            <div className="font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
-                              Location
-                            </div>
-                            <div className="font-body font-medium text-grey-900 dark:text-grey-100">
-                              {project.location}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Budget */}
-                      {project.budget && (
-                        <div className="flex items-start gap-3">
-                          <DollarSign className="mt-1 h-5 w-5 flex-shrink-0 stroke-accent-600 dark:stroke-accent-400" />
-                          <div>
-                            <div className="font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
-                              Budget
-                            </div>
-                            <div className="font-body font-medium text-grey-900 dark:text-grey-100">
-                              {project.budget}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                <ProjectSidebarOptimistic project={project} />
 
                 {/* Call to Action */}
                 <div className="rounded-2xl border border-primary-200 bg-gradient-to-br from-primary-50 to-primary-100/50 p-6 dark:border-primary-700/30 dark:from-primary-900/20 dark:to-primary-800/10">

@@ -2,7 +2,7 @@ import { getDonatePageQuery } from "@chimborazo/sanity-config/queries"
 import type { Metadata } from "next"
 import Container from "@/components/Container/container"
 import { FAQSection } from "@/components/FAQSection/faq-section"
-import PageHero from "@/components/PageHero/page-hero"
+import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityDonatePage } from "@/lib/sanity-types"
 import { generateFAQStructuredData, SITE_CONFIG } from "@/utils/seo"
@@ -56,21 +56,6 @@ export default async function DonatePage() {
     tags: [CACHE_TAGS.DONATE],
   })) as { data: SanityDonatePage | null }
 
-  // Prepare hero data from Sanity or use defaults
-  const heroData = donatePageData?.pageHero?.image
-    ? {
-        title: donatePageData.pageHero.title,
-        subtitle: donatePageData.pageHero.description,
-        sanityImage: donatePageData.pageHero.image,
-      }
-    : {
-        title: "Support Us",
-        imageSrc: "/bike_sunset.webp",
-        imageAlt: "Chimborazo Park landscape",
-        imageWidth: 2000,
-        imageHeight: 1262,
-      }
-
   const faqStructuredData = generateFAQStructuredData(DONATE_FAQS)
 
   return (
@@ -80,7 +65,18 @@ export default async function DonatePage() {
         // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
       />
-      <PageHero {...heroData} height="medium" priority={true} />
+      <PageHeroOptimistic
+        document={donatePageData}
+        fallback={{
+          title: "Support Us",
+          imageSrc: "/bike_sunset.webp",
+          imageAlt: "Chimborazo Park landscape",
+          imageWidth: 2000,
+          imageHeight: 1262,
+        }}
+        height="medium"
+        priority={true}
+      />
       <div>
         <Container spacing="xl" className="py-24">
           <div className="space-y-8">

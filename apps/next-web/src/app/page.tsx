@@ -8,13 +8,10 @@ import { PortableText } from "@portabletext/react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import Container from "@/components/Container/container"
-import Event from "@/components/Event/event"
 import GetInvolved from "@/components/GetInvolved/get-involved"
-import Hero from "@/components/Hero/hero"
 import ImageGallery from "@/components/ImageGallery/image-gallery"
 import { Image } from "@/components/OptimizedImage/optimized-image"
 import Partners from "@/components/Partners/partners"
-import Project from "@/components/Project/project"
 import Quote from "@/components/Quote/quote"
 import RotatingImages from "@/components/RotatingImages/rotating-images"
 import type { SanityImageObject } from "@/components/SanityImage/sanity-image"
@@ -29,6 +26,9 @@ import type {
 } from "@/lib/sanity-types"
 import { getSiteSettings } from "@/lib/site-settings"
 import { SITE_CONFIG } from "@/utils/seo"
+import HomepageEventsClient from "./homepage-events-client"
+import HomepageHeroClient from "./homepage-hero-client"
+import HomepageProjectsClient from "./homepage-projects-client"
 
 // ─── Portable Text renderers for section-specific styling ───
 
@@ -179,17 +179,6 @@ export default async function HomePage() {
       Awaited<ReturnType<typeof getSiteSettings>>,
     ]
 
-  // Prepare hero data from Sanity or use defaults
-  const heroData = homePageData?.hero?.heroImage?.asset?.url
-    ? {
-        heading: homePageData.hero.heading,
-        subheading: homePageData.hero.subheading,
-        heroImage: homePageData.hero.heroImage,
-        ctaText: homePageData.hero.ctaButton?.text,
-        ctaLink: homePageData.hero.ctaButton?.link,
-      }
-    : undefined
-
   // Prepare gallery data from Sanity or use defaults
   const galleryData =
     homePageData?.gallery?.images
@@ -239,7 +228,7 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-24 pb-24 text-grey-900 dark:text-grey-100">
-      <Hero {...heroData} />
+      <HomepageHeroClient homePageData={homePageData} />
 
       {/* Intro + Gallery */}
       <div className="text-grey-900">
@@ -311,11 +300,7 @@ export default async function HomePage() {
               {projectsHeader?.description || FALLBACKS.projects.description}
             </p>
 
-            <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
-              {featuredProjects.map((project) => (
-                <Project key={project._id} project={project} />
-              ))}
-            </div>
+            <HomepageProjectsClient projects={featuredProjects} />
 
             {/* View All Projects CTA */}
             <div className="mt-12 flex justify-center">
@@ -440,27 +425,7 @@ export default async function HomePage() {
             {eventsHeader?.description || FALLBACKS.events.description}
           </p>
 
-          <div className="mt-10 space-y-10">
-            {/* Featured Event - Full Width */}
-            {recentEvents.slice(0, 1).map((event) => (
-              <Event
-                key={`event-featured-${event._id}`}
-                {...event}
-                imageSizes="(max-width: 768px) 100vw, 1152px"
-                imageMaxWidth={1280}
-                imageBreakpoints={[320, 480, 640, 768, 896, 1024, 1152, 1280]}
-              />
-            ))}
-
-            {/* Recent Events Grid */}
-            {recentEvents.length > 1 && (
-              <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
-                {recentEvents.slice(1, 3).map((event) => (
-                  <Event key={`event-${event._id}`} {...event} />
-                ))}
-              </div>
-            )}
-          </div>
+          <HomepageEventsClient events={recentEvents} />
 
           {/* View All Events CTA */}
           <div className="mt-12 flex justify-center">

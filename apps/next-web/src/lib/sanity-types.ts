@@ -159,6 +159,7 @@ export interface SanityVisionPillar {
 }
 
 export interface SanityHomePage {
+  _id: string
   hero: {
     heading: string
     subheading: string
@@ -220,6 +221,7 @@ export interface SanitySiteSettings {
 }
 
 export interface SanityAmenitiesPage {
+  _id: string
   pageHero: {
     title: string
     description?: string
@@ -240,6 +242,7 @@ export interface SanityAmenitiesPage {
 }
 
 export interface SanityHistoryPage {
+  _id: string
   pageHero: {
     title: string
     description?: string
@@ -249,6 +252,7 @@ export interface SanityHistoryPage {
 }
 
 export interface SanityGetInvolvedPage {
+  _id: string
   pageHero: {
     title: string
     description?: string
@@ -257,6 +261,7 @@ export interface SanityGetInvolvedPage {
 }
 
 export interface SanityEventsPage {
+  _id: string
   pageHero: {
     title: string
     description?: string
@@ -266,6 +271,7 @@ export interface SanityEventsPage {
 }
 
 export interface SanityProjectsPage {
+  _id: string
   pageHero: {
     title: string
     description?: string
@@ -275,6 +281,7 @@ export interface SanityProjectsPage {
 }
 
 export interface SanityMediaPage {
+  _id: string
   pageHero: {
     title: string
     description?: string
@@ -297,6 +304,7 @@ export interface SanityHighlight {
 }
 
 export interface SanityAboutPage {
+  _id: string
   pageHero: {
     title: string
     description?: string
@@ -312,6 +320,7 @@ export interface SanityAboutPage {
 }
 
 export interface SanityDonatePage {
+  _id: string
   pageHero: {
     title: string
     description?: string

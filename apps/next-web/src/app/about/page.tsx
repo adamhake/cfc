@@ -2,7 +2,7 @@ import { getAboutPageQuery } from "@chimborazo/sanity-config/queries"
 import type { Metadata } from "next"
 import Container from "@/components/Container/container"
 import GetInvolved from "@/components/GetInvolved/get-involved"
-import PageHero from "@/components/PageHero/page-hero"
+import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { PortableText } from "@/components/PortableText/portable-text"
 import type { SanityImageObject } from "@/components/SanityImage/sanity-image"
 import { SanityImage } from "@/components/SanityImage/sanity-image"
@@ -56,21 +56,18 @@ export default async function AboutPage() {
       })
       .filter((img): img is SanityImageObject => img != null) || []
 
-  const heroData = pageData?.pageHero?.image
-    ? {
-        title: pageData.pageHero.title,
-        subtitle: pageData.pageHero.description,
-        sanityImage: pageData.pageHero.image,
-      }
-    : {
-        title: "About the Conservancy",
-        subtitle:
-          "A 501(c)(3) nonprofit dedicated to the restoration, beautification, and preservation of historic Chimborazo Park.",
-      }
-
   return (
     <div>
-      <PageHero {...heroData} height="small" priority={true} />
+      <PageHeroOptimistic
+        document={pageData}
+        fallback={{
+          title: "About the Conservancy",
+          subtitle:
+            "A 501(c)(3) nonprofit dedicated to the restoration, beautification, and preservation of historic Chimborazo Park.",
+        }}
+        height="small"
+        priority={true}
+      />
 
       <Container spacing="xl" className="space-y-16 py-16 pb-24 md:space-y-24">
         {/* Mission & Vision */}

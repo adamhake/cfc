@@ -1,12 +1,12 @@
 import { allEventsQuery, getEventsPageQuery } from "@chimborazo/sanity-config/queries"
 import type { Metadata } from "next"
 import Container from "@/components/Container/container"
-import Event from "@/components/Event/event"
-import PageHero from "@/components/PageHero/page-hero"
+import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { PortableText } from "@/components/PortableText/portable-text"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityEvent, SanityEventsPage } from "@/lib/sanity-types"
 import { generateItemListStructuredData, SITE_CONFIG } from "@/utils/seo"
+import EventsListClient from "./events-list-client"
 
 export const metadata: Metadata = {
   title: "Events",
@@ -42,22 +42,6 @@ export default async function EventsPage() {
     }),
   ])) as [{ data: SanityEvent[] }, { data: SanityEventsPage | null }]
 
-  // Prepare hero data from Sanity or use fallbacks
-  const heroData = pageData?.pageHero?.image
-    ? {
-        title: pageData.pageHero.title,
-        subtitle: pageData.pageHero.description,
-        sanityImage: pageData.pageHero.image,
-      }
-    : {
-        title: "Events",
-        subtitle: "Join us in preserving and enhancing Chimborazo Park",
-        imageSrc: "/volunteers.webp",
-        imageAlt: "Community volunteers at Chimborazo Park",
-        imageWidth: 2000,
-        imageHeight: 1333,
-      }
-
   // Sort events by date, newest first
   const sortedEvents = [...events].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
@@ -79,7 +63,19 @@ export default async function EventsPage() {
           __html: JSON.stringify(itemListData).replace(/</g, "\\u003c").replace(/>/g, "\\u003e"),
         }}
       />
-      <PageHero {...heroData} height="medium" priority={true} />
+      <PageHeroOptimistic
+        document={pageData}
+        fallback={{
+          title: "Events",
+          subtitle: "Join us in preserving and enhancing Chimborazo Park",
+          imageSrc: "/volunteers.webp",
+          imageAlt: "Community volunteers at Chimborazo Park",
+          imageWidth: 2000,
+          imageHeight: 1333,
+        }}
+        height="medium"
+        priority={true}
+      />
 
       <Container spacing="md">
         {pageData?.introduction && pageData.introduction.length > 0 ? (
@@ -99,11 +95,7 @@ export default async function EventsPage() {
           </div>
         )}
 
-        <div className="mt-20 grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
-          {sortedEvents.map((event) => (
-            <Event key={`event-${event._id}`} {...event} />
-          ))}
-        </div>
+        <EventsListClient events={sortedEvents} />
       </Container>
     </div>
   )

@@ -4,6 +4,7 @@ import { richTextProjection } from "./richTextProjection"
 
 export const getAboutPageQuery = defineQuery(`
   *[_type == "aboutPage"][0]{
+    _id,
     pageHero{
       title,
       description,
