@@ -22,6 +22,10 @@
     "node": ">=22.0.0"
   },
   "pnpm": {
+    "onlyBuiltDependencies": [
+      "@posthog/cli",
+      "@swc/core"
+    ],
     "overrides": {
       "@sanity/types": "^5.12.0",
       "@sanity/client": "^7.16.0"
