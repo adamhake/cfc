@@ -75,18 +75,14 @@ describe("Media API Route", () => {
   })
 
   it("returns 400 when range exceeds maximum page size", async () => {
-    const response = await GET(
-      makeRequest({ start: "0", end: "101" }),
-    )
+    const response = await GET(makeRequest({ start: "0", end: "101" }))
 
     expect(response.status).toBe(400)
     expect(sanityClient.fetch).not.toHaveBeenCalled()
   })
 
   it("returns 400 for NaN values", async () => {
-    const response = await GET(
-      makeRequest({ start: "abc", end: "10" }),
-    )
+    const response = await GET(makeRequest({ start: "abc", end: "10" }))
 
     expect(response.status).toBe(400)
     expect(sanityClient.fetch).not.toHaveBeenCalled()
@@ -105,9 +101,7 @@ describe("Media API Route", () => {
   it("allows range of exactly 100", async () => {
     vi.mocked(sanityClient.fetch).mockResolvedValue([])
 
-    const response = await GET(
-      makeRequest({ start: "0", end: "100" }),
-    )
+    const response = await GET(makeRequest({ start: "0", end: "100" }))
 
     expect(response.status).toBe(200)
     expect(sanityClient.fetch).toHaveBeenCalledWith("mock-query", { start: 0, end: 100 })

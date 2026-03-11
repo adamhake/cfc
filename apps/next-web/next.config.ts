@@ -27,8 +27,9 @@ async function getConfig(): Promise<NextConfig> {
       projectId: process.env.POSTHOG_PROJECT_ID,
       host: "https://d.chimborazoparkconservancy.org",
       sourcemaps: {
-        releaseName: "chimbo-park-next-web",
+        releaseName: "chimborazo-next-web",
         deleteAfterUpload: true,
+        enabled: true,
       },
     })
   }

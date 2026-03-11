@@ -45,13 +45,7 @@ describe("OptimizedImage", () => {
 
   it("passes through all other props", () => {
     const { container } = render(
-      <Image
-        src="/test.webp"
-        alt="Test image"
-        width={200}
-        height={150}
-        className="custom-class"
-      />,
+      <Image src="/test.webp" alt="Test image" width={200} height={150} className="custom-class" />,
     )
     const img = container.querySelector("img")
     expect(img?.getAttribute("alt")).toBe("Test image")
