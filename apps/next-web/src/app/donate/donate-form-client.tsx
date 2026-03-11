@@ -1,23 +1,18 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useState } from "react"
 
 export default function DonateFormClient() {
-  const [isIframeLoaded, setIsIframeLoaded] = useState(false);
+  const [isIframeLoaded, setIsIframeLoaded] = useState(false)
 
   return (
-    <div
-      className="mt-12"
-      style={{ position: "relative", minHeight: "700px", width: "100%" }}
-    >
+    <div className="mt-12" style={{ position: "relative", minHeight: "700px", width: "100%" }}>
       {/* Loading skeleton */}
       {!isIframeLoaded && (
         <div className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl bg-grey-100 dark:bg-grey-800">
           <div className="flex flex-col items-center gap-4">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary-200 border-t-primary-600 dark:border-primary-700 dark:border-t-primary-400" />
-            <p className="font-body text-grey-600 dark:text-grey-400">
-              Loading donation form...
-            </p>
+            <p className="font-body text-grey-600 dark:text-grey-400">Loading donation form...</p>
           </div>
         </div>
       )}
@@ -40,5 +35,5 @@ export default function DonateFormClient() {
         onLoad={() => setIsIframeLoaded(true)}
       />
     </div>
-  );
+  )
 }

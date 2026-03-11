@@ -1,9 +1,9 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { sanityClient } from "@/lib/sanity";
-import type { SanitySiteSettings } from "@/lib/sanity-types";
-import { getSiteSettingsQuery } from "@chimborazo/sanity-config/queries";
+import { getSiteSettingsQuery } from "@chimborazo/sanity-config/queries"
+import { useEffect, useState } from "react"
+import { sanityClient } from "@/lib/sanity"
+import type { SanitySiteSettings } from "@/lib/sanity-types"
 
 /**
  * Client-side hook to fetch site settings from Sanity CMS.
@@ -13,22 +13,22 @@ import { getSiteSettingsQuery } from "@chimborazo/sanity-config/queries";
  * set up as a provider in the Next.js app.
  */
 export function useSiteSettings() {
-  const [data, setData] = useState<SanitySiteSettings | null>(null);
+  const [data, setData] = useState<SanitySiteSettings | null>(null)
 
   useEffect(() => {
-    let cancelled = false;
+    let cancelled = false
     sanityClient
       .fetch<SanitySiteSettings | null>(getSiteSettingsQuery)
       .then((result) => {
-        if (!cancelled) setData(result);
+        if (!cancelled) setData(result)
       })
       .catch((err) => {
-        console.warn("Failed to fetch site settings from Sanity:", err);
-      });
+        console.warn("Failed to fetch site settings from Sanity:", err)
+      })
     return () => {
-      cancelled = true;
-    };
-  }, []);
+      cancelled = true
+    }
+  }, [])
 
-  return { data };
+  return { data }
 }

@@ -7,17 +7,17 @@ export type PaletteMode =
   | "green" // Classic cool-toned green
   | "olive" // Warm olive + blue-grey accents
   | "green-terra" // Green + Terracotta accents
-  | "green-navy"; // Green + Navy accents
+  | "green-navy" // Green + Navy accents
 
-export const PALETTE_KEY = "palette-preference";
+export const PALETTE_KEY = "palette-preference"
 
 export const PALETTE_METADATA: Record<
   PaletteMode,
   {
-    name: string;
-    description: string;
-    primary: string;
-    accent: string | null;
+    name: string
+    description: string
+    primary: string
+    accent: string | null
   }
 > = {
   green: {
@@ -44,19 +44,19 @@ export const PALETTE_METADATA: Record<
     primary: "Forest Green",
     accent: "Navy Blue",
   },
-};
+}
 
 /**
  * Get stored palette preference from localStorage
  */
 export function getStoredPalette(): PaletteMode | null {
-  if (typeof window === "undefined") return null;
+  if (typeof window === "undefined") return null
 
   try {
-    const stored = localStorage.getItem(PALETTE_KEY);
-    return stored ? validatePalette(stored) : null;
+    const stored = localStorage.getItem(PALETTE_KEY)
+    return stored ? validatePalette(stored) : null
   } catch {
-    return null;
+    return null
   }
 }
 
@@ -64,12 +64,12 @@ export function getStoredPalette(): PaletteMode | null {
  * Store palette preference in localStorage
  */
 export function storePalette(palette: PaletteMode): void {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined") return
 
   try {
-    localStorage.setItem(PALETTE_KEY, palette);
+    localStorage.setItem(PALETTE_KEY, palette)
   } catch (error) {
-    console.error("Failed to store palette preference:", error);
+    console.error("Failed to store palette preference:", error)
   }
 }
 
@@ -77,24 +77,24 @@ export function storePalette(palette: PaletteMode): void {
  * Validate palette string and return valid PaletteMode or default
  */
 export function validatePalette(palette: string): PaletteMode {
-  const validPalettes: PaletteMode[] = ["green", "olive", "green-terra", "green-navy"];
+  const validPalettes: PaletteMode[] = ["green", "olive", "green-terra", "green-navy"]
 
-  return validPalettes.includes(palette as PaletteMode) ? (palette as PaletteMode) : "olive";
+  return validPalettes.includes(palette as PaletteMode) ? (palette as PaletteMode) : "olive"
 }
 
 /**
  * Apply palette to document by setting data-palette attribute
  */
 export function applyPalette(palette: PaletteMode): void {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined") return
 
-  const html = document.documentElement;
+  const html = document.documentElement
 
   if (palette === "olive") {
     // Default palette - remove attribute
-    html.removeAttribute("data-palette");
+    html.removeAttribute("data-palette")
   } else {
-    html.setAttribute("data-palette", palette);
+    html.setAttribute("data-palette", palette)
   }
 }
 
@@ -102,45 +102,47 @@ export function applyPalette(palette: PaletteMode): void {
  * Get current palette from DOM
  */
 export function getCurrentPalette(): PaletteMode {
-  if (typeof window === "undefined") return "olive";
+  if (typeof window === "undefined") return "olive"
 
-  const html = document.documentElement;
-  const palette = html.getAttribute("data-palette");
+  const html = document.documentElement
+  const palette = html.getAttribute("data-palette")
 
-  return palette ? validatePalette(palette) : "olive";
+  return palette ? validatePalette(palette) : "olive"
 }
 
 /**
  * Palette manager for reactive updates
  */
 export class PaletteManager {
-  private listeners: Set<(palette: PaletteMode) => void> = new Set();
-  private currentPalette: PaletteMode;
+  private listeners: Set<(palette: PaletteMode) => void> = new Set()
+  private currentPalette: PaletteMode
 
   constructor(initialPalette: PaletteMode = "olive") {
-    this.currentPalette = initialPalette;
+    this.currentPalette = initialPalette
   }
 
   subscribe(callback: (palette: PaletteMode) => void): () => void {
-    this.listeners.add(callback);
-    return () => this.listeners.delete(callback);
+    this.listeners.add(callback)
+    return () => this.listeners.delete(callback)
   }
 
   setPalette(palette: PaletteMode): void {
-    const validPalette = validatePalette(palette);
-    this.currentPalette = validPalette;
+    const validPalette = validatePalette(palette)
+    this.currentPalette = validPalette
 
     // Apply to DOM
-    applyPalette(validPalette);
+    applyPalette(validPalette)
 
     // Store preference
-    storePalette(validPalette);
+    storePalette(validPalette)
 
     // Notify listeners
-    this.listeners.forEach((callback) => callback(validPalette));
+    this.listeners.forEach((callback) => {
+      callback(validPalette)
+    })
   }
 
   getPalette(): PaletteMode {
-    return this.currentPalette;
+    return this.currentPalette
   }
 }

@@ -2,7 +2,7 @@ import { defineField, defineType } from "sanity"
 
 export default defineType({
   name: "gallery",
-  title: "Gallery",
+  title: "Galleries",
   type: "document",
   fields: [
     defineField({
@@ -40,11 +40,11 @@ export default defineType({
               name: "imageV2",
               title: "Image (Direct Upload)",
               type: "contentImage",
-              description: "Upload/select an image directly. Preferred for new content.",
+              description: "Upload/select an image.",
               validation: (rule) =>
                 rule.custom((value) => {
                   const hasAsset = Boolean(
-                    (value as { asset?: { _ref?: string } } | undefined)?.asset?._ref
+                    (value as { asset?: { _ref?: string } } | undefined)?.asset?._ref,
                   )
                   return hasAsset ? true : "Image is required"
                 }),

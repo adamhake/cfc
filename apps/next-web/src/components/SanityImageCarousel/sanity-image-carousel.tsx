@@ -1,27 +1,27 @@
-'use client';
+"use client"
 
-import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import Fade from "embla-carousel-fade";
-import useEmblaCarousel from "embla-carousel-react";
-import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import Fade from "embla-carousel-fade"
+import useEmblaCarousel from "embla-carousel-react"
+import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react"
+import { useCallback, useEffect, useState } from "react"
+import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image"
+import { useReducedMotion } from "@/hooks/useReducedMotion"
 
 // Re-export for convenience
-export type { SanityImageObject };
+export type { SanityImageObject }
 
 interface SanityImageCarouselProps {
-  images: SanityImageObject[];
-  autoPlay?: boolean;
-  autoPlayInterval?: number;
-  showNavigation?: boolean;
-  showDots?: boolean;
-  showCaptions?: boolean;
-  captionPosition?: "overlay" | "below";
-  loop?: boolean;
-  aspectRatio?: "16/9" | "4/3" | "3/2" | "1/1" | "auto";
-  sizes?: string;
-  priority?: boolean;
+  images: SanityImageObject[]
+  autoPlay?: boolean
+  autoPlayInterval?: number
+  showNavigation?: boolean
+  showDots?: boolean
+  showCaptions?: boolean
+  captionPosition?: "overlay" | "below"
+  loop?: boolean
+  aspectRatio?: "16/9" | "4/3" | "3/2" | "1/1" | "auto"
+  sizes?: string
+  priority?: boolean
 }
 
 export default function SanityImageCarousel({
@@ -37,123 +37,120 @@ export default function SanityImageCarousel({
   sizes = "(max-width: 768px) 100vw, 60vw",
   priority = false,
 }: SanityImageCarouselProps) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop, duration: 50 }, [Fade()]);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
-  const [isPlaying, setIsPlaying] = useState(autoPlay);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop, duration: 50 }, [Fade()])
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([])
+  const [isPlaying, setIsPlaying] = useState(autoPlay)
   // Key to reset CSS animation when slide changes
-  const [animationKey, setAnimationKey] = useState(0);
-  const prefersReducedMotion = useReducedMotion();
+  const [animationKey, setAnimationKey] = useState(0)
+  const prefersReducedMotion = useReducedMotion()
 
   const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev();
-  }, [emblaApi]);
+    if (emblaApi) emblaApi.scrollPrev()
+  }, [emblaApi])
 
   const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext();
-  }, [emblaApi]);
+    if (emblaApi) emblaApi.scrollNext()
+  }, [emblaApi])
 
   const scrollTo = useCallback(
     (index: number) => {
-      if (emblaApi) emblaApi.scrollTo(index);
+      if (emblaApi) emblaApi.scrollTo(index)
     },
     [emblaApi],
-  );
+  )
 
   const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
+    if (!emblaApi) return
+    setSelectedIndex(emblaApi.selectedScrollSnap())
     // Reset animation when slide changes
-    setAnimationKey((prev) => prev + 1);
-  }, [emblaApi]);
+    setAnimationKey((prev) => prev + 1)
+  }, [emblaApi])
 
   useEffect(() => {
-    if (!emblaApi) return;
+    if (!emblaApi) return
 
     // Initialize state from carousel API
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-    setScrollSnaps(emblaApi.scrollSnapList());
+    setSelectedIndex(emblaApi.selectedScrollSnap())
+    setScrollSnaps(emblaApi.scrollSnapList())
 
-    emblaApi.on("select", onSelect);
-    emblaApi.on("reInit", onSelect);
+    emblaApi.on("select", onSelect)
+    emblaApi.on("reInit", onSelect)
 
     return () => {
-      emblaApi.off("select", onSelect);
-      emblaApi.off("reInit", onSelect);
-    };
-  }, [emblaApi, onSelect]);
+      emblaApi.off("select", onSelect)
+      emblaApi.off("reInit", onSelect)
+    }
+  }, [emblaApi, onSelect])
 
   // Auto-play functionality with play/pause support
   useEffect(() => {
     if (!emblaApi || !autoPlay || !isPlaying || prefersReducedMotion) {
-      return;
+      return
     }
 
     // Auto-advance timer
     const autoAdvanceTimer = setTimeout(() => {
-      emblaApi.scrollNext();
-    }, autoPlayInterval);
+      emblaApi.scrollNext()
+    }, autoPlayInterval)
 
     return () => {
-      clearTimeout(autoAdvanceTimer);
-    };
-  }, [emblaApi, autoPlay, autoPlayInterval, isPlaying, selectedIndex, prefersReducedMotion]);
+      clearTimeout(autoAdvanceTimer)
+    }
+  }, [emblaApi, autoPlay, autoPlayInterval, isPlaying, prefersReducedMotion])
 
   // Keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!emblaApi) return;
+    if (!emblaApi) return
 
     if (e.key === "ArrowLeft") {
-      e.preventDefault();
-      scrollPrev();
+      e.preventDefault()
+      scrollPrev()
     } else if (e.key === "ArrowRight") {
-      e.preventDefault();
-      scrollNext();
+      e.preventDefault()
+      scrollNext()
     } else if (e.key === "Home") {
-      e.preventDefault();
-      scrollTo(0);
+      e.preventDefault()
+      scrollTo(0)
     } else if (e.key === "End") {
-      e.preventDefault();
-      scrollTo(images.length - 1);
+      e.preventDefault()
+      scrollTo(images.length - 1)
     }
-  };
+  }
 
   const getAspectClass = () => {
     switch (aspectRatio) {
       case "16/9":
-        return "aspect-video";
+        return "aspect-video"
       case "4/3":
-        return "aspect-4/3";
+        return "aspect-4/3"
       case "3/2":
-        return "aspect-3/2";
+        return "aspect-3/2"
       case "1/1":
-        return "aspect-square";
+        return "aspect-square"
       default:
-        return "";
+        return ""
     }
-  };
+  }
 
-  if (images.length === 0) return null;
+  if (images.length === 0) return null
 
   return (
-    <div
+    <section
       className="relative"
       onKeyDown={handleKeyDown}
-      tabIndex={0}
-      role="region"
       aria-label={`Image carousel with ${images.length} images`}
       aria-roledescription="carousel"
     >
       <div className="relative overflow-hidden rounded-2xl" ref={emblaRef}>
         <div className="flex touch-pan-y touch-pinch-zoom">
           {images.map((item, index) => (
-            <div
-              key={index}
+            <section
+              key={item.asset?.url ?? item.asset?._id ?? `slide-${index}`}
               className="min-w-0 flex-[0_0_100%]"
               style={{
                 transform: "translate3d(0, 0, 0)",
               }}
-              role="group"
               aria-roledescription="slide"
               aria-label={`${index + 1} of ${images.length}`}
             >
@@ -179,15 +176,15 @@ export default function SanityImageCarousel({
                   </p>
                 </div>
               )}
-            </div>
+            </section>
           ))}
         </div>
 
         {/* Screen reader announcements */}
-        <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        <output className="sr-only" aria-live="polite" aria-atomic="true">
           Image {selectedIndex + 1} of {images.length}
           {images[selectedIndex]?.alt && `: ${images[selectedIndex].alt}`}
-        </div>
+        </output>
       </div>
 
       {/* Controls row - dots on left, buttons on right */}
@@ -195,10 +192,11 @@ export default function SanityImageCarousel({
         <div className="mt-4 flex items-center justify-between">
           {/* Pagination dots */}
           {showDots && (
-            <div className="flex gap-2" role="group" aria-label="Carousel pagination">
-              {scrollSnaps.map((_, index) => (
+            <fieldset className="flex gap-2 border-none p-0 m-0" aria-label="Carousel pagination">
+              {scrollSnaps.map((_snap, index) => (
                 <button
-                  key={index}
+                  // biome-ignore lint/suspicious/noArrayIndexKey: pagination dots have no unique identifier
+                  key={`dot-${index}`}
                   onClick={() => scrollTo(index)}
                   className={`relative h-2.5 overflow-hidden rounded-full transition-all duration-200 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none ${
                     index === selectedIndex
@@ -221,7 +219,7 @@ export default function SanityImageCarousel({
                   )}
                 </button>
               ))}
-            </div>
+            </fieldset>
           )}
 
           {/* Navigation and play/pause buttons */}
@@ -268,14 +266,14 @@ export default function SanityImageCarousel({
                 </button>
 
                 {/* Screen reader status */}
-                <div className="sr-only" role="status" aria-live="polite">
+                <output className="sr-only" aria-live="polite">
                   {isPlaying ? `Playing. Slide ${selectedIndex + 1} of ${images.length}` : "Paused"}
-                </div>
+                </output>
               </>
             )}
           </div>
         </div>
       )}
-    </div>
-  );
+    </section>
+  )
 }

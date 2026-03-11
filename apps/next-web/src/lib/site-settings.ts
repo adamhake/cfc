@@ -1,6 +1,6 @@
-import { sanityFetch, CACHE_TAGS } from "./sanity-fetch";
-import type { SanitySiteSettings } from "./sanity-types";
-import { getSiteSettingsQuery } from "@chimborazo/sanity-config/queries";
+import { getSiteSettingsQuery } from "@chimborazo/sanity-config/queries"
+import { CACHE_TAGS, sanityFetch } from "./sanity-fetch"
+import type { SanitySiteSettings } from "./sanity-types"
 
 /**
  * Server-side function to fetch site settings from Sanity.
@@ -10,6 +10,6 @@ export async function getSiteSettings(): Promise<SanitySiteSettings | null> {
   const { data } = (await sanityFetch({
     query: getSiteSettingsQuery,
     tags: [CACHE_TAGS.SITE_SETTINGS],
-  })) as { data: SanitySiteSettings | null };
-  return data;
+  })) as { data: SanitySiteSettings | null }
+  return data
 }

@@ -1,45 +1,45 @@
-import { Button } from "@/components/Button/button";
-import { Download } from "lucide-react";
+import { Download } from "lucide-react"
+import { Button } from "@/components/Button/button"
 
 interface FileAsset {
-  _id: string;
-  url: string;
-  originalFilename?: string;
-  size?: number;
-  extension?: string;
-  mimeType?: string;
+  _id: string
+  url: string
+  originalFilename?: string
+  size?: number
+  extension?: string
+  mimeType?: string
 }
 
 interface FileAttachmentProps {
-  asset: FileAsset;
-  title?: string;
-  description?: string;
+  asset: FileAsset
+  title?: string
+  description?: string
 }
 
 /**
  * Format file size in human-readable format
  */
 function formatFileSize(bytes?: number): string {
-  if (!bytes) return "";
+  if (!bytes) return ""
 
-  const units = ["B", "KB", "MB", "GB"];
-  let size = bytes;
-  let unitIndex = 0;
+  const units = ["B", "KB", "MB", "GB"]
+  let size = bytes
+  let unitIndex = 0
 
   while (size >= 1024 && unitIndex < units.length - 1) {
-    size /= 1024;
-    unitIndex++;
+    size /= 1024
+    unitIndex++
   }
 
-  return `${size.toFixed(1)} ${units[unitIndex]}`;
+  return `${size.toFixed(1)} ${units[unitIndex]}`
 }
 
 /**
  * FileAttachment component for displaying file downloads in PortableText
  */
 export function FileAttachment({ asset, title, description }: FileAttachmentProps) {
-  const displayName = title || asset.originalFilename || "Download File";
-  const fileSize = formatFileSize(asset.size);
+  const displayName = title || asset.originalFilename || "Download File"
+  const fileSize = formatFileSize(asset.size)
 
   return (
     <div className="my-6 rounded-xl border border-accent-200 bg-white p-6 shadow-sm dark:border-accent-700/30 dark:bg-primary-950">
@@ -76,5 +76,5 @@ export function FileAttachment({ asset, title, description }: FileAttachmentProp
         </Button>
       </div>
     </div>
-  );
+  )
 }

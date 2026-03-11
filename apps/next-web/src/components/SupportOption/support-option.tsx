@@ -1,14 +1,14 @@
-import Chip from "@/components/Chip/chip";
-import { Button } from "../Button/button";
+import Chip from "@/components/Chip/chip"
+import { Button } from "../Button/button"
 
 interface SupportOptionProps {
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  comingSoon?: boolean;
-  ctaText?: string;
-  ctaLink?: string;
-  ctaHash?: string;
+  title: string
+  description: string
+  icon: React.ReactNode
+  comingSoon?: boolean
+  ctaText?: string
+  ctaLink?: string
+  ctaHash?: string
 }
 
 export default function SupportOption({
@@ -42,11 +42,18 @@ export default function SupportOption({
 
       {ctaText && (ctaHash || ctaLink) && (
         <div className="mt-8">
-          <Button variant="accent" size="small" as="a" hash={ctaHash} href={ctaLink} trackingLocation="support-option">
+          <Button
+            variant="accent"
+            size="small"
+            as="a"
+            hash={ctaHash}
+            href={ctaLink}
+            trackingLocation="support-option"
+          >
             {ctaText}
           </Button>
         </div>
       )}
     </div>
-  );
+  )
 }

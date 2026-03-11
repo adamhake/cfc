@@ -1,21 +1,21 @@
-import { Image } from "@/components/OptimizedImage/optimized-image";
-import { Button } from "../Button/button";
+import { Image } from "@/components/OptimizedImage/optimized-image"
+import { Button } from "../Button/button"
 
 interface ImageCardProps {
   image: {
-    src: string;
-    alt: string;
-    width: number;
-    height: number;
-  };
-  title?: string;
-  description?: string;
-  variant?: "overlay" | "caption-below" | "side-by-side";
-  ctaText?: string;
-  ctaLink?: string;
-  onCtaClick?: () => void;
-  imagePosition?: "left" | "right";
-  aspectRatio?: "16/9" | "4/3" | "1/1" | "auto";
+    src: string
+    alt: string
+    width: number
+    height: number
+  }
+  title?: string
+  description?: string
+  variant?: "overlay" | "caption-below" | "side-by-side"
+  ctaText?: string
+  ctaLink?: string
+  onCtaClick?: () => void
+  imagePosition?: "left" | "right"
+  aspectRatio?: "16/9" | "4/3" | "1/1" | "auto"
 }
 
 export default function ImageCard({
@@ -32,15 +32,15 @@ export default function ImageCard({
   const getAspectClass = () => {
     switch (aspectRatio) {
       case "16/9":
-        return "aspect-video";
+        return "aspect-video"
       case "4/3":
-        return "aspect-4/3";
+        return "aspect-4/3"
       case "1/1":
-        return "aspect-square";
+        return "aspect-square"
       default:
-        return "";
+        return ""
     }
-  };
+  }
 
   if (variant === "overlay") {
     return (
@@ -74,7 +74,7 @@ export default function ImageCard({
           )}
         </div>
       </div>
-    );
+    )
   }
 
   if (variant === "caption-below") {
@@ -110,7 +110,7 @@ export default function ImageCard({
           )}
         </div>
       </div>
-    );
+    )
   }
 
   // Side-by-side variant
@@ -152,5 +152,5 @@ export default function ImageCard({
         </div>
       </div>
     </div>
-  );
+  )
 }

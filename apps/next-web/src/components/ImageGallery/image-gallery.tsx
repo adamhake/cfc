@@ -1,42 +1,42 @@
-"use client";
+"use client"
 
-import { SanityImage, type SanityImageObject } from "@/components/SanityImage";
-import { Image } from "@/components/OptimizedImage/optimized-image";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { getResponsiveColumnClasses } from "./image-gallery-utils";
+import { AnimatePresence, motion } from "framer-motion"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { Image } from "@/components/OptimizedImage/optimized-image"
+import { SanityImage, type SanityImageObject } from "@/components/SanityImage"
+import { useReducedMotion } from "@/hooks/useReducedMotion"
+import { getResponsiveColumnClasses } from "./image-gallery-utils"
 
 export interface GalleryImage {
-  src: string;
-  alt: string;
-  caption?: string;
-  width: number;
-  height: number;
-  showOnMobile?: boolean;
+  src: string
+  alt: string
+  caption?: string
+  width: number
+  height: number
+  showOnMobile?: boolean
 }
 
 export interface SanityGalleryImage extends SanityImageObject {
-  showOnMobile?: boolean;
+  showOnMobile?: boolean
 }
 
 interface ImageGalleryProps {
-  images: GalleryImage[] | SanityGalleryImage[];
-  variant?: "grid" | "masonry" | "staggered";
+  images: GalleryImage[] | SanityGalleryImage[]
+  variant?: "grid" | "masonry" | "staggered"
   columns?: {
-    default?: number;
-    sm?: number;
-    md?: number;
-    lg?: number;
-  };
-  showCaptions?: boolean;
-  captionPosition?: "hover" | "below";
-  gap?: "sm" | "md" | "lg";
+    default?: number
+    sm?: number
+    md?: number
+    lg?: number
+  }
+  showCaptions?: boolean
+  captionPosition?: "hover" | "below"
+  gap?: "sm" | "md" | "lg"
 }
 
 // Type guard to check if image is a Sanity image
 function isSanityImage(image: GalleryImage | SanityGalleryImage): image is SanityGalleryImage {
-  return "asset" in image && image.asset !== undefined;
+  return "asset" in image && image.asset !== undefined
 }
 
 // Helper to get image properties regardless of type
@@ -48,7 +48,7 @@ function getImageProps(image: GalleryImage | SanityGalleryImage) {
       width: image.asset.metadata?.dimensions?.width || 0,
       height: image.asset.metadata?.dimensions?.height || 0,
       showOnMobile: image.showOnMobile,
-    };
+    }
   }
   return {
     alt: image.alt,
@@ -56,42 +56,42 @@ function getImageProps(image: GalleryImage | SanityGalleryImage) {
     width: image.width,
     height: image.height,
     showOnMobile: image.showOnMobile,
-  };
+  }
 }
 
 function isPortraitImage(image: GalleryImage | SanityGalleryImage): boolean {
-  const { width, height } = getImageProps(image);
-  return width > 0 && height > 0 && height > width;
+  const { width, height } = getImageProps(image)
+  return width > 0 && height > 0 && height > width
 }
 
 function getModalImageClassName(image: GalleryImage | SanityGalleryImage): string {
-  const { caption } = getImageProps(image);
-  const hasCaption = Boolean(caption);
+  const { caption } = getImageProps(image)
+  const hasCaption = Boolean(caption)
 
   const mobileMaxHeightClass = hasCaption
     ? "max-h-[calc(100dvh-16rem)]"
-    : "max-h-[calc(100dvh-10rem)]";
-  const desktopMaxHeightClass = "md:max-h-[calc(100dvh-8rem)]";
-  const sharedClasses = `h-auto rounded-lg object-contain ${mobileMaxHeightClass} ${desktopMaxHeightClass}`;
+    : "max-h-[calc(100dvh-10rem)]"
+  const desktopMaxHeightClass = "md:max-h-[calc(100dvh-8rem)]"
+  const sharedClasses = `h-auto rounded-lg object-contain ${mobileMaxHeightClass} ${desktopMaxHeightClass}`
 
   if (isPortraitImage(image)) {
-    return `${sharedClasses} w-auto max-w-[88vw] md:max-w-[70vw]`;
+    return `${sharedClasses} w-auto max-w-[88vw] md:max-w-[70vw]`
   }
 
-  return `${sharedClasses} w-auto max-w-[92vw] md:max-w-[88vw]`;
+  return `${sharedClasses} w-auto max-w-[92vw] md:max-w-[88vw]`
 }
 
 function getModalImageSizes(image: GalleryImage | SanityGalleryImage): string {
-  return isPortraitImage(image) ? "(max-width: 768px) 88vw, 70vw" : "(max-width: 768px) 92vw, 88vw";
+  return isPortraitImage(image) ? "(max-width: 768px) 88vw, 70vw" : "(max-width: 768px) 92vw, 88vw"
 }
 
 // Helper to generate stable keys for images
 function getImageKey(image: GalleryImage | SanityGalleryImage, index: number): string {
   if (isSanityImage(image)) {
-    return image.asset._id;
+    return image.asset._id
   }
   // For legacy images, combine src with index as fallback
-  return `legacy-${index}-${image.src}`;
+  return `legacy-${index}-${image.src}`
 }
 
 export default function ImageGallery({
@@ -102,123 +102,125 @@ export default function ImageGallery({
   captionPosition = "hover",
   gap = "md",
 }: ImageGalleryProps) {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [selectedImage, setSelectedImage] = useState<number | null>(null);
-  const [captionHovered, setCaptionHovered] = useState(false);
-  const modalRef = useRef<HTMLDivElement>(null);
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
-  const prefersReducedMotion = useReducedMotion();
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [selectedImage, setSelectedImage] = useState<number | null>(null)
+  const [captionHovered, setCaptionHovered] = useState(false)
+  const modalRef = useRef<HTMLDivElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null)
+  const prefersReducedMotion = useReducedMotion()
 
-  const { gridClassNames, masonryClassNames } = getResponsiveColumnClasses(columns);
+  const { gridClassNames, masonryClassNames } = getResponsiveColumnClasses(columns)
 
-  const gapClass = gap === "sm" ? "gap-2" : gap === "md" ? "gap-4" : "gap-6";
-  const gapSize = gap === "sm" ? "0.5rem" : gap === "md" ? "1rem" : "1.5rem";
+  const gapClass = gap === "sm" ? "gap-2" : gap === "md" ? "gap-4" : "gap-6"
+  const gapSize = gap === "sm" ? "0.5rem" : gap === "md" ? "1rem" : "1.5rem"
 
   // Prevent body scroll when modal is open, and manage focus
   useEffect(() => {
     if (selectedImage !== null) {
       // Store the element that had focus before the modal opened
-      previouslyFocusedRef.current = document.activeElement as HTMLElement;
-      document.body.style.overflow = "hidden";
+      previouslyFocusedRef.current = document.activeElement as HTMLElement
+      document.body.style.overflow = "hidden"
       // Focus the close button for accessibility
-      closeButtonRef.current?.focus();
+      closeButtonRef.current?.focus()
     } else {
-      document.body.style.overflow = "";
+      document.body.style.overflow = ""
       // Restore focus when modal closes
-      previouslyFocusedRef.current?.focus();
-      previouslyFocusedRef.current = null;
+      previouslyFocusedRef.current?.focus()
+      previouslyFocusedRef.current = null
     }
 
     return () => {
-      document.body.style.overflow = "";
-    };
-  }, [selectedImage]);
+      document.body.style.overflow = ""
+    }
+  }, [selectedImage])
 
   // Focus trap for modal
   useEffect(() => {
-    if (selectedImage === null || !modalRef.current) return;
+    if (selectedImage === null || !modalRef.current) return
 
-    const modalElement = modalRef.current;
+    const modalElement = modalRef.current
 
     const handleTabKey = (e: KeyboardEvent) => {
-      if (e.key !== "Tab") return;
+      if (e.key !== "Tab") return
 
       const focusableElements = modalElement.querySelectorAll<HTMLElement>(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      );
-      const firstElement = focusableElements[0];
-      const lastElement = focusableElements[focusableElements.length - 1];
+      )
+      const firstElement = focusableElements[0]
+      const lastElement = focusableElements[focusableElements.length - 1]
 
       if (e.shiftKey) {
         if (document.activeElement === firstElement) {
-          e.preventDefault();
-          lastElement?.focus();
+          e.preventDefault()
+          lastElement?.focus()
         }
       } else {
         if (document.activeElement === lastElement) {
-          e.preventDefault();
-          firstElement?.focus();
+          e.preventDefault()
+          firstElement?.focus()
         }
       }
-    };
+    }
 
-    modalElement.addEventListener("keydown", handleTabKey);
-    return () => modalElement.removeEventListener("keydown", handleTabKey);
-  }, [selectedImage]);
+    modalElement.addEventListener("keydown", handleTabKey)
+    return () => modalElement.removeEventListener("keydown", handleTabKey)
+  }, [selectedImage])
 
   // Keyboard navigation for modal
   useEffect(() => {
-    if (selectedImage === null) return;
+    if (selectedImage === null) return
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setSelectedImage(null);
+        setSelectedImage(null)
       } else if (e.key === "ArrowLeft" && selectedImage > 0) {
-        setCaptionHovered(false);
-        setSelectedImage(selectedImage - 1);
+        setCaptionHovered(false)
+        setSelectedImage(selectedImage - 1)
       } else if (e.key === "ArrowRight" && selectedImage < images.length - 1) {
-        setCaptionHovered(false);
-        setSelectedImage(selectedImage + 1);
+        setCaptionHovered(false)
+        setSelectedImage(selectedImage + 1)
       }
-    };
+    }
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedImage, images.length]);
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [selectedImage, images.length])
 
   // Memoize handlers for performance
   const handleImageClick = useCallback((index: number) => {
-    setSelectedImage(index);
-  }, []);
+    setSelectedImage(index)
+  }, [])
 
   const handleCloseModal = useCallback(() => {
-    setSelectedImage(null);
-  }, []);
+    setSelectedImage(null)
+  }, [])
 
   const handlePrevImage = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCaptionHovered(false);
-    setSelectedImage((prev) => (prev !== null && prev > 0 ? prev - 1 : prev));
-  }, []);
+    e.stopPropagation()
+    setCaptionHovered(false)
+    setSelectedImage((prev) => (prev !== null && prev > 0 ? prev - 1 : prev))
+  }, [])
 
   const handleNextImage = useCallback(
     (e: React.MouseEvent) => {
-      e.stopPropagation();
-      setCaptionHovered(false);
-      setSelectedImage((prev) => (prev !== null && prev < images.length - 1 ? prev + 1 : prev));
+      e.stopPropagation()
+      setCaptionHovered(false)
+      setSelectedImage((prev) => (prev !== null && prev < images.length - 1 ? prev + 1 : prev))
     },
     [images.length],
-  );
+  )
 
   // Shared image card renderer
   const renderImageCard = (image: GalleryImage | SanityGalleryImage, index: number) => {
-    if (!isSanityImage(image)) return null;
-    const props = getImageProps(image);
+    if (!isSanityImage(image)) return null
+    const props = getImageProps(image)
     return (
       <button
         className="group relative w-full cursor-pointer overflow-hidden rounded-2xl shadow-sm transition-shadow hover:shadow-xl focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:outline-none"
         onClick={() => handleImageClick(index)}
+        onMouseEnter={() => setHoveredIndex(index)}
+        onMouseLeave={() => setHoveredIndex(null)}
         aria-label={`View ${props.alt}${props.caption ? `: ${props.caption}` : ""}`}
         type="button"
       >
@@ -250,12 +252,12 @@ export default function ImageGallery({
           </div>
         )}
       </button>
-    );
-  };
+    )
+  }
 
   // Render the lightbox modal
   const renderModal = () => {
-    const activeImage = selectedImage !== null ? images[selectedImage] : null;
+    const activeImage = selectedImage !== null ? images[selectedImage] : null
 
     return (
       <AnimatePresence>
@@ -293,6 +295,7 @@ export default function ImageGallery({
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"
@@ -303,9 +306,10 @@ export default function ImageGallery({
               </svg>
             </button>
             <div className="flex h-full flex-1 items-center justify-center p-4 pb-20 md:pb-4">
-              <div
-                className="relative flex flex-col items-center gap-4 md:max-h-[90vh] md:flex-row"
+              <fieldset
+                className="relative flex flex-col items-center gap-4 border-none p-0 m-0 md:max-h-[90vh] md:flex-row"
                 onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => e.stopPropagation()}
               >
                 {/* Previous button - hidden on mobile, shown on desktop */}
                 {selectedImage > 0 && (
@@ -321,6 +325,7 @@ export default function ImageGallery({
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
+                      aria-hidden="true"
                     >
                       <path
                         strokeLinecap="round"
@@ -388,6 +393,7 @@ export default function ImageGallery({
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
+                            aria-hidden="true"
                           >
                             <path
                               strokeLinecap="round"
@@ -450,6 +456,7 @@ export default function ImageGallery({
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
+                      aria-hidden="true"
                     >
                       <path
                         strokeLinecap="round"
@@ -460,12 +467,14 @@ export default function ImageGallery({
                     </svg>
                   </button>
                 )}
-              </div>
+              </fieldset>
             </div>
             {/* Mobile navigation buttons - positioned at bottom */}
-            <div
+            <nav
               className="fixed inset-x-0 bottom-0 flex justify-center gap-4 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-6 pb-8 md:hidden"
+              aria-label="Image navigation"
               onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => e.stopPropagation()}
             >
               <button
                 className={`rounded-full bg-primary-700/80 p-4 text-white backdrop-blur-sm transition-all duration-300 hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:outline-none ${selectedImage === 0 ? "cursor-not-allowed opacity-50" : ""}`}
@@ -480,6 +489,7 @@ export default function ImageGallery({
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
@@ -502,6 +512,7 @@ export default function ImageGallery({
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
@@ -511,12 +522,12 @@ export default function ImageGallery({
                   />
                 </svg>
               </button>
-            </div>
+            </nav>
           </motion.div>
         )}
       </AnimatePresence>
-    );
-  };
+    )
+  }
 
   if (variant === "grid") {
     // CSS Grid layout
@@ -524,22 +535,20 @@ export default function ImageGallery({
       <>
         <div className={`grid ${gridClassNames} ${gapClass}`}>
           {images.map((image, index) => {
-            const props = getImageProps(image);
+            const props = getImageProps(image)
             return (
               <div
                 key={getImageKey(image, index)}
                 className={props.showOnMobile === false ? "hidden sm:block" : ""}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
               >
                 {renderImageCard(image, index)}
               </div>
-            );
+            )
           })}
         </div>
         {renderModal()}
       </>
-    );
+    )
   }
 
   // Masonry and staggered variants both use CSS columns layout
@@ -548,21 +557,19 @@ export default function ImageGallery({
     <>
       <div className={masonryClassNames} style={{ columnGap: gapSize }}>
         {images.map((image, index) => {
-          const props = getImageProps(image);
+          const props = getImageProps(image)
           return (
             <div
               key={getImageKey(image, index)}
               className={props.showOnMobile === false ? "hidden sm:block" : ""}
               style={{ breakInside: "avoid", marginBottom: gapSize }}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
             >
               {renderImageCard(image, index)}
             </div>
-          );
+          )
         })}
       </div>
       {renderModal()}
     </>
-  );
+  )
 }

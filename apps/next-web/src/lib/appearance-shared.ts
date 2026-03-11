@@ -1,59 +1,61 @@
-import { PALETTE_KEY, type PaletteMode, validatePalette } from "@/utils/palette";
-import { type ResolvedTheme, type ThemeMode, validateTheme } from "@/utils/theme";
+import { PALETTE_KEY, type PaletteMode, validatePalette } from "@/utils/palette"
+import { type ResolvedTheme, type ThemeMode, validateTheme } from "@/utils/theme"
 
 export const APPEARANCE_COOKIES = {
   THEME: "theme-preference",
   RESOLVED_THEME: "resolved-theme",
   PALETTE: PALETTE_KEY,
-} as const;
+} as const
 
-export const APPEARANCE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+export const APPEARANCE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365
 
 export interface AppearanceState {
-  theme: ThemeMode;
-  resolvedTheme: ResolvedTheme;
-  palette: PaletteMode;
+  theme: ThemeMode
+  resolvedTheme: ResolvedTheme
+  palette: PaletteMode
 }
 
 export const DEFAULT_APPEARANCE: AppearanceState = {
   theme: "system",
   resolvedTheme: "light",
   palette: "olive",
-};
+}
 
 export function buildAppearanceCookie(
   name: (typeof APPEARANCE_COOKIES)[keyof typeof APPEARANCE_COOKIES],
   value: string,
 ): string {
-  return `${name}=${encodeURIComponent(value)}; Path=/; Max-Age=${APPEARANCE_COOKIE_MAX_AGE}; SameSite=Lax`;
+  return `${name}=${encodeURIComponent(value)}; Path=/; Max-Age=${APPEARANCE_COOKIE_MAX_AGE}; SameSite=Lax`
 }
 
 function validateResolvedTheme(value: string | null | undefined): ResolvedTheme | null {
   if (value === "light" || value === "dark") {
-    return value;
+    return value
   }
 
-  return null;
+  return null
 }
 
 export function getAppearanceFromCookieValues(cookieValues: {
-  theme?: string | null;
-  resolvedTheme?: string | null;
-  palette?: string | null;
+  theme?: string | null
+  resolvedTheme?: string | null
+  palette?: string | null
 }): AppearanceState {
-  const theme = validateTheme(cookieValues.theme ?? null);
+  const theme = validateTheme(cookieValues.theme ?? null)
 
-  const palette = cookieValues.palette ? validatePalette(cookieValues.palette) : DEFAULT_APPEARANCE.palette;
+  const palette = cookieValues.palette
+    ? validatePalette(cookieValues.palette)
+    : DEFAULT_APPEARANCE.palette
 
-  const resolvedThemeCookie = validateResolvedTheme(cookieValues.resolvedTheme);
+  const resolvedThemeCookie = validateResolvedTheme(cookieValues.resolvedTheme)
   const resolvedTheme =
-    theme === "system" ? resolvedThemeCookie ?? DEFAULT_APPEARANCE.resolvedTheme : theme;
+    theme === "system" ? (resolvedThemeCookie ?? DEFAULT_APPEARANCE.resolvedTheme) : theme
 
   return {
     theme,
     resolvedTheme,
     palette,
-  };
+  }
 }
 
 /**
@@ -61,7 +63,7 @@ export function getAppearanceFromCookieValues(cookieValues: {
  * It syncs localStorage + cookies and applies classes/attributes before paint.
  */
 export function getAppearanceBootstrapScript(initialAppearance: AppearanceState): string {
-  const initial = JSON.stringify(initialAppearance);
+  const initial = JSON.stringify(initialAppearance)
 
   return `
     (function() {
@@ -158,5 +160,5 @@ export function getAppearanceBootstrapScript(initialAppearance: AppearanceState)
         }
       }
     })();
-  `;
+  `
 }

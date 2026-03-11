@@ -1,7 +1,7 @@
 interface InfoCardProps {
-  icon: React.ReactNode;
-  title: string;
-  content: string;
+  icon: React.ReactNode
+  title: string
+  content: string
 }
 
 export default function InfoCard({ icon, title, content }: InfoCardProps) {
@@ -19,5 +19,5 @@ export default function InfoCard({ icon, title, content }: InfoCardProps) {
         <p className="font-body text-grey-800 dark:text-grey-200">{content}</p>
       </div>
     </div>
-  );
+  )
 }

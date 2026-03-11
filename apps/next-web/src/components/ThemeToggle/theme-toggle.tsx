@@ -1,24 +1,24 @@
-"use client";
+"use client"
 
-import { useTheme } from "@/hooks/useTheme";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { motion } from "framer-motion";
-import { Monitor, Moon, Sun } from "lucide-react";
-import { useSyncExternalStore } from "react";
+import { motion } from "framer-motion"
+import { Monitor, Moon, Sun } from "lucide-react"
+import { useSyncExternalStore } from "react"
+import { useReducedMotion } from "@/hooks/useReducedMotion"
+import { useTheme } from "@/hooks/useTheme"
 
 export interface ThemeToggleProps {
   /**
    * Visual variant of the toggle
    */
-  variant?: "button" | "nav-item";
+  variant?: "button" | "nav-item"
   /**
    * Whether to show text label alongside icon
    */
-  showLabel?: boolean;
+  showLabel?: boolean
   /**
    * Additional CSS classes
    */
-  className?: string;
+  className?: string
 }
 
 /**
@@ -29,8 +29,8 @@ export function ThemeToggle({
   showLabel = true,
   className = "",
 }: ThemeToggleProps) {
-  const { theme, setTheme } = useTheme();
-  const prefersReducedMotion = useReducedMotion();
+  const { theme, setTheme } = useTheme()
+  const prefersReducedMotion = useReducedMotion()
 
   // Use useSyncExternalStore to detect client-side rendering
   // This avoids hydration mismatches without triggering the setState-in-effect rule
@@ -38,38 +38,38 @@ export function ThemeToggle({
     () => () => {}, // subscribe (no-op since this never changes)
     () => true, // getSnapshot (client)
     () => false, // getServerSnapshot (server)
-  );
+  )
 
   const handleToggle = () => {
-    const nextTheme = theme === "light" ? "dark" : theme === "dark" ? "system" : "light";
-    setTheme(nextTheme);
-  };
+    const nextTheme = theme === "light" ? "dark" : theme === "dark" ? "system" : "light"
+    setTheme(nextTheme)
+  }
 
   const getIcon = () => {
     switch (theme) {
       case "light":
-        return <Sun className="h-5 w-5" />;
+        return <Sun className="h-5 w-5" />
       case "dark":
-        return <Moon className="h-5 w-5" />;
+        return <Moon className="h-5 w-5" />
       case "system":
-        return <Monitor className="h-5 w-5" />;
+        return <Monitor className="h-5 w-5" />
     }
-  };
+  }
 
   const getLabel = () => {
     switch (theme) {
       case "light":
-        return "Light";
+        return "Light"
       case "dark":
-        return "Dark";
+        return "Dark"
       case "system":
-        return "System";
+        return "System"
     }
-  };
+  }
 
   const getAriaLabel = () => {
-    return `Current theme: ${getLabel()}. Click to cycle to next theme.`;
-  };
+    return `Current theme: ${getLabel()}. Click to cycle to next theme.`
+  }
 
   // Render placeholder during SSR to avoid hydration mismatch
   if (!mounted) {
@@ -84,7 +84,7 @@ export function ThemeToggle({
           <Monitor className="h-5 w-5 opacity-50" />
           {showLabel && <span>Theme: System</span>}
         </button>
-      );
+      )
     }
 
     return (
@@ -97,7 +97,7 @@ export function ThemeToggle({
         <Monitor className="h-5 w-5 opacity-50" />
         {showLabel && <span>System</span>}
       </button>
-    );
+    )
   }
 
   if (variant === "nav-item") {
@@ -118,7 +118,7 @@ export function ThemeToggle({
         </motion.span>
         {showLabel && <span>Theme: {getLabel()}</span>}
       </button>
-    );
+    )
   }
 
   return (
@@ -138,5 +138,5 @@ export function ThemeToggle({
       </motion.span>
       {showLabel && <span>{getLabel()}</span>}
     </button>
-  );
+  )
 }

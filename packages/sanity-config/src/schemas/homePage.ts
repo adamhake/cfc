@@ -72,11 +72,11 @@ export default defineType({
           name: "heroImageV2",
           title: "Hero Image (Direct Upload)",
           type: "contentImage",
-          description: "Upload/select an image directly. Preferred for new content.",
+          description: "Upload/select an image.",
           validation: (rule) =>
             rule.custom((value) => {
               const hasAsset = Boolean(
-                (value as { asset?: { _ref?: string } } | undefined)?.asset?._ref
+                (value as { asset?: { _ref?: string } } | undefined)?.asset?._ref,
               )
               return hasAsset ? true : "Hero image is required"
             }),
@@ -96,8 +96,7 @@ export default defineType({
               name: "link",
               title: "Button Link",
               type: "string",
-              description:
-                'Internal path (e.g., "/donate") or anchor (e.g., "#get-involved")',
+              description: 'Internal path (e.g., "/donate") or anchor (e.g., "#get-involved")',
               validation: (rule) => rule.required(),
             }),
           ],
@@ -256,16 +255,14 @@ export default defineType({
           title: "History Content",
           type: "array",
           of: [simpleBlockContent],
-          description:
-            "Narrative paragraphs displayed alongside the rotating gallery",
+          description: "Narrative paragraphs displayed alongside the rotating gallery",
         }),
         defineField({
           name: "today",
           title: "Current State",
           type: "text",
           rows: 3,
-          description:
-            "Paragraph about the park today (displayed below the gallery grid)",
+          description: "Paragraph about the park today (displayed below the gallery grid)",
         }),
         defineField({
           name: "callout",
@@ -283,8 +280,7 @@ export default defineType({
       type: "reference",
       to: [{ type: "gallery" }],
       group: "park",
-      description:
-        "Rotating image gallery displayed alongside the history content",
+      description: "Rotating image gallery displayed alongside the history content",
     }),
 
     // ─── Events Section ───

@@ -1,3 +1,8 @@
+export type {
+  CreateBodyFieldOptions,
+  CreateIntroductionFieldOptions,
+  CreateRichTextBlocksOptions,
+} from "./richText"
 export {
   createBodyField,
   createInlineFile,
@@ -5,10 +10,4 @@ export {
   createIntroductionField,
   createLinkAnnotation,
   createRichTextBlocks,
-} from "./richText"
-
-export type {
-  CreateBodyFieldOptions,
-  CreateIntroductionFieldOptions,
-  CreateRichTextBlocksOptions,
 } from "./richText"

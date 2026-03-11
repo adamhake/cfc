@@ -1,20 +1,20 @@
-'use client';
+"use client"
 
-import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { AnimatePresence, motion } from "framer-motion";
-import { cloneElement, isValidElement, useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion"
+import { cloneElement, isValidElement, useEffect, useState } from "react"
+import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image"
+import { useReducedMotion } from "@/hooks/useReducedMotion"
 
 interface AmenityCardProps {
-  title: string;
-  icon: React.ReactElement;
-  description: string;
-  details?: string[];
+  title: string
+  icon: React.ReactElement
+  description: string
+  details?: string[]
   link?: {
-    text: string;
-    url: string;
-  };
-  images?: SanityImageObject[];
+    text: string
+    url: string
+  }
+  images?: SanityImageObject[]
 }
 
 export default function AmenityCard({
@@ -25,25 +25,25 @@ export default function AmenityCard({
   link,
   images = [],
 }: AmenityCardProps) {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const prefersReducedMotion = useReducedMotion();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const prefersReducedMotion = useReducedMotion()
   // Apply consistent icon styling
   const styledIcon = isValidElement(icon)
     ? cloneElement(icon, {
         className: "h-6 w-6 stroke-primary-700 dark:stroke-primary-400",
       } as React.HTMLAttributes<HTMLElement>)
-    : icon;
+    : icon
 
   useEffect(() => {
     // Only cycle images if user hasn't requested reduced motion and there are multiple images
-    if (prefersReducedMotion || images.length <= 1) return;
+    if (prefersReducedMotion || images.length <= 1) return
 
     const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % images.length);
-    }, 4000); // Change image every 4 seconds
+      setCurrentImageIndex((prev) => (prev + 1) % images.length)
+    }, 4000) // Change image every 4 seconds
 
-    return () => clearInterval(interval);
-  }, [prefersReducedMotion, images.length]);
+    return () => clearInterval(interval)
+  }, [prefersReducedMotion, images.length])
 
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-accent-600/20 bg-gradient-to-br from-grey-50 to-grey-50/80 shadow-sm transition-all duration-300 hover:shadow-md dark:border-accent-500/20 dark:from-primary-900 dark:to-primary-900/80">
@@ -88,9 +88,9 @@ export default function AmenityCard({
           {description}
         </p>
         {details && details.length > 0 && (
-          <ul className="mb-4 space-y-2 font-body text-grey-700 dark:text-grey-300" role="list">
-            {details.map((detail, index) => (
-              <li key={index} className="flex items-start gap-2">
+          <ul className="mb-4 space-y-2 font-body text-grey-700 dark:text-grey-300">
+            {details.map((detail) => (
+              <li key={detail} className="flex items-start gap-2">
                 <span
                   className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-600 dark:bg-accent-400"
                   aria-hidden="true"
@@ -115,5 +115,5 @@ export default function AmenityCard({
         )}
       </div>
     </div>
-  );
+  )
 }

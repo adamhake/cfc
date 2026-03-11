@@ -1,14 +1,14 @@
-import type { Metadata } from "next";
-import { sanityFetch, CACHE_TAGS } from "@/lib/sanity-fetch";
-import type { SanityAboutPage, SanityBoardMember, SanityHighlight } from "@/lib/sanity-types";
-import { SITE_CONFIG } from "@/utils/seo";
-import { getAboutPageQuery } from "@chimborazo/sanity-config/queries";
-import Container from "@/components/Container/container";
-import GetInvolved from "@/components/GetInvolved/get-involved";
-import PageHero from "@/components/PageHero/page-hero";
-import { PortableText } from "@/components/PortableText/portable-text";
-import { SanityImage } from "@/components/SanityImage/sanity-image";
-import SectionHeader from "@/components/SectionHeader/section-header";
+import { getAboutPageQuery } from "@chimborazo/sanity-config/queries"
+import type { Metadata } from "next"
+import Container from "@/components/Container/container"
+import GetInvolved from "@/components/GetInvolved/get-involved"
+import PageHero from "@/components/PageHero/page-hero"
+import { PortableText } from "@/components/PortableText/portable-text"
+import { SanityImage } from "@/components/SanityImage/sanity-image"
+import SectionHeader from "@/components/SectionHeader/section-header"
+import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import type { SanityAboutPage, SanityBoardMember, SanityHighlight } from "@/lib/sanity-types"
+import { SITE_CONFIG } from "@/utils/seo"
 
 export const metadata: Metadata = {
   title: "About the Chimborazo Park Conservancy",
@@ -22,13 +22,13 @@ export const metadata: Metadata = {
     type: "website",
     url: `${SITE_CONFIG.url}/about`,
   },
-};
+}
 
 export default async function AboutPage() {
   const { data: pageData } = (await sanityFetch({
     query: getAboutPageQuery,
     tags: [CACHE_TAGS.ABOUT],
-  })) as { data: SanityAboutPage | null };
+  })) as { data: SanityAboutPage | null }
 
   const heroData = pageData?.pageHero?.image
     ? {
@@ -40,7 +40,7 @@ export default async function AboutPage() {
         title: "About the Conservancy",
         subtitle:
           "A 501(c)(3) nonprofit dedicated to the restoration, beautification, and preservation of historic Chimborazo Park.",
-      };
+      }
 
   return (
     <div>
@@ -114,7 +114,7 @@ export default async function AboutPage() {
         />
       </Container>
     </div>
-  );
+  )
 }
 
 function Highlights({ items }: { items: SanityHighlight[] }) {
@@ -134,7 +134,7 @@ function Highlights({ items }: { items: SanityHighlight[] }) {
         </div>
       ))}
     </div>
-  );
+  )
 }
 
 function BoardSection({ members }: { members: SanityBoardMember[] }) {
@@ -151,14 +151,14 @@ function BoardSection({ members }: { members: SanityBoardMember[] }) {
         ))}
       </div>
     </div>
-  );
+  )
 }
 
 function MemberCard({ member }: { member: SanityBoardMember }) {
   const initials = member.name
     .split(" ")
     .map((n) => n[0])
-    .join("");
+    .join("")
 
   return (
     <div className="rounded-xl border border-primary-200/50 bg-gradient-to-br from-primary-50/60 to-white p-6 shadow-sm transition-shadow hover:shadow-md dark:border-primary-700/40 dark:from-primary-900/20 dark:to-primary-950">
@@ -195,5 +195,5 @@ function MemberCard({ member }: { member: SanityBoardMember }) {
         </p>
       )}
     </div>
-  );
+  )
 }

@@ -1,10 +1,10 @@
+import { CogIcon, DocumentTextIcon, ImageIcon, LinkIcon } from "@sanity/icons"
 import { defineField, defineType } from "sanity"
-import { DocumentTextIcon, ImageIcon, CogIcon, LinkIcon } from "@sanity/icons"
-import { createRichTextBlocks, createInlineImage, createInlineFile } from "./shared"
+import { createInlineFile, createInlineImage, createRichTextBlocks } from "./shared"
 
 export const updateSchema = defineType({
   name: "update",
-  title: "Update",
+  title: "Updates",
   type: "document",
   groups: [
     {
@@ -61,11 +61,11 @@ export const updateSchema = defineType({
       name: "heroImageV2",
       title: "Hero Image (Direct Upload)",
       type: "contentImage",
-      description: "Upload/select an image directly. Preferred for new content.",
+      description: "Upload/select an image.",
       validation: (Rule) =>
         Rule.custom((value) => {
           const hasAsset = Boolean(
-            (value as { asset?: { _ref?: string } } | undefined)?.asset?._ref
+            (value as { asset?: { _ref?: string } } | undefined)?.asset?._ref,
           )
           return hasAsset ? true : "Hero image is required"
         }),

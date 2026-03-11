@@ -1,9 +1,9 @@
-import { ExternalLink } from "lucide-react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import { ExternalLink } from "lucide-react"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 
 interface MarkdownProps {
-  content: string;
+  content: string
 }
 
 export function Markdown({ content }: MarkdownProps) {
@@ -64,7 +64,7 @@ export function Markdown({ content }: MarkdownProps) {
           <em className="text-grey-900 italic dark:text-grey-100">{children}</em>
         ),
         a: ({ children, href }) => {
-          const isExternal = href?.startsWith("http");
+          const isExternal = href?.startsWith("http")
           return (
             <a
               href={href}
@@ -80,7 +80,7 @@ export function Markdown({ content }: MarkdownProps) {
                 </>
               )}
             </a>
-          );
+          )
         },
         blockquote: ({ children }) => (
           <blockquote className="my-8 rounded-r-2xl border-l-4 border-accent-600 bg-accent-50/50 py-4 pr-6 pl-6 font-body text-base leading-relaxed text-grey-800 md:text-lg dark:border-accent-500 dark:bg-accent-900/20 dark:text-grey-200">
@@ -128,5 +128,5 @@ export function Markdown({ content }: MarkdownProps) {
     >
       {content}
     </ReactMarkdown>
-  );
+  )
 }

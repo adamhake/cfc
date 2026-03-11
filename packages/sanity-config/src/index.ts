@@ -1,34 +1,17 @@
 // Export schemas
-export {
-  aboutPageSchema,
-  amenitiesPageSchema,
-  contentImageSchema,
-  eventSchema,
-  gallerySchema,
-  homePageSchema,
-  mediaImageSchema,
-  mediaTagSchema,
-  partnerSchema,
-  quoteSchema,
-  schemas,
-  siteSettingsSchema,
-} from "./schemas"
 
-// Export components
-export { MediaImageReferenceInput } from "./components/MediaImageReferenceInput"
+// Re-export types from Sanity for convenience
+export type { SanityClient } from "@sanity/client"
+export type { SanityImageSource } from "@sanity/image-url"
 
 // Export document actions
 export { createGenerateMetadataAction, type GenerateMetadataActionConfig } from "./actions"
-
-// Export queries
-export * from "./queries"
-
-// Export generated types
-export type * from "./sanity.types"
-
+export type { SanityConfig } from "./client"
 // Export client utilities
 export { createImageUrlBuilder, createSanityClient, urlForImage } from "./client"
-export type { SanityConfig } from "./client"
+// Export components
+export { MediaImageReferenceInput } from "./components/MediaImageReferenceInput"
+export type { SanityConfig as SanityEnvConfig, SanityConfigWithToken } from "./env-schema"
 
 // Export environment schemas
 export {
@@ -38,8 +21,20 @@ export {
   sanityDatasetSchema,
   sanityProjectIdSchema,
 } from "./env-schema"
-export type { SanityConfigWithToken, SanityConfig as SanityEnvConfig } from "./env-schema"
-
-// Re-export types from Sanity for convenience
-export type { SanityClient } from "@sanity/client"
-export type { SanityImageSource } from "@sanity/image-url"
+// Export queries
+export * from "./queries"
+// Export generated types
+export type * from "./sanity.types"
+export {
+  aboutPageSchema,
+  amenitiesPageSchema,
+  contentImageSchema,
+  eventSchema,
+  gallerySchema,
+  homePageSchema,
+  mediaImageSchema,
+  partnerSchema,
+  quoteSchema,
+  schemas,
+  siteSettingsSchema,
+} from "./schemas"

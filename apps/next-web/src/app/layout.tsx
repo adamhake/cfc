@@ -1,20 +1,18 @@
-import type { Metadata } from "next";
-import { draftMode } from "next/headers";
-import {
-  getAppearanceBootstrapScript,
-} from "@/lib/appearance-shared";
-import Header from "@/components/Header/header";
-import Footer from "@/components/Footer/footer";
-import { SanityLive } from "@/lib/sanity-live";
-import { VisualEditing } from "@/components/VisualEditing/visual-editing";
-import { DisablePreview } from "@/components/VisualEditing/disable-preview";
-import { generateOrganizationStructuredData, SITE_CONFIG } from "@/utils/seo";
-import { getSiteSettings } from "@/lib/site-settings";
-import { sanityFetch, CACHE_TAGS } from "@/lib/sanity-fetch";
-import type { SanityProject } from "@/lib/sanity-types";
-import { projectBySlugQuery } from "@chimborazo/sanity-config/queries";
-import { Providers } from "./providers";
-import "./globals.css";
+import { projectBySlugQuery } from "@chimborazo/sanity-config/queries"
+import type { Metadata } from "next"
+import { draftMode } from "next/headers"
+import Footer from "@/components/Footer/footer"
+import Header from "@/components/Header/header"
+import { DisablePreview } from "@/components/VisualEditing/disable-preview"
+import { VisualEditing } from "@/components/VisualEditing/visual-editing"
+import { getAppearanceBootstrapScript } from "@/lib/appearance-shared"
+import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import { SanityLive } from "@/lib/sanity-live"
+import type { SanityProject } from "@/lib/sanity-types"
+import { getSiteSettings } from "@/lib/site-settings"
+import { generateOrganizationStructuredData, SITE_CONFIG } from "@/utils/seo"
+import { Providers } from "./providers"
+import "./globals.css"
 
 export const metadata: Metadata = {
   title: {
@@ -43,20 +41,16 @@ export const metadata: Metadata = {
   other: {
     "theme-color": SITE_CONFIG.themeColor,
   },
-};
+}
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const { isEnabled: isDraftMode } = await draftMode();
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const { isEnabled: isDraftMode } = await draftMode()
   const bootstrapScript = getAppearanceBootstrapScript({
     theme: "system",
     resolvedTheme: "light",
     palette: "olive",
-  });
-  const structuredData = generateOrganizationStructuredData();
+  })
+  const structuredData = generateOrganizationStructuredData()
 
   // Fetch shared data server-side to avoid client-side waterfalls
   const [siteSettings, { data: featuredProject }] = await Promise.all([
@@ -66,24 +60,23 @@ export default async function RootLayout({
       params: { slug: "parkwide-native-tree-planting" },
       tags: [CACHE_TAGS.PROJECTS],
     }) as Promise<{ data: SanityProject | null }>,
-  ]);
+  ])
 
-  const facebookUrl = siteSettings?.socialMedia?.facebook;
-  const instagramUrl = siteSettings?.socialMedia?.instagram;
+  const facebookUrl = siteSettings?.socialMedia?.facebook
+  const instagramUrl = siteSettings?.socialMedia?.instagram
 
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-    >
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: bootstrap script for theme/palette init
           dangerouslySetInnerHTML={{ __html: bootstrapScript }}
         />
         <link rel="preconnect" href="https://cdn.sanity.io" />
-        <link rel="dns-prefetch" href="https://us.i.posthog.com" />
+        <link rel="dns-prefetch" href="https://d.chimborazoparkconservancy.org" />
         <script
           type="application/ld+json"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(structuredData)
               .replace(/</g, "\\u003c")
@@ -91,15 +84,8 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body
-        className="min-h-screen bg-grey-50 dark:bg-primary-900"
-        suppressHydrationWarning
-      >
-        <Providers
-          initialTheme="system"
-          initialResolvedTheme="light"
-          initialPalette="olive"
-        >
+      <body className="min-h-screen bg-grey-50 dark:bg-primary-900" suppressHydrationWarning>
+        <Providers initialTheme="system" initialResolvedTheme="light" initialPalette="olive">
           <a
             href="#main-content"
             className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-primary-700 focus:px-4 focus:py-2 focus:text-primary-50 focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 focus:outline-none"
@@ -115,10 +101,7 @@ export default async function RootLayout({
             <main id="main-content" className="flex-1">
               {children}
             </main>
-            <Footer
-              facebookUrl={facebookUrl}
-              instagramUrl={instagramUrl}
-            />
+            <Footer facebookUrl={facebookUrl} instagramUrl={instagramUrl} />
           </div>
         </Providers>
         <SanityLive />
@@ -130,5 +113,5 @@ export default async function RootLayout({
         )}
       </body>
     </html>
-  );
+  )
 }

@@ -1,18 +1,18 @@
-"use client";
+"use client"
 
-import IconLogo from "@/components/IconLogo/icon-logo";
-import { SocialLinks } from "@/components/SocialLinks/social-links";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import type { SanityProject } from "@/lib/sanity-types";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useClickAway } from "@uidotdev/usehooks";
-import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { Button } from "../Button/button";
-import ProjectCardCondensed from "../ProjectCardCondensed/project-card-condensed";
-import { ThemeToggle } from "../ThemeToggle/theme-toggle";
+import { useClickAway } from "@uidotdev/usehooks"
+import { AnimatePresence, motion } from "framer-motion"
+import { Menu, X } from "lucide-react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { useEffect, useRef, useState } from "react"
+import IconLogo from "@/components/IconLogo/icon-logo"
+import { SocialLinks } from "@/components/SocialLinks/social-links"
+import { useReducedMotion } from "@/hooks/useReducedMotion"
+import type { SanityProject } from "@/lib/sanity-types"
+import { Button } from "../Button/button"
+import ProjectCardCondensed from "../ProjectCardCondensed/project-card-condensed"
+import { ThemeToggle } from "../ThemeToggle/theme-toggle"
 
 /**
  * Site header with navigation, logo, social links, and mobile menu.
@@ -32,96 +32,100 @@ import { ThemeToggle } from "../ThemeToggle/theme-toggle";
  */
 interface HeaderProps {
   /** Featured project data, fetched server-side */
-  featuredProject?: SanityProject | null;
+  featuredProject?: SanityProject | null
   /** Social media URLs from site settings */
-  facebookUrl?: string;
-  instagramUrl?: string;
+  facebookUrl?: string
+  instagramUrl?: string
 }
 
-export default function Header({ featuredProject: featuredProjectProp, facebookUrl, instagramUrl }: HeaderProps) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const mobileMenuRef = useRef<HTMLDivElement>(null);
-  const pathname = usePathname();
-  const currentPath = pathname;
+export default function Header({
+  featuredProject: featuredProjectProp,
+  facebookUrl,
+  instagramUrl,
+}: HeaderProps) {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const mobileMenuRef = useRef<HTMLDivElement>(null)
+  const pathname = usePathname()
+  const currentPath = pathname
   // Read hash only after mount to avoid hydration mismatch
   const [currentHash, setCurrentHash] = useState(() =>
     typeof window === "undefined" ? "" : window.location.hash.replace("#", ""),
-  );
+  )
   useEffect(() => {
-    const onHashChange = () => setCurrentHash(window.location.hash.replace("#", ""));
-    window.addEventListener("hashchange", onHashChange);
-    return () => window.removeEventListener("hashchange", onHashChange);
-  }, []);
-  const featuredProject = featuredProjectProp;
-  const prefersReducedMotion = useReducedMotion();
+    const onHashChange = () => setCurrentHash(window.location.hash.replace("#", ""))
+    window.addEventListener("hashchange", onHashChange)
+    return () => window.removeEventListener("hashchange", onHashChange)
+  }, [])
+  const featuredProject = featuredProjectProp
+  const prefersReducedMotion = useReducedMotion()
 
   const ref = useClickAway<HTMLElement>(() => {
     // Only close on click-away for desktop menu
     // Mobile menu has its own close handlers on links/buttons
-    const isMobile = window.innerWidth < 768; // md breakpoint
+    const isMobile = window.innerWidth < 768 // md breakpoint
     if (!isMobile) {
-      setMenuOpen(false);
+      setMenuOpen(false)
     }
-  });
+  })
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (menuOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = "hidden"
     } else {
-      document.body.style.overflow = "";
+      document.body.style.overflow = ""
     }
     return () => {
-      document.body.style.overflow = "";
-    };
-  }, [menuOpen]);
+      document.body.style.overflow = ""
+    }
+  }, [menuOpen])
 
   // Handle escape key to close menu
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && menuOpen) {
-        setMenuOpen(false);
+        setMenuOpen(false)
       }
-    };
-    window.addEventListener("keydown", handleEscape);
-    return () => window.removeEventListener("keydown", handleEscape);
-  }, [menuOpen]);
+    }
+    window.addEventListener("keydown", handleEscape)
+    return () => window.removeEventListener("keydown", handleEscape)
+  }, [menuOpen])
 
   // Focus trap for mobile menu
   useEffect(() => {
-    if (!menuOpen || !mobileMenuRef.current) return;
+    if (!menuOpen || !mobileMenuRef.current) return
 
-    const menuElement = mobileMenuRef.current;
+    const menuElement = mobileMenuRef.current
     const focusableElements = menuElement.querySelectorAll<HTMLElement>(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-    );
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
+    )
+    const firstElement = focusableElements[0]
+    const lastElement = focusableElements[focusableElements.length - 1]
 
     // Focus the first element when menu opens
-    firstElement?.focus();
+    firstElement?.focus()
 
     const handleTabKey = (e: KeyboardEvent) => {
-      if (e.key !== "Tab") return;
+      if (e.key !== "Tab") return
 
       if (e.shiftKey) {
         // Shift + Tab
         if (document.activeElement === firstElement) {
-          e.preventDefault();
-          lastElement?.focus();
+          e.preventDefault()
+          lastElement?.focus()
         }
       } else {
         // Tab
         if (document.activeElement === lastElement) {
-          e.preventDefault();
-          firstElement?.focus();
+          e.preventDefault()
+          firstElement?.focus()
         }
       }
-    };
+    }
 
-    menuElement.addEventListener("keydown", handleTabKey);
-    return () => menuElement.removeEventListener("keydown", handleTabKey);
-  }, [menuOpen]);
+    menuElement.addEventListener("keydown", handleTabKey)
+    return () => menuElement.removeEventListener("keydown", handleTabKey)
+  }, [menuOpen])
 
   return (
     <div className="fixed top-4 right-4 left-4 z-20 flex flex-row items-center justify-center">
@@ -133,7 +137,7 @@ export default function Header({ featuredProject: featuredProjectProp, facebookU
           {/* Menu button - Desktop only */}
           <Button
             onClick={() => {
-              setMenuOpen((s) => !s);
+              setMenuOpen((s) => !s)
             }}
             variant="outline"
             size="small"
@@ -222,9 +226,21 @@ export default function Header({ featuredProject: featuredProjectProp, facebookU
                       { href: "/", label: "Home", isActive: currentPath === "/" && !currentHash },
                       { href: "/events", label: "Events", isActive: currentPath === "/events" },
                       { href: "/about", label: "About Us", isActive: currentPath === "/about" },
-                      { href: "/amenities", label: "Amenities", isActive: currentPath === "/amenities" },
-                      { href: "/projects", label: "Projects", isActive: currentPath === "/projects" },
-                      { href: "/get-involved", label: "Get Involved", isActive: currentPath === "/get-involved" },
+                      {
+                        href: "/amenities",
+                        label: "Amenities",
+                        isActive: currentPath === "/amenities",
+                      },
+                      {
+                        href: "/projects",
+                        label: "Projects",
+                        isActive: currentPath === "/projects",
+                      },
+                      {
+                        href: "/get-involved",
+                        label: "Get Involved",
+                        isActive: currentPath === "/get-involved",
+                      },
                       { href: "/history", label: "History", isActive: currentPath === "/history" },
                       { href: "/media", label: "Media", isActive: currentPath === "/media" },
                     ].map(({ href, label, isActive }) => (
@@ -459,5 +475,5 @@ export default function Header({ featuredProject: featuredProjectProp, facebookU
         )}
       </AnimatePresence>
     </div>
-  );
+  )
 }

@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
-import { sanityFetch, CACHE_TAGS } from "@/lib/sanity-fetch";
-import type { SanityDonatePage } from "@/lib/sanity-types";
-import { generateFAQStructuredData, SITE_CONFIG } from "@/utils/seo";
-import { getDonatePageQuery } from "@chimborazo/sanity-config/queries";
-import Container from "@/components/Container/container";
-import { FAQSection } from "@/components/FAQSection/faq-section";
-import PageHero from "@/components/PageHero/page-hero";
-import DonateFormClient from "./donate-form-client";
+import { getDonatePageQuery } from "@chimborazo/sanity-config/queries"
+import type { Metadata } from "next"
+import Container from "@/components/Container/container"
+import { FAQSection } from "@/components/FAQSection/faq-section"
+import PageHero from "@/components/PageHero/page-hero"
+import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import type { SanityDonatePage } from "@/lib/sanity-types"
+import { generateFAQStructuredData, SITE_CONFIG } from "@/utils/seo"
+import DonateFormClient from "./donate-form-client"
 
 const DONATE_FAQS = [
   {
@@ -34,7 +34,7 @@ const DONATE_FAQS = [
     answer:
       "Absolutely. You can volunteer at seasonal clean-up days and trail maintenance sessions, adopt a park feature like a bench or tree, donate spring bulbs, or help spread the word on social media. Visit our Get Involved page for all the ways to contribute.",
   },
-];
+]
 
 export const metadata: Metadata = {
   title: "Donate",
@@ -48,13 +48,13 @@ export const metadata: Metadata = {
     type: "website",
     url: `${SITE_CONFIG.url}/donate`,
   },
-};
+}
 
 export default async function DonatePage() {
   const { data: donatePageData } = (await sanityFetch({
     query: getDonatePageQuery,
     tags: [CACHE_TAGS.DONATE],
-  })) as { data: SanityDonatePage | null };
+  })) as { data: SanityDonatePage | null }
 
   // Prepare hero data from Sanity or use defaults
   const heroData = donatePageData?.pageHero?.image
@@ -69,14 +69,15 @@ export default async function DonatePage() {
         imageAlt: "Chimborazo Park landscape",
         imageWidth: 2000,
         imageHeight: 1262,
-      };
+      }
 
-  const faqStructuredData = generateFAQStructuredData(DONATE_FAQS);
+  const faqStructuredData = generateFAQStructuredData(DONATE_FAQS)
 
   return (
     <div>
       <script
         type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
       />
       <PageHero {...heroData} height="medium" priority={true} />
@@ -141,5 +142,5 @@ export default async function DonatePage() {
         </Container>
       </div>
     </div>
-  );
+  )
 }

@@ -8,6 +8,7 @@
  * npx sanity@latest exec migrations/fix-homepage-hero-image.ts --with-user-token
  */
 
+// biome-ignore lint/suspicious/noExplicitAny: migration script uses untyped Sanity client
 const fixHomePageHeroImage = async (client: any) => {
   console.log("Starting migration: fix homepage hero image...")
 

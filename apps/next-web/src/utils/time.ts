@@ -4,5 +4,5 @@ export function formatDateString(dateStr: string, length: "short" | "long" = "lo
     year: "numeric",
     month: length === "short" ? "short" : "long",
     day: "numeric",
-  });
+  })
 }

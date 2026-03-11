@@ -1,2 +1,2 @@
-export { VisualEditing } from "./visual-editing";
-export { DisablePreview } from "./disable-preview";
+export { DisablePreview } from "./disable-preview"
+export { VisualEditing } from "./visual-editing"

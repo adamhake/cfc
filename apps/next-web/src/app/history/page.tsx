@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
-import { sanityFetch, CACHE_TAGS } from "@/lib/sanity-fetch";
-import type { SanityHistoryPage } from "@/lib/sanity-types";
-import { SITE_CONFIG } from "@/utils/seo";
-import { getHistoryPageQuery } from "@chimborazo/sanity-config/queries";
-import Container from "@/components/Container/container";
-import PageHero from "@/components/PageHero/page-hero";
-import { PortableText } from "@/components/PortableText/portable-text";
+import { getHistoryPageQuery } from "@chimborazo/sanity-config/queries"
+import type { Metadata } from "next"
+import Container from "@/components/Container/container"
+import PageHero from "@/components/PageHero/page-hero"
+import { PortableText } from "@/components/PortableText/portable-text"
+import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import type { SanityHistoryPage } from "@/lib/sanity-types"
+import { SITE_CONFIG } from "@/utils/seo"
 
 export const metadata: Metadata = {
   title: "History of Chimborazo Park",
@@ -19,13 +19,13 @@ export const metadata: Metadata = {
     type: "website",
     url: `${SITE_CONFIG.url}/history`,
   },
-};
+}
 
 export default async function HistoryPage() {
   const { data: pageData } = (await sanityFetch({
     query: getHistoryPageQuery,
     tags: [CACHE_TAGS.HISTORY],
-  })) as { data: SanityHistoryPage | null };
+  })) as { data: SanityHistoryPage | null }
 
   const heroData = pageData?.pageHero?.image
     ? {
@@ -37,7 +37,7 @@ export default async function HistoryPage() {
         title: "History of Chimborazo Park",
         subtitle:
           "Explore the rich and complex history of Chimborazo Park, from its role as a Civil War hospital to the emancipated community that called it home during Reconstruction.",
-      };
+      }
 
   return (
     <div>
@@ -49,5 +49,5 @@ export default async function HistoryPage() {
         </article>
       </Container>
     </div>
-  );
+  )
 }

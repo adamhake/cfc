@@ -1,8 +1,8 @@
-import { defineLive } from "next-sanity/live";
-import { sanityClient } from "./sanity";
-import { env } from "@/env";
+import { defineLive } from "next-sanity/live"
+import { env } from "@/env"
+import { sanityClient } from "./sanity"
 
-const token = env.SANITY_API_TOKEN;
+const token = env.SANITY_API_TOKEN
 
 export const { sanityFetch, SanityLive } = defineLive({
   client: sanityClient.withConfig({
@@ -15,4 +15,4 @@ export const { sanityFetch, SanityLive } = defineLive({
   fetchOptions: {
     revalidate: 1800,
   },
-});
+})

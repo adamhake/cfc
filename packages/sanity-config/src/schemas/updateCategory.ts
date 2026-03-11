@@ -1,9 +1,9 @@
-import { defineField, defineType } from "sanity"
 import { TagIcon } from "@sanity/icons"
+import { defineField, defineType } from "sanity"
 
 export const updateCategorySchema = defineType({
   name: "updateCategory",
-  title: "Update Category",
+  title: "Update Categories",
   type: "document",
   icon: TagIcon,
   fields: [

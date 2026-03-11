@@ -1,42 +1,42 @@
-"use client";
+"use client"
 
-import { useEffect, useRef, useState, useTransition } from "react";
-import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
-import { CheckCircle } from "lucide-react";
-import { Button } from "@/components/Button/button";
-import { subscribeToNewsletter } from "@/actions/newsletter";
-import type { NewsletterSource, SubscribeResponse } from "@/types/newsletter";
-import { trackNewsletterSignup, trackNewsletterSignupFailed } from "@/integrations/posthog/events";
-import { cn } from "@/utils/cn";
-import { shouldEnableTurnstile } from "./turnstile";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile"
+import { CheckCircle } from "lucide-react"
+import { useEffect, useRef, useState, useTransition } from "react"
+import { subscribeToNewsletter } from "@/actions/newsletter"
+import { Button } from "@/components/Button/button"
+import { trackNewsletterSignup, trackNewsletterSignupFailed } from "@/integrations/posthog/events"
+import type { NewsletterSource, SubscribeResponse } from "@/types/newsletter"
+import { cn } from "@/utils/cn"
+import { shouldEnableTurnstile } from "./turnstile"
 
 export interface NewsletterFormProps {
   /**
    * Tracks which form the signup came from
    */
-  source: NewsletterSource;
+  source: NewsletterSource
 
   /**
    * Callback when subscription succeeds
    */
-  onSuccess?: () => void;
+  onSuccess?: () => void
 
   /**
    * Additional CSS classes for the form container
    */
-  className?: string;
+  className?: string
 
   /**
    * Label text for the email input
    * @default "Stay updated"
    */
-  label?: string;
+  label?: string
 
   /**
    * Show the privacy notice below the form
    * @default true
    */
-  showPrivacyNotice?: boolean;
+  showPrivacyNotice?: boolean
 }
 
 export function NewsletterForm({
@@ -46,90 +46,90 @@ export function NewsletterForm({
   label = "Stay updated",
   showPrivacyNotice = true,
 }: NewsletterFormProps) {
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [formError, setFormError] = useState<string | null>(null);
-  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
-  const [turnstileError, setTurnstileError] = useState<string | null>(null);
-  const [hostname, setHostname] = useState<string>();
-  const [isPending, startTransition] = useTransition();
-  const turnstileRef = useRef<TurnstileInstance>(null);
-  const successRef = useRef<HTMLDivElement>(null);
+  const [email, setEmail] = useState("")
+  const [emailError, setEmailError] = useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [formError, setFormError] = useState<string | null>(null)
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const [turnstileError, setTurnstileError] = useState<string | null>(null)
+  const [hostname, setHostname] = useState<string>()
+  const [isPending, startTransition] = useTransition()
+  const turnstileRef = useRef<TurnstileInstance>(null)
+  const successRef = useRef<HTMLOutputElement>(null)
 
   // Focus management for accessibility - announce success to screen readers
   useEffect(() => {
     if (successMessage && successRef.current) {
-      successRef.current.focus();
+      successRef.current.focus()
     }
-  }, [successMessage]);
+  }, [successMessage])
 
-  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-  const isDevelopment = process.env.NODE_ENV === "development";
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+  const isDevelopment = process.env.NODE_ENV === "development"
   const isTurnstileEnabled = shouldEnableTurnstile({
     siteKey: turnstileSiteKey,
     isDevelopment,
     hostname,
-  });
+  })
 
   useEffect(() => {
-    setHostname(window.location.hostname);
-  }, []);
+    setHostname(window.location.hostname)
+  }, [])
 
   function validateEmail(value: string): string | null {
-    if (!value) return "Please enter your email address";
+    if (!value) return "Please enter your email address"
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-      return "Please enter a valid email address";
+      return "Please enter a valid email address"
     }
-    return null;
+    return null
   }
 
   function handleEmailChange(value: string) {
-    setEmail(value);
+    setEmail(value)
     // Clear validation error when user types
     if (emailError) {
-      const error = validateEmail(value);
-      setEmailError(error);
+      const error = validateEmail(value)
+      setEmailError(error)
     }
   }
 
   function handleEmailBlur() {
-    const error = validateEmail(email);
-    setEmailError(error);
+    const error = validateEmail(email)
+    setEmailError(error)
   }
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+    e.preventDefault()
 
     // Validate email
-    const error = validateEmail(email);
+    const error = validateEmail(email)
     if (error) {
-      setEmailError(error);
-      return;
+      setEmailError(error)
+      return
     }
 
     // Clear any previous errors
-    setTurnstileError(null);
-    setFormError(null);
+    setTurnstileError(null)
+    setFormError(null)
 
     // In production, Turnstile token is required
     // In development, allow bypass if Turnstile is not configured
     if (isTurnstileEnabled && !turnstileToken) {
-      setTurnstileError("Please complete the security verification");
-      return;
+      setTurnstileError("Please complete the security verification")
+      return
     }
 
     if (!isTurnstileEnabled && !isDevelopment) {
-      setTurnstileError("Security verification is not available. Please try again later.");
-      return;
+      setTurnstileError("Security verification is not available. Please try again later.")
+      return
     }
 
     // Only use dev bypass token in development mode without Turnstile
-    const tokenToSend = turnstileToken || (isDevelopment ? "dev-bypass" : "");
+    const tokenToSend = turnstileToken || (isDevelopment ? "dev-bypass" : "")
 
     if (!tokenToSend) {
-      setTurnstileError("Security verification is required");
-      return;
+      setTurnstileError("Security verification is required")
+      return
     }
 
     startTransition(async () => {
@@ -138,45 +138,44 @@ export function NewsletterForm({
           email,
           source,
           turnstileToken: tokenToSend,
-        });
+        })
 
         if (result.success) {
-          setSuccessMessage(result.message);
-          trackNewsletterSignup(source);
-          setEmail("");
-          onSuccess?.();
+          setSuccessMessage(result.message)
+          trackNewsletterSignup(source)
+          setEmail("")
+          onSuccess?.()
         } else {
-          setFormError(result.message);
-          trackNewsletterSignupFailed(source, result.message);
+          setFormError(result.message)
+          trackNewsletterSignupFailed(source, result.message)
         }
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error";
-        setFormError("Something went wrong. Please try again.");
-        trackNewsletterSignupFailed(source, errorMessage);
+        const errorMessage = error instanceof Error ? error.message : "Unknown error"
+        setFormError("Something went wrong. Please try again.")
+        trackNewsletterSignupFailed(source, errorMessage)
       } finally {
         // Reset Turnstile for next submission
-        turnstileRef.current?.reset();
-        setTurnstileToken(null);
+        turnstileRef.current?.reset()
+        setTurnstileToken(null)
       }
-    });
+    })
   }
 
-  const inputId = `newsletter-email-${source}`;
-  const errorId = `newsletter-error-${source}`;
+  const inputId = `newsletter-email-${source}`
+  const errorId = `newsletter-error-${source}`
 
   // Show success state with prominent confirmation
   if (successMessage) {
     return (
-      <div
+      <output
         ref={successRef}
         tabIndex={-1}
         className={cn(
-          "rounded-xl border border-green-200 bg-green-50 p-4",
+          "block rounded-xl border border-green-200 bg-green-50 p-4",
           "dark:border-green-800 dark:bg-green-900/20",
           "focus:outline-none",
           className,
         )}
-        role="status"
         aria-live="polite"
       >
         <div className="flex items-start gap-3">
@@ -188,11 +187,11 @@ export function NewsletterForm({
             <p className="font-body text-sm text-green-700 dark:text-green-400">{successMessage}</p>
           </div>
         </div>
-      </div>
-    );
+      </output>
+    )
   }
 
-  const displayError = turnstileError || formError;
+  const displayError = turnstileError || formError
 
   return (
     <form onSubmit={handleSubmit} className={cn("space-y-3", className)}>
@@ -232,14 +231,14 @@ export function NewsletterForm({
       {isTurnstileEnabled && (
         <Turnstile
           ref={turnstileRef}
-          siteKey={turnstileSiteKey!}
+          siteKey={turnstileSiteKey ?? ""}
           onSuccess={setTurnstileToken}
           onError={() => {
-            setTurnstileToken(null);
-            setTurnstileError("Security verification failed. Please refresh and try again.");
+            setTurnstileToken(null)
+            setTurnstileError("Security verification failed. Please refresh and try again.")
           }}
           onExpire={() => {
-            setTurnstileToken(null);
+            setTurnstileToken(null)
           }}
           options={{
             size: "invisible",
@@ -269,5 +268,5 @@ export function NewsletterForm({
         </p>
       )}
     </form>
-  );
+  )
 }

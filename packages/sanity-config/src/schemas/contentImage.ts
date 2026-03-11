@@ -1,4 +1,4 @@
-import { defineArrayMember, defineField, defineType } from "sanity"
+import { defineField, defineType } from "sanity"
 
 const mediaCategoryList = [
   { title: "Park Views", value: "park-views" },
@@ -42,21 +42,6 @@ export const contentImageSchema = defineType({
         list: mediaCategoryList,
       },
       initialValue: "park-views",
-    }),
-    defineField({
-      name: "tags",
-      title: "Tags",
-      type: "array",
-      of: [
-        defineArrayMember({
-          type: "reference",
-          to: [{ type: "mediaTag" }],
-        }),
-      ],
-      options: {
-        layout: "tags",
-      },
-      description: "Optional tags for organizing and filtering images",
     }),
   ],
   preview: {

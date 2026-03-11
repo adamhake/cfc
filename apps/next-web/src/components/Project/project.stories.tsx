@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { SanityProject } from "@/lib/sanity-types";
-import Project from "./project";
+import type { Meta, StoryObj } from "@storybook/react-vite"
+import type { SanityProject } from "@/lib/sanity-types"
+import Project from "./project"
 
 const meta = {
   title: "Components/Content/Project",
@@ -16,10 +16,10 @@ const meta = {
       </div>
     ),
   ],
-} satisfies Meta<typeof Project>;
+} satisfies Meta<typeof Project>
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 const mockProjectBase: SanityProject = {
   _id: "project-1",
@@ -47,13 +47,13 @@ const mockProjectBase: SanityProject = {
   category: "restoration",
   location: "Upper Park Trails",
   goal: "Restore 2 miles of historic trails and improve accessibility for all visitors",
-};
+}
 
 export const ActiveProject: Story = {
   args: {
     project: mockProjectBase,
   },
-};
+}
 
 export const PlannedProject: Story = {
   args: {
@@ -84,7 +84,7 @@ export const PlannedProject: Story = {
       },
     },
   },
-};
+}
 
 export const CompletedProject: Story = {
   args: {
@@ -116,7 +116,7 @@ export const CompletedProject: Story = {
       },
     },
   },
-};
+}
 
 export const ProjectWithoutCategory: Story = {
   args: {
@@ -146,7 +146,7 @@ export const ProjectWithoutCategory: Story = {
       },
     },
   },
-};
+}
 
 export const ProjectWithMinimalInfo: Story = {
   args: {
@@ -177,4 +177,4 @@ export const ProjectWithMinimalInfo: Story = {
       },
     },
   },
-};
+}

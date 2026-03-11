@@ -1,22 +1,22 @@
-import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image";
-import { cn } from "@/utils/cn";
-import { Image } from "@/components/OptimizedImage/optimized-image";
-import { ReactNode } from "react";
+import type { ReactNode } from "react"
+import { Image } from "@/components/OptimizedImage/optimized-image"
+import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image"
+import { cn } from "@/utils/cn"
 
 interface PageHeroProps {
-  title: string;
-  subtitle?: string;
-  imageSrc?: string;
-  imageAlt?: string;
-  imageWidth?: number;
-  imageHeight?: number;
-  sanityImage?: SanityImageObject;
-  children?: ReactNode;
-  height?: "auto" | "small" | "medium" | "large" | "event";
-  priority?: boolean;
-  alignment?: "center" | "bottom-mobile-center-desktop";
-  contentSpacing?: string;
-  titleSize?: "standard" | "large";
+  title: string
+  subtitle?: string
+  imageSrc?: string
+  imageAlt?: string
+  imageWidth?: number
+  imageHeight?: number
+  sanityImage?: SanityImageObject
+  children?: ReactNode
+  height?: "auto" | "small" | "medium" | "large" | "event"
+  priority?: boolean
+  alignment?: "center" | "bottom-mobile-center-desktop"
+  contentSpacing?: string
+  titleSize?: "standard" | "large"
 }
 
 export default function PageHero({
@@ -40,34 +40,34 @@ export default function PageHero({
     medium: "min-h-[480px] sm:min-h-[560px] md:min-h-[600px]",
     large: "min-h-[540px] sm:min-h-[620px] md:min-h-[680px] lg:min-h-[720px]",
     event: "min-h-[660px] sm:min-h-[740px] md:min-h-[780px]",
-  };
+  }
 
-  const selectedHeight = (heightClasses[height] ? height : "medium") as keyof typeof heightClasses;
+  const selectedHeight = (heightClasses[height] ? height : "medium") as keyof typeof heightClasses
 
   const alignmentClasses = {
     center: "items-center",
     "bottom-mobile-center-desktop": "items-end lg:items-center",
-  };
+  }
 
-  const paddingClasses = contentSpacing || "px-4";
+  const paddingClasses = contentSpacing || "px-4"
 
   const titleSizeClasses = {
     standard: "text-5xl md:text-6xl",
     large: "text-4xl md:text-5xl lg:text-6xl",
-  };
-  const staticImageWidth = imageWidth ?? 1920;
-  const staticImageHeight = imageHeight ?? 1080;
+  }
+  const staticImageWidth = imageWidth ?? 1920
+  const staticImageHeight = imageHeight ?? 1080
 
   const classes = cn("relative flex w-full flex-col overflow-visible", {
-    "min-h-[400px] sm:min-h-[480px] md:min-h-[520px]": selectedHeight == "auto",
-    "min-h-[440px] sm:min-h-[500px] md:min-h-[540px]": selectedHeight == "small",
-    "min-h-[480px] sm:min-h-[560px] md:min-h-[600px]": selectedHeight == "medium",
-    "min-h-[540px] sm:min-h-[620px] md:min-h-[680px] lg:min-h-[720px]": selectedHeight == "large",
-    "min-h-[660px] sm:min-h-[740px] md:min-h-[780px]": selectedHeight == "event",
-  });
+    "min-h-[400px] sm:min-h-[480px] md:min-h-[520px]": selectedHeight === "auto",
+    "min-h-[440px] sm:min-h-[500px] md:min-h-[540px]": selectedHeight === "small",
+    "min-h-[480px] sm:min-h-[560px] md:min-h-[600px]": selectedHeight === "medium",
+    "min-h-[540px] sm:min-h-[620px] md:min-h-[680px] lg:min-h-[720px]": selectedHeight === "large",
+    "min-h-[660px] sm:min-h-[740px] md:min-h-[780px]": selectedHeight === "event",
+  })
 
   return (
-    <header className={classes} role="banner" aria-label="Page header">
+    <header className={classes}>
       {sanityImage ? (
         <SanityImage
           image={sanityImage}
@@ -132,6 +132,7 @@ export default function PageHero({
           className="relative block h-16 w-full lg:h-24"
           xmlns="http://www.w3.org/2000/svg"
           style={{ display: "block" }}
+          aria-hidden="true"
         >
           {/* Flowing natural curve */}
           <path
@@ -147,5 +148,5 @@ export default function PageHero({
         </svg>
       </div>
     </header>
-  );
+  )
 }

@@ -1,7 +1,7 @@
-import { useId } from "react";
+import { useId } from "react"
 
 export default function IconLogo(props: React.SVGProps<SVGSVGElement>) {
-  const gradientId = useId();
+  const gradientId = useId()
 
   return (
     <svg
@@ -39,5 +39,5 @@ export default function IconLogo(props: React.SVGProps<SVGSVGElement>) {
         </linearGradient>
       </defs>
     </svg>
-  );
+  )
 }

@@ -1,20 +1,20 @@
-'use client';
+"use client"
 
-import { JsonLd } from "@/components/JsonLd/json-ld";
-import SectionHeader from "@/components/SectionHeader/section-header";
-import { generateFAQStructuredData } from "@/utils/seo";
-import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { ChevronDown } from "lucide-react"
+import { useState } from "react"
+import { JsonLd } from "@/components/JsonLd/json-ld"
+import SectionHeader from "@/components/SectionHeader/section-header"
+import { generateFAQStructuredData } from "@/utils/seo"
 
 interface FAQ {
-  question: string;
-  answer: string;
+  question: string
+  answer: string
 }
 
 interface FAQSectionProps {
-  faqs: FAQ[];
-  title?: string;
-  className?: string;
+  faqs: FAQ[]
+  title?: string
+  className?: string
 }
 
 export function FAQSection({
@@ -22,9 +22,9 @@ export function FAQSection({
   title = "Frequently Asked Questions",
   className,
 }: FAQSectionProps) {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
 
-  const structuredData = generateFAQStructuredData(faqs);
+  const structuredData = generateFAQStructuredData(faqs)
 
   return (
     <div className={className}>
@@ -32,12 +32,12 @@ export function FAQSection({
       <SectionHeader title={title} size="large" />
       <div className="mt-8 space-y-3">
         {faqs.map((faq, index) => {
-          const isOpen = openIndex === index;
-          const buttonId = `faq-button-${index}`;
-          const panelId = `faq-panel-${index}`;
+          const isOpen = openIndex === index
+          const buttonId = `faq-button-${index}`
+          const panelId = `faq-panel-${index}`
           return (
             <div
-              key={index}
+              key={faq.question}
               className="overflow-hidden rounded-xl border border-grey-200 bg-white dark:border-primary-700 dark:bg-primary-950"
             >
               <button
@@ -56,21 +56,20 @@ export function FAQSection({
                 />
               </button>
               {isOpen && (
-                <div
+                <section
                   id={panelId}
-                  role="region"
                   aria-labelledby={buttonId}
                   className="border-t border-grey-100 px-6 py-5 dark:border-primary-800"
                 >
                   <p className="font-body leading-relaxed text-grey-700 dark:text-grey-300">
                     {faq.answer}
                   </p>
-                </div>
+                </section>
               )}
             </div>
-          );
+          )
         })}
       </div>
     </div>
-  );
+  )
 }

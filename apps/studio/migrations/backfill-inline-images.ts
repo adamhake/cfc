@@ -74,7 +74,8 @@ const SINGLE_FIELD_CONFIGS: SingleFieldConfig[] = [
   { type: "updatesPage", legacyPath: "pageHero.image", v2Path: "pageHero.imageV2" },
 ]
 
-const parseDryRun = (): boolean => process.argv.includes("--dry-run") || process.argv.includes("--dryRun")
+const parseDryRun = (): boolean =>
+  process.argv.includes("--dry-run") || process.argv.includes("--dryRun")
 
 const getByPath = (obj: unknown, path: string): unknown => {
   if (!obj || typeof obj !== "object") return undefined
@@ -144,7 +145,7 @@ const backfillInlineImages = async (client: {
   console.log(`Starting inline image backfill (${dryRun ? "dry-run" : "write"} mode)...`)
 
   const mediaImages = await client.fetch<MediaImageDoc[]>(
-    '*[_type == "mediaImage"]{_id, title, category, image{asset, hotspot, crop, alt, caption}, imageV2{asset, hotspot, crop, alt, caption, title, category, tags}}'
+    '*[_type == "mediaImage"]{_id, title, category, image{asset, hotspot, crop, alt, caption}, imageV2{asset, hotspot, crop, alt, caption, title, category, tags}}',
   )
 
   const mediaImageById = new Map(mediaImages.map((doc) => [doc._id, doc]))
@@ -201,7 +202,10 @@ const backfillInlineImages = async (client: {
       }
 
       if (!dryRun) {
-        await client.patch(doc._id).set({ [config.v2Path]: contentImage }).commit()
+        await client
+          .patch(doc._id)
+          .set({ [config.v2Path]: contentImage })
+          .commit()
       }
 
       stats.singleFieldPatches += 1

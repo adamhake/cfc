@@ -9,8 +9,9 @@
     "build": "sanity build",
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
-    "lint": "eslint .",
-    "format": "prettier --write .",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "check": "biome check --write .",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist .sanity"
   },
@@ -26,13 +27,11 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@biomejs/biome": "catalog:",
     "@chimborazo/sanity-config": "workspace:*",
-    "@sanity/eslint-config-studio": "^6.0.0",
     "@total-typescript/ts-reset": "catalog:",
     "@types/react": "catalog:",
     "@types/styled-components": "^5.1.36",
-    "eslint": "catalog:",
-    "prettier": "catalog:",
     "typescript": "catalog:"
   }
 }

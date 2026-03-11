@@ -1,5 +1,6 @@
 import { defineQuery } from "groq"
 import { imageFieldProjection } from "./imageProjections"
+import { richTextProjection } from "./richTextProjection"
 
 export const getAboutPageQuery = defineQuery(`
   *[_type == "aboutPage"][0]{
@@ -21,18 +22,7 @@ export const getAboutPageQuery = defineQuery(`
       ${imageFieldProjection}
     },
     content[]{
-      ...,
-      _type == "image" => {
-        ...,
-        asset->{
-          _id,
-          url,
-          metadata{
-            dimensions,
-            lqip
-          }
-        }
-      }
+      ${richTextProjection}
     },
     "calloutImage": calloutImage{
       ${imageFieldProjection}
@@ -43,17 +33,7 @@ export const getAboutPageQuery = defineQuery(`
       role,
       bio,
       image{
-        asset->{
-          _id,
-          url,
-          metadata{
-            dimensions,
-            lqip
-          }
-        },
-        alt,
-        hotspot,
-        crop
+        ${imageFieldProjection}
       }
     }
   }

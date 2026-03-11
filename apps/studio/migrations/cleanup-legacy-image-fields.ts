@@ -42,7 +42,8 @@ const SINGLE_FIELD_CONFIGS: SingleFieldConfig[] = [
   { type: "updatesPage", legacyPath: "pageHero.image", v2Path: "pageHero.imageV2" },
 ]
 
-const parseDryRun = (): boolean => process.argv.includes("--dry-run") || process.argv.includes("--dryRun")
+const parseDryRun = (): boolean =>
+  process.argv.includes("--dry-run") || process.argv.includes("--dryRun")
 
 const getByPath = (obj: unknown, path: string): unknown => {
   if (!obj || typeof obj !== "object") return undefined
@@ -115,7 +116,8 @@ const cleanupLegacyImageFields = async (client: {
 
     const unsetPaths: string[] = []
     if (hasV2Image(mediaImage.image)) unsetPaths.push("image")
-    if (typeof mediaImage.title === "string" && mediaImage.title.trim().length > 0) unsetPaths.push("title")
+    if (typeof mediaImage.title === "string" && mediaImage.title.trim().length > 0)
+      unsetPaths.push("title")
     if (typeof mediaImage.category === "string" && mediaImage.category.trim().length > 0)
       unsetPaths.push("category")
 

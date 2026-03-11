@@ -1,4 +1,6 @@
+import { defineQuery } from "groq"
 import { imageFieldProjection } from "./imageProjections"
+import { richTextProjection } from "./richTextProjection"
 
 // Base update fields projection
 export const updateFields = `
@@ -31,18 +33,7 @@ export const updateFieldsExtended = `
     description,
     date,
     "heroImage": heroImage{
-      asset->{
-        _id,
-        url,
-        metadata{
-          dimensions,
-          lqip,
-          blurhash
-        }
-      },
-      alt,
-      hotspot,
-      crop
+      ${imageFieldProjection}
     }
   },
   "relatedProjects": relatedProjects[]->{
@@ -59,81 +50,69 @@ export const updateFieldsExtended = `
 `
 
 // Get all published updates
-export const allUpdatesQuery = `
-  *[_type == "update"] | order(publishedAt desc) {
+export const allUpdatesQuery = defineQuery(`
+  *[_type == "update" && defined(slug.current)] | order(publishedAt desc) {
     ${updateFields}
   }
-`
+`)
 
 // Get featured updates (for homepage)
-export const featuredUpdatesQuery = `
-  *[_type == "update"] | order(featured desc, publishedAt desc) [0...3] {
+export const featuredUpdatesQuery = defineQuery(`
+  *[_type == "update" && defined(slug.current)] | order(featured desc, publishedAt desc) [0...3] {
     ${updateFields}
   }
-`
+`)
 
 // Get updates by category slug
-export const updatesByCategoryQuery = `
-  *[_type == "update" && category->slug.current == $categorySlug] | order(publishedAt desc) {
+export const updatesByCategoryQuery = defineQuery(`
+  *[_type == "update" && defined(slug.current) && category->slug.current == $categorySlug] | order(publishedAt desc) {
     ${updateFields}
   }
-`
+`)
 
 // Get update by slug (for detail page)
-export const updateBySlugQuery = `
+export const updateBySlugQuery = defineQuery(`
   *[_type == "update" && slug.current == $slug][0] {
     ${updateFieldsExtended},
     body[]{
-      ...,
-      _type == "image" => {
-        ...,
-        asset->{
-          _id,
-          url,
-          metadata{
-            dimensions,
-            lqip,
-            blurhash
-          }
-        }
-      }
+      ${richTextProjection}
     }
   }
-`
+`)
 
 // Get update slugs for static paths
-export const updateSlugsQuery = `
-  *[_type == "update"] {
+export const updateSlugsQuery = defineQuery(`
+  *[_type == "update" && defined(slug.current)] {
     "slug": slug.current
   }
-`
+`)
 
 // Get updates that reference a specific event
-export const updatesByEventQuery = `
-  *[_type == "update" && references($eventId)] | order(publishedAt desc) {
+export const updatesByEventQuery = defineQuery(`
+  *[_type == "update" && defined(slug.current) && references($eventId)] | order(publishedAt desc) {
     ${updateFields}
   }
-`
+`)
 
 // Get updates that reference a specific project
-export const updatesByProjectQuery = `
-  *[_type == "update" && references($projectId)] | order(publishedAt desc) {
+export const updatesByProjectQuery = defineQuery(`
+  *[_type == "update" && defined(slug.current) && references($projectId)] | order(publishedAt desc) {
     ${updateFields}
   }
-`
+`)
 
 // Get all update categories
-export const updateCategoriesQuery = `
+export const updateCategoriesQuery = defineQuery(`
   *[_type == "updateCategory"] | order(title asc) {
     _id,
     title,
     slug,
     color
   }
-`
+`)
 
 // Get previous and next updates for navigation
-export const updateNavigationQuery = `
+export const updateNavigationQuery = defineQuery(`
   {
     "previous": *[_type == "update" && publishedAt < $publishedAt] | order(publishedAt desc) [0] {
       _id,
@@ -146,10 +125,10 @@ export const updateNavigationQuery = `
       slug
     }
   }
-`
+`)
 
 // Updates page singleton
-export const updatesPageQuery = `
+export const updatesPageQuery = defineQuery(`
   *[_type == "updatesPage"][0] {
     pageHero{
       title,
@@ -160,4 +139,4 @@ export const updatesPageQuery = `
     },
     introduction
   }
-`
+`)

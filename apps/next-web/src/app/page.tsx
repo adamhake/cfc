@@ -1,34 +1,34 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { PortableText } from "@portabletext/react";
-import type { PortableTextComponents } from "@portabletext/react";
-import { sanityFetch, CACHE_TAGS } from "@/lib/sanity-fetch";
-import { getSiteSettings } from "@/lib/site-settings";
-import type {
-  SanityHomePage,
-  SanityEvent,
-  SanityProject,
-  SanityImage as SanityImageType,
-} from "@/lib/sanity-types";
-import type { SanityImageObject } from "@/components/SanityImage/sanity-image";
-import { SITE_CONFIG } from "@/utils/seo";
 import {
+  featuredProjectsQuery,
   getHomePageQuery,
   recentEventsQuery,
-  featuredProjectsQuery,
-} from "@chimborazo/sanity-config/queries";
-import Container from "@/components/Container/container";
-import Event from "@/components/Event/event";
-import GetInvolved from "@/components/GetInvolved/get-involved";
-import Hero from "@/components/Hero/hero";
-import ImageGallery from "@/components/ImageGallery/image-gallery";
-import Partners from "@/components/Partners/partners";
-import Project from "@/components/Project/project";
-import Quote from "@/components/Quote/quote";
-import RotatingImages from "@/components/RotatingImages/rotating-images";
-import SectionHeader from "@/components/SectionHeader/section-header";
-import Vision from "@/components/Vision/vision";
-import { Image } from "@/components/OptimizedImage/optimized-image";
+} from "@chimborazo/sanity-config/queries"
+import type { PortableTextComponents } from "@portabletext/react"
+import { PortableText } from "@portabletext/react"
+import type { Metadata } from "next"
+import Link from "next/link"
+import Container from "@/components/Container/container"
+import Event from "@/components/Event/event"
+import GetInvolved from "@/components/GetInvolved/get-involved"
+import Hero from "@/components/Hero/hero"
+import ImageGallery from "@/components/ImageGallery/image-gallery"
+import { Image } from "@/components/OptimizedImage/optimized-image"
+import Partners from "@/components/Partners/partners"
+import Project from "@/components/Project/project"
+import Quote from "@/components/Quote/quote"
+import RotatingImages from "@/components/RotatingImages/rotating-images"
+import type { SanityImageObject } from "@/components/SanityImage/sanity-image"
+import SectionHeader from "@/components/SectionHeader/section-header"
+import Vision from "@/components/Vision/vision"
+import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import type {
+  SanityEvent,
+  SanityHomePage,
+  SanityImage as SanityImageType,
+  SanityProject,
+} from "@/lib/sanity-types"
+import { getSiteSettings } from "@/lib/site-settings"
+import { SITE_CONFIG } from "@/utils/seo"
 
 // ─── Portable Text renderers for section-specific styling ───
 
@@ -40,7 +40,7 @@ const introBodyComponents: PortableTextComponents = {
       </p>
     ),
   },
-};
+}
 
 const parkBodyComponents: PortableTextComponents = {
   block: {
@@ -48,7 +48,7 @@ const parkBodyComponents: PortableTextComponents = {
       <p className="font-body text-grey-800 md:text-lg dark:text-grey-200">{children}</p>
     ),
   },
-};
+}
 
 const parkCalloutComponents: PortableTextComponents = {
   block: {
@@ -65,7 +65,7 @@ const parkCalloutComponents: PortableTextComponents = {
       </strong>
     ),
   },
-};
+}
 
 // ─── Fallback content ───
 
@@ -118,7 +118,8 @@ const FALLBACKS = {
   },
   park: {
     title: "The Park",
-    intro: "Chimborazo Hill's story reaches back centuries\u2014from the indigenous Powhatan people to its pivotal role in the Civil War. In 1874, as Richmond rebuilt, the city transformed this storied site into a public park for all residents to enjoy.",
+    intro:
+      "Chimborazo Hill's story reaches back centuries\u2014from the indigenous Powhatan people to its pivotal role in the Civil War. In 1874, as Richmond rebuilt, the city transformed this storied site into a public park for all residents to enjoy.",
     body: [
       "City engineer Wilfred Cutshaw spent decades in the late 1800s designing winding cobbled carriage roads that embraced the steep terrain, revealing breathtaking vistas at every turn. These paths connected Church Hill with the traditionally African American Fulton neighborhood below, creating vital links between communities.",
       "By the turn of the 20th century, Chimborazo had become Richmond's beloved suburban retreat. Visitors arrived by streetcar to enjoy the bandstand, refreshment pavilion, and sweeping 180-degree views of the James River and downtown\u2014a golden era that lasted through World War II.",
@@ -136,7 +137,7 @@ const FALLBACKS = {
     description:
       "We're grateful to partner with local organizations that share our commitment to preserving and enhancing Chimborazo Park for the entire community.",
   },
-};
+}
 
 export const metadata: Metadata = {
   title: "Home",
@@ -151,29 +152,30 @@ export const metadata: Metadata = {
     url: SITE_CONFIG.url,
     images: [SITE_CONFIG.defaultImage],
   },
-};
+}
 
 export default async function HomePage() {
-  const [{ data: homePageData }, { data: featuredProjects }, { data: recentEvents }, siteSettings] = (await Promise.all([
-    sanityFetch({
-      query: getHomePageQuery,
-      tags: [CACHE_TAGS.HOMEPAGE],
-    }),
-    sanityFetch({
-      query: featuredProjectsQuery,
-      tags: [CACHE_TAGS.PROJECTS],
-    }),
-    sanityFetch({
-      query: recentEventsQuery,
-      tags: [CACHE_TAGS.EVENTS],
-    }),
-    getSiteSettings(),
-  ])) as [
-    { data: SanityHomePage | null },
-    { data: SanityProject[] },
-    { data: SanityEvent[] },
-    Awaited<ReturnType<typeof getSiteSettings>>,
-  ];
+  const [{ data: homePageData }, { data: featuredProjects }, { data: recentEvents }, siteSettings] =
+    (await Promise.all([
+      sanityFetch({
+        query: getHomePageQuery,
+        tags: [CACHE_TAGS.HOMEPAGE],
+      }),
+      sanityFetch({
+        query: featuredProjectsQuery,
+        tags: [CACHE_TAGS.PROJECTS],
+      }),
+      sanityFetch({
+        query: recentEventsQuery,
+        tags: [CACHE_TAGS.EVENTS],
+      }),
+      getSiteSettings(),
+    ])) as [
+      { data: SanityHomePage | null },
+      { data: SanityProject[] },
+      { data: SanityEvent[] },
+      Awaited<ReturnType<typeof getSiteSettings>>,
+    ]
 
   // Prepare hero data from Sanity or use defaults
   const heroData = homePageData?.hero?.heroImage?.asset?.url
@@ -184,7 +186,7 @@ export default async function HomePage() {
         ctaText: homePageData.hero.ctaButton?.text,
         ctaLink: homePageData.hero.ctaButton?.link,
       }
-    : undefined;
+    : undefined
 
   // Prepare gallery data from Sanity or use defaults
   const galleryData =
@@ -194,13 +196,13 @@ export default async function HomePage() {
         ...img.image,
         alt: img.image.alt || "",
         showOnMobile: img.showOnMobile ?? true,
-      })) || [];
+      })) || []
 
   // Prepare park gallery data for rotating images
   const parkGalleryData =
     homePageData?.parkGallery?.images
       ?.filter((img) => img?.image?.asset?.url)
-      .map((img) => img.image) || [];
+      .map((img) => img.image) || []
 
   // Prepare get-involved gallery images
   const getInvolvedGalleryImages =
@@ -211,27 +213,27 @@ export default async function HomePage() {
             image?:
               | SanityImageObject
               | {
-                  image?: SanityImageObject;
-                };
-          }>;
-        };
+                  image?: SanityImageObject
+                }
+          }>
+        }
       }
     )?.getInvolvedGallery?.images
       ?.map((item) => {
-        if (!item.image) return null;
-        if ("asset" in item.image) return item.image;
-        return item.image.image || null;
+        if (!item.image) return null
+        if ("asset" in item.image) return item.image
+        return item.image.image || null
       })
-      .filter((img): img is SanityImageObject => img != null) || [];
+      .filter((img): img is SanityImageObject => img != null) || []
 
   // CMS section data with fallbacks
-  const intro = homePageData?.introSection;
-  const vision = homePageData?.visionSection;
-  const projectsHeader = homePageData?.projectsSectionHeader;
-  const park = homePageData?.parkSection;
-  const eventsHeader = homePageData?.eventsSectionHeader;
-  const getInvolved = homePageData?.getInvolvedSection;
-  const partnersHeader = homePageData?.partnersSectionHeader;
+  const intro = homePageData?.introSection
+  const vision = homePageData?.visionSection
+  const projectsHeader = homePageData?.projectsSectionHeader
+  const park = homePageData?.parkSection
+  const eventsHeader = homePageData?.eventsSectionHeader
+  const getInvolved = homePageData?.getInvolvedSection
+  const partnersHeader = homePageData?.partnersSectionHeader
 
   return (
     <div className="space-y-24 pb-24 text-grey-900 dark:text-grey-100">
@@ -247,9 +249,9 @@ export default async function HomePage() {
           {intro?.body ? (
             <PortableText value={intro.body} components={introBodyComponents} />
           ) : (
-            FALLBACKS.intro.body.map((text, i) => (
+            FALLBACKS.intro.body.map((text) => (
               <p
-                key={i}
+                key={text}
                 className="mt-4 max-w-4xl font-body text-grey-800 md:text-lg dark:text-grey-100"
               >
                 {text}
@@ -302,10 +304,7 @@ export default async function HomePage() {
       {featuredProjects && featuredProjects.length > 0 && (
         <div>
           <Container>
-            <SectionHeader
-              title={projectsHeader?.title || FALLBACKS.projects.title}
-              size="large"
-            />
+            <SectionHeader title={projectsHeader?.title || FALLBACKS.projects.title} size="large" />
             <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
               {projectsHeader?.description || FALLBACKS.projects.description}
             </p>
@@ -361,11 +360,8 @@ export default async function HomePage() {
                 {park?.body ? (
                   <PortableText value={park.body} components={parkBodyComponents} />
                 ) : (
-                  FALLBACKS.park.body.map((text, i) => (
-                    <p
-                      key={i}
-                      className="font-body text-grey-800 md:text-lg dark:text-grey-200"
-                    >
+                  FALLBACKS.park.body.map((text) => (
+                    <p key={text} className="font-body text-grey-800 md:text-lg dark:text-grey-200">
                       {text}
                     </p>
                   ))
@@ -504,10 +500,7 @@ export default async function HomePage() {
       {/* Partners */}
       <div>
         <Container>
-          <SectionHeader
-            title={partnersHeader?.title || FALLBACKS.partners.title}
-            size="large"
-          />
+          <SectionHeader title={partnersHeader?.title || FALLBACKS.partners.title} size="large" />
           <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
             {partnersHeader?.description || FALLBACKS.partners.description}
           </p>
@@ -536,5 +529,5 @@ export default async function HomePage() {
         backgroundImage={homePageData?.quote?.backgroundImage as SanityImageType | undefined}
       />
     </div>
-  );
+  )
 }

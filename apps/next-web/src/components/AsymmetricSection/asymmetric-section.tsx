@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react"
 
 /**
  * AsymmetricSection - Two-column layout with alternating sides and varying widths
@@ -6,19 +6,19 @@ import { ReactNode } from "react";
  */
 
 interface AsymmetricSectionProps {
-  imageSlot: ReactNode;
-  contentSlot: ReactNode;
-  imagePosition?: "left" | "right";
-  imageSize?: "small" | "medium" | "large";
-  curved?: boolean;
-  className?: string;
+  imageSlot: ReactNode
+  contentSlot: ReactNode
+  imagePosition?: "left" | "right"
+  imageSize?: "small" | "medium" | "large"
+  curved?: boolean
+  className?: string
 }
 
 const imageSizeClasses = {
   small: "lg:w-1/3",
   medium: "lg:w-2/5",
   large: "lg:w-1/2",
-};
+}
 
 export default function AsymmetricSection({
   imageSlot,
@@ -28,9 +28,9 @@ export default function AsymmetricSection({
   curved = true,
   className = "",
 }: AsymmetricSectionProps) {
-  const imageWidth = imageSizeClasses[imageSize];
+  const imageWidth = imageSizeClasses[imageSize]
   const contentWidth =
-    imageSize === "small" ? "lg:w-2/3" : imageSize === "medium" ? "lg:w-3/5" : "lg:w-1/2";
+    imageSize === "small" ? "lg:w-2/3" : imageSize === "medium" ? "lg:w-3/5" : "lg:w-1/2"
 
   return (
     <div className={`flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-12 ${className}`}>
@@ -50,5 +50,5 @@ export default function AsymmetricSection({
         </>
       )}
     </div>
-  );
+  )
 }

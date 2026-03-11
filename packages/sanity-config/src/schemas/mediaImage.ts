@@ -13,7 +13,7 @@ const hasAssetRef = (value: unknown): boolean =>
 
 export const mediaImageSchema = defineType({
   name: "mediaImage",
-  title: "Media Image",
+  title: "Media Items",
   type: "document",
   fields: [
     defineField({
@@ -25,26 +25,6 @@ export const mediaImageSchema = defineType({
         Rule.custom((value) => {
           return hasAssetRef(value) ? true : "Image is required."
         }),
-    }),
-    defineField({
-      name: "featured",
-      title: "Featured",
-      type: "boolean",
-      initialValue: false,
-      description: "Show in featured gallery sections",
-    }),
-    defineField({
-      name: "hideFromMediaPage",
-      title: "Hide from Media Page",
-      type: "boolean",
-      initialValue: false,
-      description: "Hide this image from the public media gallery (use for reference images only)",
-    }),
-    defineField({
-      name: "uploadedAt",
-      title: "Uploaded at",
-      type: "datetime",
-      description: "When this image was uploaded",
     }),
   ],
   preview: {
@@ -65,12 +45,12 @@ export const mediaImageSchema = defineType({
     {
       title: "Upload Date, Newest",
       name: "uploadDateDesc",
-      by: [{ field: "uploadedAt", direction: "desc" }],
+      by: [{ field: "_createdAt", direction: "desc" }],
     },
     {
       title: "Upload Date, Oldest",
       name: "uploadDateAsc",
-      by: [{ field: "uploadedAt", direction: "asc" }],
+      by: [{ field: "_createdAt", direction: "asc" }],
     },
     {
       title: "Title, A-Z",

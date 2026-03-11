@@ -9,7 +9,6 @@ import getInvolvedPageSchema from "./getInvolvedPage"
 import historyPageSchema from "./historyPage"
 import homePageSchema from "./homePage"
 import { mediaImageSchema } from "./mediaImage"
-import { mediaTagSchema } from "./mediaTag"
 import mediaPageSchema from "./mediaPage"
 import partnerSchema from "./partner"
 import { projectSchema } from "./project"
@@ -42,7 +41,6 @@ export const schemas = [
   quoteSchema,
   gallerySchema,
   // Media
-  mediaTagSchema,
   mediaImageSchema,
   contentImageSchema,
 ]
@@ -59,7 +57,6 @@ export {
   historyPageSchema,
   homePageSchema,
   mediaImageSchema,
-  mediaTagSchema,
   mediaPageSchema,
   partnerSchema,
   projectSchema,

@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { VisualEditing as SanityVisualEditing } from "next-sanity/visual-editing";
+import { VisualEditing as SanityVisualEditing } from "next-sanity/visual-editing"
 
 /**
  * Client component that enables Sanity Visual Editing overlays.
@@ -12,5 +12,5 @@ import { VisualEditing as SanityVisualEditing } from "next-sanity/visual-editing
  * - Automatic content refresh on document changes
  */
 export function VisualEditing() {
-  return <SanityVisualEditing />;
+  return <SanityVisualEditing />
 }

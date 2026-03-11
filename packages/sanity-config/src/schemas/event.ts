@@ -1,10 +1,10 @@
 import { CalendarIcon, CogIcon, ImageIcon } from "@sanity/icons"
 import { defineField, defineType } from "sanity"
-import { createRichTextBlocks, createInlineImage, createInlineFile } from "./shared"
+import { createInlineFile, createInlineImage, createRichTextBlocks } from "./shared"
 
 export const eventSchema = defineType({
   name: "event",
-  title: "Event",
+  title: "Events",
   type: "document",
   groups: [
     {

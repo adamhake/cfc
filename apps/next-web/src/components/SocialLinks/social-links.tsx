@@ -1,20 +1,20 @@
-import { FacebookIcon } from "@/components/FacebookIcon/facebook-icon";
-import { InstagramIcon } from "@/components/InstagramIcon/instagram-icon";
+import { FacebookIcon } from "@/components/FacebookIcon/facebook-icon"
+import { InstagramIcon } from "@/components/InstagramIcon/instagram-icon"
 
-const DEFAULT_FACEBOOK_URL = "https://www.facebook.com/friendsofchimborazopark";
-const DEFAULT_INSTAGRAM_URL = "https://www.instagram.com/friendsofchimborazopark/";
+const DEFAULT_FACEBOOK_URL = "https://www.facebook.com/friendsofchimborazopark"
+const DEFAULT_INSTAGRAM_URL = "https://www.instagram.com/friendsofchimborazopark/"
 
 interface SocialLinksProps {
   /** Container className for the wrapping div */
-  className?: string;
+  className?: string
   /** className applied to each icon SVG */
-  iconClassName?: string;
+  iconClassName?: string
   /** className applied to each anchor element */
-  linkClassName?: string;
+  linkClassName?: string
   /** Facebook URL override (from site settings) */
-  facebookUrl?: string;
+  facebookUrl?: string
   /** Instagram URL override (from site settings) */
-  instagramUrl?: string;
+  instagramUrl?: string
 }
 
 /**
@@ -41,7 +41,7 @@ export function SocialLinks({
       url: instagramUrl || DEFAULT_INSTAGRAM_URL,
       Icon: InstagramIcon,
     },
-  ];
+  ]
 
   return (
     <div className={className}>
@@ -58,5 +58,5 @@ export function SocialLinks({
         </a>
       ))}
     </div>
-  );
+  )
 }

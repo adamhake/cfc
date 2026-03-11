@@ -1,8 +1,4 @@
-import type { Metadata } from "next";
-import { sanityFetch, CACHE_TAGS } from "@/lib/sanity-fetch";
-import type { SanityAmenitiesPage } from "@/lib/sanity-types";
-import { SITE_CONFIG } from "@/utils/seo";
-import { getAmenitiesPageQuery } from "@chimborazo/sanity-config/queries";
+import { getAmenitiesPageQuery } from "@chimborazo/sanity-config/queries"
 import {
   Building2,
   Car,
@@ -19,13 +15,17 @@ import {
   TreeDeciduous,
   TreePine,
   Trees,
-} from "lucide-react";
-import AmenitySection from "@/components/AmenitySection/amenity-section";
-import Container from "@/components/Container/container";
-import GetInvolved from "@/components/GetInvolved/get-involved";
-import PageHero from "@/components/PageHero/page-hero";
-import SectionHeader from "@/components/SectionHeader/section-header";
-import SupportOption from "@/components/SupportOption/support-option";
+} from "lucide-react"
+import type { Metadata } from "next"
+import AmenitySection from "@/components/AmenitySection/amenity-section"
+import Container from "@/components/Container/container"
+import GetInvolved from "@/components/GetInvolved/get-involved"
+import PageHero from "@/components/PageHero/page-hero"
+import SectionHeader from "@/components/SectionHeader/section-header"
+import SupportOption from "@/components/SupportOption/support-option"
+import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import type { SanityAmenitiesPage } from "@/lib/sanity-types"
+import { SITE_CONFIG } from "@/utils/seo"
 
 // Icon mapping based on schema icon values
 const iconMap = {
@@ -41,13 +41,13 @@ const iconMap = {
   playground: TreeDeciduous,
   fountain: Droplet,
   garden: Flower2,
-} as const;
+} as const
 
 // Helper to get icon component from string
 const getIconComponent = (iconName: string) => {
-  const IconComponent = iconMap[iconName as keyof typeof iconMap];
-  return IconComponent ? <IconComponent /> : <Building2 />;
-};
+  const IconComponent = iconMap[iconName as keyof typeof iconMap]
+  return IconComponent ? <IconComponent /> : <Building2 />
+}
 
 export const metadata: Metadata = {
   title: "Park Amenities",
@@ -61,13 +61,13 @@ export const metadata: Metadata = {
     type: "website",
     url: `${SITE_CONFIG.url}/amenities`,
   },
-};
+}
 
 export default async function AmenitiesPage() {
   const { data: amenitiesPageData } = (await sanityFetch({
     query: getAmenitiesPageQuery,
     tags: [CACHE_TAGS.AMENITIES],
-  })) as { data: SanityAmenitiesPage | null };
+  })) as { data: SanityAmenitiesPage | null }
 
   // Prepare hero data from Sanity or use defaults
   const heroData = amenitiesPageData?.pageHero?.image
@@ -83,18 +83,18 @@ export default async function AmenitiesPage() {
         imageAlt: "Chimborazo Park landscape",
         imageWidth: 2000,
         imageHeight: 1262,
-      };
+      }
 
   // Filter amenities by section
   const upperParkAmenities =
     amenitiesPageData?.amenities?.filter(
       (amenity) => amenity.section === "upper-park" || amenity.section === "both",
-    ) || [];
+    ) || []
 
   const lowerParkAmenities =
     amenitiesPageData?.amenities?.filter(
       (amenity) => amenity.section === "lower-park" || amenity.section === "both",
-    ) || [];
+    ) || []
 
   return (
     <div>
@@ -279,5 +279,5 @@ export default async function AmenitiesPage() {
         />
       </Container>
     </div>
-  );
+  )
 }
