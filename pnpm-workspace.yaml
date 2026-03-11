@@ -1,7 +1,6 @@
 packages:
   - apps/**
   - packages/**
-  - '!apps/web/.netlify'
 
 catalog:
   '@eslint/js': 9.39.3
