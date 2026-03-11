@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
   },
 }
 
-async function getConfig(): Promise<NextConfig> {
+export default async function config(): Promise<NextConfig> {
   if (process.env.POSTHOG_API_KEY && process.env.POSTHOG_PROJECT_ID) {
     const { withPostHogConfig } = await import("@posthog/nextjs-config")
     return withPostHogConfig(nextConfig, {
@@ -34,5 +34,3 @@ async function getConfig(): Promise<NextConfig> {
   }
   return nextConfig
 }
-
-export default getConfig()
