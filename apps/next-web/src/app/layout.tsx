@@ -77,6 +77,20 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           // biome-ignore lint/security/noDangerouslySetInnerHtml: bootstrap script for theme/palette init
           dangerouslySetInnerHTML={{ __html: bootstrapScript }}
         />
+        <link
+          rel="preload"
+          href="/fonts/Montserrat/Montserrat-VariableFont_wght.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/Vollkorn_SC/VollkornSC-Regular.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
         <link rel="preconnect" href="https://cdn.sanity.io" />
         <link rel="dns-prefetch" href="https://d.chimborazoparkconservancy.org" />
         <script
