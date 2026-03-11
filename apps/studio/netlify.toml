@@ -1,7 +1,7 @@
 [build]
 # Build from monorepo root using Turborepo
 package = "apps/studio"
-command = "pnpm run build --filter=@chimborazo/studio && npx sanity schema deploy"
+command = "pnpm run build --filter=@chimborazo/studio && cd apps/studio && pnpm sanity schema deploy"
 publish = "apps/studio/dist"
 ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- apps/studio packages/sanity-config"
 
