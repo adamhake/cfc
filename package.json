@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "prettier": "catalog:",
-    "turbo": "^2.8.11",
+    "turbo": "^2.8.16",
     "typescript": "catalog:"
   },
   "packageManager": "pnpm@10.25.0",
