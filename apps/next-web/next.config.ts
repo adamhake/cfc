@@ -25,7 +25,6 @@ async function getConfig(): Promise<NextConfig> {
     return withPostHogConfig(nextConfig, {
       personalApiKey: process.env.POSTHOG_API_KEY,
       projectId: process.env.POSTHOG_PROJECT_ID,
-      host: "https://d.chimborazoparkconservancy.org",
       sourcemaps: {
         releaseName: "chimborazo-next-web",
         deleteAfterUpload: true,
