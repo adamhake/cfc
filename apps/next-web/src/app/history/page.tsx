@@ -1,7 +1,7 @@
 import { getHistoryPageQuery } from "@chimborazo/sanity-config/queries"
 import type { Metadata } from "next"
 import Container from "@/components/Container/container"
-import PageHero from "@/components/PageHero/page-hero"
+import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { PortableText } from "@/components/PortableText/portable-text"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityHistoryPage } from "@/lib/sanity-types"
@@ -27,21 +27,17 @@ export default async function HistoryPage() {
     tags: [CACHE_TAGS.HISTORY],
   })) as { data: SanityHistoryPage | null }
 
-  const heroData = pageData?.pageHero?.image
-    ? {
-        title: pageData.pageHero.title,
-        subtitle: pageData.pageHero.description,
-        sanityImage: pageData.pageHero.image,
-      }
-    : {
-        title: "History of Chimborazo Park",
-        subtitle:
-          "Explore the rich and complex history of Chimborazo Park, from its role as a Civil War hospital to the emancipated community that called it home during Reconstruction.",
-      }
-
   return (
     <div>
-      <PageHero {...heroData} height="small" />
+      <PageHeroOptimistic
+        document={pageData}
+        fallback={{
+          title: "History of Chimborazo Park",
+          subtitle:
+            "Explore the rich and complex history of Chimborazo Park, from its role as a Civil War hospital to the emancipated community that called it home during Reconstruction.",
+        }}
+        height="small"
+      />
 
       <Container spacing="xl" className="py-16 pb-24">
         <article className="mx-auto max-w-3xl">

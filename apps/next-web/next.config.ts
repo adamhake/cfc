@@ -20,7 +20,8 @@ const nextConfig: NextConfig = {
   },
 }
 
-const hasPostHog = !!(process.env.POSTHOG_API_KEY && process.env.POSTHOG_PROJECT_ID)
+const isCI = !!(process.env.CI || process.env.NETLIFY)
+const hasPostHog = isCI && !!(process.env.POSTHOG_API_KEY && process.env.POSTHOG_PROJECT_ID)
 
 export default withPostHogConfig(nextConfig, {
   personalApiKey: process.env.POSTHOG_API_KEY ?? "",

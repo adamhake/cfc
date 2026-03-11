@@ -20,7 +20,7 @@ import type { Metadata } from "next"
 import AmenitySection from "@/components/AmenitySection/amenity-section"
 import Container from "@/components/Container/container"
 import GetInvolved from "@/components/GetInvolved/get-involved"
-import PageHero from "@/components/PageHero/page-hero"
+import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import SectionHeader from "@/components/SectionHeader/section-header"
 import SupportOption from "@/components/SupportOption/support-option"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
@@ -69,22 +69,6 @@ export default async function AmenitiesPage() {
     tags: [CACHE_TAGS.AMENITIES],
   })) as { data: SanityAmenitiesPage | null }
 
-  // Prepare hero data from Sanity or use defaults
-  const heroData = amenitiesPageData?.pageHero?.image
-    ? {
-        title: amenitiesPageData.pageHero.title,
-        subtitle: amenitiesPageData.pageHero.description,
-        sanityImage: amenitiesPageData.pageHero.image,
-      }
-    : {
-        title: "Park Amenities",
-        subtitle: "Explore the spaces, trails, and landmarks that make Chimborazo special",
-        imageSrc: "/bike_sunset.webp",
-        imageAlt: "Chimborazo Park landscape",
-        imageWidth: 2000,
-        imageHeight: 1262,
-      }
-
   // Filter amenities by section
   const upperParkAmenities =
     amenitiesPageData?.amenities?.filter(
@@ -98,7 +82,19 @@ export default async function AmenitiesPage() {
 
   return (
     <div>
-      <PageHero {...heroData} height="small" priority={true} />
+      <PageHeroOptimistic
+        document={amenitiesPageData}
+        fallback={{
+          title: "Park Amenities",
+          subtitle: "Explore the spaces, trails, and landmarks that make Chimborazo special",
+          imageSrc: "/bike_sunset.webp",
+          imageAlt: "Chimborazo Park landscape",
+          imageWidth: 2000,
+          imageHeight: 1262,
+        }}
+        height="small"
+        priority={true}
+      />
 
       {/* Main Content */}
       <Container spacing="none" className="space-y-24 py-16 pb-24">

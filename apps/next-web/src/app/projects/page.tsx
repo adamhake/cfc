@@ -1,12 +1,12 @@
 import { allProjectsQuery, getProjectsPageQuery } from "@chimborazo/sanity-config/queries"
 import type { Metadata } from "next"
 import Container from "@/components/Container/container"
-import PageHero from "@/components/PageHero/page-hero"
+import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { PortableText } from "@/components/PortableText/portable-text"
-import Project from "@/components/Project/project"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityProject, SanityProjectsPage } from "@/lib/sanity-types"
 import { generateItemListStructuredData, SITE_CONFIG } from "@/utils/seo"
+import ProjectsListClient from "./projects-list-client"
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -42,22 +42,6 @@ export default async function ProjectsPage() {
     }),
   ])) as [{ data: SanityProject[] }, { data: SanityProjectsPage | null }]
 
-  // Prepare hero data from Sanity or use fallbacks
-  const heroData = pageData?.pageHero?.image
-    ? {
-        title: pageData.pageHero.title,
-        subtitle: pageData.pageHero.description,
-        sanityImage: pageData.pageHero.image,
-      }
-    : {
-        title: "Projects",
-        subtitle: "Transforming Chimborazo Park through community-driven initiatives",
-        imageSrc: "/volunteers.webp",
-        imageAlt: "Projects at Chimborazo Park",
-        imageWidth: 2000,
-        imageHeight: 1333,
-      }
-
   // Sort projects: active first, then by startDate desc
   const sortedProjects = [...projects].sort((a, b) => {
     if (a.status === "active" && b.status !== "active") return -1
@@ -81,7 +65,19 @@ export default async function ProjectsPage() {
           __html: JSON.stringify(itemListData).replace(/</g, "\\u003c").replace(/>/g, "\\u003e"),
         }}
       />
-      <PageHero {...heroData} height="small" priority={true} />
+      <PageHeroOptimistic
+        document={pageData}
+        fallback={{
+          title: "Projects",
+          subtitle: "Transforming Chimborazo Park through community-driven initiatives",
+          imageSrc: "/volunteers.webp",
+          imageAlt: "Projects at Chimborazo Park",
+          imageWidth: 2000,
+          imageHeight: 1333,
+        }}
+        height="small"
+        priority={true}
+      />
 
       <Container spacing="md">
         {pageData?.introduction && pageData.introduction.length > 0 ? (
@@ -103,20 +99,7 @@ export default async function ProjectsPage() {
           </div>
         )}
 
-        {sortedProjects.length > 0 ? (
-          <div className="mt-20 grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
-            {sortedProjects.map((project) => (
-              <Project key={project._id} project={project} />
-            ))}
-          </div>
-        ) : (
-          <div className="mt-20 text-center">
-            <p className="font-body text-lg text-grey-700 dark:text-grey-300">
-              No projects available at this time. Check back soon for updates on our ongoing
-              initiatives!
-            </p>
-          </div>
-        )}
+        <ProjectsListClient projects={sortedProjects} />
       </Container>
     </div>
   )

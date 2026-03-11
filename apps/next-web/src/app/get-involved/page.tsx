@@ -18,7 +18,7 @@ import { FacebookIcon } from "@/components/FacebookIcon/facebook-icon"
 import { InstagramIcon } from "@/components/InstagramIcon/instagram-icon"
 import { NewsletterForm } from "@/components/NewsletterForm"
 import { Image } from "@/components/OptimizedImage/optimized-image"
-import PageHero from "@/components/PageHero/page-hero"
+import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import SectionHeader from "@/components/SectionHeader/section-header"
 import SupportOption from "@/components/SupportOption/support-option"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
@@ -59,24 +59,21 @@ export default async function GetInvolvedPage() {
     siteSettings?.socialMedia?.instagram?.split("instagram.com/")[1]?.replace(/\/$/, "") ||
     "friendsofchimborazopark"
 
-  const heroData = pageData?.pageHero?.image
-    ? {
-        title: pageData.pageHero.title,
-        subtitle: pageData.pageHero.description,
-        sanityImage: pageData.pageHero.image,
-      }
-    : {
-        title: "Get Involved",
-        subtitle: "Join our community in preserving and enhancing Chimborazo Park",
-        imageSrc: "/get_involved.webp",
-        imageAlt: "Volunteers working at Chimborazo Park",
-        imageWidth: 800,
-        imageHeight: 600,
-      }
-
   return (
     <div>
-      <PageHero {...heroData} height="medium" priority={true} />
+      <PageHeroOptimistic
+        document={pageData}
+        fallback={{
+          title: "Get Involved",
+          subtitle: "Join our community in preserving and enhancing Chimborazo Park",
+          imageSrc: "/get_involved.webp",
+          imageAlt: "Volunteers working at Chimborazo Park",
+          imageWidth: 800,
+          imageHeight: 600,
+        }}
+        height="medium"
+        priority={true}
+      />
 
       <div>
         <Container spacing="xl" className="space-y-24 py-16 pb-24">
