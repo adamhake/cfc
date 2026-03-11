@@ -10,7 +10,11 @@ import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
 import { SanityLive } from "@/lib/sanity-live"
 import type { SanityProject } from "@/lib/sanity-types"
 import { getSiteSettings } from "@/lib/site-settings"
-import { generateOrganizationStructuredData, SITE_CONFIG } from "@/utils/seo"
+import {
+  generateOrganizationStructuredData,
+  generateParkStructuredData,
+  SITE_CONFIG,
+} from "@/utils/seo"
 import { Providers } from "./providers"
 import "./globals.css"
 
@@ -51,6 +55,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     palette: "olive",
   })
   const structuredData = generateOrganizationStructuredData()
+  const parkStructuredData = generateParkStructuredData()
 
   // Fetch shared data server-side to avoid client-side waterfalls
   const [siteSettings, { data: featuredProject }] = await Promise.all([
@@ -79,6 +84,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(structuredData)
+              .replace(/</g, "\\u003c")
+              .replace(/>/g, "\\u003e"),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(parkStructuredData)
               .replace(/</g, "\\u003c")
               .replace(/>/g, "\\u003e"),
           }}

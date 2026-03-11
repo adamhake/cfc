@@ -6,17 +6,17 @@ import { PortableText } from "@/components/PortableText/portable-text"
 import Project from "@/components/Project/project"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityProject, SanityProjectsPage } from "@/lib/sanity-types"
-import { SITE_CONFIG } from "@/utils/seo"
+import { generateItemListStructuredData, SITE_CONFIG } from "@/utils/seo"
 
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "Explore the Chimborazo Park Conservancy's ongoing and completed initiatives to restore, preserve, and enhance our historic park for the community.",
+    "Explore ongoing and completed initiatives to restore, preserve, and enhance Chimborazo Park in Richmond, VA for the Church Hill community.",
   alternates: { canonical: `${SITE_CONFIG.url}/projects` },
   openGraph: {
     title: "Projects",
     description:
-      "Explore the Chimborazo Park Conservancy's ongoing and completed initiatives to restore, preserve, and enhance our historic park for the community.",
+      "Explore ongoing and completed initiatives to restore, preserve, and enhance Chimborazo Park in Richmond, VA for the Church Hill community.",
     type: "website",
     url: `${SITE_CONFIG.url}/projects`,
     images: [
@@ -65,8 +65,22 @@ export default async function ProjectsPage() {
     return new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
   })
 
+  const itemListData = generateItemListStructuredData(
+    sortedProjects.map((project) => ({
+      name: project.title,
+      url: `${SITE_CONFIG.url}/projects/${project.slug.current}`,
+    })),
+  )
+
   return (
     <div className="space-y-24 pb-24">
+      <script
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(itemListData).replace(/</g, "\\u003c").replace(/>/g, "\\u003e"),
+        }}
+      />
       <PageHero {...heroData} height="small" priority={true} />
 
       <Container spacing="md">

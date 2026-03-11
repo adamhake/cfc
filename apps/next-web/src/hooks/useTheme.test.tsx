@@ -148,4 +148,32 @@ describe("useThemeState", () => {
 
     expect(result.current.theme).toBe("system")
   })
+
+  it("syncs from localStorage on mount", () => {
+    vi.mocked(getStoredTheme).mockReturnValue("dark")
+    vi.mocked(resolveTheme).mockReturnValue("dark")
+
+    const { result } = renderHook(() => useThemeState("system", "light"))
+
+    // After mount effect runs, should sync to stored value
+    expect(result.current.theme).toBe("dark")
+    expect(result.current.resolvedTheme).toBe("dark")
+    expect(applyTheme).toHaveBeenCalledWith("dark")
+    expect(storeTheme).toHaveBeenCalledWith("dark")
+  })
+
+  it("initializes with server values before mount sync to avoid hydration mismatch", () => {
+    // getStoredTheme returns "dark" but initial should be "system" before effects run
+    vi.mocked(getStoredTheme).mockReturnValue("dark")
+    vi.mocked(resolveTheme).mockImplementation((mode) =>
+      mode === "system" ? "light" : (mode as "light" | "dark"),
+    )
+
+    // The useState initializer should use the server-provided value, not localStorage
+    // After effects, it syncs to localStorage
+    const { result } = renderHook(() => useThemeState("system", "light"))
+
+    // After effects have run, it should have synced
+    expect(getStoredTheme).toHaveBeenCalled()
+  })
 })

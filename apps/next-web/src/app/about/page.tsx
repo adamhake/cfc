@@ -13,12 +13,12 @@ import { SITE_CONFIG } from "@/utils/seo"
 export const metadata: Metadata = {
   title: "About the Chimborazo Park Conservancy",
   description:
-    "Learn about the Chimborazo Park Conservancy, a 501(c)(3) nonprofit dedicated to the restoration, beautification, and preservation of historic Chimborazo Park in Richmond, Virginia.",
+    "A 501(c)(3) nonprofit dedicated to restoring and preserving historic Chimborazo Park in Richmond, VA. Learn about our mission, board, and community impact.",
   alternates: { canonical: `${SITE_CONFIG.url}/about` },
   openGraph: {
     title: "About the Chimborazo Park Conservancy",
     description:
-      "Learn about the Chimborazo Park Conservancy, a 501(c)(3) nonprofit dedicated to the restoration, beautification, and preservation of historic Chimborazo Park in Richmond, Virginia.",
+      "A 501(c)(3) nonprofit dedicated to restoring and preserving historic Chimborazo Park in Richmond, VA. Learn about our mission, board, and community impact.",
     type: "website",
     url: `${SITE_CONFIG.url}/about`,
   },

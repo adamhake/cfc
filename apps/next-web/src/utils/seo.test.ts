@@ -5,9 +5,11 @@ import {
   generateBreadcrumbStructuredData,
   generateEventStructuredData,
   generateFAQStructuredData,
+  generateItemListStructuredData,
   generateLinkTags,
   generateMetaTags,
   generateOrganizationStructuredData,
+  generateParkStructuredData,
   SITE_CONFIG,
 } from "./seo"
 
@@ -208,6 +210,72 @@ describe("generateOrganizationStructuredData", () => {
     expect(data.name).toBe(SITE_CONFIG.name)
     expect(data.sameAs).toEqual(SITE_CONFIG.socialProfiles)
     expect(data.address.addressLocality).toBe("Richmond")
+  })
+
+  it("includes geo coordinates", () => {
+    const data = generateOrganizationStructuredData()
+    expect(data.geo["@type"]).toBe("GeoCoordinates")
+    expect(data.geo.latitude).toBe(37.5268)
+    expect(data.geo.longitude).toBe(-77.4105)
+  })
+
+  it("uses ISO date format for foundingDate", () => {
+    const data = generateOrganizationStructuredData()
+    expect(data.foundingDate).toBe("2023-01-01")
+  })
+
+  it("includes full postal address", () => {
+    const data = generateOrganizationStructuredData()
+    expect(data.address.streetAddress).toBe("3215 E Broad St")
+    expect(data.address.postalCode).toBe("23223")
+  })
+})
+
+describe("generateParkStructuredData", () => {
+  it("generates valid Park structured data", () => {
+    const data = generateParkStructuredData()
+    expect(data["@context"]).toBe("https://schema.org")
+    expect(data["@type"]).toBe("Park")
+    expect(data.name).toBe("Chimborazo Park")
+    expect(data.isAccessibleForFree).toBe(true)
+    expect(data.publicAccess).toBe(true)
+  })
+
+  it("includes geo coordinates and address", () => {
+    const data = generateParkStructuredData()
+    expect(data.geo["@type"]).toBe("GeoCoordinates")
+    expect(data.geo.latitude).toBe(37.5268)
+    expect(data.address.streetAddress).toBe("3215 E Broad St")
+    expect(data.address.addressLocality).toBe("Richmond")
+  })
+
+  it("includes opening hours specification", () => {
+    const data = generateParkStructuredData()
+    expect(data.openingHoursSpecification["@type"]).toBe("OpeningHoursSpecification")
+    expect(data.openingHoursSpecification.dayOfWeek).toHaveLength(7)
+  })
+})
+
+describe("generateItemListStructuredData", () => {
+  it("generates valid ItemList structured data", () => {
+    const data = generateItemListStructuredData([
+      { name: "Event 1", url: "https://example.com/events/1" },
+      { name: "Event 2", url: "https://example.com/events/2" },
+    ])
+
+    expect(data["@context"]).toBe("https://schema.org")
+    expect(data["@type"]).toBe("ItemList")
+    expect(data.itemListElement).toHaveLength(2)
+    expect(data.itemListElement[0].position).toBe(1)
+    expect(data.itemListElement[1].position).toBe(2)
+    expect(data.itemListElement[0].name).toBe("Event 1")
+  })
+
+  it("uses custom position when provided", () => {
+    const data = generateItemListStructuredData([
+      { name: "Item", url: "https://example.com/item", position: 5 },
+    ])
+    expect(data.itemListElement[0].position).toBe(5)
   })
 })
 

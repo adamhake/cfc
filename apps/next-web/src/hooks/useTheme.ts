@@ -29,14 +29,10 @@ export function useTheme() {
 }
 
 export function useThemeState(initialTheme: ThemeMode, initialResolved: ResolvedTheme) {
-  const [theme, setThemeRaw] = useState<ThemeMode>(() => {
-    if (typeof window === "undefined") return initialTheme
-    return getStoredTheme()
-  })
-  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(() => {
-    if (typeof window === "undefined") return initialResolved
-    return resolveTheme(getStoredTheme())
-  })
+  // Initialize with server-provided values to avoid hydration mismatch.
+  // Client-side localStorage is synced in the mount effect below.
+  const [theme, setThemeRaw] = useState<ThemeMode>(initialTheme)
+  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(initialResolved)
 
   const setTheme = useCallback((newTheme: ThemeMode) => {
     setThemeRaw(newTheme)
@@ -44,18 +40,21 @@ export function useThemeState(initialTheme: ThemeMode, initialResolved: Resolved
     setResolvedTheme(resolved)
     applyTheme(resolved)
     storeTheme(newTheme)
-    // Sync cookies
     // biome-ignore lint/suspicious/noDocumentCookie: client-side cookie for theme persistence
     document.cookie = `${APPEARANCE_COOKIES.THEME}=${encodeURIComponent(newTheme)}; Path=/; Max-Age=${APPEARANCE_COOKIE_MAX_AGE}; SameSite=Lax`
     // biome-ignore lint/suspicious/noDocumentCookie: client-side cookie for theme persistence
     document.cookie = `${APPEARANCE_COOKIES.RESOLVED_THEME}=${encodeURIComponent(resolved)}; Path=/; Max-Age=${APPEARANCE_COOKIE_MAX_AGE}; SameSite=Lax`
   }, [])
 
-  // Apply stored theme on mount (side effect only, no setState)
+  // Sync with localStorage on mount
   useEffect(() => {
-    applyTheme(resolveTheme(theme))
-    storeTheme(theme)
-  }, [theme]) // eslint-disable-line react-hooks/exhaustive-deps
+    const stored = getStoredTheme()
+    setThemeRaw(stored)
+    const resolved = resolveTheme(stored)
+    setResolvedTheme(resolved)
+    applyTheme(resolved)
+    storeTheme(stored)
+  }, [])
 
   // Listen for system theme changes
   useEffect(() => {

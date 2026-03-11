@@ -371,18 +371,78 @@ export function generateOrganizationStructuredData() {
     url: SITE_CONFIG.url,
     logo: `${SITE_CONFIG.url}/logo512.png`,
     description: SITE_CONFIG.description,
-    foundingDate: "2023",
+    foundingDate: "2023-01-01",
     address: {
       "@type": "PostalAddress",
+      streetAddress: "3215 E Broad St",
       addressLocality: "Richmond",
       addressRegion: "VA",
+      postalCode: "23223",
       addressCountry: "US",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 37.5268,
+      longitude: -77.4105,
     },
     areaServed: {
       "@type": "Place",
       name: "Church Hill, Richmond, Virginia",
     },
     sameAs: SITE_CONFIG.socialProfiles,
+  }
+}
+
+/**
+ * Generates JSON-LD structured data for Chimborazo Park itself
+ */
+export function generateParkStructuredData() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Park",
+    name: "Chimborazo Park",
+    description:
+      "A 30-acre historic park in Richmond, VA's Church Hill neighborhood featuring the Round House, gazebo, dog park, woodland trails, and a replica Statue of Liberty.",
+    url: SITE_CONFIG.url,
+    image: SITE_CONFIG.defaultImage.url,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "3215 E Broad St",
+      addressLocality: "Richmond",
+      addressRegion: "VA",
+      postalCode: "23223",
+      addressCountry: "US",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 37.5268,
+      longitude: -77.4105,
+    },
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      description: "Dawn to dusk",
+    },
+    isAccessibleForFree: true,
+    publicAccess: true,
+  }
+}
+
+/**
+ * Generates JSON-LD ItemList structured data for listing pages
+ */
+export function generateItemListStructuredData(
+  items: Array<{ name: string; url: string; position?: number }>,
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: item.position ?? index + 1,
+      name: item.name,
+      url: item.url,
+    })),
   }
 }
 
