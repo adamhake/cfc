@@ -18,7 +18,7 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_SANITY_PROJECT_ID: z.string().min(1),
     NEXT_PUBLIC_SANITY_DATASET: z.string().default("production"),
-    NEXT_PUBLIC_SANITY_API_VERSION: z.string().default("2024-01-01"),
+    NEXT_PUBLIC_SANITY_API_VERSION: z.string().default("2025-03-04"),
     NEXT_PUBLIC_SANITY_STUDIO_URL: z.string().url().optional(),
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
     NEXT_PUBLIC_POSTHOG_KEY: z.string().optional(),
