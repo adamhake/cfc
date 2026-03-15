@@ -33,12 +33,12 @@
     "clsx": "^2.1.1",
     "embla-carousel-fade": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
-    "framer-motion": "^12.35.2",
+    "framer-motion": "^12.36.0",
     "lucide-react": "^0.577.0",
     "next": "^16.1.6",
     "next-sanity": "^12.1.1",
-    "posthog-js": "^1.360.1",
-    "posthog-node": "^5.28.1",
+    "posthog-js": "^1.360.2",
+    "posthog-node": "^5.28.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-markdown": "^10.1.0",
@@ -57,15 +57,15 @@
   "devDependencies": {
     "@biomejs/biome": "catalog:",
     "@netlify/plugin-nextjs": "^5.15.9",
-    "@posthog/nextjs-config": "^1.8.20",
+    "@posthog/nextjs-config": "^1.8.21",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
-    "@types/node": "^25.4.0",
+    "@types/node": "^25.5.0",
     "@types/react": "catalog:",
     "@types/react-dom": "^19.2.3",
-    "jsdom": "^28.1.0",
+    "jsdom": "^29.0.0",
     "typescript": "catalog:",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.0"
   }
 }
