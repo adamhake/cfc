@@ -21,7 +21,7 @@ export function createSanityClient(config: SanityConfig) {
   return createClient({
     projectId: config.projectId,
     dataset: config.dataset,
-    apiVersion: config.apiVersion || "2024-01-01",
+    apiVersion: config.apiVersion || "2025-03-04",
     useCdn: config.useCdn ?? !config.token,
     token: config.token,
     perspective: config.perspective || "published",
@@ -44,7 +44,7 @@ export function createImageUrlBuilder(config: Pick<SanityConfig, "projectId" | "
   const client = createClient({
     projectId: config.projectId,
     dataset: config.dataset,
-    apiVersion: "2024-01-01",
+    apiVersion: "2025-03-04",
     useCdn: true,
   })
 
