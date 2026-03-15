@@ -1,5 +1,10 @@
 import { createGenerateMetadataAction, schemas } from "@chimborazo/sanity-config"
 import { CogIcon, DocumentTextIcon, HomeIcon } from "@sanity/icons"
+import { createPreviewSecret } from "@sanity/preview-url-secret/create-secret"
+import {
+  urlSearchParamPreviewPathname,
+  urlSearchParamPreviewSecret,
+} from "@sanity/preview-url-secret/constants"
 import { visionTool } from "@sanity/vision"
 import { defineConfig } from "sanity"
 import { defineDocuments, defineLocations, presentationTool } from "sanity/presentation"
@@ -38,6 +43,44 @@ const singletonTypes = [
   "getInvolvedPage",
   "historyPage",
 ]
+
+function getPreviewPathForDocument(document: { _type?: string; slug?: { current?: string } }) {
+  const slug = document.slug?.current
+
+  switch (document._type) {
+    case "homePage":
+      return "/"
+    case "aboutPage":
+      return "/about"
+    case "historyPage":
+      return "/history"
+    case "amenitiesPage":
+      return "/amenities"
+    case "getInvolvedPage":
+      return "/get-involved"
+    case "donatePage":
+      return "/donate"
+    case "mediaPage":
+      return "/media"
+    case "eventsPage":
+      return "/events"
+    case "projectsPage":
+      return "/projects"
+    case "event":
+      return slug ? `/events/${slug}` : null
+    case "project":
+      return slug ? `/projects/${slug}` : null
+    default:
+      return null
+  }
+}
+
+function buildDraftPreviewUrl(options: { baseUrl: string; path: string; secret: string }) {
+  const previewUrl = new URL("/api/draft", options.baseUrl)
+  previewUrl.searchParams.set(urlSearchParamPreviewSecret, options.secret)
+  previewUrl.searchParams.set(urlSearchParamPreviewPathname, options.path)
+  return previewUrl.toString()
+}
 
 // Define custom structure for organizing content
 const structure: StructureResolver = (S) =>
@@ -267,19 +310,32 @@ export default defineConfig({
   document: {
     productionUrl: async (prev, context) => {
       const { document } = context
-      const baseUrl = env.SANITY_STUDIO_PREVIEW_URL
-      const slug = (document.slug as { current?: string })?.current
+      const previewPath = getPreviewPathForDocument(
+        document as {
+          _type?: string
+          slug?: { current?: string }
+        },
+      )
 
-      if (slug) {
-        if (document._type === "event") {
-          return `${baseUrl}/events/${slug}`
-        }
-        if (document._type === "project") {
-          return `${baseUrl}/projects/${slug}`
-        }
+      if (!previewPath) {
+        return prev
       }
 
-      return prev
+      const previewSecretClient = context.getClient({ apiVersion })
+      const studioUrl =
+        typeof window === "undefined" ? env.SANITY_STUDIO_PREVIEW_URL : window.location.origin
+      const { secret } = await createPreviewSecret(
+        previewSecretClient,
+        "document.productionUrl",
+        studioUrl,
+        context.currentUser?.id,
+      )
+
+      return buildDraftPreviewUrl({
+        baseUrl: env.SANITY_STUDIO_PREVIEW_URL,
+        path: previewPath,
+        secret,
+      })
     },
     actions: (prev, context) => {
       // Restrict actions for singleton documents
