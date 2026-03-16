@@ -26,7 +26,7 @@ export const env = createEnv({
     SANITY_STUDIO_DATASET: sanityDatasetSchema,
     SANITY_STUDIO_API_VERSION: sanityApiVersionSchema,
     SANITY_STUDIO_PREVIEW_URL: z.url().default("http://localhost:3001"),
-    SANITY_STUDIO_API_URL: z.url().default("http://localhost:3000/api/generate-metadata"),
+    SANITY_STUDIO_API_URL: z.url().default("http://localhost:3001/api/generate-metadata"),
   },
 
   /**

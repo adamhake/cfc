@@ -110,6 +110,9 @@ function getCacheTagsForDocumentType(docType: string): CacheTag[] {
       tags.push(CACHE_TAGS.PROJECTS, CACHE_TAGS.PROJECTS_LIST, CACHE_TAGS.PROJECT_DETAIL)
       tags.push(CACHE_TAGS.HOMEPAGE)
       break
+    case "update":
+      tags.push(CACHE_TAGS.UPDATES, CACHE_TAGS.UPDATES_LIST, CACHE_TAGS.UPDATE_DETAIL)
+      break
     case "mediaImage":
       tags.push(CACHE_TAGS.MEDIA)
       tags.push(CACHE_TAGS.HOMEPAGE)
@@ -122,6 +125,9 @@ function getCacheTagsForDocumentType(docType: string): CacheTag[] {
       break
     case "projectsPage":
       tags.push(CACHE_TAGS.PROJECTS_LIST)
+      break
+    case "updatesPage":
+      tags.push(CACHE_TAGS.UPDATES_LIST)
       break
     case "mediaPage":
       tags.push(CACHE_TAGS.MEDIA)

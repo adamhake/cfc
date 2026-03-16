@@ -1,9 +1,9 @@
 import Link from "next/link"
-import type { SanityProject } from "@/lib/sanity-types"
+import type { SanityProjectCard } from "@/lib/sanity-types"
 import { SanityImage } from "../SanityImage/sanity-image"
 
 export interface ProjectCardCondensedProps {
-  project: SanityProject
+  project: SanityProjectCard
   onClick?: () => void
 }
 

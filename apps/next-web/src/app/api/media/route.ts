@@ -1,6 +1,7 @@
 import { paginatedMediaImagesQuery } from "@chimborazo/sanity-config/queries"
 import { NextResponse } from "next/server"
-import { sanityClient } from "@/lib/sanity"
+import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import type { SanityMediaImage } from "@/lib/sanity-types"
 
 const MAX_PAGE_SIZE = 100
 
@@ -25,12 +26,13 @@ export async function GET(request: Request) {
   }
 
   try {
-    const images = await sanityClient.fetch(paginatedMediaImagesQuery, { start, end })
-    return NextResponse.json(images, {
-      headers: {
-        "Cache-Control": "public, s-maxage=1800, stale-while-revalidate=60",
-      },
-    })
+    const { data: images } = (await sanityFetch({
+      query: paginatedMediaImagesQuery,
+      params: { start, end },
+      tags: [CACHE_TAGS.MEDIA],
+    })) as { data: SanityMediaImage[] }
+
+    return NextResponse.json(images)
   } catch (error) {
     console.error("[API/media] Failed to fetch images:", error)
     return NextResponse.json({ error: "Failed to fetch images" }, { status: 500 })

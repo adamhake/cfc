@@ -2,8 +2,7 @@ import { defineQuery } from "groq"
 import { imageFieldProjection } from "./imageProjections"
 import { richTextProjection } from "./richTextProjection"
 
-// Base project fields projection
-export const projectFields = `
+export const projectCardFields = `
   _id,
   _type,
   title,
@@ -11,7 +10,12 @@ export const projectFields = `
   description,
   "heroImage": heroImageV2{
     ${imageFieldProjection}
-  },
+  }
+`
+
+// Base project fields projection
+export const projectFields = `
+  ${projectCardFields},
   status,
   startDate,
   startDateOverride,
@@ -85,6 +89,12 @@ export const projectBySlugQuery = defineQuery(`
         ${imageFieldProjection}
       }
     }
+  }
+`)
+
+export const projectCardBySlugQuery = defineQuery(`
+  *[_type == "project" && slug.current == $slug][0] {
+    ${projectCardFields}
   }
 `)
 

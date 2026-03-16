@@ -4,13 +4,14 @@ vi.mock("@chimborazo/sanity-config/queries", () => ({
   paginatedMediaImagesQuery: "mock-query",
 }))
 
-vi.mock("@/lib/sanity", () => ({
-  sanityClient: {
-    fetch: vi.fn(),
+vi.mock("@/lib/sanity-fetch", () => ({
+  CACHE_TAGS: {
+    MEDIA: "media",
   },
+  sanityFetch: vi.fn(),
 }))
 
-import { sanityClient } from "@/lib/sanity"
+import { sanityFetch } from "@/lib/sanity-fetch"
 import { GET } from "./route"
 
 function makeRequest(params?: Record<string, string>): Request {
@@ -30,32 +31,38 @@ describe("Media API Route", () => {
 
   it("returns images with default pagination", async () => {
     const mockImages = [{ _id: "img-1" }, { _id: "img-2" }]
-    vi.mocked(sanityClient.fetch).mockResolvedValue(mockImages)
+    vi.mocked(sanityFetch).mockResolvedValue({ data: mockImages })
 
     const response = await GET(makeRequest())
     const json = await response.json()
 
     expect(response.status).toBe(200)
     expect(json).toEqual(mockImages)
-    expect(sanityClient.fetch).toHaveBeenCalledWith("mock-query", { start: 0, end: 9 })
+    expect(sanityFetch).toHaveBeenCalledWith({
+      query: "mock-query",
+      params: { start: 0, end: 9 },
+      tags: ["media"],
+    })
   })
 
   it("passes custom start and end params to Sanity", async () => {
-    vi.mocked(sanityClient.fetch).mockResolvedValue([])
+    vi.mocked(sanityFetch).mockResolvedValue({ data: [] })
 
     await GET(makeRequest({ start: "10", end: "19" }))
 
-    expect(sanityClient.fetch).toHaveBeenCalledWith("mock-query", { start: 10, end: 19 })
+    expect(sanityFetch).toHaveBeenCalledWith({
+      query: "mock-query",
+      params: { start: 10, end: 19 },
+      tags: ["media"],
+    })
   })
 
-  it("sets Cache-Control headers", async () => {
-    vi.mocked(sanityClient.fetch).mockResolvedValue([])
+  it("does not set independent cache headers", async () => {
+    vi.mocked(sanityFetch).mockResolvedValue({ data: [] })
 
     const response = await GET(makeRequest())
 
-    expect(response.headers.get("Cache-Control")).toBe(
-      "public, s-maxage=1800, stale-while-revalidate=60",
-    )
+    expect(response.headers.get("Cache-Control")).toBeNull()
   })
 
   it("returns 400 for negative start", async () => {
@@ -64,32 +71,32 @@ describe("Media API Route", () => {
     expect(response.status).toBe(400)
     const json = await response.json()
     expect(json.error).toContain("Invalid range")
-    expect(sanityClient.fetch).not.toHaveBeenCalled()
+    expect(sanityFetch).not.toHaveBeenCalled()
   })
 
   it("returns 400 when end is less than start", async () => {
     const response = await GET(makeRequest({ start: "10", end: "5" }))
 
     expect(response.status).toBe(400)
-    expect(sanityClient.fetch).not.toHaveBeenCalled()
+    expect(sanityFetch).not.toHaveBeenCalled()
   })
 
   it("returns 400 when range exceeds maximum page size", async () => {
     const response = await GET(makeRequest({ start: "0", end: "101" }))
 
     expect(response.status).toBe(400)
-    expect(sanityClient.fetch).not.toHaveBeenCalled()
+    expect(sanityFetch).not.toHaveBeenCalled()
   })
 
   it("returns 400 for NaN values", async () => {
     const response = await GET(makeRequest({ start: "abc", end: "10" }))
 
     expect(response.status).toBe(400)
-    expect(sanityClient.fetch).not.toHaveBeenCalled()
+    expect(sanityFetch).not.toHaveBeenCalled()
   })
 
   it("returns 500 when Sanity fetch fails", async () => {
-    vi.mocked(sanityClient.fetch).mockRejectedValue(new Error("Sanity unavailable"))
+    vi.mocked(sanityFetch).mockRejectedValue(new Error("Sanity unavailable"))
 
     const response = await GET(makeRequest())
 
@@ -99,11 +106,15 @@ describe("Media API Route", () => {
   })
 
   it("allows range of exactly 100", async () => {
-    vi.mocked(sanityClient.fetch).mockResolvedValue([])
+    vi.mocked(sanityFetch).mockResolvedValue({ data: [] })
 
     const response = await GET(makeRequest({ start: "0", end: "100" }))
 
     expect(response.status).toBe(200)
-    expect(sanityClient.fetch).toHaveBeenCalledWith("mock-query", { start: 0, end: 100 })
+    expect(sanityFetch).toHaveBeenCalledWith({
+      query: "mock-query",
+      params: { start: 0, end: 100 },
+      tags: ["media"],
+    })
   })
 })

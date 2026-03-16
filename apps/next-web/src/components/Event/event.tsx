@@ -1,7 +1,7 @@
 import { Calendar, Clock, MapPin } from "lucide-react"
 import Link from "next/link"
 import type { SanityEvent } from "@/lib/sanity-types"
-import { formatDateString } from "@/utils/time"
+import { formatDateString, isPastDate } from "@/utils/time"
 import Chip from "../Chip/chip"
 import { SanityImage } from "../SanityImage/sanity-image"
 
@@ -32,7 +32,7 @@ export default function Event({
   imageBreakpoints = DEFAULT_EVENT_IMAGE_BREAKPOINTS,
   imageQuality = DEFAULT_EVENT_IMAGE_QUALITY,
 }: EventProps) {
-  const past = isPast ?? new Date(date) < new Date()
+  const past = isPast ?? isPastDate(date)
   const fmtDate = formatDateString(date, "short")
 
   return (
