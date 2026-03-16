@@ -66,10 +66,14 @@ function getPreviewPathForDocument(document: { _type?: string; slug?: { current?
       return "/events"
     case "projectsPage":
       return "/projects"
+    case "updatesPage":
+      return "/updates"
     case "event":
       return slug ? `/events/${slug}` : null
     case "project":
       return slug ? `/projects/${slug}` : null
+    case "update":
+      return slug ? `/updates/${slug}` : null
     default:
       return null
   }
@@ -218,6 +222,10 @@ export default defineConfig({
             route: "/projects/:slug",
             filter: `_type == "project" && slug.current == $slug`,
           },
+          {
+            route: "/updates/:slug",
+            filter: `_type == "update" && slug.current == $slug`,
+          },
         ]),
         locations: {
           // Homepage
@@ -289,6 +297,20 @@ export default defineConfig({
                 ? [
                     { title: doc.title || "Untitled Project", href: `/projects/${doc.slug}` },
                     { title: "Projects Listing", href: "/projects" },
+                  ]
+                : [],
+            }),
+          }),
+          update: defineLocations({
+            select: {
+              title: "title",
+              slug: "slug.current",
+            },
+            resolve: (doc) => ({
+              locations: doc?.slug
+                ? [
+                    { title: doc.title || "Untitled Update", href: `/updates/${doc.slug}` },
+                    { title: "Updates Listing", href: "/updates" },
                   ]
                 : [],
             }),

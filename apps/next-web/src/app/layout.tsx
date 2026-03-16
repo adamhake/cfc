@@ -1,4 +1,4 @@
-import { projectBySlugQuery } from "@chimborazo/sanity-config/queries"
+import { projectCardBySlugQuery } from "@chimborazo/sanity-config/queries"
 import type { Metadata } from "next"
 import { draftMode } from "next/headers"
 import Footer from "@/components/Footer/footer"
@@ -8,7 +8,7 @@ import { VisualEditing } from "@/components/VisualEditing/visual-editing"
 import { getAppearanceBootstrapScript } from "@/lib/appearance-shared"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
 import { SanityLive } from "@/lib/sanity-live"
-import type { SanityProject } from "@/lib/sanity-types"
+import type { SanityProjectCard } from "@/lib/sanity-types"
 import { getSiteSettings } from "@/lib/site-settings"
 import {
   generateOrganizationStructuredData,
@@ -61,10 +61,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const [siteSettings, { data: featuredProject }] = await Promise.all([
     getSiteSettings(),
     sanityFetch({
-      query: projectBySlugQuery,
+      query: projectCardBySlugQuery,
       params: { slug: "parkwide-native-tree-planting" },
       tags: [CACHE_TAGS.PROJECTS],
-    }) as Promise<{ data: SanityProject | null }>,
+    }) as Promise<{ data: SanityProjectCard | null }>,
   ])
 
   const facebookUrl = siteSettings?.socialMedia?.facebook

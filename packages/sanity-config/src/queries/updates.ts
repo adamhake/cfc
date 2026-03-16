@@ -130,6 +130,7 @@ export const updateNavigationQuery = defineQuery(`
 // Updates page singleton
 export const updatesPageQuery = defineQuery(`
   *[_type == "updatesPage"][0] {
+    _id,
     pageHero{
       title,
       description,

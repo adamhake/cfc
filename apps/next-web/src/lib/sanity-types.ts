@@ -96,6 +96,17 @@ export interface SanityProject {
   publishedAt?: string
 }
 
+export interface SanityProjectCard {
+  _id: string
+  _type: "project"
+  title: string
+  slug: {
+    current: string
+  }
+  description: string
+  heroImage: SanityImage
+}
+
 export interface SanityMediaImage {
   _id: string
   _type: "mediaImage"
@@ -110,6 +121,10 @@ export interface EventSlug {
 }
 
 export interface ProjectSlug {
+  slug: string
+}
+
+export interface UpdateSlug {
   slug: string
 }
 
@@ -287,6 +302,64 @@ export interface SanityMediaPage {
     description?: string
     image?: SanityImage
   }
+}
+
+export interface SanityUpdateCategory {
+  _id: string
+  title: string
+  slug?: {
+    current: string
+  }
+  color?: "green" | "blue" | "orange" | "purple" | "teal"
+}
+
+export interface SanityUpdateEventReference {
+  _id: string
+  _type: "event"
+  title: string
+  slug: {
+    current: string
+  }
+  description: string
+  date?: string
+}
+
+export interface SanityUpdateProjectReference {
+  _id: string
+  _type: "project"
+  title: string
+  slug: {
+    current: string
+  }
+  description: string
+  status?: "planned" | "active" | "completed"
+}
+
+export interface SanityUpdate {
+  _id: string
+  _type: "update"
+  title: string
+  slug: {
+    current: string
+  }
+  description: string
+  heroImage: SanityImage
+  category?: SanityUpdateCategory
+  featured?: boolean
+  publishedAt: string
+  body?: PortableTextBlock[]
+  relatedEvents?: SanityUpdateEventReference[]
+  relatedProjects?: SanityUpdateProjectReference[]
+}
+
+export interface SanityUpdatesPage {
+  _id: string
+  pageHero: {
+    title: string
+    description?: string
+    image?: SanityImage
+  }
+  introduction?: PortableTextBlock[]
 }
 
 export interface SanityBoardMember {

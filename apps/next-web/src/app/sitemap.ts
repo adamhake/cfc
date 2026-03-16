@@ -7,11 +7,13 @@ export const revalidate = 3600
 const sitemapSlugsQuery = `{
   "events": *[_type == "event"] { "slug": slug.current, _updatedAt },
   "projects": *[_type == "project"] { "slug": slug.current, _updatedAt },
+  "updates": *[_type == "update"] { "slug": slug.current, _updatedAt },
   "pages": {
     "home": *[_type == "homePage"][0]._updatedAt,
     "about": *[_type == "aboutPage"][0]._updatedAt,
     "events": *[_type == "eventsPage"][0]._updatedAt,
     "projects": *[_type == "projectsPage"][0]._updatedAt,
+    "updates": *[_type == "updatesPage"][0]._updatedAt,
     "amenities": *[_type == "amenitiesPage"][0]._updatedAt,
     "history": *[_type == "historyPage"][0]._updatedAt,
     "getInvolved": *[_type == "getInvolvedPage"][0]._updatedAt,
@@ -23,6 +25,7 @@ const sitemapSlugsQuery = `{
 interface SitemapData {
   events: Array<{ slug: string; _updatedAt: string }>
   projects: Array<{ slug: string; _updatedAt: string }>
+  updates: Array<{ slug: string; _updatedAt: string }>
   pages: Record<string, string | null>
 }
 
@@ -54,6 +57,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${SITE_CONFIG.url}/projects`,
       lastModified: toDate(pages.projects),
       priority: 0.9,
+    },
+    {
+      url: `${SITE_CONFIG.url}/updates`,
+      lastModified: toDate(pages.updates),
+      priority: 0.8,
     },
     {
       url: `${SITE_CONFIG.url}/amenities`,
@@ -99,5 +107,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  return [...staticRoutes, ...eventRoutes, ...projectRoutes]
+  const updateRoutes: MetadataRoute.Sitemap = data.updates.map(({ slug, _updatedAt }) => ({
+    url: `${SITE_CONFIG.url}/updates/${slug}`,
+    lastModified: toDate(_updatedAt),
+    priority: 0.6,
+  }))
+
+  return [...staticRoutes, ...eventRoutes, ...projectRoutes, ...updateRoutes]
 }

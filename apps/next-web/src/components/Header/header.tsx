@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from "react"
 import IconLogo from "@/components/IconLogo/icon-logo"
 import { SocialLinks } from "@/components/SocialLinks/social-links"
 import { useReducedMotion } from "@/hooks/useReducedMotion"
-import type { SanityProject } from "@/lib/sanity-types"
+import type { SanityProjectCard } from "@/lib/sanity-types"
 import { Button } from "../Button/button"
 import ProjectCardCondensed from "../ProjectCardCondensed/project-card-condensed"
 import { ThemeToggle } from "../ThemeToggle/theme-toggle"
@@ -32,7 +32,7 @@ import { ThemeToggle } from "../ThemeToggle/theme-toggle"
  */
 interface HeaderProps {
   /** Featured project data, fetched server-side */
-  featuredProject?: SanityProject | null
+  featuredProject?: SanityProjectCard | null
   /** Social media URLs from site settings */
   facebookUrl?: string
   instagramUrl?: string

@@ -81,14 +81,14 @@ chimborazo-park-conservancy/
    SANITY_STUDIO_API_VERSION=2024-01-01
 
    # Optional - defaults provided
-   SANITY_STUDIO_PREVIEW_URL=http://localhost:3000
-   SANITY_STUDIO_API_URL=http://localhost:3000/api/generate-metadata
+   SANITY_STUDIO_PREVIEW_URL=http://localhost:3001
+   SANITY_STUDIO_API_URL=http://localhost:3001/api/generate-metadata
    ```
 
    **Environment Variable Validation:**
    - All environment variables are validated at build/startup time using Zod schemas
    - Type errors will occur if required variables are missing or invalid
-   - See `apps/web/src/env.ts` and `apps/studio/src/env.ts` for validation schemas
+   - See `apps/next-web/src/env.ts` and `apps/studio/src/env.ts` for validation schemas
    - Shared Sanity schemas are defined in `packages/sanity-config/src/env-schema.ts`
 
 ## 💻 Development
@@ -99,16 +99,16 @@ pnpm run dev
 ```
 
 This will start:
-- **Web app** on http://localhost:3000
+- **Web app** on http://localhost:3001
 - **Sanity Studio** on http://localhost:3333
 
 ### Run individual apps
 
 **Web app only:**
 ```bash
-pnpm --filter @chimborazo/web dev
+pnpm --filter @chimborazo/next-web dev
 # or
-cd apps/web && pnpm run dev
+cd apps/next-web && pnpm run dev
 ```
 
 **Sanity Studio only:**
@@ -258,8 +258,8 @@ const imageUrl = urlForImage(event.heroImage)
    - `SANITY_STUDIO_API_VERSION` - API version (e.g., "2024-01-01")
 
    **Optional (with defaults):**
-   - `SANITY_STUDIO_PREVIEW_URL` - Your production web app URL (default: http://localhost:3000)
-   - `SANITY_STUDIO_API_URL` - API endpoint for AI metadata (default: http://localhost:3000/api/generate-metadata)
+   - `SANITY_STUDIO_PREVIEW_URL` - Your production web app URL (default: http://localhost:3001)
+   - `SANITY_STUDIO_API_URL` - API endpoint for AI metadata (default: http://localhost:3001/api/generate-metadata)
 
    > **Note:** All env vars are validated using T3 Env. The Studio will fail to build if required vars are missing.
 

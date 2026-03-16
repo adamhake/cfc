@@ -19,6 +19,9 @@ vi.mock("@/lib/sanity-fetch", () => ({
     EVENTS: "events",
     EVENTS_LIST: "events-list",
     EVENT_DETAIL: "event-detail",
+    UPDATES: "updates",
+    UPDATES_LIST: "updates-list",
+    UPDATE_DETAIL: "update-detail",
     PROJECTS: "projects",
     PROJECTS_LIST: "projects-list",
     PROJECT_DETAIL: "project-detail",
@@ -135,6 +138,18 @@ describe("Sanity Webhook Route", () => {
       expect(json.tags).toContain(CACHE_TAGS.HOMEPAGE)
     })
 
+    it("revalidates correct tags for update document", async () => {
+      vi.mocked(isValidSignature).mockReturnValue(true)
+      const request = makeRequest({ _id: "update-1", _type: "update" }, "valid-sig")
+
+      const response = await POST(request)
+      const json = await response.json()
+
+      expect(json.tags).toContain(CACHE_TAGS.UPDATES)
+      expect(json.tags).toContain(CACHE_TAGS.UPDATES_LIST)
+      expect(json.tags).toContain(CACHE_TAGS.UPDATE_DETAIL)
+    })
+
     it("revalidates correct tags for mediaImage document", async () => {
       vi.mocked(isValidSignature).mockReturnValue(true)
       const request = makeRequest({ _id: "img-1", _type: "mediaImage" }, "valid-sig")
@@ -163,6 +178,7 @@ describe("Sanity Webhook Route", () => {
       ["homePage", [CACHE_TAGS.HOMEPAGE]],
       ["eventsPage", [CACHE_TAGS.EVENTS_LIST]],
       ["projectsPage", [CACHE_TAGS.PROJECTS_LIST]],
+      ["updatesPage", [CACHE_TAGS.UPDATES_LIST]],
       ["mediaPage", [CACHE_TAGS.MEDIA]],
       ["aboutPage", [CACHE_TAGS.ABOUT]],
       ["historyPage", [CACHE_TAGS.HISTORY]],

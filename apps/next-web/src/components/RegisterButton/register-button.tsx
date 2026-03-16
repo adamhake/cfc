@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@/components/Button/button"
+import { isPastDate } from "@/utils/time"
 
 interface RegisterButtonProps {
   eventDate: string
@@ -11,11 +12,7 @@ interface RegisterButtonProps {
  * based on whether the event is in the past or upcoming.
  */
 export function RegisterButton({ eventDate }: RegisterButtonProps) {
-  const eventDay = new Date(eventDate)
-  const today = new Date()
-  const isPast =
-    new Date(eventDay.getFullYear(), eventDay.getMonth(), eventDay.getDate()) <
-    new Date(today.getFullYear(), today.getMonth(), today.getDate())
+  const isPast = isPastDate(eventDate)
 
   if (isPast) return null
 
