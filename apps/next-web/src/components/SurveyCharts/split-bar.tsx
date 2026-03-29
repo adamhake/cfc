@@ -15,7 +15,7 @@ export function SplitBar({ title, subtitle, options }: SplitBarProps) {
 
   return (
     <div>
-      <h3 className="font-display text-lg text-grey-900 md:text-xl dark:text-grey-100">{title}</h3>
+      <h3 className="font-display text-xl text-grey-900 md:text-2xl dark:text-grey-100">{title}</h3>
       {subtitle && (
         <p className="mt-1 font-body text-sm text-grey-500 dark:text-grey-400">{subtitle}</p>
       )}

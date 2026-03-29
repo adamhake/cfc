@@ -35,7 +35,10 @@ export function DonutChart({ title, subtitle, data, centerLabel }: DonutChartPro
 
   return (
     <div>
-      <h3 id={titleId} className="font-display text-lg text-grey-900 md:text-xl dark:text-grey-100">
+      <h3
+        id={titleId}
+        className="font-display text-xl text-grey-900 md:text-2xl dark:text-grey-100"
+      >
         {title}
       </h3>
       {subtitle && (
