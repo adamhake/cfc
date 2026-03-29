@@ -20,6 +20,7 @@ export const CACHE_TAGS = {
   DONATE: "donate",
   GET_INVOLVED: "get-involved",
   AMENITIES: "amenities",
+  SURVEY_RESULTS: "survey-results",
   SITE_SETTINGS: "site-settings",
 } as const
 

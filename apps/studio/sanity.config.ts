@@ -42,6 +42,7 @@ const singletonTypes = [
   "donatePage",
   "getInvolvedPage",
   "historyPage",
+  "surveyResultsPage",
 ]
 
 function getPreviewPathForDocument(document: { _type?: string; slug?: { current?: string } }) {
@@ -68,6 +69,8 @@ function getPreviewPathForDocument(document: { _type?: string; slug?: { current?
       return "/projects"
     case "updatesPage":
       return "/updates"
+    case "surveyResultsPage":
+      return "/2022-park-survey"
     case "event":
       return slug ? `/events/${slug}` : null
     case "project":
@@ -123,6 +126,12 @@ const structure: StructureResolver = (S) =>
         .title("Get Involved Page")
         .icon(DocumentTextIcon)
         .child(S.document().schemaType("getInvolvedPage").documentId("getInvolvedPage")),
+      S.listItem()
+        .title("Survey Results Page")
+        .icon(DocumentTextIcon)
+        .child(
+          S.document().schemaType("surveyResultsPage").documentId("surveyResultsPage"),
+        ),
 
       S.divider(),
 
@@ -213,6 +222,7 @@ export default defineConfig({
           { route: "/events", type: "eventsPage" },
           { route: "/projects", type: "projectsPage" },
           { route: "/updates", type: "updatesPage" },
+          { route: "/2022-park-survey", type: "surveyResultsPage" },
           // Dynamic routes
           {
             route: "/events/:slug",
@@ -271,6 +281,10 @@ export default defineConfig({
           updatesPage: defineLocations({
             message: "This document controls the Updates page",
             locations: [{ title: "Updates", href: "/updates" }],
+          }),
+          surveyResultsPage: defineLocations({
+            message: "This document controls the Survey Results page",
+            locations: [{ title: "Survey Results", href: "/2022-park-survey" }],
           }),
           // Dynamic content types
           event: defineLocations({

@@ -1,16 +1,12 @@
-"use client";
+"use client"
 
-import { useOptimisticDocument } from "@/hooks/use-optimistic-sanity";
-import type { SanityEvent } from "@/lib/sanity-types";
-import { formatDateString } from "@/utils/time";
-import { Calendar, Clock, MapPin } from "lucide-react";
+import { Calendar, Clock, MapPin } from "lucide-react"
+import { useOptimisticDocument } from "@/hooks/use-optimistic-sanity"
+import type { SanityEvent } from "@/lib/sanity-types"
+import { formatDateString } from "@/utils/time"
 
-export default function EventSidebarOptimistic({
-  event,
-}: {
-  event: SanityEvent;
-}) {
-  const optimisticEvent = useOptimisticDocument(event) ?? event;
+export default function EventSidebarOptimistic({ event }: { event: SanityEvent }) {
+  const optimisticEvent = useOptimisticDocument(event) ?? event
 
   return (
     <div className="overflow-hidden rounded-2xl border border-accent-200 bg-white shadow-sm dark:border-accent-700/30 dark:bg-primary-900">
@@ -59,5 +55,5 @@ export default function EventSidebarOptimistic({
         {/*<RegisterButton eventDate={optimisticEvent.date} />*/}
       </div>
     </div>
-  );
+  )
 }

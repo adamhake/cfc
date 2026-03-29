@@ -392,6 +392,16 @@ export interface SanityAboutPage {
   boardMembers?: SanityBoardMember[]
 }
 
+export interface SanitySurveyResultsPage {
+  _id: string
+  pageHero: {
+    title: string
+    description?: string
+    image?: SanityImage
+  }
+  introduction?: PortableTextBlock[]
+}
+
 export interface SanityDonatePage {
   _id: string
   pageHero: {
