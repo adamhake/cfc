@@ -17,14 +17,14 @@
   },
   "dependencies": {
     "@sanity/icons": "^3.7.4",
-    "@sanity/preview-url-secret": "^4.0.3",
-    "@sanity/ui": "^3.1.13",
-    "@sanity/vision": "^5.16.0",
-    "@t3-oss/env-core": "^0.13.10",
+    "@sanity/preview-url-secret": "^4.0.4",
+    "@sanity/ui": "^3.1.14",
+    "@sanity/vision": "^5.18.0",
+    "@t3-oss/env-core": "^0.13.11",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "sanity": "^5.16.0",
-    "styled-components": "^6.3.11",
+    "sanity": "^5.18.0",
+    "styled-components": "^6.3.12",
     "zod": "^4.3.6"
   },
   "devDependencies": {
