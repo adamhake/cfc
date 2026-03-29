@@ -36,12 +36,12 @@
     "check": "biome check --write ."
   },
   "dependencies": {
-    "@sanity/client": "^7.17.0",
+    "@sanity/client": "^7.20.0",
     "@sanity/icons": "^3.7.4",
-    "@sanity/image-url": "^2.0.3",
-    "@sanity/types": "^5.16.0",
-    "@t3-oss/env-core": "^0.13.10",
-    "groq": "^5.16.0",
+    "@sanity/image-url": "^2.1.0",
+    "@sanity/types": "^5.18.0",
+    "@t3-oss/env-core": "^0.13.11",
+    "groq": "^5.18.0",
     "zod": "^4.3.6"
   },
   "peerDependencies": {
