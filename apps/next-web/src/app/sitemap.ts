@@ -19,6 +19,7 @@ const sitemapSlugsQuery = `{
     "getInvolved": *[_type == "getInvolvedPage"][0]._updatedAt,
     "donate": *[_type == "donatePage"][0]._updatedAt,
     "media": *[_type == "mediaPage"][0]._updatedAt,
+    "surveyResults": *[_type == "surveyResultsPage"][0]._updatedAt,
   }
 }`
 
@@ -87,6 +88,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${SITE_CONFIG.url}/media`,
       lastModified: toDate(pages.media),
       priority: 0.6,
+    },
+    {
+      url: `${SITE_CONFIG.url}/2022-park-survey`,
+      lastModified: toDate(pages.surveyResults),
+      priority: 0.5,
     },
     {
       url: `${SITE_CONFIG.url}/privacy-policy`,

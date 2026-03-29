@@ -9,10 +9,7 @@ import {
 } from "@/components/SurveyCharts";
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch";
 import type { SanitySurveyResultsPage } from "@/lib/sanity-types";
-import {
-  generateBreadcrumbStructuredData,
-  SITE_CONFIG,
-} from "@/utils/seo";
+import { generateBreadcrumbStructuredData, SITE_CONFIG } from "@/utils/seo";
 import { getSurveyResultsPageQuery } from "@chimborazo/sanity-config/queries";
 import type { Metadata } from "next";
 import {
@@ -154,10 +151,6 @@ export default async function SurveyResultsPage() {
         {/* CMS Introduction */}
         {pageData?.introduction && (
           <article className="mx-auto max-w-3xl">
-            <p className="mb-4 text-sm text-grey-500 dark:text-grey-400">
-              Survey conducted in{" "}
-              <time dateTime="2022">2022</time>
-            </p>
             <PortableText value={pageData.introduction} />
           </article>
         )}
