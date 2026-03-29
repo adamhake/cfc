@@ -9,7 +9,10 @@ import {
 } from "@/components/SurveyCharts";
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch";
 import type { SanitySurveyResultsPage } from "@/lib/sanity-types";
-import { SITE_CONFIG } from "@/utils/seo";
+import {
+  generateBreadcrumbStructuredData,
+  SITE_CONFIG,
+} from "@/utils/seo";
 import { getSurveyResultsPageQuery } from "@chimborazo/sanity-config/queries";
 import type { Metadata } from "next";
 import {
@@ -26,16 +29,29 @@ import {
 } from "./survey-data";
 
 export const metadata: Metadata = {
-  title: "Community Survey Results",
+  title: "2022 Community Survey Results",
   description:
-    "Results from the Friends of Chimborazo Park community survey. See how park users and neighbors envision the future of Chimborazo Park.",
+    "Results from the 2022 Chimborazo Park community survey in Richmond, VA. See how Church Hill park users and neighbors prioritize safety, events, and historic restoration.",
   alternates: { canonical: `${SITE_CONFIG.url}/2022-park-survey` },
   openGraph: {
-    title: "Community Survey Results",
+    title: "2022 Community Survey Results",
     description:
-      "Results from the Friends of Chimborazo Park community survey. See how park users and neighbors envision the future of Chimborazo Park.",
+      "Results from the 2022 Chimborazo Park community survey in Richmond, VA. See how Church Hill park users and neighbors prioritize safety, events, and historic restoration.",
     type: "website",
     url: `${SITE_CONFIG.url}/2022-park-survey`,
+    images: [
+      {
+        url: `${SITE_CONFIG.url}/og/2022-survey.webp`,
+        width: 1200,
+        height: 630,
+        alt: "2022 Chimborazo Park Community Survey Results",
+      },
+    ],
+  },
+  twitter: {
+    title: "2022 Community Survey Results",
+    description:
+      "Results from the 2022 Chimborazo Park community survey in Richmond, VA. See how Church Hill park users and neighbors prioritize safety, events, and historic restoration.",
   },
 };
 
@@ -65,6 +81,38 @@ const dailyWeeklyPercent = Math.round(
   Q1_FREQUENCY.options[0].percent + Q1_FREQUENCY.options[1].percent,
 );
 
+const surveyStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: "2022 Chimborazo Park Community Survey Results",
+  description:
+    "Results from the 2022 Chimborazo Park community survey in Richmond, VA. See how Church Hill park users and neighbors prioritize safety, events, and historic restoration.",
+  url: `${SITE_CONFIG.url}/2022-park-survey`,
+  mainEntity: {
+    "@type": "Dataset",
+    name: "2022 Chimborazo Park Community Survey",
+    description:
+      "Community survey of park usage, safety, events, and restoration priorities",
+    creator: { "@type": "Organization", name: SITE_CONFIG.name },
+    temporalCoverage: "2022",
+    variableMeasured: [
+      "Park Usage Frequency",
+      "Safety Priorities",
+      "Event Preferences",
+      "Investment Priorities",
+      "Historic Restoration",
+    ],
+  },
+};
+
+const breadcrumbStructuredData = generateBreadcrumbStructuredData([
+  { name: "Home", url: SITE_CONFIG.url },
+  {
+    name: "2022 Community Survey Results",
+    url: `${SITE_CONFIG.url}/2022-park-survey`,
+  },
+]);
+
 export default async function SurveyResultsPage() {
   const { data: pageData } = (await sanityFetch({
     query: getSurveyResultsPageQuery,
@@ -73,10 +121,28 @@ export default async function SurveyResultsPage() {
 
   return (
     <div>
+      <script
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(surveyStructuredData)
+            .replace(/</g, "\\u003c")
+            .replace(/>/g, "\\u003e"),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbStructuredData)
+            .replace(/</g, "\\u003c")
+            .replace(/>/g, "\\u003e"),
+        }}
+      />
       <PageHeroOptimistic
         document={pageData}
         fallback={{
-          title: "Community Survey Results",
+          title: "2022 Community Survey Results",
           subtitle:
             "What park users and neighbors told us about the future of Chimborazo Park.",
         }}
@@ -88,6 +154,10 @@ export default async function SurveyResultsPage() {
         {/* CMS Introduction */}
         {pageData?.introduction && (
           <article className="mx-auto max-w-3xl">
+            <p className="mb-4 text-sm text-grey-500 dark:text-grey-400">
+              Survey conducted in{" "}
+              <time dateTime="2022">2022</time>
+            </p>
             <PortableText value={pageData.introduction} />
           </article>
         )}
