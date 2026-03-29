@@ -22,4 +22,5 @@ export * from "./quotes"
 export * from "./richTextProjection"
 // Site Settings
 export * from "./siteSettings"
+export * from "./surveyResultsPage"
 export * from "./updates"

@@ -13,6 +13,7 @@ import mediaPageSchema from "./mediaPage"
 import partnerSchema from "./partner"
 import { projectSchema } from "./project"
 import projectsPageSchema from "./projectsPage"
+import surveyResultsPageSchema from "./surveyResultsPage"
 import quoteSchema from "./quote"
 import siteSettingsSchema from "./siteSettings"
 import { updateSchema } from "./update"
@@ -32,6 +33,7 @@ export const schemas = [
   donatePageSchema,
   getInvolvedPageSchema,
   historyPageSchema,
+  surveyResultsPageSchema,
   // Content
   eventSchema,
   projectSchema,
@@ -63,6 +65,7 @@ export {
   projectsPageSchema,
   quoteSchema,
   siteSettingsSchema,
+  surveyResultsPageSchema,
   updateCategorySchema,
   updateSchema,
   updatesPageSchema,
