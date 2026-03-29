@@ -377,7 +377,7 @@ export default defineConfig({
       // Restrict actions for singleton documents
       if (singletonTypes.includes(context.schemaType)) {
         return prev.filter(
-          (action) => !["delete", "duplicate", "unpublish"].includes(action.action ?? ""),
+          (action) => !["delete", "duplicate"].includes(action.action ?? ""),
         )
       }
       // Add AI metadata generation action for mediaImage documents

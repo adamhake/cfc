@@ -191,10 +191,10 @@ export default async function SurveyResultsPage() {
 function StatCard({ value, label }: { value: string; label: string }) {
   return (
     <div className="rounded-xl border border-primary-200 bg-primary-100 px-4 py-5 text-center md:px-6 md:py-7 dark:border-primary-800/70 dark:bg-primary-900/50">
-      <dt className="font-display text-3xl text-primary-800 md:text-4xl dark:text-primary-300">
+      <dt className="font-display text-4xl text-primary-800 md:text-5xl dark:text-primary-300">
         {value}
       </dt>
-      <dd className="mt-1 font-body text-sm font-medium text-primary-800 md:text-base dark:text-primary-300">
+      <dd className="mt-1 font-body text-lg font-medium text-primary-800 dark:text-primary-300">
         {label}
       </dd>
     </div>
