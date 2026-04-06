@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
-    "turbo": "^2.8.21",
+    "turbo": "^2.9.4",
     "typescript": "catalog:"
   },
   "packageManager": "pnpm@10.33.0",
