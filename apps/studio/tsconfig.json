@@ -16,7 +16,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
     "paths": {
       "@chimborazo/sanity-config": ["../../packages/sanity-config/src/index.ts"]
     }
