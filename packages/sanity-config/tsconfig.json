@@ -5,6 +5,7 @@
     "rootDir": "./src",
     "declaration": true,
     "declarationMap": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "composite": true,
     "noEmit": false,
     "jsx": "react-jsx",
