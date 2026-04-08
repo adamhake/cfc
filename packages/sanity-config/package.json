@@ -36,7 +36,7 @@
     "check": "biome check --write ."
   },
   "dependencies": {
-    "@sanity/client": "^7.16.0",
+    "@sanity/client": "^7.20.0",
     "@sanity/icons": "^3.7.4",
     "@sanity/image-url": "^2.1.1",
     "@sanity/types": "^5.20.0",
