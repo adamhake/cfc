@@ -1,37 +1,42 @@
 interface DonutSegment {
-  label: string
-  percent: number
-  count: number
-  color: string
+  label: string;
+  percent: number;
+  count: number;
+  color: string;
 }
 
 interface DonutChartProps {
-  title: string
-  subtitle?: string
-  data: DonutSegment[]
-  centerLabel?: string
+  title: string;
+  subtitle?: string;
+  data: DonutSegment[];
+  centerLabel?: string;
 }
 
-const RADIUS = 15.915
-const CIRCUMFERENCE = 2 * Math.PI * RADIUS // ~100
+const RADIUS = 15.915;
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS; // ~100
 
-export function DonutChart({ title, subtitle, data, centerLabel }: DonutChartProps) {
-  const visibleData = data.filter((d) => d.percent > 0)
+export function DonutChart({
+  title,
+  subtitle,
+  data,
+  centerLabel,
+}: DonutChartProps) {
+  const visibleData = data.filter((d) => d.percent > 0);
 
-  let cumulativePercent = 0
+  let cumulativePercent = 0;
   const segments = visibleData.map((segment) => {
-    const offset = CIRCUMFERENCE - (cumulativePercent / 100) * CIRCUMFERENCE
-    const dashLength = (segment.percent / 100) * CIRCUMFERENCE
-    cumulativePercent += segment.percent
-    return { ...segment, offset, dashLength }
-  })
+    const offset = CIRCUMFERENCE - (cumulativePercent / 100) * CIRCUMFERENCE;
+    const dashLength = (segment.percent / 100) * CIRCUMFERENCE;
+    cumulativePercent += segment.percent;
+    return { ...segment, offset, dashLength };
+  });
 
-  const titleId = `donut-title-${title.replace(/\s+/g, "-").toLowerCase()}`
-  const subtitleId = `donut-subtitle-${title.replace(/\s+/g, "-").toLowerCase()}`
-  const descId = `donut-desc-${title.replace(/\s+/g, "-").toLowerCase()}`
+  const titleId = `donut-title-${title.replace(/\s+/g, "-").toLowerCase()}`;
+  const subtitleId = `donut-subtitle-${title.replace(/\s+/g, "-").toLowerCase()}`;
+  const descId = `donut-desc-${title.replace(/\s+/g, "-").toLowerCase()}`;
   const dataDescription = visibleData
     .map((d) => `${d.label}: ${d.percent}% (${d.count})`)
-    .join(", ")
+    .join(", ");
 
   return (
     <div>
@@ -42,7 +47,10 @@ export function DonutChart({ title, subtitle, data, centerLabel }: DonutChartPro
         {title}
       </h3>
       {subtitle && (
-        <p id={subtitleId} className="mt-1 font-body text-sm text-grey-500 dark:text-grey-400">
+        <p
+          id={subtitleId}
+          className="mt-1 font-body text-sm text-grey-500 dark:text-grey-400"
+        >
           {subtitle}
         </p>
       )}
@@ -93,7 +101,9 @@ export function DonutChart({ title, subtitle, data, centerLabel }: DonutChartPro
               <span className="font-display text-lg text-grey-700 dark:text-grey-300">
                 {centerLabel}
               </span>
-              <span className="text-xs text-grey-500 dark:text-grey-400">responses</span>
+              <span className="text-xs text-grey-500 dark:text-grey-400">
+                responses
+              </span>
             </div>
           )}
         </div>
@@ -106,13 +116,18 @@ export function DonutChart({ title, subtitle, data, centerLabel }: DonutChartPro
                 aria-hidden="true"
               />
               <span className="font-body text-sm text-grey-700 dark:text-grey-300">
-                <span className="font-medium">{segment.percent}%</span> {segment.label}
-                <span className="ml-1 text-grey-400 dark:text-grey-500">({segment.count})</span>
+                <span className="font-medium">
+                  {segment.percent.toFixed(1)}%
+                </span>{" "}
+                {segment.label}
+                <span className="ml-1 text-grey-400 dark:text-grey-500">
+                  ({segment.count})
+                </span>
               </span>
             </li>
           ))}
         </ul>
       </div>
     </div>
-  )
+  );
 }
