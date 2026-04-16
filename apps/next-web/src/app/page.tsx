@@ -3,7 +3,7 @@ import {
   getHomePageQuery,
   recentEventsQuery,
 } from "@chimborazo/sanity-config/queries"
-import type { PortableTextComponents } from "@portabletext/react"
+import type { PortableTextBlock, PortableTextComponents } from "@portabletext/react"
 import { PortableText } from "@portabletext/react"
 import type { Metadata } from "next"
 import Link from "next/link"
@@ -14,9 +14,9 @@ import { Image } from "@/components/OptimizedImage/optimized-image"
 import Partners from "@/components/Partners/partners"
 import Quote from "@/components/Quote/quote"
 import RotatingImages from "@/components/RotatingImages/rotating-images"
-import type { SanityImageObject } from "@/components/SanityImage/sanity-image"
 import SectionHeader from "@/components/SectionHeader/section-header"
 import Vision from "@/components/Vision/vision"
+import { extractGetInvolvedGalleryImages } from "@/lib/gallery-extractors"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
 import type {
   SanityEvent,
@@ -182,40 +182,27 @@ export default async function HomePage() {
   // Prepare gallery data from Sanity or use defaults
   const galleryData =
     homePageData?.gallery?.images
-      ?.filter((img) => img?.image?.asset?.url)
-      .map((img) => ({
-        ...img.image,
-        alt: img.image.alt || "",
-        showOnMobile: img.showOnMobile ?? true,
-      })) || []
+      ?.flatMap((img) => {
+        const image = img?.image
+        if (!image?.asset?.url) return []
+        return [
+          {
+            ...image,
+            asset: image.asset,
+            alt: image.alt || "",
+            showOnMobile: img.showOnMobile ?? true,
+          },
+        ]
+      }) ?? []
 
   // Prepare park gallery data for rotating images
   const parkGalleryData =
-    homePageData?.parkGallery?.images
-      ?.filter((img) => img?.image?.asset?.url)
-      .map((img) => img.image) || []
+    homePageData?.parkGallery?.images?.flatMap((img) =>
+      img?.image?.asset?.url ? [img.image] : [],
+    ) ?? []
 
-  // Prepare get-involved gallery images
-  const getInvolvedGalleryImages =
-    (
-      siteSettings as unknown as {
-        getInvolvedGallery?: {
-          images?: Array<{
-            image?:
-              | SanityImageObject
-              | {
-                  image?: SanityImageObject
-                }
-          }>
-        }
-      }
-    )?.getInvolvedGallery?.images
-      ?.map((item) => {
-        if (!item.image) return null
-        if ("asset" in item.image) return item.image
-        return item.image.image || null
-      })
-      .filter((img): img is SanityImageObject => img != null) || []
+  // Prepare get-involved gallery images (shared with About page)
+  const getInvolvedGalleryImages = extractGetInvolvedGalleryImages(siteSettings)
 
   // CMS section data with fallbacks
   const intro = homePageData?.introSection
@@ -271,14 +258,19 @@ export default async function HomePage() {
           </p>
           <div className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-14">
             {vision?.pillars && vision.pillars.length > 0
-              ? vision.pillars.map((pillar) => (
-                  <Vision
-                    key={pillar._key}
-                    title={pillar.title}
-                    pillar={pillar.pillar}
-                    content={pillar.description}
-                  />
-                ))
+              ? vision.pillars
+                  .filter(
+                    (pillar): pillar is typeof pillar & { pillar: NonNullable<typeof pillar.pillar> } =>
+                      pillar.pillar != null,
+                  )
+                  .map((pillar) => (
+                    <Vision
+                      key={pillar._key}
+                      title={pillar.title ?? ""}
+                      pillar={pillar.pillar}
+                      content={(pillar.description ?? undefined) as PortableTextBlock[] | undefined}
+                    />
+                  ))
               : FALLBACKS.vision.pillars.map((pillar) => (
                   <Vision
                     key={pillar.pillar}
@@ -456,11 +448,11 @@ export default async function HomePage() {
       {/* Get Involved */}
       <div>
         <GetInvolved
-          title={getInvolved?.title}
-          description={getInvolved?.description}
+          title={getInvolved?.title ?? undefined}
+          description={getInvolved?.description ?? undefined}
           galleryImages={getInvolvedGalleryImages}
-          facebookUrl={siteSettings?.socialMedia?.facebook}
-          instagramUrl={siteSettings?.socialMedia?.instagram}
+          facebookUrl={siteSettings?.socialMedia?.facebook ?? undefined}
+          instagramUrl={siteSettings?.socialMedia?.instagram ?? undefined}
         />
       </div>
 
@@ -473,17 +465,24 @@ export default async function HomePage() {
           </p>
           <div className="mt-12">
             <Partners
-              partners={homePageData?.partners
-                ?.filter((partner) => partner?.logo?.asset?.url)
-                ?.map((partner) => ({
-                  name: partner.name,
-                  url: partner.websiteUrl,
-                  logo: {
-                    ...partner.logo,
-                    alt: partner.logo.alt || partner.name,
-                  },
-                  description: partner.description,
-                }))}
+              partners={
+                homePageData?.partners?.flatMap((partner) => {
+                  const logo = partner?.logo
+                  if (!logo?.asset?.url) return []
+                  return [
+                    {
+                      name: partner.name ?? "",
+                      url: partner.websiteUrl ?? undefined,
+                      logo: {
+                        ...logo,
+                        asset: logo.asset,
+                        alt: logo.alt || partner.name || "",
+                      },
+                      description: partner.description ?? undefined,
+                    },
+                  ]
+                }) ?? []
+              }
             />
           </div>
         </Container>
@@ -491,8 +490,8 @@ export default async function HomePage() {
 
       {/* Quote */}
       <Quote
-        quoteText={homePageData?.quote?.quoteText}
-        attribution={homePageData?.quote?.attribution}
+        quoteText={homePageData?.quote?.quoteText ?? undefined}
+        attribution={homePageData?.quote?.attribution ?? undefined}
         backgroundImage={homePageData?.quote?.backgroundImage as SanityImageType | undefined}
       />
     </div>

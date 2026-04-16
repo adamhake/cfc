@@ -12,620 +12,657 @@
  * ---------------------------------------------------------------------------------
  */
 
+export declare const internalGroqTypeReferenceTo: unique symbol;
+
 // Source: schema.json
 export type SanityImageAssetReference = {
-  _ref: string
-  _type: "reference"
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
-}
-
-export type MediaTagReference = {
-  _ref: string
-  _type: "reference"
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: "mediaTag"
-}
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
 
 export type ContentImage = {
-  _type: "contentImage"
-  asset?: SanityImageAssetReference
-  media?: unknown
-  hotspot?: SanityImageHotspot
-  crop?: SanityImageCrop
-  alt?: string
-  caption?: string
-  title?: string
-  category?: "park-views" | "events" | "nature" | "community" | "history"
-  tags?: Array<
-    {
-      _key: string
-    } & MediaTagReference
-  >
-}
+  _type: "contentImage";
+  asset?: SanityImageAssetReference;
+  media?: unknown;
+  hotspot?: SanityImageHotspot;
+  crop?: SanityImageCrop;
+  alt?: string;
+  caption?: string;
+  title?: string;
+  category?: "park-views" | "events" | "nature" | "community" | "history";
+};
 
 export type MediaImage = {
-  _id: string
-  _type: "mediaImage"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  imageV2?: ContentImage
-  featured?: boolean
-  hideFromMediaPage?: boolean
-  uploadedAt?: string
-}
-
-export type MediaTag = {
-  _id: string
-  _type: "mediaTag"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title?: string
-  slug?: Slug
-  description?: string
-}
-
-export type Slug = {
-  _type: "slug"
-  current?: string
-  source?: string
-}
+  _id: string;
+  _type: "mediaImage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  imageV2?: ContentImage;
+};
 
 export type Partner = {
-  _id: string
-  _type: "partner"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  name?: string
-  slug?: Slug
+  _id: string;
+  _type: "partner";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
   logo?: {
-    asset?: SanityImageAssetReference
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    alt?: string
-    _type: "image"
-  }
-  description?: string
-  websiteUrl?: string
-  featured?: boolean
-  order?: number
-}
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  description?: string;
+  websiteUrl?: string;
+  featured?: boolean;
+  order?: number;
+};
 
 export type SanityImageCrop = {
-  _type: "sanity.imageCrop"
-  top?: number
-  bottom?: number
-  left?: number
-  right?: number
-}
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
 
 export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot"
-  x?: number
-  y?: number
-  height?: number
-  width?: number
-}
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
+};
+
+export type Slug = {
+  _type: "slug";
+  current?: string;
+  source?: string;
+};
 
 export type SanityFileAssetReference = {
-  _ref: string
-  _type: "reference"
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: "sanity.fileAsset"
-}
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+};
 
 export type UpdateCategoryReference = {
-  _ref: string
-  _type: "reference"
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: "updateCategory"
-}
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "updateCategory";
+};
 
 export type EventReference = {
-  _ref: string
-  _type: "reference"
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: "event"
-}
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "event";
+};
 
 export type ProjectReference = {
-  _ref: string
-  _type: "reference"
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: "project"
-}
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "project";
+};
 
 export type Update = {
-  _id: string
-  _type: "update"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title?: string
-  slug?: Slug
-  description?: string
-  heroImageV2?: ContentImage
+  _id: string;
+  _type: "update";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  description?: string;
+  heroImageV2?: ContentImage;
   body?: Array<
     | {
         children?: Array<{
-          marks?: Array<string>
-          text?: string
-          _type: "span"
-          _key: string
-        }>
-        style?: "normal" | "leading" | "leading-lg" | "h2" | "h3" | "blockquote"
-        listItem?: "bullet" | "number"
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "normal"
+          | "leading"
+          | "leading-lg"
+          | "h2"
+          | "h3"
+          | "blockquote";
+        listItem?: "bullet" | "number";
         markDefs?: Array<{
-          href?: string
-          _type: "link"
-          _key: string
-        }>
-        level?: number
-        _type: "block"
-        _key: string
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
       }
     | {
-        asset?: SanityImageAssetReference
-        media?: unknown
-        hotspot?: SanityImageHotspot
-        crop?: SanityImageCrop
-        alt?: string
-        caption?: string
-        _type: "image"
-        _key: string
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        caption?: string;
+        _type: "image";
+        _key: string;
       }
     | {
-        asset?: SanityFileAssetReference
-        media?: unknown
-        title?: string
-        description?: string
-        _type: "fileAttachment"
-        _key: string
+        asset?: SanityFileAssetReference;
+        media?: unknown;
+        title?: string;
+        description?: string;
+        _type: "fileAttachment";
+        _key: string;
       }
-  >
-  category?: UpdateCategoryReference
+  >;
+  category?: UpdateCategoryReference;
   relatedEvents?: Array<
     {
-      _key: string
+      _key: string;
     } & EventReference
-  >
+  >;
   relatedProjects?: Array<
     {
-      _key: string
+      _key: string;
     } & ProjectReference
-  >
-  featured?: boolean
-  publishedAt?: string
-}
+  >;
+  featured?: boolean;
+  publishedAt?: string;
+};
 
 export type UpdateCategory = {
-  _id: string
-  _type: "updateCategory"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title?: string
-  slug?: Slug
-  description?: string
-  color?: "green" | "blue" | "orange" | "purple" | "teal"
-}
+  _id: string;
+  _type: "updateCategory";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  description?: string;
+  color?: "green" | "blue" | "orange" | "purple" | "teal";
+};
 
 export type PartnerReference = {
-  _ref: string
-  _type: "reference"
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: "partner"
-}
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "partner";
+};
 
 export type Project = {
-  _id: string
-  _type: "project"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title?: string
-  slug?: Slug
-  description?: string
-  heroImageV2?: ContentImage
-  status?: "planned" | "active" | "completed"
-  startDate?: string
-  startDateOverride?: string
-  completionDate?: string
-  completionDateOverride?: string
-  goal?: string
-  location?: string
-  budget?: string
-  category?: "restoration" | "recreation" | "connection" | "preservation"
+  _id: string;
+  _type: "project";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  description?: string;
+  heroImageV2?: ContentImage;
+  status?: "planned" | "active" | "completed";
+  startDate?: string;
+  startDateOverride?: string;
+  completionDate?: string;
+  completionDateOverride?: string;
+  goal?: string;
+  location?: string;
+  budget?: string;
+  category?: "restoration" | "recreation" | "connection" | "preservation";
   body?: Array<
     | {
         children?: Array<{
-          marks?: Array<string>
-          text?: string
-          _type: "span"
-          _key: string
-        }>
-        style?: "normal" | "leading" | "leading-lg" | "h2" | "h3" | "blockquote"
-        listItem?: "bullet" | "number"
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "normal"
+          | "leading"
+          | "leading-lg"
+          | "h2"
+          | "h3"
+          | "blockquote";
+        listItem?: "bullet" | "number";
         markDefs?: Array<{
-          href?: string
-          _type: "link"
-          _key: string
-        }>
-        level?: number
-        _type: "block"
-        _key: string
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
       }
     | {
-        asset?: SanityImageAssetReference
-        media?: unknown
-        hotspot?: SanityImageHotspot
-        crop?: SanityImageCrop
-        alt?: string
-        caption?: string
-        _type: "image"
-        _key: string
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        caption?: string;
+        _type: "image";
+        _key: string;
       }
     | {
-        asset?: SanityFileAssetReference
-        media?: unknown
-        title?: string
-        description?: string
-        _type: "fileAttachment"
-        _key: string
+        asset?: SanityFileAssetReference;
+        media?: unknown;
+        title?: string;
+        description?: string;
+        _type: "fileAttachment";
+        _key: string;
       }
-  >
+  >;
   gallery?: Array<{
-    asset?: SanityImageAssetReference
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    alt?: string
-    caption?: string
-    _type: "image"
-    _key: string
-  }>
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    caption?: string;
+    _type: "image";
+    _key: string;
+  }>;
   relatedEvents?: Array<
     {
-      _key: string
+      _key: string;
     } & EventReference
-  >
+  >;
   partners?: Array<
     {
-      _key: string
+      _key: string;
     } & PartnerReference
-  >
-  featured?: boolean
-  publishedAt?: string
-}
+  >;
+  featured?: boolean;
+  publishedAt?: string;
+};
 
 export type GalleryReference = {
-  _ref: string
-  _type: "reference"
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: "gallery"
-}
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "gallery";
+};
 
 export type Event = {
-  _id: string
-  _type: "event"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title?: string
-  slug?: Slug
-  description?: string
+  _id: string;
+  _type: "event";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  description?: string;
   heroImage?: {
-    asset?: SanityImageAssetReference
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    alt?: string
-    caption?: string
-    _type: "image"
-  }
-  date?: string
-  time?: string
-  location?: string
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    caption?: string;
+    _type: "image";
+  };
+  date?: string;
+  time?: string;
+  location?: string;
   body?: Array<
     | {
         children?: Array<{
-          marks?: Array<string>
-          text?: string
-          _type: "span"
-          _key: string
-        }>
-        style?: "normal" | "leading" | "leading-lg" | "h2" | "h3" | "blockquote"
-        listItem?: "bullet" | "number"
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "normal"
+          | "leading"
+          | "leading-lg"
+          | "h2"
+          | "h3"
+          | "blockquote";
+        listItem?: "bullet" | "number";
         markDefs?: Array<{
-          href?: string
-          _type: "link"
-          _key: string
-        }>
-        level?: number
-        _type: "block"
-        _key: string
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
       }
     | {
-        asset?: SanityImageAssetReference
-        media?: unknown
-        hotspot?: SanityImageHotspot
-        crop?: SanityImageCrop
-        alt?: string
-        caption?: string
-        _type: "image"
-        _key: string
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        caption?: string;
+        _type: "image";
+        _key: string;
       }
     | {
-        asset?: SanityFileAssetReference
-        media?: unknown
-        title?: string
-        description?: string
-        _type: "fileAttachment"
-        _key: string
+        asset?: SanityFileAssetReference;
+        media?: unknown;
+        title?: string;
+        description?: string;
+        _type: "fileAttachment";
+        _key: string;
       }
-  >
+  >;
   recap?: Array<
     | {
         children?: Array<{
-          marks?: Array<string>
-          text?: string
-          _type: "span"
-          _key: string
-        }>
-        style?: "normal" | "leading" | "leading-lg" | "h2" | "h3" | "blockquote"
-        listItem?: "bullet" | "number"
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "normal"
+          | "leading"
+          | "leading-lg"
+          | "h2"
+          | "h3"
+          | "blockquote";
+        listItem?: "bullet" | "number";
         markDefs?: Array<{
-          href?: string
-          _type: "link"
-          _key: string
-        }>
-        level?: number
-        _type: "block"
-        _key: string
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
       }
     | {
-        asset?: SanityImageAssetReference
-        media?: unknown
-        hotspot?: SanityImageHotspot
-        crop?: SanityImageCrop
-        alt?: string
-        caption?: string
-        _type: "image"
-        _key: string
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        caption?: string;
+        _type: "image";
+        _key: string;
       }
     | {
-        asset?: SanityFileAssetReference
-        media?: unknown
-        title?: string
-        description?: string
-        _type: "fileAttachment"
-        _key: string
+        asset?: SanityFileAssetReference;
+        media?: unknown;
+        title?: string;
+        description?: string;
+        _type: "fileAttachment";
+        _key: string;
       }
-  >
-  recapGallery?: GalleryReference
-  featured?: boolean
-  publishedAt?: string
-}
+  >;
+  recapGallery?: GalleryReference;
+  featured?: boolean;
+  publishedAt?: string;
+};
+
+export type SurveyResultsPage = {
+  _id: string;
+  _type: "surveyResultsPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  pageHero?: {
+    title?: string;
+    description?: string;
+    imageV2?: ContentImage;
+  };
+  introduction?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "leading" | "leading-lg" | "h2" | "h3";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+};
 
 export type HistoryPage = {
-  _id: string
-  _type: "historyPage"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
+  _id: string;
+  _type: "historyPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
   pageHero?: {
-    title?: string
-    description?: string
-    imageV2?: ContentImage
-  }
+    title?: string;
+    description?: string;
+    imageV2?: ContentImage;
+  };
   content?: Array<
     | {
         children?: Array<{
-          marks?: Array<string>
-          text?: string
-          _type: "span"
-          _key: string
-        }>
-        style?: "normal" | "leading" | "leading-lg" | "h2" | "h3" | "blockquote"
-        listItem?: "bullet" | "number"
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "normal"
+          | "leading"
+          | "leading-lg"
+          | "h2"
+          | "h3"
+          | "blockquote";
+        listItem?: "bullet" | "number";
         markDefs?: Array<{
-          href?: string
-          _type: "link"
-          _key: string
-        }>
-        level?: number
-        _type: "block"
-        _key: string
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
       }
     | {
-        asset?: SanityImageAssetReference
-        media?: unknown
-        hotspot?: SanityImageHotspot
-        crop?: SanityImageCrop
-        alt?: string
-        caption?: string
-        _type: "image"
-        _key: string
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        caption?: string;
+        _type: "image";
+        _key: string;
       }
     | {
-        asset?: SanityFileAssetReference
-        media?: unknown
-        title?: string
-        description?: string
-        _type: "fileAttachment"
-        _key: string
+        asset?: SanityFileAssetReference;
+        media?: unknown;
+        title?: string;
+        description?: string;
+        _type: "fileAttachment";
+        _key: string;
       }
-  >
-}
+  >;
+};
 
 export type GetInvolvedPage = {
-  _id: string
-  _type: "getInvolvedPage"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
+  _id: string;
+  _type: "getInvolvedPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
   pageHero?: {
-    title?: string
-    description?: string
-    imageV2?: ContentImage
-  }
-}
+    title?: string;
+    description?: string;
+    imageV2?: ContentImage;
+  };
+};
 
 export type DonatePage = {
-  _id: string
-  _type: "donatePage"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
+  _id: string;
+  _type: "donatePage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
   pageHero?: {
-    title?: string
-    description?: string
-    imageV2?: ContentImage
-  }
-}
+    title?: string;
+    description?: string;
+    imageV2?: ContentImage;
+  };
+};
 
 export type MediaPage = {
-  _id: string
-  _type: "mediaPage"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
+  _id: string;
+  _type: "mediaPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
   pageHero?: {
-    title?: string
-    description?: string
-    imageV2?: ContentImage
-  }
-}
+    title?: string;
+    description?: string;
+    imageV2?: ContentImage;
+  };
+};
 
 export type UpdatesPage = {
-  _id: string
-  _type: "updatesPage"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
+  _id: string;
+  _type: "updatesPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
   pageHero?: {
-    title?: string
-    description?: string
-    imageV2?: ContentImage
-  }
+    title?: string;
+    description?: string;
+    imageV2?: ContentImage;
+  };
   introduction?: Array<{
     children?: Array<{
-      marks?: Array<string>
-      text?: string
-      _type: "span"
-      _key: string
-    }>
-    style?: "normal" | "leading" | "leading-lg" | "h2" | "h3"
-    listItem?: "bullet" | "number"
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "leading" | "leading-lg" | "h2" | "h3";
+    listItem?: "bullet" | "number";
     markDefs?: Array<{
-      href?: string
-      _type: "link"
-      _key: string
-    }>
-    level?: number
-    _type: "block"
-    _key: string
-  }>
-}
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+};
 
 export type ProjectsPage = {
-  _id: string
-  _type: "projectsPage"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
+  _id: string;
+  _type: "projectsPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
   pageHero?: {
-    title?: string
-    description?: string
-    imageV2?: ContentImage
-  }
+    title?: string;
+    description?: string;
+    imageV2?: ContentImage;
+  };
   introduction?: Array<{
     children?: Array<{
-      marks?: Array<string>
-      text?: string
-      _type: "span"
-      _key: string
-    }>
-    style?: "normal" | "leading" | "leading-lg" | "h2" | "h3"
-    listItem?: "bullet" | "number"
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "leading" | "leading-lg" | "h2" | "h3";
+    listItem?: "bullet" | "number";
     markDefs?: Array<{
-      href?: string
-      _type: "link"
-      _key: string
-    }>
-    level?: number
-    _type: "block"
-    _key: string
-  }>
-}
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+};
 
 export type EventsPage = {
-  _id: string
-  _type: "eventsPage"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
+  _id: string;
+  _type: "eventsPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
   pageHero?: {
-    title?: string
-    description?: string
-    imageV2?: ContentImage
-  }
+    title?: string;
+    description?: string;
+    imageV2?: ContentImage;
+  };
   introduction?: Array<{
     children?: Array<{
-      marks?: Array<string>
-      text?: string
-      _type: "span"
-      _key: string
-    }>
-    style?: "normal" | "leading" | "leading-lg" | "h2" | "h3"
-    listItem?: "bullet" | "number"
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "leading" | "leading-lg" | "h2" | "h3";
+    listItem?: "bullet" | "number";
     markDefs?: Array<{
-      href?: string
-      _type: "link"
-      _key: string
-    }>
-    level?: number
-    _type: "block"
-    _key: string
-  }>
-}
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+};
 
 export type AmenitiesPage = {
-  _id: string
-  _type: "amenitiesPage"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
+  _id: string;
+  _type: "amenitiesPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
   pageHero?: {
-    title?: string
-    description?: string
-    imageV2?: ContentImage
-  }
+    title?: string;
+    description?: string;
+    imageV2?: ContentImage;
+  };
   introduction?: Array<{
     children?: Array<{
-      marks?: Array<string>
-      text?: string
-      _type: "span"
-      _key: string
-    }>
-    style?: "normal" | "leading" | "leading-lg" | "h2" | "h3"
-    listItem?: "bullet" | "number"
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "leading" | "leading-lg" | "h2" | "h3";
+    listItem?: "bullet" | "number";
     markDefs?: Array<{
-      href?: string
-      _type: "link"
-      _key: string
-    }>
-    level?: number
-    _type: "block"
-    _key: string
-  }>
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
   amenities?: Array<{
-    title?: string
-    slug?: Slug
+    title?: string;
+    slug?: Slug;
     icon?:
       | "building"
       | "gazebo"
@@ -638,248 +675,395 @@ export type AmenitiesPage = {
       | "parking"
       | "playground"
       | "fountain"
-      | "garden"
-    description?: string
-    details?: Array<string>
+      | "garden";
+    description?: string;
+    details?: Array<string>;
     imagesV2?: Array<
       {
-        _key: string
+        _key: string;
       } & ContentImage
-    >
-    externalLink?: string
-    linkText?: string
-    section?: "upper-park" | "lower-park" | "both"
-    _key: string
-  }>
-}
+    >;
+    externalLink?: string;
+    linkText?: string;
+    section?: "upper-park" | "lower-park" | "both";
+    _key: string;
+  }>;
+};
 
 export type QuoteReference = {
-  _ref: string
-  _type: "reference"
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: "quote"
-}
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "quote";
+};
 
 export type HomePage = {
-  _id: string
-  _type: "homePage"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
+  _id: string;
+  _type: "homePage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
   hero?: {
-    heading?: string
-    subheading?: string
-    heroImageV2?: ContentImage
+    heading?: string;
+    subheading?: string;
+    heroImageV2?: ContentImage;
     ctaButton?: {
-      text?: string
-      link?: string
-    }
-  }
+      text?: string;
+      link?: string;
+    };
+  };
+  introSection?: {
+    heading?: string;
+    body?: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal";
+      listItem?: never;
+      markDefs?: null;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }>;
+  };
+  homepageGallery?: GalleryReference;
+  visionSection?: {
+    title?: string;
+    description?: string;
+    pillars?: Array<{
+      title?: string;
+      pillar?: "restoration" | "recreation" | "connection" | "preservation";
+      description?: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "normal";
+        listItem?: "bullet";
+        markDefs?: null;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }>;
+      _key: string;
+    }>;
+  };
+  projectsSectionHeader?: {
+    title?: string;
+    description?: string;
+  };
+  parkSection?: {
+    title?: string;
+    intro?: string;
+    body?: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal";
+      listItem?: never;
+      markDefs?: null;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }>;
+    today?: string;
+    callout?: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal";
+      listItem?: never;
+      markDefs?: null;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }>;
+  };
+  parkGallery?: GalleryReference;
+  eventsSectionHeader?: {
+    title?: string;
+    description?: string;
+  };
+  getInvolvedSection?: {
+    title?: string;
+    description?: string;
+  };
+  partnersSectionHeader?: {
+    title?: string;
+    description?: string;
+  };
   featuredPartners?: Array<
     {
-      _key: string
+      _key: string;
     } & PartnerReference
-  >
-  featuredQuote?: QuoteReference
-  homepageGallery?: GalleryReference
-  parkGallery?: GalleryReference
-}
+  >;
+  featuredQuote?: QuoteReference;
+};
 
 export type SiteSettings = {
-  _id: string
-  _type: "siteSettings"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  organizationName?: string
-  alternativeName?: string
-  description?: string
+  _id: string;
+  _type: "siteSettings";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  organizationName?: string;
+  alternativeName?: string;
+  description?: string;
   parkAddress?: {
-    street?: string
-    city?: string
-    state?: string
-    zipCode?: string
-  }
-  parkHours?: string
+    street?: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
+  };
+  parkHours?: string;
   socialMedia?: {
-    facebook?: string
-    instagram?: string
-  }
-  donationUrl?: string
-  contactEmail?: string
+    facebook?: string;
+    instagram?: string;
+  };
+  donationUrl?: string;
+  contactEmail?: string;
   metaDefaults?: {
-    siteTitle?: string
+    siteTitle?: string;
     ogImage?: {
-      asset?: SanityImageAssetReference
-      media?: unknown
-      hotspot?: SanityImageHotspot
-      crop?: SanityImageCrop
-      alt?: string
-      _type: "image"
-    }
-  }
-  getInvolvedGallery?: GalleryReference
-  featuredQuote?: QuoteReference
-}
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+  };
+  getInvolvedGallery?: GalleryReference;
+  featuredQuote?: QuoteReference;
+};
 
 export type Quote = {
-  _id: string
-  _type: "quote"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  quoteText?: string
-  attribution?: string
-  backgroundImageV2?: ContentImage
-  featured?: boolean
-  category?: "nature" | "community" | "conservation" | "history"
-}
+  _id: string;
+  _type: "quote";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  quoteText?: string;
+  attribution?: string;
+  backgroundImageV2?: ContentImage;
+  featured?: boolean;
+  category?: "nature" | "community" | "conservation" | "history";
+};
 
 export type Gallery = {
-  _id: string
-  _type: "gallery"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title?: string
-  galleryType?: "homepage" | "amenities" | "events" | "about"
+  _id: string;
+  _type: "gallery";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  galleryType?: "homepage" | "amenities" | "events" | "about";
   images?: Array<{
-    imageV2?: ContentImage
-    showOnMobile?: boolean
-    _key: string
-  }>
-  order?: number
-}
+    imageV2?: ContentImage;
+    showOnMobile?: boolean;
+    _key: string;
+  }>;
+  order?: number;
+};
 
 export type AboutPage = {
-  _id: string
-  _type: "aboutPage"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
+  _id: string;
+  _type: "aboutPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
   pageHero?: {
-    title?: string
-    description?: string
-    imageV2?: ContentImage
-  }
-}
-
-export type MediaTag_2 = {
-  _id: string
-  _type: "media.tag"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  name?: Slug
-}
+    title?: string;
+    description?: string;
+    imageV2?: ContentImage;
+  };
+  mission?: string;
+  vision?: string;
+  highlights?: Array<{
+    value?: string;
+    label?: string;
+    _type: "highlight";
+    _key: string;
+  }>;
+  storyImage?: ContentImage;
+  content?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "normal"
+          | "leading"
+          | "leading-lg"
+          | "h2"
+          | "h3"
+          | "blockquote";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        caption?: string;
+        _type: "image";
+        _key: string;
+      }
+    | {
+        asset?: SanityFileAssetReference;
+        media?: unknown;
+        title?: string;
+        description?: string;
+        _type: "fileAttachment";
+        _key: string;
+      }
+  >;
+  calloutImage?: ContentImage;
+  boardMembers?: Array<{
+    name?: string;
+    role?: string;
+    bio?: string;
+    image?: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    _type: "boardMember";
+    _key: string;
+  }>;
+};
 
 export type SanityImagePaletteSwatch = {
-  _type: "sanity.imagePaletteSwatch"
-  background?: string
-  foreground?: string
-  population?: number
-  title?: string
-}
+  _type: "sanity.imagePaletteSwatch";
+  background?: string;
+  foreground?: string;
+  population?: number;
+  title?: string;
+};
 
 export type SanityImagePalette = {
-  _type: "sanity.imagePalette"
-  darkMuted?: SanityImagePaletteSwatch
-  lightVibrant?: SanityImagePaletteSwatch
-  darkVibrant?: SanityImagePaletteSwatch
-  vibrant?: SanityImagePaletteSwatch
-  dominant?: SanityImagePaletteSwatch
-  lightMuted?: SanityImagePaletteSwatch
-  muted?: SanityImagePaletteSwatch
-}
+  _type: "sanity.imagePalette";
+  darkMuted?: SanityImagePaletteSwatch;
+  lightVibrant?: SanityImagePaletteSwatch;
+  darkVibrant?: SanityImagePaletteSwatch;
+  vibrant?: SanityImagePaletteSwatch;
+  dominant?: SanityImagePaletteSwatch;
+  lightMuted?: SanityImagePaletteSwatch;
+  muted?: SanityImagePaletteSwatch;
+};
 
 export type SanityImageDimensions = {
-  _type: "sanity.imageDimensions"
-  height?: number
-  width?: number
-  aspectRatio?: number
-}
+  _type: "sanity.imageDimensions";
+  height?: number;
+  width?: number;
+  aspectRatio?: number;
+};
 
 export type SanityImageMetadata = {
-  _type: "sanity.imageMetadata"
-  location?: Geopoint
-  dimensions?: SanityImageDimensions
-  palette?: SanityImagePalette
-  lqip?: string
-  blurHash?: string
-  thumbHash?: string
-  hasAlpha?: boolean
-  isOpaque?: boolean
-}
+  _type: "sanity.imageMetadata";
+  location?: Geopoint;
+  dimensions?: SanityImageDimensions;
+  palette?: SanityImagePalette;
+  lqip?: string;
+  blurHash?: string;
+  thumbHash?: string;
+  hasAlpha?: boolean;
+  isOpaque?: boolean;
+};
 
 export type SanityFileAsset = {
-  _id: string
-  _type: "sanity.fileAsset"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  originalFilename?: string
-  label?: string
-  title?: string
-  description?: string
-  altText?: string
-  sha1hash?: string
-  extension?: string
-  mimeType?: string
-  size?: number
-  assetId?: string
-  uploadId?: string
-  path?: string
-  url?: string
-  source?: SanityAssetSourceData
-}
+  _id: string;
+  _type: "sanity.fileAsset";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  originalFilename?: string;
+  label?: string;
+  title?: string;
+  description?: string;
+  altText?: string;
+  sha1hash?: string;
+  extension?: string;
+  mimeType?: string;
+  size?: number;
+  assetId?: string;
+  uploadId?: string;
+  path?: string;
+  url?: string;
+  source?: SanityAssetSourceData;
+};
 
 export type SanityAssetSourceData = {
-  _type: "sanity.assetSourceData"
-  name?: string
-  id?: string
-  url?: string
-}
+  _type: "sanity.assetSourceData";
+  name?: string;
+  id?: string;
+  url?: string;
+};
 
 export type SanityImageAsset = {
-  _id: string
-  _type: "sanity.imageAsset"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  originalFilename?: string
-  label?: string
-  title?: string
-  description?: string
-  altText?: string
-  sha1hash?: string
-  extension?: string
-  mimeType?: string
-  size?: number
-  assetId?: string
-  uploadId?: string
-  path?: string
-  url?: string
-  metadata?: SanityImageMetadata
-  source?: SanityAssetSourceData
-}
+  _id: string;
+  _type: "sanity.imageAsset";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  originalFilename?: string;
+  label?: string;
+  title?: string;
+  description?: string;
+  altText?: string;
+  sha1hash?: string;
+  extension?: string;
+  mimeType?: string;
+  size?: number;
+  assetId?: string;
+  uploadId?: string;
+  path?: string;
+  url?: string;
+  metadata?: SanityImageMetadata;
+  source?: SanityAssetSourceData;
+};
 
 export type Geopoint = {
-  _type: "geopoint"
-  lat?: number
-  lng?: number
-  alt?: number
-}
+  _type: "geopoint";
+  lat?: number;
+  lng?: number;
+  alt?: number;
+};
 
 export type AllSanitySchemaTypes =
   | SanityImageAssetReference
-  | MediaTagReference
   | ContentImage
   | MediaImage
-  | MediaTag
-  | Slug
   | Partner
   | SanityImageCrop
   | SanityImageHotspot
+  | Slug
   | SanityFileAssetReference
   | UpdateCategoryReference
   | EventReference
@@ -890,6 +1074,7 @@ export type AllSanitySchemaTypes =
   | Project
   | GalleryReference
   | Event
+  | SurveyResultsPage
   | HistoryPage
   | GetInvolvedPage
   | DonatePage
@@ -904,7 +1089,6 @@ export type AllSanitySchemaTypes =
   | Quote
   | Gallery
   | AboutPage
-  | MediaTag_2
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -912,81 +1096,201 @@ export type AllSanitySchemaTypes =
   | SanityFileAsset
   | SanityAssetSourceData
   | SanityImageAsset
-  | Geopoint
+  | Geopoint;
 
-export declare const internalGroqTypeReferenceTo: unique symbol
-
-// Source: ../../packages/sanity-config/src/queries/aboutPage.ts
+// Source: src/queries/aboutPage.ts
 // Variable: getAboutPageQuery
-// Query: *[_type == "aboutPage"][0]{    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },  }
+// Query: *[_type == "aboutPage"][0]{    _id,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    mission,    vision,    highlights[]{      _key,      value,      label    },    "storyImage": storyImage{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    content[]{        ...,  _type == "image" => {    ...,    asset->{      _id,      url,      metadata{        dimensions,        lqip,        blurhash      }    }  },  _type == "fileAttachment" => {    ...,    asset->{      _id,      url,      originalFilename,      size,      extension,      mimeType    }  }    },    "calloutImage": calloutImage{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    boardMembers[]{      _key,      name,      role,      bio,      image{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    }  }
 export type GetAboutPageQueryResult = {
+  _id: string;
   pageHero: {
-    title: string | null
-    description: string | null
+    title: string | null;
+    description: string | null;
     image: {
       asset: {
-        _id: string
-        url: string | null
+        _id: string;
+        url: string | null;
         metadata: {
-          dimensions: SanityImageDimensions | null
-          lqip: string | null
-          blurhash: null
-          palette: SanityImagePalette | null
-        } | null
-      } | null
-      alt: string | null
-      caption: string | null
-      hotspot: SanityImageHotspot | null
-      crop: SanityImageCrop | null
-    } | null
-  } | null
-} | null
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  } | null;
+  mission: string | null;
+  vision: string | null;
+  highlights: Array<{
+    _key: string;
+    value: string | null;
+    label: string | null;
+  }> | null;
+  storyImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+        palette: SanityImagePalette | null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  content: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h2"
+          | "h3"
+          | "leading-lg"
+          | "leading"
+          | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset: {
+          _id: string;
+          url: string | null;
+          originalFilename: string | null;
+          size: number | null;
+          extension: string | null;
+          mimeType: string | null;
+        } | null;
+        media?: unknown;
+        title?: string;
+        description?: string;
+        _type: "fileAttachment";
+        _key: string;
+      }
+    | {
+        asset: {
+          _id: string;
+          url: string | null;
+          metadata: {
+            dimensions: SanityImageDimensions | null;
+            lqip: string | null;
+            blurhash: null;
+          } | null;
+        } | null;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        caption?: string;
+        _type: "image";
+        _key: string;
+      }
+  > | null;
+  calloutImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+        palette: SanityImagePalette | null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  boardMembers: Array<{
+    _key: string;
+    name: string | null;
+    role: string | null;
+    bio: string | null;
+    image: {
+      asset: {
+        _id: string;
+        url: string | null;
+        metadata: {
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  }> | null;
+} | null;
 
-// Source: ../../packages/sanity-config/src/queries/amenitiesPage.ts
+// Source: src/queries/amenitiesPage.ts
 // Variable: getAmenitiesPageQuery
-// Query: *[_type == "amenitiesPage"][0]{    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    introduction,    amenities[]{      title,      slug,      icon,      description,      details,      "images": imagesV2[defined(asset)][]{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      },      externalLink,      linkText,      section    }  }
+// Query: *[_type == "amenitiesPage"][0]{    _id,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    introduction,    amenities[]{      title,      slug,      icon,      description,      details,      "images": imagesV2[defined(asset)][]{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      },      externalLink,      linkText,      section    }  }
 export type GetAmenitiesPageQueryResult = {
+  _id: string;
   pageHero: {
-    title: string | null
-    description: string | null
+    title: string | null;
+    description: string | null;
     image: {
       asset: {
-        _id: string
-        url: string | null
+        _id: string;
+        url: string | null;
         metadata: {
-          dimensions: SanityImageDimensions | null
-          lqip: string | null
-          blurhash: null
-          palette: SanityImagePalette | null
-        } | null
-      } | null
-      alt: string | null
-      caption: string | null
-      hotspot: SanityImageHotspot | null
-      crop: SanityImageCrop | null
-    } | null
-  } | null
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  } | null;
   introduction: Array<{
     children?: Array<{
-      marks?: Array<string>
-      text?: string
-      _type: "span"
-      _key: string
-    }>
-    style?: "h2" | "h3" | "leading-lg" | "leading" | "normal"
-    listItem?: "bullet" | "number"
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "h2" | "h3" | "leading-lg" | "leading" | "normal";
+    listItem?: "bullet" | "number";
     markDefs?: Array<{
-      href?: string
-      _type: "link"
-      _key: string
-    }>
-    level?: number
-    _type: "block"
-    _key: string
-  }> | null
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }> | null;
   amenities: Array<{
-    title: string | null
-    slug: Slug | null
+    title: string | null;
+    slug: Slug | null;
     icon:
       | "bench"
       | "building"
@@ -1000,38 +1304,38 @@ export type GetAmenitiesPageQueryResult = {
       | "restroom"
       | "trail"
       | "trees"
-      | null
-    description: string | null
-    details: Array<string> | null
+      | null;
+    description: string | null;
+    details: Array<string> | null;
     images: Array<{
       asset: {
-        _id: string
-        url: string | null
+        _id: string;
+        url: string | null;
         metadata: {
-          dimensions: SanityImageDimensions | null
-          lqip: string | null
-          blurhash: null
-          palette: SanityImagePalette | null
-        } | null
-      } | null
-      alt: string | null
-      caption: string | null
-      hotspot: SanityImageHotspot | null
-      crop: SanityImageCrop | null
-    }> | null
-    externalLink: string | null
-    linkText: string | null
-    section: "both" | "lower-park" | "upper-park" | null
-  }> | null
-} | null
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    }> | null;
+    externalLink: string | null;
+    linkText: string | null;
+    section: "both" | "lower-park" | "upper-park" | null;
+  }> | null;
+} | null;
 
-// Source: ../../packages/sanity-config/src/queries/amenitiesPage.ts
+// Source: src/queries/amenitiesPage.ts
 // Variable: getAmenitiesBySectionQuery
 // Query: *[_type == "amenitiesPage"][0]{    "upperParkAmenities": amenities[section == "upper-park" || section == "both"],    "lowerParkAmenities": amenities[section == "lower-park" || section == "both"]  }
 export type GetAmenitiesBySectionQueryResult = {
   upperParkAmenities: Array<{
-    title?: string
-    slug?: Slug
+    title?: string;
+    slug?: Slug;
     icon?:
       | "bench"
       | "building"
@@ -1044,22 +1348,22 @@ export type GetAmenitiesBySectionQueryResult = {
       | "playground"
       | "restroom"
       | "trail"
-      | "trees"
-    description?: string
-    details?: Array<string>
+      | "trees";
+    description?: string;
+    details?: Array<string>;
     imagesV2?: Array<
       {
-        _key: string
+        _key: string;
       } & ContentImage
-    >
-    externalLink?: string
-    linkText?: string
-    section?: "both" | "lower-park" | "upper-park"
-    _key: string
-  }> | null
+    >;
+    externalLink?: string;
+    linkText?: string;
+    section?: "both" | "lower-park" | "upper-park";
+    _key: string;
+  }> | null;
   lowerParkAmenities: Array<{
-    title?: string
-    slug?: Slug
+    title?: string;
+    slug?: Slug;
     icon?:
       | "bench"
       | "building"
@@ -1072,706 +1376,2079 @@ export type GetAmenitiesBySectionQueryResult = {
       | "playground"
       | "restroom"
       | "trail"
-      | "trees"
-    description?: string
-    details?: Array<string>
+      | "trees";
+    description?: string;
+    details?: Array<string>;
     imagesV2?: Array<
       {
-        _key: string
+        _key: string;
       } & ContentImage
-    >
-    externalLink?: string
-    linkText?: string
-    section?: "both" | "lower-park" | "upper-park"
-    _key: string
-  }> | null
-} | null
+    >;
+    externalLink?: string;
+    linkText?: string;
+    section?: "both" | "lower-park" | "upper-park";
+    _key: string;
+  }> | null;
+} | null;
 
-// Source: ../../packages/sanity-config/src/queries/donatePage.ts
+// Source: src/queries/donatePage.ts
 // Variable: getDonatePageQuery
-// Query: *[_type == "donatePage"][0]{    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    }  }
+// Query: *[_type == "donatePage"][0]{    _id,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    }  }
 export type GetDonatePageQueryResult = {
+  _id: string;
   pageHero: {
-    title: string | null
-    description: string | null
+    title: string | null;
+    description: string | null;
     image: {
       asset: {
-        _id: string
-        url: string | null
+        _id: string;
+        url: string | null;
         metadata: {
-          dimensions: SanityImageDimensions | null
-          lqip: string | null
-          blurhash: null
-          palette: SanityImagePalette | null
-        } | null
-      } | null
-      alt: string | null
-      caption: string | null
-      hotspot: SanityImageHotspot | null
-      crop: SanityImageCrop | null
-    } | null
-  } | null
-} | null
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  } | null;
+} | null;
 
-// Source: ../../packages/sanity-config/src/queries/eventsPage.ts
+// Source: src/queries/events.ts
+// Variable: allEventsQuery
+// Query: *[_type == "event" && defined(slug.current)] | order(date desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImage{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    date,    time,    location,    featured,    publishedAt  }
+export type AllEventsQueryResult = Array<{
+  _id: string;
+  _type: "event";
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  date: string | null;
+  time: string | null;
+  location: string | null;
+  featured: boolean | null;
+  publishedAt: string | null;
+}>;
+
+// Source: src/queries/events.ts
+// Variable: upcomingEventsQuery
+// Query: *[_type == "event" && defined(slug.current) && date >= now()] | order(date asc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImage{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    date,    time,    location,    featured,    publishedAt  }
+export type UpcomingEventsQueryResult = Array<{
+  _id: string;
+  _type: "event";
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  date: string | null;
+  time: string | null;
+  location: string | null;
+  featured: boolean | null;
+  publishedAt: string | null;
+}>;
+
+// Source: src/queries/events.ts
+// Variable: pastEventsQuery
+// Query: *[_type == "event" && defined(slug.current) && date < now()] | order(date desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImage{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    date,    time,    location,    featured,    publishedAt  }
+export type PastEventsQueryResult = Array<{
+  _id: string;
+  _type: "event";
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  date: string | null;
+  time: string | null;
+  location: string | null;
+  featured: boolean | null;
+  publishedAt: string | null;
+}>;
+
+// Source: src/queries/events.ts
+// Variable: featuredEventsQuery
+// Query: *[_type == "event" && defined(slug.current) && featured == true] | order(date desc) [0...3] {    _id,    _type,    title,    slug,    description,    "heroImage": heroImage{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    date,    time,    location,    featured,    publishedAt  }
+export type FeaturedEventsQueryResult = Array<{
+  _id: string;
+  _type: "event";
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  date: string | null;
+  time: string | null;
+  location: string | null;
+  featured: boolean | null;
+  publishedAt: string | null;
+}>;
+
+// Source: src/queries/events.ts
+// Variable: recentEventsQuery
+// Query: *[_type == "event" && defined(slug.current)] | order(date desc) [0...3] {    _id,    _type,    title,    slug,    description,    "heroImage": heroImage{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    date,    time,    location,    featured,    publishedAt  }
+export type RecentEventsQueryResult = Array<{
+  _id: string;
+  _type: "event";
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  date: string | null;
+  time: string | null;
+  location: string | null;
+  featured: boolean | null;
+  publishedAt: string | null;
+}>;
+
+// Source: src/queries/events.ts
+// Variable: eventBySlugQuery
+// Query: *[_type == "event" && slug.current == $slug][0] {    _id,    _type,    title,    slug,    description,    "heroImage": heroImage{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    date,    time,    location,    featured,    publishedAt,    body[]{        ...,  _type == "image" => {    ...,    asset->{      _id,      url,      metadata{        dimensions,        lqip,        blurhash      }    }  },  _type == "fileAttachment" => {    ...,    asset->{      _id,      url,      originalFilename,      size,      extension,      mimeType    }  }    },    recap[]{        ...,  _type == "image" => {    ...,    asset->{      _id,      url,      metadata{        dimensions,        lqip,        blurhash      }    }  },  _type == "fileAttachment" => {    ...,    asset->{      _id,      url,      originalFilename,      size,      extension,      mimeType    }  }    },    "recapGallery": recapGallery->{      _id,      title,      images[]{        "image": imageV2{            asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop        },        showOnMobile      }    }  }
+export type EventBySlugQueryResult = {
+  _id: string;
+  _type: "event";
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+        palette: SanityImagePalette | null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  date: string | null;
+  time: string | null;
+  location: string | null;
+  featured: boolean | null;
+  publishedAt: string | null;
+  body: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h2"
+          | "h3"
+          | "leading-lg"
+          | "leading"
+          | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset: {
+          _id: string;
+          url: string | null;
+          originalFilename: string | null;
+          size: number | null;
+          extension: string | null;
+          mimeType: string | null;
+        } | null;
+        media?: unknown;
+        title?: string;
+        description?: string;
+        _type: "fileAttachment";
+        _key: string;
+      }
+    | {
+        asset: {
+          _id: string;
+          url: string | null;
+          metadata: {
+            dimensions: SanityImageDimensions | null;
+            lqip: string | null;
+            blurhash: null;
+          } | null;
+        } | null;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        caption?: string;
+        _type: "image";
+        _key: string;
+      }
+  > | null;
+  recap: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h2"
+          | "h3"
+          | "leading-lg"
+          | "leading"
+          | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset: {
+          _id: string;
+          url: string | null;
+          originalFilename: string | null;
+          size: number | null;
+          extension: string | null;
+          mimeType: string | null;
+        } | null;
+        media?: unknown;
+        title?: string;
+        description?: string;
+        _type: "fileAttachment";
+        _key: string;
+      }
+    | {
+        asset: {
+          _id: string;
+          url: string | null;
+          metadata: {
+            dimensions: SanityImageDimensions | null;
+            lqip: string | null;
+            blurhash: null;
+          } | null;
+        } | null;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        caption?: string;
+        _type: "image";
+        _key: string;
+      }
+  > | null;
+  recapGallery: {
+    _id: string;
+    title: string | null;
+    images: Array<{
+      image: {
+        asset: {
+          _id: string;
+          url: string | null;
+          metadata: {
+            dimensions: SanityImageDimensions | null;
+            lqip: string | null;
+            blurhash: null;
+            palette: SanityImagePalette | null;
+          } | null;
+        } | null;
+        alt: string | null;
+        caption: string | null;
+        hotspot: SanityImageHotspot | null;
+        crop: SanityImageCrop | null;
+      } | null;
+      showOnMobile: boolean | null;
+    }> | null;
+  } | null;
+} | null;
+
+// Source: src/queries/events.ts
+// Variable: eventSlugsQuery
+// Query: *[_type == "event" && defined(slug.current)] {    "slug": slug.current  }
+export type EventSlugsQueryResult = Array<{
+  slug: string | null;
+}>;
+
+// Source: src/queries/eventsPage.ts
 // Variable: getEventsPageQuery
-// Query: *[_type == "eventsPage"][0]{    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    introduction  }
+// Query: *[_type == "eventsPage"][0]{    _id,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    introduction  }
 export type GetEventsPageQueryResult = {
+  _id: string;
   pageHero: {
-    title: string | null
-    description: string | null
+    title: string | null;
+    description: string | null;
     image: {
       asset: {
-        _id: string
-        url: string | null
+        _id: string;
+        url: string | null;
         metadata: {
-          dimensions: SanityImageDimensions | null
-          lqip: string | null
-          blurhash: null
-          palette: SanityImagePalette | null
-        } | null
-      } | null
-      alt: string | null
-      caption: string | null
-      hotspot: SanityImageHotspot | null
-      crop: SanityImageCrop | null
-    } | null
-  } | null
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  } | null;
   introduction: Array<{
     children?: Array<{
-      marks?: Array<string>
-      text?: string
-      _type: "span"
-      _key: string
-    }>
-    style?: "h2" | "h3" | "leading-lg" | "leading" | "normal"
-    listItem?: "bullet" | "number"
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "h2" | "h3" | "leading-lg" | "leading" | "normal";
+    listItem?: "bullet" | "number";
     markDefs?: Array<{
-      href?: string
-      _type: "link"
-      _key: string
-    }>
-    level?: number
-    _type: "block"
-    _key: string
-  }> | null
-} | null
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }> | null;
+} | null;
 
-// Source: ../../packages/sanity-config/src/queries/gallery.ts
+// Source: src/queries/gallery.ts
 // Variable: getGalleriesQuery
 // Query: *[_type == "gallery"] | order(order asc){    _id,    title,    galleryType,    images[]{      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      },      showOnMobile    },    order  }
 export type GetGalleriesQueryResult = Array<{
-  _id: string
-  title: string | null
-  galleryType: "about" | "amenities" | "events" | "homepage" | null
+  _id: string;
+  title: string | null;
+  galleryType: "about" | "amenities" | "events" | "homepage" | null;
   images: Array<{
     image: {
       asset: {
-        _id: string
-        url: string | null
+        _id: string;
+        url: string | null;
         metadata: {
-          dimensions: SanityImageDimensions | null
-          lqip: string | null
-          blurhash: null
-          palette: SanityImagePalette | null
-        } | null
-      } | null
-      alt: string | null
-      caption: string | null
-      hotspot: SanityImageHotspot | null
-      crop: SanityImageCrop | null
-    } | null
-    showOnMobile: boolean | null
-  }> | null
-  order: number | null
-}>
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+    showOnMobile: boolean | null;
+  }> | null;
+  order: number | null;
+}>;
 
-// Source: ../../packages/sanity-config/src/queries/gallery.ts
+// Source: src/queries/gallery.ts
 // Variable: getGalleryByTypeQuery
 // Query: *[_type == "gallery" && galleryType == $type] | order(order asc){    _id,    title,    galleryType,    images[]{      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      },      showOnMobile    },    order  }
 export type GetGalleryByTypeQueryResult = Array<{
-  _id: string
-  title: string | null
-  galleryType: "about" | "amenities" | "events" | "homepage" | null
+  _id: string;
+  title: string | null;
+  galleryType: "about" | "amenities" | "events" | "homepage" | null;
   images: Array<{
     image: {
       asset: {
-        _id: string
-        url: string | null
+        _id: string;
+        url: string | null;
         metadata: {
-          dimensions: SanityImageDimensions | null
-          lqip: string | null
-          blurhash: null
-          palette: SanityImagePalette | null
-        } | null
-      } | null
-      alt: string | null
-      caption: string | null
-      hotspot: SanityImageHotspot | null
-      crop: SanityImageCrop | null
-    } | null
-    showOnMobile: boolean | null
-  }> | null
-  order: number | null
-}>
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+    showOnMobile: boolean | null;
+  }> | null;
+  order: number | null;
+}>;
 
-// Source: ../../packages/sanity-config/src/queries/gallery.ts
+// Source: src/queries/gallery.ts
 // Variable: getGalleryByIdQuery
 // Query: *[_type == "gallery" && _id == $id][0]{    _id,    title,    galleryType,    images[]{      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      },      showOnMobile    },    order  }
 export type GetGalleryByIdQueryResult = {
-  _id: string
-  title: string | null
-  galleryType: "about" | "amenities" | "events" | "homepage" | null
+  _id: string;
+  title: string | null;
+  galleryType: "about" | "amenities" | "events" | "homepage" | null;
   images: Array<{
     image: {
       asset: {
-        _id: string
-        url: string | null
+        _id: string;
+        url: string | null;
         metadata: {
-          dimensions: SanityImageDimensions | null
-          lqip: string | null
-          blurhash: null
-          palette: SanityImagePalette | null
-        } | null
-      } | null
-      alt: string | null
-      caption: string | null
-      hotspot: SanityImageHotspot | null
-      crop: SanityImageCrop | null
-    } | null
-    showOnMobile: boolean | null
-  }> | null
-  order: number | null
-} | null
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+    showOnMobile: boolean | null;
+  }> | null;
+  order: number | null;
+} | null;
 
-// Source: ../../packages/sanity-config/src/queries/getInvolvedPage.ts
+// Source: src/queries/getInvolvedPage.ts
 // Variable: getGetInvolvedPageQuery
-// Query: *[_type == "getInvolvedPage"][0]{    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },  }
+// Query: *[_type == "getInvolvedPage"][0]{    _id,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },  }
 export type GetGetInvolvedPageQueryResult = {
+  _id: string;
   pageHero: {
-    title: string | null
-    description: string | null
+    title: string | null;
+    description: string | null;
     image: {
       asset: {
-        _id: string
-        url: string | null
+        _id: string;
+        url: string | null;
         metadata: {
-          dimensions: SanityImageDimensions | null
-          lqip: string | null
-          blurhash: null
-          palette: SanityImagePalette | null
-        } | null
-      } | null
-      alt: string | null
-      caption: string | null
-      hotspot: SanityImageHotspot | null
-      crop: SanityImageCrop | null
-    } | null
-  } | null
-} | null
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  } | null;
+} | null;
 
-// Source: ../../packages/sanity-config/src/queries/historyPage.ts
+// Source: src/queries/historyPage.ts
 // Variable: getHistoryPageQuery
-// Query: *[_type == "historyPage"][0]{    content,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },  }
+// Query: *[_type == "historyPage"][0]{    _id,    content[]{        ...,  _type == "image" => {    ...,    asset->{      _id,      url,      metadata{        dimensions,        lqip,        blurhash      }    }  },  _type == "fileAttachment" => {    ...,    asset->{      _id,      url,      originalFilename,      size,      extension,      mimeType    }  }    },    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },  }
 export type GetHistoryPageQueryResult = {
+  _id: string;
   content: Array<
     | {
         children?: Array<{
-          marks?: Array<string>
-          text?: string
-          _type: "span"
-          _key: string
-        }>
-        style?: "blockquote" | "h2" | "h3" | "leading-lg" | "leading" | "normal"
-        listItem?: "bullet" | "number"
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h2"
+          | "h3"
+          | "leading-lg"
+          | "leading"
+          | "normal";
+        listItem?: "bullet" | "number";
         markDefs?: Array<{
-          href?: string
-          _type: "link"
-          _key: string
-        }>
-        level?: number
-        _type: "block"
-        _key: string
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
       }
     | {
-        asset?: SanityFileAssetReference
-        media?: unknown
-        title?: string
-        description?: string
-        _type: "fileAttachment"
-        _key: string
+        asset: {
+          _id: string;
+          url: string | null;
+          originalFilename: string | null;
+          size: number | null;
+          extension: string | null;
+          mimeType: string | null;
+        } | null;
+        media?: unknown;
+        title?: string;
+        description?: string;
+        _type: "fileAttachment";
+        _key: string;
       }
     | {
-        asset?: SanityImageAssetReference
-        media?: unknown
-        hotspot?: SanityImageHotspot
-        crop?: SanityImageCrop
-        alt?: string
-        caption?: string
-        _type: "image"
-        _key: string
+        asset: {
+          _id: string;
+          url: string | null;
+          metadata: {
+            dimensions: SanityImageDimensions | null;
+            lqip: string | null;
+            blurhash: null;
+          } | null;
+        } | null;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        caption?: string;
+        _type: "image";
+        _key: string;
       }
-  > | null
+  > | null;
   pageHero: {
-    title: string | null
-    description: string | null
+    title: string | null;
+    description: string | null;
     image: {
       asset: {
-        _id: string
-        url: string | null
+        _id: string;
+        url: string | null;
         metadata: {
-          dimensions: SanityImageDimensions | null
-          lqip: string | null
-          blurhash: null
-          palette: SanityImagePalette | null
-        } | null
-      } | null
-      alt: string | null
-      caption: string | null
-      hotspot: SanityImageHotspot | null
-      crop: SanityImageCrop | null
-    } | null
-  } | null
-} | null
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  } | null;
+} | null;
 
-// Source: ../../packages/sanity-config/src/queries/homePage.ts
+// Source: src/queries/homePage.ts
 // Variable: getHomePageQuery
-// Query: *[_type == "homePage"][0]{    hero{      heading,      subheading,      "heroImage": heroImageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      },      ctaButton    },    "partners": featuredPartners[]->{      _id,      name,      slug,      logo{        asset->{          _id,          url,          metadata{            dimensions,            lqip          }        },        alt      },      description,      websiteUrl,      order    } | order(order asc),    "quote": featuredQuote->{      _id,      quoteText,      attribution,      "backgroundImage": backgroundImageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    "gallery": homepageGallery->{      _id,      title,      images[]{        "image": imageV2{            asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop        },        showOnMobile      }    },    "parkGallery": parkGallery->{      _id,      title,      images[]{        "image": imageV2{            asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop        },        showOnMobile      }    }  }
+// Query: *[_type == "homePage"][0]{    _id,    hero{      heading,      subheading,      "heroImage": heroImageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      },      ctaButton    },    introSection{      heading,      body    },    visionSection{      title,      description,      pillars[]{        _key,        title,        pillar,        description      }    },    projectsSectionHeader{      title,      description    },    parkSection{      title,      intro,      body,      today,      callout    },    eventsSectionHeader{      title,      description    },    getInvolvedSection{      title,      description    },    partnersSectionHeader{      title,      description    },    "partners": featuredPartners[]->{      _id,      name,      slug,      logo{        asset->{          _id,          url,          metadata{            dimensions,            lqip          }        },        alt      },      description,      websiteUrl,      order    } | order(order asc),    "quote": featuredQuote->{      _id,      quoteText,      attribution,      "backgroundImage": backgroundImageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    "gallery": homepageGallery->{      _id,      title,      images[]{        "image": imageV2{            asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop        },        showOnMobile      }    },    "parkGallery": parkGallery->{      _id,      title,      images[]{        "image": imageV2{            asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop        },        showOnMobile      }    }  }
 export type GetHomePageQueryResult = {
+  _id: string;
   hero: {
-    heading: string | null
-    subheading: string | null
+    heading: string | null;
+    subheading: string | null;
     heroImage: {
       asset: {
-        _id: string
-        url: string | null
+        _id: string;
+        url: string | null;
         metadata: {
-          dimensions: SanityImageDimensions | null
-          lqip: string | null
-          blurhash: null
-          palette: SanityImagePalette | null
-        } | null
-      } | null
-      alt: string | null
-      caption: string | null
-      hotspot: SanityImageHotspot | null
-      crop: SanityImageCrop | null
-    } | null
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
     ctaButton: {
-      text?: string
-      link?: string
-    } | null
-  } | null
+      text?: string;
+      link?: string;
+    } | null;
+  } | null;
+  introSection: {
+    heading: string | null;
+    body: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal";
+      listItem?: never;
+      markDefs?: null;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }> | null;
+  } | null;
+  visionSection: {
+    title: string | null;
+    description: string | null;
+    pillars: Array<{
+      _key: string;
+      title: string | null;
+      pillar:
+        | "connection"
+        | "preservation"
+        | "recreation"
+        | "restoration"
+        | null;
+      description: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "normal";
+        listItem?: "bullet";
+        markDefs?: null;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }> | null;
+    }> | null;
+  } | null;
+  projectsSectionHeader: {
+    title: string | null;
+    description: string | null;
+  } | null;
+  parkSection: {
+    title: string | null;
+    intro: string | null;
+    body: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal";
+      listItem?: never;
+      markDefs?: null;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }> | null;
+    today: string | null;
+    callout: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal";
+      listItem?: never;
+      markDefs?: null;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }> | null;
+  } | null;
+  eventsSectionHeader: {
+    title: string | null;
+    description: string | null;
+  } | null;
+  getInvolvedSection: {
+    title: string | null;
+    description: string | null;
+  } | null;
+  partnersSectionHeader: {
+    title: string | null;
+    description: string | null;
+  } | null;
   partners: Array<{
-    _id: string
-    name: string | null
-    slug: Slug | null
+    _id: string;
+    name: string | null;
+    slug: Slug | null;
     logo: {
       asset: {
-        _id: string
-        url: string | null
+        _id: string;
+        url: string | null;
         metadata: {
-          dimensions: SanityImageDimensions | null
-          lqip: string | null
-        } | null
-      } | null
-      alt: string | null
-    } | null
-    description: string | null
-    websiteUrl: string | null
-    order: number | null
-  }> | null
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+        } | null;
+      } | null;
+      alt: string | null;
+    } | null;
+    description: string | null;
+    websiteUrl: string | null;
+    order: number | null;
+  }> | null;
   quote: {
-    _id: string
-    quoteText: string | null
-    attribution: string | null
+    _id: string;
+    quoteText: string | null;
+    attribution: string | null;
     backgroundImage: {
       asset: {
-        _id: string
-        url: string | null
+        _id: string;
+        url: string | null;
         metadata: {
-          dimensions: SanityImageDimensions | null
-          lqip: string | null
-          blurhash: null
-          palette: SanityImagePalette | null
-        } | null
-      } | null
-      alt: string | null
-      caption: string | null
-      hotspot: SanityImageHotspot | null
-      crop: SanityImageCrop | null
-    } | null
-  } | null
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  } | null;
   gallery: {
-    _id: string
-    title: string | null
+    _id: string;
+    title: string | null;
     images: Array<{
       image: {
         asset: {
-          _id: string
-          url: string | null
+          _id: string;
+          url: string | null;
           metadata: {
-            dimensions: SanityImageDimensions | null
-            lqip: string | null
-            blurhash: null
-            palette: SanityImagePalette | null
-          } | null
-        } | null
-        alt: string | null
-        caption: string | null
-        hotspot: SanityImageHotspot | null
-        crop: SanityImageCrop | null
-      } | null
-      showOnMobile: boolean | null
-    }> | null
-  } | null
+            dimensions: SanityImageDimensions | null;
+            lqip: string | null;
+            blurhash: null;
+            palette: SanityImagePalette | null;
+          } | null;
+        } | null;
+        alt: string | null;
+        caption: string | null;
+        hotspot: SanityImageHotspot | null;
+        crop: SanityImageCrop | null;
+      } | null;
+      showOnMobile: boolean | null;
+    }> | null;
+  } | null;
   parkGallery: {
-    _id: string
-    title: string | null
+    _id: string;
+    title: string | null;
     images: Array<{
       image: {
         asset: {
-          _id: string
-          url: string | null
+          _id: string;
+          url: string | null;
           metadata: {
-            dimensions: SanityImageDimensions | null
-            lqip: string | null
-            blurhash: null
-            palette: SanityImagePalette | null
-          } | null
-        } | null
-        alt: string | null
-        caption: string | null
-        hotspot: SanityImageHotspot | null
-        crop: SanityImageCrop | null
-      } | null
-      showOnMobile: boolean | null
-    }> | null
-  } | null
-} | null
+            dimensions: SanityImageDimensions | null;
+            lqip: string | null;
+            blurhash: null;
+            palette: SanityImagePalette | null;
+          } | null;
+        } | null;
+        alt: string | null;
+        caption: string | null;
+        hotspot: SanityImageHotspot | null;
+        crop: SanityImageCrop | null;
+      } | null;
+      showOnMobile: boolean | null;
+    }> | null;
+  } | null;
+} | null;
 
-// Source: ../../packages/sanity-config/src/queries/mediaPage.ts
+// Source: src/queries/media.ts
+// Variable: allMediaImagesQuery
+// Query: *[_type == "mediaImage" && defined(imageV2.asset)] | order(_createdAt desc) {    _id,    _type,    "title": coalesce(imageV2.title, "Untitled image"),    "image": imageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": coalesce(imageV2.category, "park-views")  }
+export type AllMediaImagesQueryResult = Array<{
+  _id: string;
+  _type: "mediaImage";
+  title: string | "Untitled image";
+  image: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  category: "community" | "events" | "history" | "nature" | "park-views";
+}>;
+
+// Source: src/queries/media.ts
+// Variable: mediaImagesByCategoryQuery
+// Query: *[    _type == "mediaImage" &&    defined(imageV2.asset) &&    imageV2.category == $category  ] | order(_createdAt desc) {    _id,    _type,    "title": coalesce(imageV2.title, "Untitled image"),    "image": imageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": coalesce(imageV2.category, "park-views")  }
+export type MediaImagesByCategoryQueryResult = Array<{
+  _id: string;
+  _type: "mediaImage";
+  title: string | "Untitled image";
+  image: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  category: "community" | "events" | "history" | "nature" | "park-views";
+}>;
+
+// Source: src/queries/media.ts
+// Variable: mediaImageByIdQuery
+// Query: *[_type == "mediaImage" && defined(imageV2.asset) && _id == $id][0] {    _id,    _type,    "title": coalesce(imageV2.title, "Untitled image"),    "image": imageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    "category": coalesce(imageV2.category, "park-views")  }
+export type MediaImageByIdQueryResult = {
+  _id: string;
+  _type: "mediaImage";
+  title: string | "Untitled image";
+  image: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+        palette: SanityImagePalette | null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  category: "community" | "events" | "history" | "nature" | "park-views";
+} | null;
+
+// Source: src/queries/media.ts
+// Variable: paginatedMediaImagesQuery
+// Query: *[_type == "mediaImage" && defined(imageV2.asset)] | order(_createdAt desc) [$start...$end] {    _id,    _type,    "title": coalesce(imageV2.title, "Untitled image"),    "image": imageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": coalesce(imageV2.category, "park-views")  }
+export type PaginatedMediaImagesQueryResult = Array<{
+  _id: string;
+  _type: "mediaImage";
+  title: string | "Untitled image";
+  image: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  category: "community" | "events" | "history" | "nature" | "park-views";
+}>;
+
+// Source: src/queries/media.ts
+// Variable: mediaImagesCountQuery
+// Query: count(*[_type == "mediaImage" && defined(imageV2.asset)])
+export type MediaImagesCountQueryResult = number;
+
+// Source: src/queries/mediaPage.ts
 // Variable: getMediaPageQuery
-// Query: *[_type == "mediaPage"][0]{    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    }  }
+// Query: *[_type == "mediaPage"][0]{    _id,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    }  }
 export type GetMediaPageQueryResult = {
+  _id: string;
   pageHero: {
-    title: string | null
-    description: string | null
+    title: string | null;
+    description: string | null;
     image: {
       asset: {
-        _id: string
-        url: string | null
+        _id: string;
+        url: string | null;
         metadata: {
-          dimensions: SanityImageDimensions | null
-          lqip: string | null
-          blurhash: null
-          palette: SanityImagePalette | null
-        } | null
-      } | null
-      alt: string | null
-      caption: string | null
-      hotspot: SanityImageHotspot | null
-      crop: SanityImageCrop | null
-    } | null
-  } | null
-} | null
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  } | null;
+} | null;
 
-// Source: ../../packages/sanity-config/src/queries/partners.ts
+// Source: src/queries/partners.ts
 // Variable: getPartnersQuery
 // Query: *[_type == "partner"] | order(order asc){    _id,    name,    slug,    logo{      asset->{        _id,        url,        metadata{          dimensions,          lqip        }      },      alt    },    description,    websiteUrl,    featured,    order  }
 export type GetPartnersQueryResult = Array<{
-  _id: string
-  name: string | null
-  slug: Slug | null
+  _id: string;
+  name: string | null;
+  slug: Slug | null;
   logo: {
     asset: {
-      _id: string
-      url: string | null
+      _id: string;
+      url: string | null;
       metadata: {
-        dimensions: SanityImageDimensions | null
-        lqip: string | null
-      } | null
-    } | null
-    alt: string | null
-  } | null
-  description: string | null
-  websiteUrl: string | null
-  featured: boolean | null
-  order: number | null
-}>
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+      } | null;
+    } | null;
+    alt: string | null;
+  } | null;
+  description: string | null;
+  websiteUrl: string | null;
+  featured: boolean | null;
+  order: number | null;
+}>;
 
-// Source: ../../packages/sanity-config/src/queries/partners.ts
+// Source: src/queries/partners.ts
 // Variable: getFeaturedPartnersQuery
 // Query: *[_type == "partner" && featured == true] | order(order asc){    _id,    name,    slug,    logo{      asset->{        _id,        url,        metadata{          dimensions,          lqip        }      },      alt    },    description,    websiteUrl,    order  }
 export type GetFeaturedPartnersQueryResult = Array<{
-  _id: string
-  name: string | null
-  slug: Slug | null
+  _id: string;
+  name: string | null;
+  slug: Slug | null;
   logo: {
     asset: {
-      _id: string
-      url: string | null
+      _id: string;
+      url: string | null;
       metadata: {
-        dimensions: SanityImageDimensions | null
-        lqip: string | null
-      } | null
-    } | null
-    alt: string | null
-  } | null
-  description: string | null
-  websiteUrl: string | null
-  order: number | null
-}>
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+      } | null;
+    } | null;
+    alt: string | null;
+  } | null;
+  description: string | null;
+  websiteUrl: string | null;
+  order: number | null;
+}>;
 
-// Source: ../../packages/sanity-config/src/queries/partners.ts
+// Source: src/queries/partners.ts
 // Variable: getPartnerBySlugQuery
 // Query: *[_type == "partner" && slug.current == $slug][0]{    _id,    name,    slug,    logo{      asset->{        _id,        url,        metadata{          dimensions,          lqip        }      },      alt    },    description,    websiteUrl,    featured,    order  }
 export type GetPartnerBySlugQueryResult = {
-  _id: string
-  name: string | null
-  slug: Slug | null
+  _id: string;
+  name: string | null;
+  slug: Slug | null;
   logo: {
     asset: {
-      _id: string
-      url: string | null
+      _id: string;
+      url: string | null;
       metadata: {
-        dimensions: SanityImageDimensions | null
-        lqip: string | null
-      } | null
-    } | null
-    alt: string | null
-  } | null
-  description: string | null
-  websiteUrl: string | null
-  featured: boolean | null
-  order: number | null
-} | null
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+      } | null;
+    } | null;
+    alt: string | null;
+  } | null;
+  description: string | null;
+  websiteUrl: string | null;
+  featured: boolean | null;
+  order: number | null;
+} | null;
 
-// Source: ../../packages/sanity-config/src/queries/projectsPage.ts
+// Source: src/queries/projects.ts
+// Variable: allProjectsQuery
+// Query: *[_type == "project" && defined(slug.current)] | order(startDate desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    status,    startDate,    startDateOverride,    completionDate,    completionDateOverride,    goal,    location,    budget,    category,    featured,    publishedAt  }
+export type AllProjectsQueryResult = Array<{
+  _id: string;
+  _type: "project";
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  status: "active" | "completed" | "planned" | null;
+  startDate: string | null;
+  startDateOverride: string | null;
+  completionDate: string | null;
+  completionDateOverride: string | null;
+  goal: string | null;
+  location: string | null;
+  budget: string | null;
+  category: "connection" | "preservation" | "recreation" | "restoration" | null;
+  featured: boolean | null;
+  publishedAt: string | null;
+}>;
+
+// Source: src/queries/projects.ts
+// Variable: activeProjectsQuery
+// Query: *[_type == "project" && defined(slug.current) && status == "active"] | order(startDate desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    status,    startDate,    startDateOverride,    completionDate,    completionDateOverride,    goal,    location,    budget,    category,    featured,    publishedAt  }
+export type ActiveProjectsQueryResult = Array<{
+  _id: string;
+  _type: "project";
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  status: "active" | "completed" | "planned" | null;
+  startDate: string | null;
+  startDateOverride: string | null;
+  completionDate: string | null;
+  completionDateOverride: string | null;
+  goal: string | null;
+  location: string | null;
+  budget: string | null;
+  category: "connection" | "preservation" | "recreation" | "restoration" | null;
+  featured: boolean | null;
+  publishedAt: string | null;
+}>;
+
+// Source: src/queries/projects.ts
+// Variable: featuredProjectQuery
+// Query: *[_type == "project" && defined(slug.current) && featured == true] | order(startDate desc) [0] {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    status,    startDate,    startDateOverride,    completionDate,    completionDateOverride,    goal,    location,    budget,    category,    featured,    publishedAt  }
+export type FeaturedProjectQueryResult = {
+  _id: string;
+  _type: "project";
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  status: "active" | "completed" | "planned" | null;
+  startDate: string | null;
+  startDateOverride: string | null;
+  completionDate: string | null;
+  completionDateOverride: string | null;
+  goal: string | null;
+  location: string | null;
+  budget: string | null;
+  category: "connection" | "preservation" | "recreation" | "restoration" | null;
+  featured: boolean | null;
+  publishedAt: string | null;
+} | null;
+
+// Source: src/queries/projects.ts
+// Variable: featuredProjectsQuery
+// Query: *[_type == "project" && defined(slug.current) && featured == true] | order(startDate desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    status,    startDate,    startDateOverride,    completionDate,    completionDateOverride,    goal,    location,    budget,    category,    featured,    publishedAt  }
+export type FeaturedProjectsQueryResult = Array<{
+  _id: string;
+  _type: "project";
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  status: "active" | "completed" | "planned" | null;
+  startDate: string | null;
+  startDateOverride: string | null;
+  completionDate: string | null;
+  completionDateOverride: string | null;
+  goal: string | null;
+  location: string | null;
+  budget: string | null;
+  category: "connection" | "preservation" | "recreation" | "restoration" | null;
+  featured: boolean | null;
+  publishedAt: string | null;
+}>;
+
+// Source: src/queries/projects.ts
+// Variable: projectBySlugQuery
+// Query: *[_type == "project" && slug.current == $slug][0] {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    status,    startDate,    startDateOverride,    completionDate,    completionDateOverride,    goal,    location,    budget,    category,    featured,    publishedAt,    body[]{        ...,  _type == "image" => {    ...,    asset->{      _id,      url,      metadata{        dimensions,        lqip,        blurhash      }    }  },  _type == "fileAttachment" => {    ...,    asset->{      _id,      url,      originalFilename,      size,      extension,      mimeType    }  }    },    gallery[]{      ...,      asset->{        _id,        url,        metadata{          dimensions,          lqip,          blurhash,          palette        }      },      alt,      caption,      hotspot,      crop    },    "relatedEvents": relatedEvents[]->{      _id,      _type,      title,      slug,      description,      "heroImage": heroImage{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      },      date,      time,      location    },    "partners": partners[]->{      _id,      _type,      name,      logo{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    }  }
+export type ProjectBySlugQueryResult = {
+  _id: string;
+  _type: "project";
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+        palette: SanityImagePalette | null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  status: "active" | "completed" | "planned" | null;
+  startDate: string | null;
+  startDateOverride: string | null;
+  completionDate: string | null;
+  completionDateOverride: string | null;
+  goal: string | null;
+  location: string | null;
+  budget: string | null;
+  category: "connection" | "preservation" | "recreation" | "restoration" | null;
+  featured: boolean | null;
+  publishedAt: string | null;
+  body: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h2"
+          | "h3"
+          | "leading-lg"
+          | "leading"
+          | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset: {
+          _id: string;
+          url: string | null;
+          originalFilename: string | null;
+          size: number | null;
+          extension: string | null;
+          mimeType: string | null;
+        } | null;
+        media?: unknown;
+        title?: string;
+        description?: string;
+        _type: "fileAttachment";
+        _key: string;
+      }
+    | {
+        asset: {
+          _id: string;
+          url: string | null;
+          metadata: {
+            dimensions: SanityImageDimensions | null;
+            lqip: string | null;
+            blurhash: null;
+          } | null;
+        } | null;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        caption?: string;
+        _type: "image";
+        _key: string;
+      }
+  > | null;
+  gallery: Array<{
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+        palette: SanityImagePalette | null;
+      } | null;
+    } | null;
+    media?: unknown;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+    alt: string | null;
+    caption: string | null;
+    _type: "image";
+    _key: string;
+  }> | null;
+  relatedEvents: Array<{
+    _id: string;
+    _type: "event";
+    title: string | null;
+    slug: Slug | null;
+    description: string | null;
+    heroImage: {
+      asset: {
+        _id: string;
+        url: string | null;
+        metadata: {
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+    date: string | null;
+    time: string | null;
+    location: string | null;
+  }> | null;
+  partners: Array<{
+    _id: string;
+    _type: "partner";
+    name: string | null;
+    logo: {
+      asset: {
+        _id: string;
+        url: string | null;
+        metadata: {
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  }> | null;
+} | null;
+
+// Source: src/queries/projects.ts
+// Variable: projectCardBySlugQuery
+// Query: *[_type == "project" && slug.current == $slug][0] {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    }  }
+export type ProjectCardBySlugQueryResult = {
+  _id: string;
+  _type: "project";
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+        palette: SanityImagePalette | null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+} | null;
+
+// Source: src/queries/projects.ts
+// Variable: projectSlugsQuery
+// Query: *[_type == "project" && defined(slug.current)] {    "slug": slug.current  }
+export type ProjectSlugsQueryResult = Array<{
+  slug: string | null;
+}>;
+
+// Source: src/queries/projectsPage.ts
 // Variable: getProjectsPageQuery
-// Query: *[_type == "projectsPage"][0]{    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    introduction  }
+// Query: *[_type == "projectsPage"][0]{    _id,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    introduction  }
 export type GetProjectsPageQueryResult = {
+  _id: string;
   pageHero: {
-    title: string | null
-    description: string | null
+    title: string | null;
+    description: string | null;
     image: {
       asset: {
-        _id: string
-        url: string | null
+        _id: string;
+        url: string | null;
         metadata: {
-          dimensions: SanityImageDimensions | null
-          lqip: string | null
-          blurhash: null
-          palette: SanityImagePalette | null
-        } | null
-      } | null
-      alt: string | null
-      caption: string | null
-      hotspot: SanityImageHotspot | null
-      crop: SanityImageCrop | null
-    } | null
-  } | null
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  } | null;
   introduction: Array<{
     children?: Array<{
-      marks?: Array<string>
-      text?: string
-      _type: "span"
-      _key: string
-    }>
-    style?: "h2" | "h3" | "leading-lg" | "leading" | "normal"
-    listItem?: "bullet" | "number"
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "h2" | "h3" | "leading-lg" | "leading" | "normal";
+    listItem?: "bullet" | "number";
     markDefs?: Array<{
-      href?: string
-      _type: "link"
-      _key: string
-    }>
-    level?: number
-    _type: "block"
-    _key: string
-  }> | null
-} | null
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }> | null;
+} | null;
 
-// Source: ../../packages/sanity-config/src/queries/quotes.ts
+// Source: src/queries/quotes.ts
 // Variable: getQuotesQuery
 // Query: *[_type == "quote"] | order(_createdAt desc){    _id,    quoteText,    attribution,    "backgroundImage": backgroundImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    featured,    category  }
 export type GetQuotesQueryResult = Array<{
-  _id: string
-  quoteText: string | null
-  attribution: string | null
+  _id: string;
+  quoteText: string | null;
+  attribution: string | null;
   backgroundImage: {
     asset: {
-      _id: string
-      url: string | null
+      _id: string;
+      url: string | null;
       metadata: {
-        dimensions: SanityImageDimensions | null
-        lqip: string | null
-        blurhash: null
-        palette: SanityImagePalette | null
-      } | null
-    } | null
-    alt: string | null
-    caption: string | null
-    hotspot: SanityImageHotspot | null
-    crop: SanityImageCrop | null
-  } | null
-  featured: boolean | null
-  category: "community" | "conservation" | "history" | "nature" | null
-}>
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+        palette: SanityImagePalette | null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  featured: boolean | null;
+  category: "community" | "conservation" | "history" | "nature" | null;
+}>;
 
-// Source: ../../packages/sanity-config/src/queries/quotes.ts
+// Source: src/queries/quotes.ts
 // Variable: getFeaturedQuoteQuery
 // Query: *[_type == "quote" && featured == true][0]{    _id,    quoteText,    attribution,    "backgroundImage": backgroundImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    category  }
 export type GetFeaturedQuoteQueryResult = {
-  _id: string
-  quoteText: string | null
-  attribution: string | null
+  _id: string;
+  quoteText: string | null;
+  attribution: string | null;
   backgroundImage: {
     asset: {
-      _id: string
-      url: string | null
+      _id: string;
+      url: string | null;
       metadata: {
-        dimensions: SanityImageDimensions | null
-        lqip: string | null
-        blurhash: null
-        palette: SanityImagePalette | null
-      } | null
-    } | null
-    alt: string | null
-    caption: string | null
-    hotspot: SanityImageHotspot | null
-    crop: SanityImageCrop | null
-  } | null
-  category: "community" | "conservation" | "history" | "nature" | null
-} | null
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+        palette: SanityImagePalette | null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  category: "community" | "conservation" | "history" | "nature" | null;
+} | null;
 
-// Source: ../../packages/sanity-config/src/queries/quotes.ts
+// Source: src/queries/quotes.ts
 // Variable: getQuotesByCategoryQuery
 // Query: *[_type == "quote" && category == $category] | order(_createdAt desc){    _id,    quoteText,    attribution,    "backgroundImage": backgroundImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    featured  }
 export type GetQuotesByCategoryQueryResult = Array<{
-  _id: string
-  quoteText: string | null
-  attribution: string | null
+  _id: string;
+  quoteText: string | null;
+  attribution: string | null;
   backgroundImage: {
     asset: {
-      _id: string
-      url: string | null
+      _id: string;
+      url: string | null;
       metadata: {
-        dimensions: SanityImageDimensions | null
-        lqip: string | null
-        blurhash: null
-        palette: SanityImagePalette | null
-      } | null
-    } | null
-    alt: string | null
-    caption: string | null
-    hotspot: SanityImageHotspot | null
-    crop: SanityImageCrop | null
-  } | null
-  featured: boolean | null
-}>
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+        palette: SanityImagePalette | null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  featured: boolean | null;
+}>;
 
-// Source: ../../packages/sanity-config/src/queries/siteSettings.ts
+// Source: src/queries/siteSettings.ts
 // Variable: getSiteSettingsQuery
 // Query: *[_type == "siteSettings"][0]{    organizationName,    alternativeName,    description,    parkAddress,    parkHours,    socialMedia,    donationUrl,    contactEmail,    metaDefaults{      siteTitle,      ogImage{        asset->{          _id,          url,          metadata{            dimensions,            lqip          }        },        alt      }    },    getInvolvedGallery->{      _id,      title,      images[]{        "image": imageV2{            asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop        }      }    },    featuredQuote->{      _id,      quoteText,      attribution,      "backgroundImage": backgroundImageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    }  }
 export type GetSiteSettingsQueryResult = {
-  organizationName: string | null
-  alternativeName: string | null
-  description: string | null
+  organizationName: string | null;
+  alternativeName: string | null;
+  description: string | null;
   parkAddress: {
-    street?: string
-    city?: string
-    state?: string
-    zipCode?: string
-  } | null
-  parkHours: string | null
+    street?: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
+  } | null;
+  parkHours: string | null;
   socialMedia: {
-    facebook?: string
-    instagram?: string
-  } | null
-  donationUrl: string | null
-  contactEmail: string | null
+    facebook?: string;
+    instagram?: string;
+  } | null;
+  donationUrl: string | null;
+  contactEmail: string | null;
   metaDefaults: {
-    siteTitle: string | null
+    siteTitle: string | null;
     ogImage: {
       asset: {
-        _id: string
-        url: string | null
+        _id: string;
+        url: string | null;
         metadata: {
-          dimensions: SanityImageDimensions | null
-          lqip: string | null
-        } | null
-      } | null
-      alt: string | null
-    } | null
-  } | null
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+        } | null;
+      } | null;
+      alt: string | null;
+    } | null;
+  } | null;
   getInvolvedGallery: {
-    _id: string
-    title: string | null
+    _id: string;
+    title: string | null;
     images: Array<{
       image: {
         asset: {
-          _id: string
-          url: string | null
+          _id: string;
+          url: string | null;
           metadata: {
-            dimensions: SanityImageDimensions | null
-            lqip: string | null
-            blurhash: null
-            palette: SanityImagePalette | null
-          } | null
-        } | null
-        alt: string | null
-        caption: string | null
-        hotspot: SanityImageHotspot | null
-        crop: SanityImageCrop | null
-      } | null
-    }> | null
-  } | null
+            dimensions: SanityImageDimensions | null;
+            lqip: string | null;
+            blurhash: null;
+            palette: SanityImagePalette | null;
+          } | null;
+        } | null;
+        alt: string | null;
+        caption: string | null;
+        hotspot: SanityImageHotspot | null;
+        crop: SanityImageCrop | null;
+      } | null;
+    }> | null;
+  } | null;
   featuredQuote: {
-    _id: string
-    quoteText: string | null
-    attribution: string | null
+    _id: string;
+    quoteText: string | null;
+    attribution: string | null;
     backgroundImage: {
       asset: {
-        _id: string
-        url: string | null
+        _id: string;
+        url: string | null;
         metadata: {
-          dimensions: SanityImageDimensions | null
-          lqip: string | null
-          blurhash: null
-          palette: SanityImagePalette | null
-        } | null
-      } | null
-      alt: string | null
-      caption: string | null
-      hotspot: SanityImageHotspot | null
-      crop: SanityImageCrop | null
-    } | null
-  } | null
-} | null
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  } | null;
+} | null;
+
+// Source: src/queries/surveyResultsPage.ts
+// Variable: getSurveyResultsPageQuery
+// Query: *[_type == "surveyResultsPage"][0]{    _id,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    introduction  }
+export type GetSurveyResultsPageQueryResult = {
+  _id: string;
+  pageHero: {
+    title: string | null;
+    description: string | null;
+    image: {
+      asset: {
+        _id: string;
+        url: string | null;
+        metadata: {
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  } | null;
+  introduction: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "h2" | "h3" | "leading-lg" | "leading" | "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }> | null;
+} | null;
+
+// Source: src/queries/updates.ts
+// Variable: allUpdatesQuery
+// Query: *[_type == "update" && defined(slug.current)] | order(publishedAt desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": category->{      _id,      title,      slug,      color    },    featured,    publishedAt  }
+export type AllUpdatesQueryResult = Array<{
+  _id: string;
+  _type: "update";
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  category: {
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+    color: "blue" | "green" | "orange" | "purple" | "teal" | null;
+  } | null;
+  featured: boolean | null;
+  publishedAt: string | null;
+}>;
+
+// Source: src/queries/updates.ts
+// Variable: featuredUpdatesQuery
+// Query: *[_type == "update" && defined(slug.current)] | order(featured desc, publishedAt desc) [0...3] {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": category->{      _id,      title,      slug,      color    },    featured,    publishedAt  }
+export type FeaturedUpdatesQueryResult = Array<{
+  _id: string;
+  _type: "update";
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  category: {
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+    color: "blue" | "green" | "orange" | "purple" | "teal" | null;
+  } | null;
+  featured: boolean | null;
+  publishedAt: string | null;
+}>;
+
+// Source: src/queries/updates.ts
+// Variable: updatesByCategoryQuery
+// Query: *[_type == "update" && defined(slug.current) && category->slug.current == $categorySlug] | order(publishedAt desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": category->{      _id,      title,      slug,      color    },    featured,    publishedAt  }
+export type UpdatesByCategoryQueryResult = Array<{
+  _id: string;
+  _type: "update";
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  category: {
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+    color: "blue" | "green" | "orange" | "purple" | "teal" | null;
+  } | null;
+  featured: boolean | null;
+  publishedAt: string | null;
+}>;
+
+// Source: src/queries/updates.ts
+// Variable: updateBySlugQuery
+// Query: *[_type == "update" && slug.current == $slug][0] {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    "category": category->{      _id,      title,      slug,      color    },    featured,    publishedAt,    "relatedEvents": relatedEvents[]->{      _id,      _type,      title,      slug,      description,      date,      "heroImage": heroImage{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    "relatedProjects": relatedProjects[]->{      _id,      _type,      title,      slug,      description,      status,      "heroImage": heroImageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    body[]{        ...,  _type == "image" => {    ...,    asset->{      _id,      url,      metadata{        dimensions,        lqip,        blurhash      }    }  },  _type == "fileAttachment" => {    ...,    asset->{      _id,      url,      originalFilename,      size,      extension,      mimeType    }  }    }  }
+export type UpdateBySlugQueryResult = {
+  _id: string;
+  _type: "update";
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+        palette: SanityImagePalette | null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  category: {
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+    color: "blue" | "green" | "orange" | "purple" | "teal" | null;
+  } | null;
+  featured: boolean | null;
+  publishedAt: string | null;
+  relatedEvents: Array<{
+    _id: string;
+    _type: "event";
+    title: string | null;
+    slug: Slug | null;
+    description: string | null;
+    date: string | null;
+    heroImage: {
+      asset: {
+        _id: string;
+        url: string | null;
+        metadata: {
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  }> | null;
+  relatedProjects: Array<{
+    _id: string;
+    _type: "project";
+    title: string | null;
+    slug: Slug | null;
+    description: string | null;
+    status: "active" | "completed" | "planned" | null;
+    heroImage: {
+      asset: {
+        _id: string;
+        url: string | null;
+        metadata: {
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  }> | null;
+  body: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h2"
+          | "h3"
+          | "leading-lg"
+          | "leading"
+          | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset: {
+          _id: string;
+          url: string | null;
+          originalFilename: string | null;
+          size: number | null;
+          extension: string | null;
+          mimeType: string | null;
+        } | null;
+        media?: unknown;
+        title?: string;
+        description?: string;
+        _type: "fileAttachment";
+        _key: string;
+      }
+    | {
+        asset: {
+          _id: string;
+          url: string | null;
+          metadata: {
+            dimensions: SanityImageDimensions | null;
+            lqip: string | null;
+            blurhash: null;
+          } | null;
+        } | null;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        caption?: string;
+        _type: "image";
+        _key: string;
+      }
+  > | null;
+} | null;
+
+// Source: src/queries/updates.ts
+// Variable: updateSlugsQuery
+// Query: *[_type == "update" && defined(slug.current)] {    "slug": slug.current  }
+export type UpdateSlugsQueryResult = Array<{
+  slug: string | null;
+}>;
+
+// Source: src/queries/updates.ts
+// Variable: updatesByEventQuery
+// Query: *[_type == "update" && defined(slug.current) && references($eventId)] | order(publishedAt desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": category->{      _id,      title,      slug,      color    },    featured,    publishedAt  }
+export type UpdatesByEventQueryResult = Array<{
+  _id: string;
+  _type: "update";
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  category: {
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+    color: "blue" | "green" | "orange" | "purple" | "teal" | null;
+  } | null;
+  featured: boolean | null;
+  publishedAt: string | null;
+}>;
+
+// Source: src/queries/updates.ts
+// Variable: updatesByProjectQuery
+// Query: *[_type == "update" && defined(slug.current) && references($projectId)] | order(publishedAt desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": category->{      _id,      title,      slug,      color    },    featured,    publishedAt  }
+export type UpdatesByProjectQueryResult = Array<{
+  _id: string;
+  _type: "update";
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        dimensions: SanityImageDimensions | null;
+        lqip: string | null;
+        blurhash: null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  category: {
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+    color: "blue" | "green" | "orange" | "purple" | "teal" | null;
+  } | null;
+  featured: boolean | null;
+  publishedAt: string | null;
+}>;
+
+// Source: src/queries/updates.ts
+// Variable: updateCategoriesQuery
+// Query: *[_type == "updateCategory"] | order(title asc) {    _id,    title,    slug,    color  }
+export type UpdateCategoriesQueryResult = Array<{
+  _id: string;
+  title: string | null;
+  slug: Slug | null;
+  color: "blue" | "green" | "orange" | "purple" | "teal" | null;
+}>;
+
+// Source: src/queries/updates.ts
+// Variable: updateNavigationQuery
+// Query: {    "previous": *[_type == "update" && (publishedAt < $publishedAt || (publishedAt == $publishedAt && _id < $id))] | order(publishedAt desc, _id desc) [0] {      _id,      title,      slug    },    "next": *[_type == "update" && (publishedAt > $publishedAt || (publishedAt == $publishedAt && _id > $id))] | order(publishedAt asc, _id asc) [0] {      _id,      title,      slug    }  }
+export type UpdateNavigationQueryResult = {
+  previous: {
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+  } | null;
+  next: {
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+  } | null;
+};
+
+// Source: src/queries/updates.ts
+// Variable: updatesPageQuery
+// Query: *[_type == "updatesPage"][0] {    _id,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    introduction  }
+export type UpdatesPageQueryResult = {
+  _id: string;
+  pageHero: {
+    title: string | null;
+    description: string | null;
+    image: {
+      asset: {
+        _id: string;
+        url: string | null;
+        metadata: {
+          dimensions: SanityImageDimensions | null;
+          lqip: string | null;
+          blurhash: null;
+          palette: SanityImagePalette | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  } | null;
+  introduction: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "h2" | "h3" | "leading-lg" | "leading" | "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }> | null;
+} | null;
 
 // Query TypeMap
-import "@sanity/client"
+import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n  *[_type == "aboutPage"][0]{\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n  }\n': GetAboutPageQueryResult
-    '\n  *[_type == "amenitiesPage"][0]{\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    introduction,\n    amenities[]{\n      title,\n      slug,\n      icon,\n      description,\n      details,\n      "images": imagesV2[defined(asset)][]{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      externalLink,\n      linkText,\n      section\n    }\n  }\n': GetAmenitiesPageQueryResult
-    '\n  *[_type == "amenitiesPage"][0]{\n    "upperParkAmenities": amenities[section == "upper-park" || section == "both"],\n    "lowerParkAmenities": amenities[section == "lower-park" || section == "both"]\n  }\n': GetAmenitiesBySectionQueryResult
-    '\n  *[_type == "donatePage"][0]{\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    }\n  }\n': GetDonatePageQueryResult
-    '\n  *[_type == "eventsPage"][0]{\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    introduction\n  }\n': GetEventsPageQueryResult
-    '\n  *[_type == "gallery"] | order(order asc){\n    _id,\n    title,\n    galleryType,\n    images[]{\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      showOnMobile\n    },\n    order\n  }\n': GetGalleriesQueryResult
-    '\n  *[_type == "gallery" && galleryType == $type] | order(order asc){\n    _id,\n    title,\n    galleryType,\n    images[]{\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      showOnMobile\n    },\n    order\n  }\n': GetGalleryByTypeQueryResult
-    '\n  *[_type == "gallery" && _id == $id][0]{\n    _id,\n    title,\n    galleryType,\n    images[]{\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      showOnMobile\n    },\n    order\n  }\n': GetGalleryByIdQueryResult
-    '\n  *[_type == "getInvolvedPage"][0]{\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n  }\n': GetGetInvolvedPageQueryResult
-    '\n  *[_type == "historyPage"][0]{\n    content,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n  }\n': GetHistoryPageQueryResult
-    '\n  *[_type == "homePage"][0]{\n    hero{\n      heading,\n      subheading,\n      "heroImage": heroImageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      ctaButton\n    },\n    "partners": featuredPartners[]->{\n      _id,\n      name,\n      slug,\n      logo{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt\n      },\n      description,\n      websiteUrl,\n      order\n    } | order(order asc),\n    "quote": featuredQuote->{\n      _id,\n      quoteText,\n      attribution,\n      "backgroundImage": backgroundImageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    "gallery": homepageGallery->{\n      _id,\n      title,\n      images[]{\n        "image": imageV2{\n          \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n        },\n        showOnMobile\n      }\n    },\n    "parkGallery": parkGallery->{\n      _id,\n      title,\n      images[]{\n        "image": imageV2{\n          \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n        },\n        showOnMobile\n      }\n    }\n  }\n': GetHomePageQueryResult
-    '\n  *[_type == "mediaPage"][0]{\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    }\n  }\n': GetMediaPageQueryResult
-    '\n  *[_type == "partner"] | order(order asc){\n    _id,\n    name,\n    slug,\n    logo{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt\n    },\n    description,\n    websiteUrl,\n    featured,\n    order\n  }\n': GetPartnersQueryResult
-    '\n  *[_type == "partner" && featured == true] | order(order asc){\n    _id,\n    name,\n    slug,\n    logo{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt\n    },\n    description,\n    websiteUrl,\n    order\n  }\n': GetFeaturedPartnersQueryResult
-    '\n  *[_type == "partner" && slug.current == $slug][0]{\n    _id,\n    name,\n    slug,\n    logo{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt\n    },\n    description,\n    websiteUrl,\n    featured,\n    order\n  }\n': GetPartnerBySlugQueryResult
-    '\n  *[_type == "projectsPage"][0]{\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    introduction\n  }\n': GetProjectsPageQueryResult
-    '\n  *[_type == "quote"] | order(_createdAt desc){\n    _id,\n    quoteText,\n    attribution,\n    "backgroundImage": backgroundImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    featured,\n    category\n  }\n': GetQuotesQueryResult
-    '\n  *[_type == "quote" && featured == true][0]{\n    _id,\n    quoteText,\n    attribution,\n    "backgroundImage": backgroundImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    category\n  }\n': GetFeaturedQuoteQueryResult
-    '\n  *[_type == "quote" && category == $category] | order(_createdAt desc){\n    _id,\n    quoteText,\n    attribution,\n    "backgroundImage": backgroundImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    featured\n  }\n': GetQuotesByCategoryQueryResult
-    '\n  *[_type == "siteSettings"][0]{\n    organizationName,\n    alternativeName,\n    description,\n    parkAddress,\n    parkHours,\n    socialMedia,\n    donationUrl,\n    contactEmail,\n    metaDefaults{\n      siteTitle,\n      ogImage{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt\n      }\n    },\n    getInvolvedGallery->{\n      _id,\n      title,\n      images[]{\n        "image": imageV2{\n          \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n        }\n      }\n    },\n    featuredQuote->{\n      _id,\n      quoteText,\n      attribution,\n      "backgroundImage": backgroundImageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    }\n  }\n': GetSiteSettingsQueryResult
+    '\n  *[_type == "aboutPage"][0]{\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    mission,\n    vision,\n    highlights[]{\n      _key,\n      value,\n      label\n    },\n    "storyImage": storyImage{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    content[]{\n      \n  ...,\n  _type == "image" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      metadata{\n        dimensions,\n        lqip,\n        blurhash\n      }\n    }\n  },\n  _type == "fileAttachment" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      originalFilename,\n      size,\n      extension,\n      mimeType\n    }\n  }\n\n    },\n    "calloutImage": calloutImage{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    boardMembers[]{\n      _key,\n      name,\n      role,\n      bio,\n      image{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    }\n  }\n': GetAboutPageQueryResult;
+    '\n  *[_type == "amenitiesPage"][0]{\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    introduction,\n    amenities[]{\n      title,\n      slug,\n      icon,\n      description,\n      details,\n      "images": imagesV2[defined(asset)][]{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      externalLink,\n      linkText,\n      section\n    }\n  }\n': GetAmenitiesPageQueryResult;
+    '\n  *[_type == "amenitiesPage"][0]{\n    "upperParkAmenities": amenities[section == "upper-park" || section == "both"],\n    "lowerParkAmenities": amenities[section == "lower-park" || section == "both"]\n  }\n': GetAmenitiesBySectionQueryResult;
+    '\n  *[_type == "donatePage"][0]{\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    }\n  }\n': GetDonatePageQueryResult;
+    '\n  *[_type == "event" && defined(slug.current)] | order(date desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImage{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    date,\n    time,\n    location,\n    featured,\n    publishedAt\n  }\n': AllEventsQueryResult;
+    '\n  *[_type == "event" && defined(slug.current) && date >= now()] | order(date asc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImage{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    date,\n    time,\n    location,\n    featured,\n    publishedAt\n  }\n': UpcomingEventsQueryResult;
+    '\n  *[_type == "event" && defined(slug.current) && date < now()] | order(date desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImage{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    date,\n    time,\n    location,\n    featured,\n    publishedAt\n  }\n': PastEventsQueryResult;
+    '\n  *[_type == "event" && defined(slug.current) && featured == true] | order(date desc) [0...3] {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImage{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    date,\n    time,\n    location,\n    featured,\n    publishedAt\n  }\n': FeaturedEventsQueryResult;
+    '\n  *[_type == "event" && defined(slug.current)] | order(date desc) [0...3] {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImage{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    date,\n    time,\n    location,\n    featured,\n    publishedAt\n  }\n': RecentEventsQueryResult;
+    '\n  *[_type == "event" && slug.current == $slug][0] {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImage{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    date,\n    time,\n    location,\n    featured,\n    publishedAt,\n    body[]{\n      \n  ...,\n  _type == "image" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      metadata{\n        dimensions,\n        lqip,\n        blurhash\n      }\n    }\n  },\n  _type == "fileAttachment" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      originalFilename,\n      size,\n      extension,\n      mimeType\n    }\n  }\n\n    },\n    recap[]{\n      \n  ...,\n  _type == "image" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      metadata{\n        dimensions,\n        lqip,\n        blurhash\n      }\n    }\n  },\n  _type == "fileAttachment" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      originalFilename,\n      size,\n      extension,\n      mimeType\n    }\n  }\n\n    },\n    "recapGallery": recapGallery->{\n      _id,\n      title,\n      images[]{\n        "image": imageV2{\n          \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n        },\n        showOnMobile\n      }\n    }\n  }\n': EventBySlugQueryResult;
+    '\n  *[_type == "event" && defined(slug.current)] {\n    "slug": slug.current\n  }\n': EventSlugsQueryResult;
+    '\n  *[_type == "eventsPage"][0]{\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    introduction\n  }\n': GetEventsPageQueryResult;
+    '\n  *[_type == "gallery"] | order(order asc){\n    _id,\n    title,\n    galleryType,\n    images[]{\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      showOnMobile\n    },\n    order\n  }\n': GetGalleriesQueryResult;
+    '\n  *[_type == "gallery" && galleryType == $type] | order(order asc){\n    _id,\n    title,\n    galleryType,\n    images[]{\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      showOnMobile\n    },\n    order\n  }\n': GetGalleryByTypeQueryResult;
+    '\n  *[_type == "gallery" && _id == $id][0]{\n    _id,\n    title,\n    galleryType,\n    images[]{\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      showOnMobile\n    },\n    order\n  }\n': GetGalleryByIdQueryResult;
+    '\n  *[_type == "getInvolvedPage"][0]{\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n  }\n': GetGetInvolvedPageQueryResult;
+    '\n  *[_type == "historyPage"][0]{\n    _id,\n    content[]{\n      \n  ...,\n  _type == "image" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      metadata{\n        dimensions,\n        lqip,\n        blurhash\n      }\n    }\n  },\n  _type == "fileAttachment" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      originalFilename,\n      size,\n      extension,\n      mimeType\n    }\n  }\n\n    },\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n  }\n': GetHistoryPageQueryResult;
+    '\n  *[_type == "homePage"][0]{\n    _id,\n    hero{\n      heading,\n      subheading,\n      "heroImage": heroImageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      ctaButton\n    },\n    introSection{\n      heading,\n      body\n    },\n    visionSection{\n      title,\n      description,\n      pillars[]{\n        _key,\n        title,\n        pillar,\n        description\n      }\n    },\n    projectsSectionHeader{\n      title,\n      description\n    },\n    parkSection{\n      title,\n      intro,\n      body,\n      today,\n      callout\n    },\n    eventsSectionHeader{\n      title,\n      description\n    },\n    getInvolvedSection{\n      title,\n      description\n    },\n    partnersSectionHeader{\n      title,\n      description\n    },\n    "partners": featuredPartners[]->{\n      _id,\n      name,\n      slug,\n      logo{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt\n      },\n      description,\n      websiteUrl,\n      order\n    } | order(order asc),\n    "quote": featuredQuote->{\n      _id,\n      quoteText,\n      attribution,\n      "backgroundImage": backgroundImageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    "gallery": homepageGallery->{\n      _id,\n      title,\n      images[]{\n        "image": imageV2{\n          \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n        },\n        showOnMobile\n      }\n    },\n    "parkGallery": parkGallery->{\n      _id,\n      title,\n      images[]{\n        "image": imageV2{\n          \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n        },\n        showOnMobile\n      }\n    }\n  }\n': GetHomePageQueryResult;
+    '\n  *[_type == "mediaImage" && defined(imageV2.asset)] | order(_createdAt desc) {\n    _id,\n    _type,\n    "title": coalesce(imageV2.title, "Untitled image"),\n    "image": imageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": coalesce(imageV2.category, "park-views")\n  }\n': AllMediaImagesQueryResult;
+    '\n  *[\n    _type == "mediaImage" &&\n    defined(imageV2.asset) &&\n    imageV2.category == $category\n  ] | order(_createdAt desc) {\n    _id,\n    _type,\n    "title": coalesce(imageV2.title, "Untitled image"),\n    "image": imageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": coalesce(imageV2.category, "park-views")\n  }\n': MediaImagesByCategoryQueryResult;
+    '\n  *[_type == "mediaImage" && defined(imageV2.asset) && _id == $id][0] {\n    _id,\n    _type,\n    "title": coalesce(imageV2.title, "Untitled image"),\n    "image": imageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": coalesce(imageV2.category, "park-views")\n  }\n': MediaImageByIdQueryResult;
+    '\n  *[_type == "mediaImage" && defined(imageV2.asset)] | order(_createdAt desc) [$start...$end] {\n    _id,\n    _type,\n    "title": coalesce(imageV2.title, "Untitled image"),\n    "image": imageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": coalesce(imageV2.category, "park-views")\n  }\n': PaginatedMediaImagesQueryResult;
+    '\n  count(*[_type == "mediaImage" && defined(imageV2.asset)])\n': MediaImagesCountQueryResult;
+    '\n  *[_type == "mediaPage"][0]{\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    }\n  }\n': GetMediaPageQueryResult;
+    '\n  *[_type == "partner"] | order(order asc){\n    _id,\n    name,\n    slug,\n    logo{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt\n    },\n    description,\n    websiteUrl,\n    featured,\n    order\n  }\n': GetPartnersQueryResult;
+    '\n  *[_type == "partner" && featured == true] | order(order asc){\n    _id,\n    name,\n    slug,\n    logo{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt\n    },\n    description,\n    websiteUrl,\n    order\n  }\n': GetFeaturedPartnersQueryResult;
+    '\n  *[_type == "partner" && slug.current == $slug][0]{\n    _id,\n    name,\n    slug,\n    logo{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt\n    },\n    description,\n    websiteUrl,\n    featured,\n    order\n  }\n': GetPartnerBySlugQueryResult;
+    '\n  *[_type == "project" && defined(slug.current)] | order(startDate desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    status,\n    startDate,\n    startDateOverride,\n    completionDate,\n    completionDateOverride,\n    goal,\n    location,\n    budget,\n    category,\n    featured,\n    publishedAt\n  }\n': AllProjectsQueryResult;
+    '\n  *[_type == "project" && defined(slug.current) && status == "active"] | order(startDate desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    status,\n    startDate,\n    startDateOverride,\n    completionDate,\n    completionDateOverride,\n    goal,\n    location,\n    budget,\n    category,\n    featured,\n    publishedAt\n  }\n': ActiveProjectsQueryResult;
+    '\n  *[_type == "project" && defined(slug.current) && featured == true] | order(startDate desc) [0] {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    status,\n    startDate,\n    startDateOverride,\n    completionDate,\n    completionDateOverride,\n    goal,\n    location,\n    budget,\n    category,\n    featured,\n    publishedAt\n  }\n': FeaturedProjectQueryResult;
+    '\n  *[_type == "project" && defined(slug.current) && featured == true] | order(startDate desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    status,\n    startDate,\n    startDateOverride,\n    completionDate,\n    completionDateOverride,\n    goal,\n    location,\n    budget,\n    category,\n    featured,\n    publishedAt\n  }\n': FeaturedProjectsQueryResult;
+    '\n  *[_type == "project" && slug.current == $slug][0] {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    status,\n    startDate,\n    startDateOverride,\n    completionDate,\n    completionDateOverride,\n    goal,\n    location,\n    budget,\n    category,\n    featured,\n    publishedAt,\n    body[]{\n      \n  ...,\n  _type == "image" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      metadata{\n        dimensions,\n        lqip,\n        blurhash\n      }\n    }\n  },\n  _type == "fileAttachment" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      originalFilename,\n      size,\n      extension,\n      mimeType\n    }\n  }\n\n    },\n    gallery[]{\n      ...,\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip,\n          blurhash,\n          palette\n        }\n      },\n      alt,\n      caption,\n      hotspot,\n      crop\n    },\n    "relatedEvents": relatedEvents[]->{\n      _id,\n      _type,\n      title,\n      slug,\n      description,\n      "heroImage": heroImage{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      date,\n      time,\n      location\n    },\n    "partners": partners[]->{\n      _id,\n      _type,\n      name,\n      logo{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    }\n  }\n': ProjectBySlugQueryResult;
+    '\n  *[_type == "project" && slug.current == $slug][0] {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    }\n  }\n': ProjectCardBySlugQueryResult;
+    '\n  *[_type == "project" && defined(slug.current)] {\n    "slug": slug.current\n  }\n': ProjectSlugsQueryResult;
+    '\n  *[_type == "projectsPage"][0]{\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    introduction\n  }\n': GetProjectsPageQueryResult;
+    '\n  *[_type == "quote"] | order(_createdAt desc){\n    _id,\n    quoteText,\n    attribution,\n    "backgroundImage": backgroundImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    featured,\n    category\n  }\n': GetQuotesQueryResult;
+    '\n  *[_type == "quote" && featured == true][0]{\n    _id,\n    quoteText,\n    attribution,\n    "backgroundImage": backgroundImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    category\n  }\n': GetFeaturedQuoteQueryResult;
+    '\n  *[_type == "quote" && category == $category] | order(_createdAt desc){\n    _id,\n    quoteText,\n    attribution,\n    "backgroundImage": backgroundImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    featured\n  }\n': GetQuotesByCategoryQueryResult;
+    '\n  *[_type == "siteSettings"][0]{\n    organizationName,\n    alternativeName,\n    description,\n    parkAddress,\n    parkHours,\n    socialMedia,\n    donationUrl,\n    contactEmail,\n    metaDefaults{\n      siteTitle,\n      ogImage{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt\n      }\n    },\n    getInvolvedGallery->{\n      _id,\n      title,\n      images[]{\n        "image": imageV2{\n          \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n        }\n      }\n    },\n    featuredQuote->{\n      _id,\n      quoteText,\n      attribution,\n      "backgroundImage": backgroundImageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    }\n  }\n': GetSiteSettingsQueryResult;
+    '\n  *[_type == "surveyResultsPage"][0]{\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    introduction\n  }\n': GetSurveyResultsPageQueryResult;
+    '\n  *[_type == "update" && defined(slug.current)] | order(publishedAt desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    publishedAt\n  }\n': AllUpdatesQueryResult;
+    '\n  *[_type == "update" && defined(slug.current)] | order(featured desc, publishedAt desc) [0...3] {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    publishedAt\n  }\n': FeaturedUpdatesQueryResult;
+    '\n  *[_type == "update" && defined(slug.current) && category->slug.current == $categorySlug] | order(publishedAt desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    publishedAt\n  }\n': UpdatesByCategoryQueryResult;
+    '\n  *[_type == "update" && slug.current == $slug][0] {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    publishedAt,\n    "relatedEvents": relatedEvents[]->{\n      _id,\n      _type,\n      title,\n      slug,\n      description,\n      date,\n      "heroImage": heroImage{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    "relatedProjects": relatedProjects[]->{\n      _id,\n      _type,\n      title,\n      slug,\n      description,\n      status,\n      "heroImage": heroImageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    body[]{\n      \n  ...,\n  _type == "image" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      metadata{\n        dimensions,\n        lqip,\n        blurhash\n      }\n    }\n  },\n  _type == "fileAttachment" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      originalFilename,\n      size,\n      extension,\n      mimeType\n    }\n  }\n\n    }\n  }\n': UpdateBySlugQueryResult;
+    '\n  *[_type == "update" && defined(slug.current)] {\n    "slug": slug.current\n  }\n': UpdateSlugsQueryResult;
+    '\n  *[_type == "update" && defined(slug.current) && references($eventId)] | order(publishedAt desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    publishedAt\n  }\n': UpdatesByEventQueryResult;
+    '\n  *[_type == "update" && defined(slug.current) && references($projectId)] | order(publishedAt desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    publishedAt\n  }\n': UpdatesByProjectQueryResult;
+    '\n  *[_type == "updateCategory"] | order(title asc) {\n    _id,\n    title,\n    slug,\n    color\n  }\n': UpdateCategoriesQueryResult;
+    '\n  {\n    "previous": *[_type == "update" && (publishedAt < $publishedAt || (publishedAt == $publishedAt && _id < $id))] | order(publishedAt desc, _id desc) [0] {\n      _id,\n      title,\n      slug\n    },\n    "next": *[_type == "update" && (publishedAt > $publishedAt || (publishedAt == $publishedAt && _id > $id))] | order(publishedAt asc, _id asc) [0] {\n      _id,\n      title,\n      slug\n    }\n  }\n': UpdateNavigationQueryResult;
+    '\n  *[_type == "updatesPage"][0] {\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    introduction\n  }\n': UpdatesPageQueryResult;
   }
 }

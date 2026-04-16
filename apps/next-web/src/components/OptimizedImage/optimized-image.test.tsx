@@ -10,6 +10,7 @@ vi.mock("next/image", () => ({
     for (const [key, value] of Object.entries(props)) {
       dataProps[`data-${key.toLowerCase()}`] = String(value)
     }
+    // biome-ignore lint/performance/noImgElement: mocking next/image in tests; replacing with <Image> would be circular
     return <img {...dataProps} alt={props.alt as string} />
   },
 }))

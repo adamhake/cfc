@@ -1,15 +1,18 @@
 import { getSiteSettingsQuery } from "@chimborazo/sanity-config/queries"
+import { cache } from "react"
 import { CACHE_TAGS, sanityFetch } from "./sanity-fetch"
 import type { SanitySiteSettings } from "./sanity-types"
 
 /**
  * Server-side function to fetch site settings from Sanity.
- * Used in layout.tsx to avoid client-side waterfall fetches.
+ * Wrapped in React.cache() for request-level memoization regardless of
+ * transport — layout.tsx + individual pages all call this and we want
+ * a single Sanity round trip per request.
  */
-export async function getSiteSettings(): Promise<SanitySiteSettings | null> {
+export const getSiteSettings = cache(async (): Promise<SanitySiteSettings | null> => {
   const { data } = (await sanityFetch({
     query: getSiteSettingsQuery,
     tags: [CACHE_TAGS.SITE_SETTINGS],
   })) as { data: SanitySiteSettings | null }
   return data
-}
+})

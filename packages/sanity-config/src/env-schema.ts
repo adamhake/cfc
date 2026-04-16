@@ -7,6 +7,12 @@ import { z } from "zod"
  */
 
 /**
+ * Default Sanity API version used across client, image builder, and env defaults.
+ * Kept in this file so the env schema and client stay in sync.
+ */
+export const DEFAULT_SANITY_API_VERSION = "2025-03-04"
+
+/**
  * Schema for Sanity project ID.
  * Required - identifies which Sanity project to connect to.
  */
@@ -20,9 +26,9 @@ export const sanityDatasetSchema = z.string().default("production")
 
 /**
  * Schema for Sanity API version.
- * Defaults to "2024-01-01" - the current stable API version.
+ * Defaults to DEFAULT_SANITY_API_VERSION - the current pinned API version.
  */
-export const sanityApiVersionSchema = z.string().default("2024-01-01")
+export const sanityApiVersionSchema = z.string().default(DEFAULT_SANITY_API_VERSION)
 
 /**
  * Schema for optional Sanity API token.

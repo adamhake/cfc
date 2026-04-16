@@ -58,6 +58,8 @@ export const eventSchema = defineType({
       type: "image",
       options: {
         hotspot: true,
+        // Request LQIP + blurhash so placeholders render with the responsive <img>
+        metadata: ["blurhash", "lqip", "palette"],
       },
       fields: [
         {

@@ -1,9 +1,11 @@
 import { allProjectsQuery, getProjectsPageQuery } from "@chimborazo/sanity-config/queries"
+import type { PortableTextBlock } from "@portabletext/react"
 import type { Metadata } from "next"
 import Container from "@/components/Container/container"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { PortableText } from "@/components/PortableText/portable-text"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import { sortProjects } from "@/lib/sort-helpers"
 import type { SanityProject, SanityProjectsPage } from "@/lib/sanity-types"
 import { generateItemListStructuredData, SITE_CONFIG } from "@/utils/seo"
 import ProjectsListClient from "./projects-list-client"
@@ -42,17 +44,13 @@ export default async function ProjectsPage() {
     }),
   ])) as [{ data: SanityProject[] }, { data: SanityProjectsPage | null }]
 
-  // Sort projects: active first, then by startDate desc
-  const sortedProjects = [...projects].sort((a, b) => {
-    if (a.status === "active" && b.status !== "active") return -1
-    if (a.status !== "active" && b.status === "active") return 1
-    return new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
-  })
+  // Active first, then by startDate desc. Client re-sorts after optimistic updates.
+  const sortedProjects = sortProjects(projects)
 
   const itemListData = generateItemListStructuredData(
     sortedProjects.map((project) => ({
-      name: project.title,
-      url: `${SITE_CONFIG.url}/projects/${project.slug.current}`,
+      name: project.title ?? "",
+      url: `${SITE_CONFIG.url}/projects/${project.slug?.current ?? ""}`,
     })),
   )
 
@@ -82,7 +80,7 @@ export default async function ProjectsPage() {
       <Container spacing="md">
         {pageData?.introduction && pageData.introduction.length > 0 ? (
           <div className="mx-auto max-w-3xl text-center">
-            <PortableText value={pageData.introduction} />
+            <PortableText value={pageData.introduction as PortableTextBlock[]} />
           </div>
         ) : (
           <div className="mx-auto max-w-3xl space-y-4 text-center">

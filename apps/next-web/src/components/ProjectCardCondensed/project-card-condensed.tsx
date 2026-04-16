@@ -12,20 +12,22 @@ export default function ProjectCardCondensed({ project, onClick }: ProjectCardCo
 
   return (
     <Link
-      href={`/projects/${slug.current}`}
+      href={`/projects/${slug?.current ?? ""}`}
       onClick={onClick}
       className="group relative block overflow-hidden rounded-xl border border-accent-600/20 transition-all hover:shadow-md dark:border-accent-500/20"
     >
       {/* Image background */}
       <div className="relative h-32 w-full overflow-hidden">
-        <SanityImage
-          image={heroImage}
-          alt={heroImage.alt}
-          className="absolute inset-0 h-full w-full object-cover"
-          sizes="288px"
-          priority={false}
-          useHotspotPosition
-        />
+        {heroImage && (
+          <SanityImage
+            image={heroImage}
+            alt={heroImage.alt ?? ""}
+            className="absolute inset-0 h-full w-full object-cover"
+            sizes="288px"
+            priority={false}
+            useHotspotPosition
+          />
+        )}
         <div className="absolute inset-0 bg-primary-900/60"></div>
       </div>
 

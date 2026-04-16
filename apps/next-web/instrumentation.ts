@@ -4,28 +4,39 @@ import { resourceFromAttributes } from "@opentelemetry/resources"
 import { BatchLogRecordProcessor, LoggerProvider } from "@opentelemetry/sdk-logs"
 import { createPostHogServerClient } from "@/integrations/posthog/server"
 
-const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_KEY
+let _loggerProvider: LoggerProvider | null = null
 
-export const loggerProvider = new LoggerProvider({
-  resource: resourceFromAttributes({ "service.name": "chimbo-park-next-web" }),
-  processors: posthogKey
-    ? [
-        new BatchLogRecordProcessor(
-          new OTLPLogExporter({
-            url: "https://d.chimborazoparkconservancy.org/i/v1/logs",
-            headers: {
-              Authorization: `Bearer ${posthogKey}`,
-              "Content-Type": "application/json",
-            },
-          }),
-        ),
-      ]
-    : [],
-})
+/**
+ * Lazily construct the OTel LoggerProvider so module import doesn't
+ * eagerly wire up the OTel SDK on every server file that imports the
+ * logger helpers. Constructed on first call (from `register()` or
+ * from `logger.ts` helpers in edge/node runtimes).
+ */
+export function getLoggerProvider(): LoggerProvider {
+  if (_loggerProvider) return _loggerProvider
+  const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_KEY
+  _loggerProvider = new LoggerProvider({
+    resource: resourceFromAttributes({ "service.name": "chimbo-park-next-web" }),
+    processors: posthogKey
+      ? [
+          new BatchLogRecordProcessor(
+            new OTLPLogExporter({
+              url: "https://d.chimborazoparkconservancy.org/i/v1/logs",
+              headers: {
+                Authorization: `Bearer ${posthogKey}`,
+                "Content-Type": "application/json",
+              },
+            }),
+          ),
+        ]
+      : [],
+  })
+  return _loggerProvider
+}
 
 export function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
-    logs.setGlobalLoggerProvider(loggerProvider)
+    logs.setGlobalLoggerProvider(getLoggerProvider())
   }
 }
 

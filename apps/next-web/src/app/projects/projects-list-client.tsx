@@ -2,17 +2,14 @@
 
 import Project from "@/components/Project/project"
 import { useOptimisticList } from "@/hooks/use-optimistic-sanity"
+import { sortProjects } from "@/lib/sort-helpers"
 import type { SanityProject } from "@/lib/sanity-types"
 
 export default function ProjectsListClient({ projects }: { projects: SanityProject[] }) {
   const optimisticProjects = useOptimisticList(projects)
 
-  // Re-sort: active first, then by startDate desc
-  const sorted = [...optimisticProjects].sort((a, b) => {
-    if (a.status === "active" && b.status !== "active") return -1
-    if (a.status !== "active" && b.status === "active") return 1
-    return new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
-  })
+  // Re-sort after optimistic adds/removes/edits.
+  const sorted = sortProjects(optimisticProjects)
 
   return sorted.length > 0 ? (
     <div className="mt-20 grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">

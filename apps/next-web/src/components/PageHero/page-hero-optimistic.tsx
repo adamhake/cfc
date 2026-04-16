@@ -7,11 +7,11 @@ import PageHero from "./page-hero"
 
 interface PageDocument {
   _id: string
-  pageHero?: {
-    title?: string
-    description?: string
-    image?: SanityImage
-  }
+  pageHero: {
+    title: string | null
+    description: string | null
+    image: SanityImage | null
+  } | null
 }
 
 interface PageHeroOptimisticProps {

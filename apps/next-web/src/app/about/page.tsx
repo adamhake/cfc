@@ -1,12 +1,13 @@
 import { getAboutPageQuery } from "@chimborazo/sanity-config/queries"
+import type { PortableTextBlock } from "@portabletext/react"
 import type { Metadata } from "next"
 import Container from "@/components/Container/container"
 import GetInvolved from "@/components/GetInvolved/get-involved"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { PortableText } from "@/components/PortableText/portable-text"
-import type { SanityImageObject } from "@/components/SanityImage/sanity-image"
 import { SanityImage } from "@/components/SanityImage/sanity-image"
 import SectionHeader from "@/components/SectionHeader/section-header"
+import { extractGetInvolvedGalleryImages } from "@/lib/gallery-extractors"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityAboutPage, SanityBoardMember, SanityHighlight } from "@/lib/sanity-types"
 import { getSiteSettings } from "@/lib/site-settings"
@@ -35,26 +36,7 @@ export default async function AboutPage() {
     getSiteSettings(),
   ])
 
-  const getInvolvedGalleryImages =
-    (
-      siteSettings as unknown as {
-        getInvolvedGallery?: {
-          images?: Array<{
-            image?:
-              | SanityImageObject
-              | {
-                  image?: SanityImageObject
-                }
-          }>
-        }
-      }
-    )?.getInvolvedGallery?.images
-      ?.map((item) => {
-        if (!item.image) return null
-        if ("asset" in item.image) return item.image
-        return item.image.image || null
-      })
-      .filter((img): img is SanityImageObject => img != null) || []
+  const getInvolvedGalleryImages = extractGetInvolvedGalleryImages(siteSettings)
 
   return (
     <div>
@@ -104,7 +86,7 @@ export default async function AboutPage() {
         {/* Body Content */}
         {pageData?.content && pageData.content.length > 0 && (
           <article className="mx-auto max-w-5xl">
-            <PortableText value={pageData.content} />
+            <PortableText value={pageData.content as PortableTextBlock[]} />
           </article>
         )}
 
@@ -181,7 +163,7 @@ function BoardSection({ members }: { members: SanityBoardMember[] }) {
 }
 
 function MemberCard({ member }: { member: SanityBoardMember }) {
-  const initials = member.name
+  const initials = (member.name ?? "")
     .split(" ")
     .map((n) => n[0])
     .join("")
@@ -193,7 +175,7 @@ function MemberCard({ member }: { member: SanityBoardMember }) {
           <div className="h-16 w-16 shrink-0 overflow-hidden rounded-full">
             <SanityImage
               image={member.image}
-              alt={member.image.alt || member.name}
+              alt={member.image.alt || member.name || ""}
               className="h-full w-full object-cover"
               sizes="56px"
               maxWidth={112}

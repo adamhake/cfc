@@ -1,6 +1,7 @@
 import Container from "@/components/Container/container";
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic";
 import { PortableText } from "@/components/PortableText/portable-text";
+import type { PortableTextBlock } from "@portabletext/react";
 import {
   DonutChart,
   HorizontalBarChart,
@@ -151,7 +152,7 @@ export default async function SurveyResultsPage() {
         {/* CMS Introduction */}
         {pageData?.introduction && (
           <article className="mx-auto max-w-3xl">
-            <PortableText value={pageData.introduction} />
+            <PortableText value={pageData.introduction as PortableTextBlock[]} />
           </article>
         )}
 

@@ -1,9 +1,11 @@
 import { allEventsQuery, getEventsPageQuery } from "@chimborazo/sanity-config/queries"
+import type { PortableTextBlock } from "@portabletext/react"
 import type { Metadata } from "next"
 import Container from "@/components/Container/container"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { PortableText } from "@/components/PortableText/portable-text"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import { sortEventsByDate } from "@/lib/sort-helpers"
 import type { SanityEvent, SanityEventsPage } from "@/lib/sanity-types"
 import { generateItemListStructuredData, SITE_CONFIG } from "@/utils/seo"
 import EventsListClient from "./events-list-client"
@@ -42,15 +44,13 @@ export default async function EventsPage() {
     }),
   ])) as [{ data: SanityEvent[] }, { data: SanityEventsPage | null }]
 
-  // Sort events by date, newest first
-  const sortedEvents = [...events].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-  )
+  // Sort events by date, newest first. Client re-sorts after optimistic updates.
+  const sortedEvents = sortEventsByDate(events)
 
   const itemListData = generateItemListStructuredData(
     sortedEvents.map((event) => ({
-      name: event.title,
-      url: `${SITE_CONFIG.url}/events/${event.slug.current}`,
+      name: event.title ?? "",
+      url: `${SITE_CONFIG.url}/events/${event.slug?.current ?? ""}`,
     })),
   )
 
@@ -80,7 +80,7 @@ export default async function EventsPage() {
       <Container spacing="md">
         {pageData?.introduction && pageData.introduction.length > 0 ? (
           <div className="mx-auto max-w-3xl text-center">
-            <PortableText value={pageData.introduction} />
+            <PortableText value={pageData.introduction as PortableTextBlock[]} />
           </div>
         ) : (
           <div className="mx-auto max-w-3xl space-y-4 text-center">

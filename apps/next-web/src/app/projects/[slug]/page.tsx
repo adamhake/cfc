@@ -1,3 +1,4 @@
+import type { PortableTextBlock } from "@portabletext/react"
 import { projectBySlugQuery, projectSlugsQuery } from "@chimborazo/sanity-config/queries"
 import { ArrowLeft, Target } from "lucide-react"
 import type { Metadata } from "next"
@@ -10,7 +11,7 @@ import { PortableText } from "@/components/PortableText/portable-text"
 import { SanityImage } from "@/components/SanityImage/sanity-image"
 import { sanityClient } from "@/lib/sanity"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
-import type { SanityProject } from "@/lib/sanity-types"
+import type { SanityProjectDetail } from "@/lib/sanity-types"
 import {
   generateArticleStructuredData,
   generateBreadcrumbStructuredData,
@@ -34,7 +35,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     query: projectBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.PROJECT_DETAIL, CACHE_TAGS.PROJECTS],
-  })) as { data: SanityProject | null }
+  })) as { data: SanityProjectDetail | null }
 
   if (!project) {
     return {
@@ -43,14 +44,14 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     }
   }
 
-  const projectUrl = `${SITE_CONFIG.url}/projects/${project.slug.current}`
+  const projectUrl = `${SITE_CONFIG.url}/projects/${project.slug?.current ?? ""}`
   return {
-    title: project.title,
-    description: project.description,
+    title: project.title ?? undefined,
+    description: project.description ?? undefined,
     alternates: { canonical: projectUrl },
     openGraph: {
-      title: project.title,
-      description: project.description,
+      title: project.title ?? undefined,
+      description: project.description ?? undefined,
       type: "article",
       url: projectUrl,
       images: project.heroImage?.asset?.url
@@ -59,7 +60,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
               url: project.heroImage.asset.url,
               width: project.heroImage.asset.metadata?.dimensions?.width || 1200,
               height: project.heroImage.asset.metadata?.dimensions?.height || 630,
-              alt: project.heroImage.alt || project.title,
+              alt: project.heroImage.alt || project.title || "",
             },
           ]
         : undefined,
@@ -73,27 +74,27 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     query: projectBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.PROJECT_DETAIL, CACHE_TAGS.PROJECTS],
-  })) as { data: SanityProject | null }
+  })) as { data: SanityProjectDetail | null }
 
   if (!project) {
     notFound()
   }
 
-  const projectUrl = `${SITE_CONFIG.url}/projects/${project.slug.current}`
+  const projectUrl = `${SITE_CONFIG.url}/projects/${project.slug?.current ?? ""}`
   const imageUrl = project.heroImage?.asset?.url
 
   const articleData = generateArticleStructuredData({
-    headline: project.title,
-    description: project.description,
+    headline: project.title ?? "",
+    description: project.description ?? "",
     image: imageUrl || `${SITE_CONFIG.url}/bike_sunset.webp`,
-    datePublished: project.startDate,
-    dateModified: project.completionDate || project.startDate,
+    datePublished: project.startDate ?? "",
+    dateModified: project.completionDate || project.startDate || "",
   })
 
   const breadcrumbData = generateBreadcrumbStructuredData([
     { name: "Home", url: SITE_CONFIG.url },
     { name: "Projects", url: `${SITE_CONFIG.url}/projects` },
-    { name: project.title, url: projectUrl },
+    { name: project.title ?? "", url: projectUrl },
   ])
 
   return (
@@ -131,7 +132,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <Container spacing="md" className="py-12 md:py-16">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
             {/* Main Content */}
-            <main className="lg:col-span-8">
+            <div className="lg:col-span-8">
               {/* Project Goal Card */}
               {project.goal && (
                 <div className="mb-8 rounded-2xl border border-accent-200 bg-gradient-to-br from-accent-50 to-accent-100/50 p-6 md:p-8 dark:border-accent-700/30 dark:from-accent-900/20 dark:to-accent-800/10">
@@ -148,7 +149,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               )}
 
               {project.body && project.body.length > 0 ? (
-                <PortableText value={project.body} />
+                <PortableText value={project.body as PortableTextBlock[]} />
               ) : (
                 <div className="rounded-2xl border border-primary-200 bg-primary-50/30 p-8 md:p-12 dark:border-primary-700/30 dark:bg-primary-900/20">
                   <p className="font-body text-lg leading-relaxed text-grey-700 dark:text-grey-300">
@@ -172,7 +173,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                       >
                         <SanityImage
                           image={image}
-                          alt={image.alt || `${project.title} gallery image ${index + 1}`}
+                          alt={image.alt || `${project.title ?? ""} gallery image ${index + 1}`}
                           className="h-full w-full object-cover"
                           sizes="(max-width: 768px) 100vw, 50vw"
                         />
@@ -192,7 +193,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     {project.relatedEvents.map((event) => (
                       <Event
                         key={event._id}
-                        {...event}
+                        _id={event._id}
+                        _type={event._type}
+                        title={event.title}
+                        slug={event.slug}
+                        description={event.description}
+                        heroImage={event.heroImage}
+                        date={event.date}
+                        time={event.time}
+                        location={event.location}
+                        featured={null}
+                        publishedAt={null}
                         imageSizes="(max-width: 768px) 100vw, 768px"
                         imageMaxWidth={1024}
                         imageBreakpoints={[320, 480, 640, 768, 896, 1024]}
@@ -201,7 +212,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   </div>
                 </div>
               )}
-            </main>
+            </div>
 
             {/* Sidebar */}
             <aside className="lg:col-span-4">

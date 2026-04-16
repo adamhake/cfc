@@ -6,12 +6,12 @@ import { DEFAULT_BREAKPOINTS, getResponsiveWidths } from "./sanity-image-utils"
 
 // Re-export types for external use
 // These are derived from the centralized SanityImage type in sanity-types.ts
-export type SanityImageMetadata = NonNullable<SanityImageType["asset"]["metadata"]>
-export type SanityImageAsset = SanityImageType["asset"]
+export type SanityImageAsset = NonNullable<SanityImageType["asset"]>
+export type SanityImageMetadata = NonNullable<SanityImageAsset["metadata"]>
 
 // Using SanityImage from sanity-types.ts with optional alt for component flexibility
 export interface SanityImageObject extends Omit<SanityImageType, "alt"> {
-  alt?: string // Make alt optional since it may come from props instead
+  alt?: string | null // Accept both null and undefined for flexibility
 }
 
 export interface SanityImageProps {
@@ -128,7 +128,7 @@ export function SanityImage({
   const hasAsset = imageObject?.asset
 
   const altText = alt || imageObject?.alt || ""
-  const metadata = hasAsset ? imageObject.asset.metadata : undefined
+  const metadata = hasAsset ? imageObject.asset?.metadata : undefined
   const lqip = metadata?.lqip
   const dimensions = metadata?.dimensions
   const hotspot = imageObject?.hotspot
@@ -178,7 +178,7 @@ export function SanityImage({
   const hotspotStyle: CSSProperties =
     useHotspotPosition && hotspot
       ? {
-          objectPosition: `${hotspot.x * 100}% ${hotspot.y * 100}%`,
+          objectPosition: `${(hotspot.x ?? 0.5) * 100}% ${(hotspot.y ?? 0.5) * 100}%`,
         }
       : {}
 
@@ -240,7 +240,9 @@ export function SanityBackgroundImage({
 
   // Calculate background-position from hotspot data
   const backgroundPosition =
-    useHotspotPosition && hotspot ? `${hotspot.x * 100}% ${hotspot.y * 100}%` : "center"
+    useHotspotPosition && hotspot
+      ? `${(hotspot.x ?? 0.5) * 100}% ${(hotspot.y ?? 0.5) * 100}%`
+      : "center"
 
   const backgroundStyle: CSSProperties = {
     backgroundImage: `url(${url})`,

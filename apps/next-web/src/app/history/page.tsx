@@ -1,4 +1,5 @@
 import { getHistoryPageQuery } from "@chimborazo/sanity-config/queries"
+import type { PortableTextBlock } from "@portabletext/react"
 import type { Metadata } from "next"
 import Container from "@/components/Container/container"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
@@ -41,7 +42,7 @@ export default async function HistoryPage() {
 
       <Container spacing="xl" className="py-16 pb-24">
         <article className="mx-auto max-w-3xl">
-          <PortableText value={pageData?.content || []} />
+          <PortableText value={(pageData?.content || []) as PortableTextBlock[]} />
         </article>
       </Container>
     </div>

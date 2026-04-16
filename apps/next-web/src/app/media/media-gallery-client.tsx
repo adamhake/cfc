@@ -12,17 +12,18 @@ interface MediaGalleryClientProps {
 }
 
 function transformImages(images: SanityMediaImage[]): SanityGalleryImage[] {
-  return images
-    .filter(
-      (img) =>
-        img?.image?.asset?.url &&
-        img?.image?.asset?.metadata?.dimensions?.width &&
-        img?.image?.asset?.metadata?.dimensions?.height,
-    )
-    .map((img) => ({
-      ...img.image,
-      alt: img.image.alt || img.title || "Park image",
-    }))
+  return images.flatMap((img) => {
+    const image = img?.image
+    const dims = image?.asset?.metadata?.dimensions
+    if (!image?.asset?.url || !dims?.width || !dims?.height) return []
+    return [
+      {
+        ...image,
+        asset: image.asset,
+        alt: image.alt || img.title || "Park image",
+      },
+    ]
+  })
 }
 
 export default function MediaGalleryClient({

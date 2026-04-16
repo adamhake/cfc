@@ -28,26 +28,28 @@ export default function Project({ project }: ProjectProps) {
   if (!slug?.current) return null
 
   // Use override text if provided, otherwise format the date
-  const fmtDate = startDateOverride || formatDateString(startDate, "short")
+  const fmtDate = startDateOverride || formatDateString(startDate ?? "", "short")
 
   return (
     <Link
       href={`/projects/${slug.current}`}
       className="group relative block min-h-[400px] cursor-pointer overflow-hidden rounded-2xl border border-accent-600/20 transition-transform active:scale-98 md:min-h-[450px] dark:border-accent-500/20"
     >
-      <SanityImage
-        image={heroImage}
-        alt={heroImage?.alt || title}
-        className="absolute inset-0 h-full w-full object-cover transition-opacity group-hover:opacity-0"
-        sizes={PROJECT_IMAGE_SIZES}
-        maxWidth={1024}
-        breakpoints={[320, 480, 576, 640, 768, 896, 1024]}
-        quality={70}
-      />
+      {heroImage && (
+        <SanityImage
+          image={heroImage}
+          alt={heroImage.alt ?? title ?? ""}
+          className="absolute inset-0 h-full w-full object-cover transition-opacity group-hover:opacity-0"
+          sizes={PROJECT_IMAGE_SIZES}
+          maxWidth={1024}
+          breakpoints={[320, 480, 576, 640, 768, 896, 1024]}
+          quality={70}
+        />
+      )}
       <div className="absolute top-0 left-0 h-full w-full bg-primary-900/55 dark:bg-grey-900/60"></div>
       <div className="relative z-10 space-y-6 p-8 md:space-y-8">
         <div className="flex flex-wrap gap-2">
-          <Chip variant={status} />
+          {status && <Chip variant={status} />}
           {category && <Chip variant={category} />}
         </div>
         <h3 className="font-display text-3xl text-primary-50 dark:text-grey-100">{title}</h3>

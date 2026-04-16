@@ -1,10 +1,11 @@
 import { SeverityNumber } from "@opentelemetry/api-logs"
-import { loggerProvider } from "../../../instrumentation"
+import { getLoggerProvider } from "../../../instrumentation"
 
-const logger = loggerProvider.getLogger("chimbo-park-next-web")
+/** Lazy logger accessor — avoids eager OTel SDK init at module import. */
+const getLogger = () => getLoggerProvider().getLogger("chimbo-park-next-web")
 
 export function logInfo(message: string, attributes?: Record<string, string>) {
-  logger.emit({
+  getLogger().emit({
     body: message,
     severityNumber: SeverityNumber.INFO,
     attributes,
@@ -12,7 +13,7 @@ export function logInfo(message: string, attributes?: Record<string, string>) {
 }
 
 export function logWarn(message: string, attributes?: Record<string, string>) {
-  logger.emit({
+  getLogger().emit({
     body: message,
     severityNumber: SeverityNumber.WARN,
     attributes,
@@ -20,11 +21,11 @@ export function logWarn(message: string, attributes?: Record<string, string>) {
 }
 
 export function logError(message: string, attributes?: Record<string, string>) {
-  logger.emit({
+  getLogger().emit({
     body: message,
     severityNumber: SeverityNumber.ERROR,
     attributes,
   })
 }
 
-export { loggerProvider }
+export { getLoggerProvider }

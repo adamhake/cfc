@@ -1,72 +1,148 @@
 import { defineQuery } from "groq"
-import { imageFieldProjection } from "./imageProjections"
+import { imageFieldProjection, imageFieldProjectionSlim } from "./imageProjections"
 import { richTextProjection } from "./richTextProjection"
-
-export const projectCardFields = `
-  _id,
-  _type,
-  title,
-  slug,
-  description,
-  "heroImage": heroImageV2{
-    ${imageFieldProjection}
-  }
-`
-
-// Base project fields projection
-export const projectFields = `
-  ${projectCardFields},
-  status,
-  startDate,
-  startDateOverride,
-  completionDate,
-  completionDateOverride,
-  goal,
-  location,
-  budget,
-  category,
-  featured,
-  publishedAt
-`
 
 // Get all published projects
 export const allProjectsQuery = defineQuery(`
   *[_type == "project" && defined(slug.current)] | order(startDate desc) {
-    ${projectFields}
+    _id,
+    _type,
+    title,
+    slug,
+    description,
+    "heroImage": heroImageV2{
+      ${imageFieldProjectionSlim}
+    },
+    status,
+    startDate,
+    startDateOverride,
+    completionDate,
+    completionDateOverride,
+    goal,
+    location,
+    budget,
+    category,
+    featured,
+    publishedAt
   }
 `)
 
 // Get active projects
 export const activeProjectsQuery = defineQuery(`
   *[_type == "project" && defined(slug.current) && status == "active"] | order(startDate desc) {
-    ${projectFields}
+    _id,
+    _type,
+    title,
+    slug,
+    description,
+    "heroImage": heroImageV2{
+      ${imageFieldProjectionSlim}
+    },
+    status,
+    startDate,
+    startDateOverride,
+    completionDate,
+    completionDateOverride,
+    goal,
+    location,
+    budget,
+    category,
+    featured,
+    publishedAt
   }
 `)
 
 // Get featured project (single)
 export const featuredProjectQuery = defineQuery(`
   *[_type == "project" && defined(slug.current) && featured == true] | order(startDate desc) [0] {
-    ${projectFields}
+    _id,
+    _type,
+    title,
+    slug,
+    description,
+    "heroImage": heroImageV2{
+      ${imageFieldProjectionSlim}
+    },
+    status,
+    startDate,
+    startDateOverride,
+    completionDate,
+    completionDateOverride,
+    goal,
+    location,
+    budget,
+    category,
+    featured,
+    publishedAt
   }
 `)
 
 // Get all featured projects
 export const featuredProjectsQuery = defineQuery(`
   *[_type == "project" && defined(slug.current) && featured == true] | order(startDate desc) {
-    ${projectFields}
+    _id,
+    _type,
+    title,
+    slug,
+    description,
+    "heroImage": heroImageV2{
+      ${imageFieldProjectionSlim}
+    },
+    status,
+    startDate,
+    startDateOverride,
+    completionDate,
+    completionDateOverride,
+    goal,
+    location,
+    budget,
+    category,
+    featured,
+    publishedAt
   }
 `)
 
 // Get project by slug with full details and relationships
 export const projectBySlugQuery = defineQuery(`
   *[_type == "project" && slug.current == $slug][0] {
-    ${projectFields},
+    _id,
+    _type,
+    title,
+    slug,
+    description,
+    "heroImage": heroImageV2{
+      ${imageFieldProjection}
+    },
+    status,
+    startDate,
+    startDateOverride,
+    completionDate,
+    completionDateOverride,
+    goal,
+    location,
+    budget,
+    category,
+    featured,
+    publishedAt,
     body[]{
       ${richTextProjection}
     },
     gallery[]{
       ...,
-      ${imageFieldProjection}
+      asset->{
+        _id,
+        url,
+        metadata{
+          dimensions,
+          lqip,
+          blurhash,
+          palette
+        }
+      },
+      alt,
+      caption,
+      hotspot,
+      crop
     },
     "relatedEvents": relatedEvents[]->{
       _id,
@@ -94,7 +170,14 @@ export const projectBySlugQuery = defineQuery(`
 
 export const projectCardBySlugQuery = defineQuery(`
   *[_type == "project" && slug.current == $slug][0] {
-    ${projectCardFields}
+    _id,
+    _type,
+    title,
+    slug,
+    description,
+    "heroImage": heroImageV2{
+      ${imageFieldProjection}
+    }
   }
 `)
 

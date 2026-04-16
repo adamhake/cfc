@@ -1,7 +1,7 @@
 import { ExternalLink } from "lucide-react"
 import Container from "@/components/Container/container"
 import { Image } from "@/components/OptimizedImage/optimized-image"
-import { SanityImage, type SanityImageObject } from "@/components/SanityImage"
+import { SanityImage } from "@/components/SanityImage"
 
 interface PartnerLogo {
   src: string
@@ -10,16 +10,26 @@ interface PartnerLogo {
   height: number
 }
 
+/**
+ * Minimal Sanity-backed logo shape. Partner logos don't need hotspot/crop/caption,
+ * so accept any object with an `asset` (mirrors SanityImage's structural contract).
+ */
+interface PartnerSanityLogo {
+  asset?: unknown
+  alt?: string | null
+  [key: string]: unknown
+}
+
 interface Partner {
   name: string
   url?: string
-  logo: PartnerLogo | SanityImageObject
+  logo: PartnerLogo | PartnerSanityLogo
   description?: string
 }
 
 // Type guard to check if logo is a Sanity image
-function isSanityLogo(logo: PartnerLogo | SanityImageObject): logo is SanityImageObject {
-  return "asset" in logo && logo.asset !== undefined
+function isSanityLogo(logo: PartnerLogo | PartnerSanityLogo): logo is PartnerSanityLogo {
+  return "asset" in logo && logo.asset !== undefined && logo.asset !== null
 }
 
 interface PartnersProps {
@@ -42,7 +52,7 @@ export default function Partners({ partners }: PartnersProps) {
               <div className="flex items-center justify-center rounded-xl bg-white p-6 shadow-sm transition-transform duration-300 group-hover:scale-105 dark:border dark:border-primary-500/50 dark:bg-grey-200">
                 {isSanityLogo(partner.logo) ? (
                   <SanityImage
-                    image={partner.logo}
+                    image={partner.logo as Parameters<typeof SanityImage>[0]["image"]}
                     alt={partner.logo.alt || partner.name}
                     className="mx-auto h-auto max-w-48"
                     sizes="(max-width: 768px) 200px, 275px"

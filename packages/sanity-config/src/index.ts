@@ -15,12 +15,15 @@ export type { SanityConfig as SanityEnvConfig, SanityConfigWithToken } from "./e
 
 // Export environment schemas
 export {
+  DEFAULT_SANITY_API_VERSION,
   sanityApiTokenSchema,
   sanityApiVersionSchema,
   sanityConfigSchema,
   sanityDatasetSchema,
   sanityProjectIdSchema,
 } from "./env-schema"
+// Shared project identifiers for CLI/Studio config
+export { SANITY_DATASET, SANITY_PROJECT_ID } from "./sanity-constants"
 // Export queries
 export * from "./queries"
 // Export generated types

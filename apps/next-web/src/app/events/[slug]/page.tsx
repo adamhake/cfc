@@ -1,4 +1,5 @@
 import { eventBySlugQuery, eventSlugsQuery } from "@chimborazo/sanity-config/queries"
+import type { PortableTextBlock } from "@portabletext/react"
 import { ArrowLeft } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
@@ -9,7 +10,7 @@ import type { SanityGalleryImage } from "@/components/ImageGallery/image-gallery
 import { PortableText } from "@/components/PortableText/portable-text"
 import { sanityClient } from "@/lib/sanity"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
-import type { SanityEvent } from "@/lib/sanity-types"
+import type { SanityEventDetail } from "@/lib/sanity-types"
 import {
   generateBreadcrumbStructuredData,
   generateEventStructuredData,
@@ -34,7 +35,7 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
     query: eventBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.EVENT_DETAIL, CACHE_TAGS.EVENTS],
-  })) as { data: SanityEvent | null }
+  })) as { data: SanityEventDetail | null }
 
   if (!event) {
     return {
@@ -43,23 +44,23 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
     }
   }
 
-  const eventUrl = `${SITE_CONFIG.url}/events/${event.slug.current}`
+  const eventUrl = `${SITE_CONFIG.url}/events/${event.slug?.current}`
   return {
-    title: event.title,
-    description: event.description,
+    title: event.title ?? undefined,
+    description: event.description ?? undefined,
     alternates: { canonical: eventUrl },
     openGraph: {
-      title: event.title,
-      description: event.description,
+      title: event.title ?? undefined,
+      description: event.description ?? undefined,
       type: "article",
       url: eventUrl,
       images: event.heroImage?.asset?.url
         ? [
             {
               url: event.heroImage.asset.url,
-              width: event.heroImage.asset.metadata?.dimensions?.width,
-              height: event.heroImage.asset.metadata?.dimensions?.height,
-              alt: event.heroImage.alt || event.title,
+              width: event.heroImage.asset.metadata?.dimensions?.width ?? undefined,
+              height: event.heroImage.asset.metadata?.dimensions?.height ?? undefined,
+              alt: event.heroImage?.alt ?? event.title ?? undefined,
             },
           ]
         : undefined,
@@ -73,7 +74,7 @@ export default async function EventPage({ params }: EventPageProps) {
     query: eventBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.EVENT_DETAIL, CACHE_TAGS.EVENTS],
-  })) as { data: SanityEvent | null }
+  })) as { data: SanityEventDetail | null }
 
   if (!event) {
     notFound()
@@ -85,24 +86,28 @@ export default async function EventPage({ params }: EventPageProps) {
   // Transform recap gallery images for ImageGallery component
   const recapGalleryImages: SanityGalleryImage[] =
     event.recapGallery?.images
-      ?.filter((item) => item?.image?.asset?.url)
+      ?.filter(
+        (item): item is typeof item & { image: NonNullable<typeof item.image> } =>
+          !!item?.image?.asset?.url,
+      )
       .map((item) => ({
         ...item.image,
         alt: item.image.alt || "Event photo",
+        caption: item.image.caption ?? null,
         showOnMobile: item.showOnMobile,
       })) ?? []
 
   // Generate structured data
   const imageUrl = event.heroImage?.asset?.url || `${SITE_CONFIG.url}/volunteers.webp`
-  const eventUrl = `${SITE_CONFIG.url}/events/${event.slug.current}`
+  const eventUrl = `${SITE_CONFIG.url}/events/${event.slug?.current}`
 
   const structuredData = generateEventStructuredData({
-    name: event.title,
-    description: event.description,
+    name: event.title ?? "",
+    description: event.description ?? "",
     image: imageUrl,
-    startDate: event.date,
+    startDate: event.date ?? "",
     location: {
-      name: event.location,
+      name: event.location ?? "",
       address: {
         addressLocality: "Richmond",
         addressRegion: "VA",
@@ -119,7 +124,7 @@ export default async function EventPage({ params }: EventPageProps) {
   const breadcrumbData = generateBreadcrumbStructuredData([
     { name: "Home", url: SITE_CONFIG.url },
     { name: "Events", url: `${SITE_CONFIG.url}/events` },
-    { name: event.title, url: eventUrl },
+    { name: event.title ?? "", url: eventUrl },
   ])
 
   return (
@@ -158,15 +163,15 @@ export default async function EventPage({ params }: EventPageProps) {
         <Container spacing="md" className="py-12 md:py-16">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
             {/* Main Content */}
-            <main className="lg:col-span-8">
+            <div className="lg:col-span-8">
               {hasRecap ? (
                 <EventDetailClient
-                  recap={event.recap ?? []}
-                  body={event.body}
+                  recap={(event.recap ?? []) as PortableTextBlock[]}
+                  body={event.body as PortableTextBlock[] | undefined}
                   recapGalleryImages={recapGalleryImages}
                 />
               ) : event.body ? (
-                <PortableText value={event.body} />
+                <PortableText value={event.body as PortableTextBlock[]} />
               ) : (
                 <div className="rounded-2xl border border-primary-200 bg-primary-50/30 p-8 md:p-12 dark:border-primary-700/30 dark:bg-primary-900/20">
                   <p className="font-body text-lg leading-relaxed text-grey-700 dark:text-grey-300">
@@ -175,7 +180,7 @@ export default async function EventPage({ params }: EventPageProps) {
                   </p>
                 </div>
               )}
-            </main>
+            </div>
 
             {/* Sidebar */}
             <aside className="lg:col-span-4">

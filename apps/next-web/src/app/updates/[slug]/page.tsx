@@ -1,4 +1,5 @@
 import { updateBySlugQuery, updateSlugsQuery } from "@chimborazo/sanity-config/queries"
+import type { PortableTextBlock } from "@portabletext/react"
 import { ArrowLeft } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
@@ -8,7 +9,7 @@ import PageHero from "@/components/PageHero/page-hero"
 import { PortableText } from "@/components/PortableText/portable-text"
 import { sanityClient } from "@/lib/sanity"
 import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
-import type { SanityUpdate, UpdateSlug } from "@/lib/sanity-types"
+import type { SanityUpdateDetail, UpdateSlug } from "@/lib/sanity-types"
 import {
   generateArticleStructuredData,
   generateBreadcrumbStructuredData,
@@ -31,7 +32,7 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
     query: updateBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.UPDATE_DETAIL, CACHE_TAGS.UPDATES],
-  })) as { data: SanityUpdate | null }
+  })) as { data: SanityUpdateDetail | null }
 
   if (!update) {
     return {
@@ -40,14 +41,14 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
     }
   }
 
-  const updateUrl = `${SITE_CONFIG.url}/updates/${update.slug.current}`
+  const updateUrl = `${SITE_CONFIG.url}/updates/${update.slug?.current}`
   return {
-    title: update.title,
-    description: update.description,
+    title: update.title ?? undefined,
+    description: update.description ?? undefined,
     alternates: { canonical: updateUrl },
     openGraph: {
-      title: update.title,
-      description: update.description,
+      title: update.title ?? undefined,
+      description: update.description ?? undefined,
       type: "article",
       url: updateUrl,
       images: update.heroImage?.asset?.url
@@ -56,7 +57,7 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
               url: update.heroImage.asset.url,
               width: update.heroImage.asset.metadata?.dimensions?.width || 1200,
               height: update.heroImage.asset.metadata?.dimensions?.height || 630,
-              alt: update.heroImage.alt || update.title,
+              alt: update.heroImage.alt ?? update.title ?? undefined,
             },
           ]
         : undefined,
@@ -70,23 +71,23 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
     query: updateBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.UPDATE_DETAIL, CACHE_TAGS.UPDATES],
-  })) as { data: SanityUpdate | null }
+  })) as { data: SanityUpdateDetail | null }
 
   if (!update) {
     notFound()
   }
 
-  const updateUrl = `${SITE_CONFIG.url}/updates/${update.slug.current}`
+  const updateUrl = `${SITE_CONFIG.url}/updates/${update.slug?.current}`
   const articleData = generateArticleStructuredData({
-    headline: update.title,
-    description: update.description,
+    headline: update.title ?? "",
+    description: update.description ?? "",
     image: update.heroImage?.asset?.url || SITE_CONFIG.defaultImage.url,
-    datePublished: update.publishedAt,
+    datePublished: update.publishedAt ?? "",
   })
   const breadcrumbData = generateBreadcrumbStructuredData([
     { name: "Home", url: SITE_CONFIG.url },
     { name: "Updates", url: `${SITE_CONFIG.url}/updates` },
-    { name: update.title, url: updateUrl },
+    { name: update.title ?? "", url: updateUrl },
   ])
 
   return (
@@ -108,9 +109,9 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
 
       <div className="pb-24">
         <PageHero
-          title={update.title}
-          subtitle={update.description}
-          sanityImage={update.heroImage}
+          title={update.title ?? ""}
+          subtitle={update.description ?? undefined}
+          sanityImage={update.heroImage ?? undefined}
           height="medium"
           priority={true}
           titleSize="large"
@@ -131,7 +132,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
             <div className="space-y-8">
               <div className="flex flex-wrap items-center gap-3">
                 <span className="rounded-full bg-primary-100 px-3 py-1 font-body font-medium text-primary-800 dark:bg-primary-900/60 dark:text-primary-200">
-                  {formatDateString(update.publishedAt, "long")}
+                  {formatDateString(update.publishedAt ?? "", "long")}
                 </span>
                 {update.category?.title && (
                   <span className="rounded-full bg-accent-100 px-3 py-1 font-body font-medium text-accent-800 dark:bg-accent-900/40 dark:text-accent-200">
@@ -146,7 +147,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
               </div>
 
               {update.body && update.body.length > 0 ? (
-                <PortableText value={update.body} />
+                <PortableText value={update.body as PortableTextBlock[]} />
               ) : (
                 <div className="rounded-2xl border border-primary-200 bg-primary-50/30 p-8 md:p-12 dark:border-primary-700/30 dark:bg-primary-900/20">
                   <p className="font-body text-lg leading-relaxed text-grey-700 dark:text-grey-300">
@@ -164,7 +165,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
                     {update.relatedEvents.map((event) => (
                       <Link
                         key={event._id}
-                        href={`/events/${event.slug.current}`}
+                        href={`/events/${event.slug?.current}`}
                         className="block rounded-2xl border border-primary-200 bg-grey-50/70 p-5 transition-colors hover:bg-primary-50 dark:border-primary-700/30 dark:bg-primary-900/20 dark:hover:bg-primary-900/35"
                       >
                         <h3 className="font-display text-xl text-grey-900 dark:text-grey-100">
@@ -193,7 +194,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
                     {update.relatedProjects.map((project) => (
                       <Link
                         key={project._id}
-                        href={`/projects/${project.slug.current}`}
+                        href={`/projects/${project.slug?.current}`}
                         className="block rounded-2xl border border-primary-200 bg-grey-50/70 p-5 transition-colors hover:bg-primary-50 dark:border-primary-700/30 dark:bg-primary-900/20 dark:hover:bg-primary-900/35"
                       >
                         <div className="flex flex-wrap items-center gap-3">
@@ -227,7 +228,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
                       Published
                     </dt>
                     <dd className="mt-1 text-base text-grey-900 dark:text-grey-100">
-                      {formatDateString(update.publishedAt, "long")}
+                      {formatDateString(update.publishedAt ?? "", "long")}
                     </dd>
                   </div>
                   {update.category?.title && (

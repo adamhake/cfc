@@ -171,11 +171,11 @@ export default async function AmenitiesPage() {
           <div className="space-y-20 md:space-y-28">
             {upperParkAmenities.map((amenity, index) => (
               <AmenitySection
-                key={amenity.slug.current}
-                title={amenity.title}
-                icon={getIconComponent(amenity.icon)}
-                description={amenity.description}
-                details={amenity.details}
+                key={amenity.slug?.current ?? index}
+                title={amenity.title ?? ""}
+                icon={getIconComponent(amenity.icon ?? "")}
+                description={amenity.description ?? ""}
+                details={amenity.details ?? undefined}
                 link={
                   amenity.externalLink
                     ? {
@@ -205,11 +205,11 @@ export default async function AmenitiesPage() {
           <div className="space-y-20 md:space-y-28">
             {lowerParkAmenities.map((amenity, index) => (
               <AmenitySection
-                key={amenity.slug.current}
-                title={amenity.title}
-                icon={getIconComponent(amenity.icon)}
-                description={amenity.description}
-                details={amenity.details}
+                key={amenity.slug?.current ?? index}
+                title={amenity.title ?? ""}
+                icon={getIconComponent(amenity.icon ?? "")}
+                description={amenity.description ?? ""}
+                details={amenity.details ?? undefined}
                 link={
                   amenity.externalLink
                     ? {

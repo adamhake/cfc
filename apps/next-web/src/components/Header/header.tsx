@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import { useClickAway } from "@uidotdev/usehooks"
-import { AnimatePresence, motion } from "framer-motion"
-import { Menu, X } from "lucide-react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
-import IconLogo from "@/components/IconLogo/icon-logo"
-import { SocialLinks } from "@/components/SocialLinks/social-links"
-import { useReducedMotion } from "@/hooks/useReducedMotion"
-import type { SanityProjectCard } from "@/lib/sanity-types"
-import { Button } from "../Button/button"
-import ProjectCardCondensed from "../ProjectCardCondensed/project-card-condensed"
-import { ThemeToggle } from "../ThemeToggle/theme-toggle"
+import IconLogo from "@/components/IconLogo/icon-logo";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import type { SanityProjectCard } from "@/lib/sanity-types";
+import { useClickAway } from "@uidotdev/usehooks";
+import { Menu, X } from "lucide-react";
+import Link from "next/link";
+import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "../Button/button";
+
+const HeaderDesktopMenu = dynamic(() => import("./header-desktop-menu"), { ssr: false });
+const HeaderMobileMenu = dynamic(() => import("./header-mobile-menu"), { ssr: false });
 
 /**
  * Site header with navigation, logo, social links, and mobile menu.
@@ -32,10 +32,10 @@ import { ThemeToggle } from "../ThemeToggle/theme-toggle"
  */
 interface HeaderProps {
   /** Featured project data, fetched server-side */
-  featuredProject?: SanityProjectCard | null
+  featuredProject?: SanityProjectCard | null;
   /** Social media URLs from site settings */
-  facebookUrl?: string
-  instagramUrl?: string
+  facebookUrl?: string;
+  instagramUrl?: string;
 }
 
 export default function Header({
@@ -43,89 +43,90 @@ export default function Header({
   facebookUrl,
   instagramUrl,
 }: HeaderProps) {
-  const [menuOpen, setMenuOpen] = useState(false)
-  const mobileMenuRef = useRef<HTMLDivElement>(null)
-  const pathname = usePathname()
-  const currentPath = pathname
-  // Read hash only after mount to avoid hydration mismatch
-  const [currentHash, setCurrentHash] = useState(() =>
-    typeof window === "undefined" ? "" : window.location.hash.replace("#", ""),
-  )
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [hasOpened, setHasOpened] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  const currentPath = pathname;
+  // Always init to "" so SSR and first client render match; sync after mount
+  const [currentHash, setCurrentHash] = useState("");
   useEffect(() => {
-    const onHashChange = () => setCurrentHash(window.location.hash.replace("#", ""))
-    window.addEventListener("hashchange", onHashChange)
-    return () => window.removeEventListener("hashchange", onHashChange)
-  }, [])
-  const featuredProject = featuredProjectProp
-  const prefersReducedMotion = useReducedMotion()
+    setCurrentHash(window.location.hash.replace("#", ""));
+    const onHashChange = () =>
+      setCurrentHash(window.location.hash.replace("#", ""));
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+  const featuredProject = featuredProjectProp;
+  const prefersReducedMotion = useReducedMotion();
 
   const ref = useClickAway<HTMLElement>(() => {
     // Only close on click-away for desktop menu
     // Mobile menu has its own close handlers on links/buttons
     // Use matchMedia instead of window.innerWidth to avoid forced reflow
     if (window.matchMedia("(min-width: 768px)").matches) {
-      setMenuOpen(false)
+      setMenuOpen(false);
     }
-  })
+  });
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (menuOpen) {
-      document.body.style.overflow = "hidden"
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = ""
+      document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = ""
-    }
-  }, [menuOpen])
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
 
   // Handle escape key to close menu
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && menuOpen) {
-        setMenuOpen(false)
+        setMenuOpen(false);
       }
-    }
-    window.addEventListener("keydown", handleEscape)
-    return () => window.removeEventListener("keydown", handleEscape)
-  }, [menuOpen])
+    };
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [menuOpen]);
 
   // Focus trap for mobile menu
   useEffect(() => {
-    if (!menuOpen || !mobileMenuRef.current) return
+    if (!menuOpen || !mobileMenuRef.current) return;
 
-    const menuElement = mobileMenuRef.current
+    const menuElement = mobileMenuRef.current;
     const focusableElements = menuElement.querySelectorAll<HTMLElement>(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-    )
-    const firstElement = focusableElements[0]
-    const lastElement = focusableElements[focusableElements.length - 1]
+    );
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
 
     // Focus the first element when menu opens
-    firstElement?.focus()
+    firstElement?.focus();
 
     const handleTabKey = (e: KeyboardEvent) => {
-      if (e.key !== "Tab") return
+      if (e.key !== "Tab") return;
 
       if (e.shiftKey) {
         // Shift + Tab
         if (document.activeElement === firstElement) {
-          e.preventDefault()
-          lastElement?.focus()
+          e.preventDefault();
+          lastElement?.focus();
         }
       } else {
         // Tab
         if (document.activeElement === lastElement) {
-          e.preventDefault()
-          firstElement?.focus()
+          e.preventDefault();
+          firstElement?.focus();
         }
       }
-    }
+    };
 
-    menuElement.addEventListener("keydown", handleTabKey)
-    return () => menuElement.removeEventListener("keydown", handleTabKey)
-  }, [menuOpen])
+    menuElement.addEventListener("keydown", handleTabKey);
+    return () => menuElement.removeEventListener("keydown", handleTabKey);
+  }, [menuOpen]);
 
   return (
     <div className="fixed top-4 right-4 left-4 z-20 flex flex-row items-center justify-center">
@@ -137,7 +138,8 @@ export default function Header({
           {/* Menu button - Desktop only */}
           <Button
             onClick={() => {
-              setMenuOpen((s) => !s)
+              setHasOpened(true);
+              setMenuOpen((s) => !s);
             }}
             variant="outline"
             size="small"
@@ -145,7 +147,11 @@ export default function Header({
             aria-expanded={menuOpen}
             aria-controls="desktop-menu"
           >
-            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {menuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
             <span>{menuOpen ? "Close" : "Menu"}</span>
           </Button>
 
@@ -171,7 +177,7 @@ export default function Header({
 
           {/* Mobile menu button */}
           <Button
-            onClick={() => setMenuOpen((s) => !s)}
+            onClick={() => { setHasOpened(true); setMenuOpen((s) => !s); }}
             variant="secondary"
             className="flex h-12 w-12 items-center justify-center border p-0 shadow-md md:hidden dark:border-grey-800 dark:bg-grey-900"
             aria-label="Toggle menu"
@@ -195,246 +201,33 @@ export default function Header({
         </div>
 
         {/* Dropdown menu - Desktop only */}
-        <AnimatePresence mode="wait">
-          {menuOpen && (
-            <motion.div
-              id="desktop-menu"
-              key="mainMenu"
-              initial={prefersReducedMotion ? {} : { opacity: 0, y: -8 }}
-              animate={{
-                opacity: 1,
-                y: 0,
-                transition: {
-                  duration: prefersReducedMotion ? 0 : 0.2,
-                  ease: [0.16, 1, 0.3, 1], // Smooth ease-out
-                },
-              }}
-              exit={{
-                opacity: 0,
-                y: -4,
-                transition: {
-                  duration: prefersReducedMotion ? 0 : 0.15,
-                  ease: [0.4, 0, 1, 1], // Ease-in for exit (snappier)
-                },
-              }}
-              className="hidden md:block"
-            >
-              <div className="mt-4 flex w-full justify-between gap-12 border-t border-accent-600/20 p-6 pt-8 transition dark:border-accent-500/20">
-                <nav className="flex flex-1 flex-col justify-between border-r border-accent-600/20 pr-12 dark:border-accent-500/20">
-                  <ul className="grid grid-cols-2 gap-x-8 gap-y-5">
-                    {[
-                      { href: "/", label: "Home", isActive: currentPath === "/" && !currentHash },
-                      { href: "/events", label: "Events", isActive: currentPath === "/events" },
-                      { href: "/about", label: "About Us", isActive: currentPath === "/about" },
-                      {
-                        href: "/amenities",
-                        label: "Amenities",
-                        isActive: currentPath === "/amenities",
-                      },
-                      {
-                        href: "/projects",
-                        label: "Projects",
-                        isActive: currentPath === "/projects",
-                      },
-                      {
-                        href: "/get-involved",
-                        label: "Get Involved",
-                        isActive: currentPath === "/get-involved",
-                      },
-                      { href: "/history", label: "History", isActive: currentPath === "/history" },
-                      { href: "/media", label: "Media", isActive: currentPath === "/media" },
-                    ].map(({ href, label, isActive }) => (
-                      <li key={href}>
-                        <Link
-                          href={href}
-                          onClick={() => setMenuOpen(false)}
-                          aria-current={isActive ? "page" : undefined}
-                          className="group inline-block font-body text-lg font-medium text-grey-800 transition focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-100"
-                        >
-                          <span
-                            className={`border-b-2 transition group-hover:border-accent-600 dark:group-hover:border-accent-400 ${isActive ? "border-accent-600 dark:border-accent-400" : "border-transparent"}`}
-                          >
-                            {label}
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* Social Media Links */}
-                  <div className="mt-6">
-                    <SocialLinks
-                      className="flex gap-3"
-                      linkClassName="transition-transform active:scale-90"
-                      iconClassName="h-6 w-6 fill-grey-700 transition hover:fill-accent-600 dark:fill-primary-400 dark:hover:fill-accent-400"
-                      facebookUrl={facebookUrl}
-                      instagramUrl={instagramUrl}
-                    />
-                  </div>
-                </nav>
-                {featuredProject && (
-                  <div className="w-72">
-                    <h3 className="mb-3 font-display text-base font-semibold text-primary-700 dark:text-primary-400">
-                      Featured Project
-                    </h3>
-                    <ProjectCardCondensed
-                      project={featuredProject}
-                      onClick={() => setMenuOpen(false)}
-                    />
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {hasOpened && (
+          <HeaderDesktopMenu
+            menuOpen={menuOpen}
+            setMenuOpen={setMenuOpen}
+            currentPath={currentPath}
+            currentHash={currentHash}
+            facebookUrl={facebookUrl}
+            instagramUrl={instagramUrl}
+            prefersReducedMotion={prefersReducedMotion}
+            featuredProject={featuredProject}
+          />
+        )}
       </header>
 
       {/* Full-screen Mobile Menu */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            id="mobile-menu"
-            ref={mobileMenuRef}
-            initial={prefersReducedMotion ? {} : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={prefersReducedMotion ? {} : { opacity: 0 }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.15 }}
-            className="fixed inset-0 z-50 overflow-y-auto bg-grey-50 md:hidden dark:bg-primary-900"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Mobile navigation menu"
-          >
-            <div className="flex min-h-full flex-col p-6">
-              {/* Close button */}
-              <div className="mb-12 flex items-center justify-between">
-                {/* Logo and branding */}
-                <Link
-                  href="/"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center justify-center gap-2 rounded-lg text-primary-800 focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-100"
-                >
-                  <IconLogo className="h-8 w-8 shrink-0" />
-                  <div className="flex flex-col font-display">
-                    <span className="text-base leading-none font-semibold">Chimborazo</span>
-                    <span className="text-sm leading-none text-primary-700 dark:text-primary-400">
-                      Park Conservancy
-                    </span>
-                  </div>
-                </Link>
-
-                <Button
-                  onClick={() => setMenuOpen(false)}
-                  variant="secondary"
-                  className="flex h-12 w-12 items-center justify-center rounded-full border p-0 dark:border-grey-700 dark:bg-grey-800 dark:hover:bg-grey-700"
-                  aria-label="Close menu"
-                >
-                  <X className="h-6 w-6" />
-                </Button>
-              </div>
-
-              {/* Navigation */}
-              <nav className="flex-1">
-                <motion.ul className="space-y-6">
-                  {[
-                    {
-                      href: "/",
-                      label: "Home",
-                      isActive: currentPath === "/" && !currentHash,
-                      delay: 0.01,
-                    },
-                    {
-                      href: "/about",
-                      label: "About Us",
-                      isActive: currentPath === "/about" && !currentHash,
-                      delay: 0.01,
-                    },
-                    {
-                      href: "/amenities",
-                      label: "Amenities",
-                      isActive: currentPath === "/amenities",
-                      delay: 0.02,
-                    },
-                    {
-                      href: "/projects",
-                      label: "Projects",
-                      isActive: currentPath === "/projects",
-                      delay: 0.03,
-                    },
-                    {
-                      href: "/events",
-                      label: "Events",
-                      isActive: currentPath === "/events",
-                      delay: 0.03,
-                    },
-                    {
-                      href: "/get-involved",
-                      label: "Get Involved",
-                      isActive: currentPath === "/get-involved",
-                      delay: 0.04,
-                    },
-                    {
-                      href: "/history",
-                      label: "History",
-                      isActive: currentPath === "/history",
-                      delay: 0.045,
-                    },
-                    {
-                      href: "/media",
-                      label: "Media",
-                      isActive: currentPath === "/media",
-                      delay: 0.05,
-                    },
-                  ].map(({ href, label, isActive, delay }) => (
-                    <motion.li
-                      key={href}
-                      initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: prefersReducedMotion ? 0 : delay }}
-                    >
-                      <Link
-                        href={href}
-                        onClick={() => setMenuOpen(false)}
-                        className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${isActive ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
-                      >
-                        {label}
-                      </Link>
-                    </motion.li>
-                  ))}
-                </motion.ul>
-              </nav>
-
-              {/* Social Media Links */}
-              <div className="mt-6">
-                <SocialLinks
-                  className="flex gap-3"
-                  linkClassName="transition-transform active:scale-90"
-                  iconClassName="h-6 w-6 fill-grey-700 transition hover:fill-accent-700 dark:fill-primary-400 dark:hover:fill-accent-400"
-                  facebookUrl={facebookUrl}
-                  instagramUrl={instagramUrl}
-                />
-              </div>
-
-              {/* Footer CTA */}
-              <div className="mt-6">
-                <Button
-                  as="a"
-                  variant="accent"
-                  href="/donate"
-                  trackingLocation="mobile-menu"
-                  className="block w-full text-center"
-                >
-                  Donate
-                </Button>
-              </div>
-
-              {/* Theme Toggle */}
-              <div className="mt-4 border-t border-accent-600/20 pt-4 dark:border-accent-500/20">
-                <ThemeToggle variant="button" showLabel={true} />
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {hasOpened && (
+        <HeaderMobileMenu
+          menuOpen={menuOpen}
+          setMenuOpen={setMenuOpen}
+          currentPath={currentPath}
+          currentHash={currentHash}
+          facebookUrl={facebookUrl}
+          instagramUrl={instagramUrl}
+          mobileMenuRef={mobileMenuRef}
+          prefersReducedMotion={prefersReducedMotion}
+        />
+      )}
     </div>
-  )
+  );
 }

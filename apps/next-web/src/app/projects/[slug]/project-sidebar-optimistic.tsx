@@ -2,7 +2,7 @@
 
 import { Calendar, CheckCircle2, DollarSign, MapPin, Target } from "lucide-react"
 import { useOptimisticDocument } from "@/hooks/use-optimistic-sanity"
-import type { SanityProject } from "@/lib/sanity-types"
+import type { SanityProjectDetail } from "@/lib/sanity-types"
 import { formatDateString } from "@/utils/time"
 
 const categoryLabels = {
@@ -12,11 +12,11 @@ const categoryLabels = {
   preservation: "Preservation",
 } as const
 
-export default function ProjectSidebarOptimistic({ project }: { project: SanityProject }) {
+export default function ProjectSidebarOptimistic({ project }: { project: SanityProjectDetail }) {
   const optimisticProject = useOptimisticDocument(project) ?? project
 
   const fmtStartDate =
-    optimisticProject.startDateOverride || formatDateString(optimisticProject.startDate)
+    optimisticProject.startDateOverride || formatDateString(optimisticProject.startDate ?? "")
   const fmtCompletionDate = optimisticProject.completionDateOverride
     ? optimisticProject.completionDateOverride
     : optimisticProject.completionDate

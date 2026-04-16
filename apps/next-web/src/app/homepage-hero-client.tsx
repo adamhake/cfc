@@ -13,11 +13,11 @@ export default function HomepageHeroClient({
 
   const heroData = optimistic?.hero?.heroImage?.asset?.url
     ? {
-        heading: optimistic.hero.heading,
-        subheading: optimistic.hero.subheading,
-        heroImage: optimistic.hero.heroImage,
-        ctaText: optimistic.hero.ctaButton?.text,
-        ctaLink: optimistic.hero.ctaButton?.link,
+        heading: optimistic.hero.heading ?? undefined,
+        subheading: optimistic.hero.subheading ?? undefined,
+        heroImage: optimistic.hero.heroImage ?? undefined,
+        ctaText: optimistic.hero.ctaButton?.text ?? undefined,
+        ctaLink: optimistic.hero.ctaButton?.link ?? undefined,
       }
     : undefined
 

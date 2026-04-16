@@ -24,12 +24,12 @@ export default function EventSidebarOptimistic({ event }: { event: SanityEvent }
                 Date
               </div>
               <div className="font-body font-medium text-grey-900 dark:text-grey-100">
-                {formatDateString(optimisticEvent.date)}
+                {formatDateString(optimisticEvent.date ?? "")}
               </div>
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <Clock className="mt-1 h-5 w-5 hrink-0 stroke-accent-600 dark:stroke-accent-400" />
+            <Clock className="mt-1 h-5 w-5 shrink-0 stroke-accent-600 dark:stroke-accent-400" />
             <div>
               <div className="font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
                 Time
@@ -51,8 +51,6 @@ export default function EventSidebarOptimistic({ event }: { event: SanityEvent }
             </div>
           </div>
         </div>
-
-        {/*<RegisterButton eventDate={optimisticEvent.date} />*/}
       </div>
     </div>
   )

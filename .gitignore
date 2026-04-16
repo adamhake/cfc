@@ -25,3 +25,6 @@ storybook-static
 .claude
 .playwright-mcp
 .omc
+
+# Sanity extracted schema — regenerate with `pnpm --filter @chimborazo/sanity-config schema:generate`
+packages/sanity-config/schema.json

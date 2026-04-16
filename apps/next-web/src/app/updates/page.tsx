@@ -1,4 +1,5 @@
 import { allUpdatesQuery, updatesPageQuery } from "@chimborazo/sanity-config/queries"
+import type { PortableTextBlock } from "@portabletext/react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import Container from "@/components/Container/container"
@@ -39,8 +40,8 @@ export default async function UpdatesPage() {
 
   const itemListData = generateItemListStructuredData(
     updates.map((update) => ({
-      name: update.title,
-      url: `${SITE_CONFIG.url}/updates/${update.slug.current}`,
+      name: update.title ?? "",
+      url: `${SITE_CONFIG.url}/updates/${update.slug?.current}`,
     })),
   )
 
@@ -71,7 +72,7 @@ export default async function UpdatesPage() {
       <Container spacing="md">
         {pageData?.introduction && pageData.introduction.length > 0 ? (
           <div className="mx-auto max-w-3xl text-center">
-            <PortableText value={pageData.introduction} />
+            <PortableText value={pageData.introduction as PortableTextBlock[]} />
           </div>
         ) : (
           <div className="mx-auto max-w-3xl space-y-4 text-center">
@@ -91,25 +92,27 @@ export default async function UpdatesPage() {
             {updates.map((update) => (
               <Link
                 key={update._id}
-                href={`/updates/${update.slug.current}`}
+                href={`/updates/${update.slug?.current}`}
                 className="group block overflow-hidden rounded-2xl border border-primary-200/70 bg-grey-50/70 transition-all hover:-translate-y-0.5 hover:shadow-lg dark:border-primary-700/30 dark:bg-primary-900/20"
               >
                 <div className="grid gap-0 md:grid-cols-[320px_minmax(0,1fr)]">
                   <div className="relative min-h-[240px] overflow-hidden bg-primary-100 dark:bg-primary-800/40">
-                    <SanityImage
-                      image={update.heroImage}
-                      alt={update.heroImage.alt || update.title}
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                      sizes="(max-width: 768px) 100vw, 320px"
-                      maxWidth={960}
-                      quality={72}
-                      useHotspotPosition
-                    />
+                    {update.heroImage && (
+                      <SanityImage
+                        image={update.heroImage}
+                        alt={update.heroImage.alt || update.title || ""}
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                        sizes="(max-width: 768px) 100vw, 320px"
+                        maxWidth={960}
+                        quality={72}
+                        useHotspotPosition
+                      />
+                    )}
                   </div>
                   <div className="p-6 md:p-8">
                     <div className="flex flex-wrap items-center gap-3 text-sm">
                       <span className="rounded-full bg-primary-100 px-3 py-1 font-body font-medium text-primary-800 dark:bg-primary-900/60 dark:text-primary-200">
-                        {formatDateString(update.publishedAt, "short")}
+                        {formatDateString(update.publishedAt ?? "", "short")}
                       </span>
                       {update.category?.title && (
                         <span className="rounded-full bg-accent-100 px-3 py-1 font-body font-medium text-accent-800 dark:bg-accent-900/40 dark:text-accent-200">

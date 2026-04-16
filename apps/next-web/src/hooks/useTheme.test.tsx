@@ -169,9 +169,9 @@ describe("useThemeState", () => {
       mode === "system" ? "light" : (mode as "light" | "dark"),
     )
 
-    // The useState initializer should use the server-provided value, not localStorage
-    // After effects, it syncs to localStorage
-    const { result } = renderHook(() => useThemeState("system", "light"))
+    // The useState initializer should use the server-provided value, not localStorage.
+    // After effects, it syncs to localStorage.
+    renderHook(() => useThemeState("system", "light"))
 
     // After effects have run, it should have synced
     expect(getStoredTheme).toHaveBeenCalled()

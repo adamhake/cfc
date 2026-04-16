@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
       expire: 7776000, // 90 days — Sanity Live handles on-demand revalidation
     },
   },
+  experimental: {
+    // Belt-and-suspenders tree-shaking for barrel-exported packages.
+    // Next converts named imports to direct path imports at build time.
+    optimizePackageImports: ["lucide-react", "@uidotdev/usehooks", "framer-motion"],
+  },
   images: {
     remotePatterns: [
       {

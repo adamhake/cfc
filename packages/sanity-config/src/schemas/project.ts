@@ -181,6 +181,7 @@ export const projectSchema = defineType({
               name: "alt",
               type: "string",
               title: "Alternative text",
+              validation: (Rule) => Rule.required(),
             },
             {
               name: "caption",
