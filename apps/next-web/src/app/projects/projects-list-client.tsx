@@ -2,8 +2,8 @@
 
 import Project from "@/components/Project/project"
 import { useOptimisticList } from "@/hooks/use-optimistic-sanity"
-import { sortProjects } from "@/lib/sort-helpers"
 import type { SanityProject } from "@/lib/sanity-types"
+import { sortProjects } from "@/lib/sort-helpers"
 
 export default function ProjectsListClient({ projects }: { projects: SanityProject[] }) {
   const optimisticProjects = useOptimisticList(projects)

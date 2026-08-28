@@ -1,18 +1,18 @@
-"use client";
+"use client"
 
-import IconLogo from "@/components/IconLogo/icon-logo";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import type { SanityProjectCard } from "@/lib/sanity-types";
-import { useClickAway } from "@uidotdev/usehooks";
-import { Menu, X } from "lucide-react";
-import Link from "next/link";
-import dynamic from "next/dynamic";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { Button } from "../Button/button";
+import { useClickAway } from "@uidotdev/usehooks"
+import { Menu, X } from "lucide-react"
+import dynamic from "next/dynamic"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { useEffect, useRef, useState } from "react"
+import IconLogo from "@/components/IconLogo/icon-logo"
+import { useReducedMotion } from "@/hooks/useReducedMotion"
+import type { SanityProjectCard } from "@/lib/sanity-types"
+import { Button } from "../Button/button"
 
-const HeaderDesktopMenu = dynamic(() => import("./header-desktop-menu"), { ssr: false });
-const HeaderMobileMenu = dynamic(() => import("./header-mobile-menu"), { ssr: false });
+const HeaderDesktopMenu = dynamic(() => import("./header-desktop-menu"), { ssr: false })
+const HeaderMobileMenu = dynamic(() => import("./header-mobile-menu"), { ssr: false })
 
 /**
  * Site header with navigation, logo, social links, and mobile menu.
@@ -32,10 +32,10 @@ const HeaderMobileMenu = dynamic(() => import("./header-mobile-menu"), { ssr: fa
  */
 interface HeaderProps {
   /** Featured project data, fetched server-side */
-  featuredProject?: SanityProjectCard | null;
+  featuredProject?: SanityProjectCard | null
   /** Social media URLs from site settings */
-  facebookUrl?: string;
-  instagramUrl?: string;
+  facebookUrl?: string
+  instagramUrl?: string
 }
 
 export default function Header({
@@ -43,90 +43,89 @@ export default function Header({
   facebookUrl,
   instagramUrl,
 }: HeaderProps) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [hasOpened, setHasOpened] = useState(false);
-  const mobileMenuRef = useRef<HTMLDivElement>(null);
-  const pathname = usePathname();
-  const currentPath = pathname;
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [hasOpened, setHasOpened] = useState(false)
+  const mobileMenuRef = useRef<HTMLDivElement>(null)
+  const pathname = usePathname()
+  const currentPath = pathname
   // Always init to "" so SSR and first client render match; sync after mount
-  const [currentHash, setCurrentHash] = useState("");
+  const [currentHash, setCurrentHash] = useState("")
   useEffect(() => {
-    setCurrentHash(window.location.hash.replace("#", ""));
-    const onHashChange = () =>
-      setCurrentHash(window.location.hash.replace("#", ""));
-    window.addEventListener("hashchange", onHashChange);
-    return () => window.removeEventListener("hashchange", onHashChange);
-  }, []);
-  const featuredProject = featuredProjectProp;
-  const prefersReducedMotion = useReducedMotion();
+    setCurrentHash(window.location.hash.replace("#", ""))
+    const onHashChange = () => setCurrentHash(window.location.hash.replace("#", ""))
+    window.addEventListener("hashchange", onHashChange)
+    return () => window.removeEventListener("hashchange", onHashChange)
+  }, [])
+  const featuredProject = featuredProjectProp
+  const prefersReducedMotion = useReducedMotion()
 
   const ref = useClickAway<HTMLElement>(() => {
     // Only close on click-away for desktop menu
     // Mobile menu has its own close handlers on links/buttons
     // Use matchMedia instead of window.innerWidth to avoid forced reflow
     if (window.matchMedia("(min-width: 768px)").matches) {
-      setMenuOpen(false);
+      setMenuOpen(false)
     }
-  });
+  })
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (menuOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = "hidden"
     } else {
-      document.body.style.overflow = "";
+      document.body.style.overflow = ""
     }
     return () => {
-      document.body.style.overflow = "";
-    };
-  }, [menuOpen]);
+      document.body.style.overflow = ""
+    }
+  }, [menuOpen])
 
   // Handle escape key to close menu
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && menuOpen) {
-        setMenuOpen(false);
+        setMenuOpen(false)
       }
-    };
-    window.addEventListener("keydown", handleEscape);
-    return () => window.removeEventListener("keydown", handleEscape);
-  }, [menuOpen]);
+    }
+    window.addEventListener("keydown", handleEscape)
+    return () => window.removeEventListener("keydown", handleEscape)
+  }, [menuOpen])
 
   // Focus trap for mobile menu
   useEffect(() => {
-    if (!menuOpen || !mobileMenuRef.current) return;
+    if (!menuOpen || !mobileMenuRef.current) return
 
-    const menuElement = mobileMenuRef.current;
+    const menuElement = mobileMenuRef.current
     const focusableElements = menuElement.querySelectorAll<HTMLElement>(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-    );
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
+    )
+    const firstElement = focusableElements[0]
+    const lastElement = focusableElements[focusableElements.length - 1]
 
     // Focus the first element when menu opens
-    firstElement?.focus();
+    firstElement?.focus()
 
     const handleTabKey = (e: KeyboardEvent) => {
-      if (e.key !== "Tab") return;
+      if (e.key !== "Tab") return
 
       if (e.shiftKey) {
         // Shift + Tab
         if (document.activeElement === firstElement) {
-          e.preventDefault();
-          lastElement?.focus();
+          e.preventDefault()
+          lastElement?.focus()
         }
       } else {
         // Tab
         if (document.activeElement === lastElement) {
-          e.preventDefault();
-          firstElement?.focus();
+          e.preventDefault()
+          firstElement?.focus()
         }
       }
-    };
+    }
 
-    menuElement.addEventListener("keydown", handleTabKey);
-    return () => menuElement.removeEventListener("keydown", handleTabKey);
-  }, [menuOpen]);
+    menuElement.addEventListener("keydown", handleTabKey)
+    return () => menuElement.removeEventListener("keydown", handleTabKey)
+  }, [menuOpen])
 
   return (
     <div className="fixed top-4 right-4 left-4 z-20 flex flex-row items-center justify-center">
@@ -138,8 +137,8 @@ export default function Header({
           {/* Menu button - Desktop only */}
           <Button
             onClick={() => {
-              setHasOpened(true);
-              setMenuOpen((s) => !s);
+              setHasOpened(true)
+              setMenuOpen((s) => !s)
             }}
             variant="outline"
             size="small"
@@ -147,11 +146,7 @@ export default function Header({
             aria-expanded={menuOpen}
             aria-controls="desktop-menu"
           >
-            {menuOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
+            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             <span>{menuOpen ? "Close" : "Menu"}</span>
           </Button>
 
@@ -177,7 +172,10 @@ export default function Header({
 
           {/* Mobile menu button */}
           <Button
-            onClick={() => { setHasOpened(true); setMenuOpen((s) => !s); }}
+            onClick={() => {
+              setHasOpened(true)
+              setMenuOpen((s) => !s)
+            }}
             variant="secondary"
             className="flex h-12 w-12 items-center justify-center border p-0 shadow-md md:hidden dark:border-grey-800 dark:bg-grey-900"
             aria-label="Toggle menu"
@@ -229,5 +227,5 @@ export default function Header({
         />
       )}
     </div>
-  );
+  )
 }

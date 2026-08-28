@@ -2,8 +2,8 @@
 
 import Event from "@/components/Event/event"
 import { useOptimisticList } from "@/hooks/use-optimistic-sanity"
-import { sortEventsByDate } from "@/lib/sort-helpers"
 import type { SanityEvent } from "@/lib/sanity-types"
+import { sortEventsByDate } from "@/lib/sort-helpers"
 
 export default function EventsListClient({ events }: { events: SanityEvent[] }) {
   const optimisticEvents = useOptimisticList(events)

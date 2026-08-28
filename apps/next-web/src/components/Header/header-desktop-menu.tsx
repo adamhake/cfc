@@ -1,20 +1,20 @@
-"use client";
+"use client"
 
-import { SocialLinks } from "@/components/SocialLinks/social-links";
-import type { SanityProjectCard } from "@/lib/sanity-types";
-import { AnimatePresence, motion } from "framer-motion";
-import Link from "next/link";
-import ProjectCardCondensed from "../ProjectCardCondensed/project-card-condensed";
+import { AnimatePresence, motion } from "framer-motion"
+import Link from "next/link"
+import { SocialLinks } from "@/components/SocialLinks/social-links"
+import type { SanityProjectCard } from "@/lib/sanity-types"
+import ProjectCardCondensed from "../ProjectCardCondensed/project-card-condensed"
 
 interface HeaderDesktopMenuProps {
-  menuOpen: boolean;
-  setMenuOpen: (open: boolean) => void;
-  currentPath: string;
-  currentHash: string;
-  facebookUrl?: string;
-  instagramUrl?: string;
-  prefersReducedMotion: boolean;
-  featuredProject?: SanityProjectCard | null;
+  menuOpen: boolean
+  setMenuOpen: (open: boolean) => void
+  currentPath: string
+  currentHash: string
+  facebookUrl?: string
+  instagramUrl?: string
+  prefersReducedMotion: boolean
+  featuredProject?: SanityProjectCard | null
 }
 
 export default function HeaderDesktopMenu({
@@ -140,5 +140,5 @@ export default function HeaderDesktopMenu({
         </motion.div>
       )}
     </AnimatePresence>
-  );
+  )
 }

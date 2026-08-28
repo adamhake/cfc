@@ -22,12 +22,12 @@ export {
   sanityDatasetSchema,
   sanityProjectIdSchema,
 } from "./env-schema"
-// Shared project identifiers for CLI/Studio config
-export { SANITY_DATASET, SANITY_PROJECT_ID } from "./sanity-constants"
 // Export queries
 export * from "./queries"
 // Export generated types
 export type * from "./sanity.types"
+// Shared project identifiers for CLI/Studio config
+export { SANITY_DATASET, SANITY_PROJECT_ID } from "./sanity-constants"
 export {
   aboutPageSchema,
   amenitiesPageSchema,

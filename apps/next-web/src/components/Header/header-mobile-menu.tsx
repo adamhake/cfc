@@ -1,23 +1,23 @@
-"use client";
+"use client"
 
-import IconLogo from "@/components/IconLogo/icon-logo";
-import { SocialLinks } from "@/components/SocialLinks/social-links";
-import { AnimatePresence, motion } from "framer-motion";
-import { X } from "lucide-react";
-import Link from "next/link";
-import type { RefObject } from "react";
-import { Button } from "../Button/button";
-import { ThemeToggle } from "../ThemeToggle/theme-toggle";
+import { AnimatePresence, motion } from "framer-motion"
+import { X } from "lucide-react"
+import Link from "next/link"
+import type { RefObject } from "react"
+import IconLogo from "@/components/IconLogo/icon-logo"
+import { SocialLinks } from "@/components/SocialLinks/social-links"
+import { Button } from "../Button/button"
+import { ThemeToggle } from "../ThemeToggle/theme-toggle"
 
 interface HeaderMobileMenuProps {
-  menuOpen: boolean;
-  setMenuOpen: (open: boolean) => void;
-  currentPath: string;
-  currentHash: string;
-  facebookUrl?: string;
-  instagramUrl?: string;
-  mobileMenuRef: RefObject<HTMLDivElement | null>;
-  prefersReducedMotion: boolean;
+  menuOpen: boolean
+  setMenuOpen: (open: boolean) => void
+  currentPath: string
+  currentHash: string
+  facebookUrl?: string
+  instagramUrl?: string
+  mobileMenuRef: RefObject<HTMLDivElement | null>
+  prefersReducedMotion: boolean
 }
 
 export default function HeaderMobileMenu({
@@ -56,9 +56,7 @@ export default function HeaderMobileMenu({
               >
                 <IconLogo className="h-8 w-8 shrink-0" />
                 <div className="flex flex-col font-display">
-                  <span className="text-base leading-none font-semibold">
-                    Chimborazo
-                  </span>
+                  <span className="text-base leading-none font-semibold">Chimborazo</span>
                   <span className="text-sm leading-none text-primary-700 dark:text-primary-400">
                     Park Conservancy
                   </span>
@@ -130,9 +128,7 @@ export default function HeaderMobileMenu({
                 ].map(({ href, label, isActive, delay }) => (
                   <motion.li
                     key={href}
-                    initial={
-                      prefersReducedMotion ? {} : { opacity: 0, x: -20 }
-                    }
+                    initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: prefersReducedMotion ? 0 : delay }}
                   >
@@ -180,5 +176,5 @@ export default function HeaderMobileMenu({
         </motion.div>
       )}
     </AnimatePresence>
-  );
+  )
 }

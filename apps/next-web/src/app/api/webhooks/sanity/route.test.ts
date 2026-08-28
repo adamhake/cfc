@@ -197,19 +197,18 @@ describe("Sanity Webhook Route", () => {
       }
     })
 
-    it.each([
-      "partner",
-      "quote",
-      "gallery",
-    ])("revalidates homepage for %s document", async (docType) => {
-      vi.mocked(isValidSignature).mockReturnValue(true)
-      const request = makeRequest({ _id: "doc-1", _type: docType }, "valid-sig")
+    it.each(["partner", "quote", "gallery"])(
+      "revalidates homepage for %s document",
+      async (docType) => {
+        vi.mocked(isValidSignature).mockReturnValue(true)
+        const request = makeRequest({ _id: "doc-1", _type: docType }, "valid-sig")
 
-      const response = await POST(request)
-      const json = await response.json()
+        const response = await POST(request)
+        const json = await response.json()
 
-      expect(json.tags).toContain(CACHE_TAGS.HOMEPAGE)
-    })
+        expect(json.tags).toContain(CACHE_TAGS.HOMEPAGE)
+      },
+    )
 
     it("revalidates homepage for unknown document type", async () => {
       vi.mocked(isValidSignature).mockReturnValue(true)

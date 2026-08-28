@@ -7,69 +7,66 @@
  */
 
 export type {
-	// Re-export schema primitives used by consumers
-	SanityImageCrop,
-	SanityImageDimensions,
-	SanityImageHotspot,
-	SanityImagePalette,
-	Slug,
-} from "./sanity.types"
-
-export type {
-	// Re-export all generated query result types
-	AllEventsQueryResult,
-	AllMediaImagesQueryResult,
-	AllProjectsQueryResult,
-	AllUpdatesQueryResult,
-	EventBySlugQueryResult,
-	EventSlugsQueryResult,
-	GetAboutPageQueryResult,
-	GetAmenitiesPageQueryResult,
-	GetDonatePageQueryResult,
-	GetEventsPageQueryResult,
-	GetGetInvolvedPageQueryResult,
-	GetHistoryPageQueryResult,
-	GetHomePageQueryResult,
-	GetMediaPageQueryResult,
-	GetProjectsPageQueryResult,
-	GetSiteSettingsQueryResult,
-	GetSurveyResultsPageQueryResult,
-	MediaImageByIdQueryResult,
-	MediaImagesByCategoryQueryResult,
-	PaginatedMediaImagesQueryResult,
-	ProjectBySlugQueryResult,
-	ProjectCardBySlugQueryResult,
-	ProjectSlugsQueryResult,
-	UpdateBySlugQueryResult,
-	UpdateCategoriesQueryResult,
-	UpdateSlugsQueryResult,
-	UpdatesPageQueryResult,
+  // Re-export all generated query result types
+  AllEventsQueryResult,
+  AllMediaImagesQueryResult,
+  AllProjectsQueryResult,
+  AllUpdatesQueryResult,
+  EventBySlugQueryResult,
+  EventSlugsQueryResult,
+  GetAboutPageQueryResult,
+  GetAmenitiesPageQueryResult,
+  GetDonatePageQueryResult,
+  GetEventsPageQueryResult,
+  GetGetInvolvedPageQueryResult,
+  GetHistoryPageQueryResult,
+  GetHomePageQueryResult,
+  GetMediaPageQueryResult,
+  GetProjectsPageQueryResult,
+  GetSiteSettingsQueryResult,
+  GetSurveyResultsPageQueryResult,
+  MediaImageByIdQueryResult,
+  MediaImagesByCategoryQueryResult,
+  PaginatedMediaImagesQueryResult,
+  ProjectBySlugQueryResult,
+  ProjectCardBySlugQueryResult,
+  ProjectSlugsQueryResult,
+  // Re-export schema primitives used by consumers
+  SanityImageCrop,
+  SanityImageDimensions,
+  SanityImageHotspot,
+  SanityImagePalette,
+  Slug,
+  UpdateBySlugQueryResult,
+  UpdateCategoriesQueryResult,
+  UpdateSlugsQueryResult,
+  UpdatesPageQueryResult,
 } from "./sanity.types"
 
 import type {
-	AllEventsQueryResult,
-	AllMediaImagesQueryResult,
-	AllProjectsQueryResult,
-	AllUpdatesQueryResult,
-	EventBySlugQueryResult,
-	EventSlugsQueryResult,
-	GetAboutPageQueryResult,
-	GetAmenitiesPageQueryResult,
-	GetDonatePageQueryResult,
-	GetEventsPageQueryResult,
-	GetGetInvolvedPageQueryResult,
-	GetHistoryPageQueryResult,
-	GetHomePageQueryResult,
-	GetMediaPageQueryResult,
-	GetProjectsPageQueryResult,
-	GetSiteSettingsQueryResult,
-	GetSurveyResultsPageQueryResult,
-	ProjectBySlugQueryResult,
-	ProjectCardBySlugQueryResult,
-	ProjectSlugsQueryResult,
-	UpdateBySlugQueryResult,
-	UpdateSlugsQueryResult,
-	UpdatesPageQueryResult,
+  AllEventsQueryResult,
+  AllMediaImagesQueryResult,
+  AllProjectsQueryResult,
+  AllUpdatesQueryResult,
+  EventBySlugQueryResult,
+  EventSlugsQueryResult,
+  GetAboutPageQueryResult,
+  GetAmenitiesPageQueryResult,
+  GetDonatePageQueryResult,
+  GetEventsPageQueryResult,
+  GetGetInvolvedPageQueryResult,
+  GetHistoryPageQueryResult,
+  GetHomePageQueryResult,
+  GetMediaPageQueryResult,
+  GetProjectsPageQueryResult,
+  GetSiteSettingsQueryResult,
+  GetSurveyResultsPageQueryResult,
+  ProjectBySlugQueryResult,
+  ProjectCardBySlugQueryResult,
+  ProjectSlugsQueryResult,
+  UpdateBySlugQueryResult,
+  UpdateSlugsQueryResult,
+  UpdatesPageQueryResult,
 } from "./sanity.types"
 
 // ---------------------------------------------------------------------------
@@ -120,13 +117,17 @@ export type SanityPartner = NonNullable<SanityHomePage["partners"]>[number]
 export type SanityQuote = NonNullable<SanityHomePage["quote"]>
 export type SanityGallery = NonNullable<SanityHomePage["gallery"]>
 export type SanityGalleryImage = NonNullable<SanityGallery["images"]>[number]
-export type SanityVisionPillar = NonNullable<NonNullable<SanityHomePage["visionSection"]>["pillars"]>[number]
+export type SanityVisionPillar = NonNullable<
+  NonNullable<SanityHomePage["visionSection"]>["pillars"]
+>[number]
 export type SanitySectionHeader = NonNullable<SanityHomePage["projectsSectionHeader"]>
 export type SanityBoardMember = NonNullable<SanityAboutPage["boardMembers"]>[number]
 export type SanityHighlight = NonNullable<SanityAboutPage["highlights"]>[number]
 export type SanityUpdateCategory = NonNullable<SanityUpdate["category"]>
 export type SanityUpdateEventReference = NonNullable<SanityUpdateDetail["relatedEvents"]>[number]
-export type SanityUpdateProjectReference = NonNullable<SanityUpdateDetail["relatedProjects"]>[number]
+export type SanityUpdateProjectReference = NonNullable<
+  SanityUpdateDetail["relatedProjects"]
+>[number]
 
 // ---------------------------------------------------------------------------
 // Slug result types for generateStaticParams

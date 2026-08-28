@@ -1,9 +1,9 @@
 "use client"
 
+import dynamic from "next/dynamic"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { SanityImage, type SanityImageObject } from "@/components/SanityImage"
 import { useReducedMotion } from "@/hooks/useReducedMotion"
-import dynamic from "next/dynamic"
 import { getResponsiveColumnClasses } from "./image-gallery-utils"
 
 const ImageGalleryLightbox = dynamic(() => import("./image-gallery-lightbox"), { ssr: false })
@@ -230,20 +230,21 @@ export default function ImageGallery({
     )
   }
 
-  const lightbox = selectedImage !== null ? (
-    <ImageGalleryLightbox
-      images={images}
-      selectedImage={selectedImage}
-      captionHovered={captionHovered}
-      setCaptionHovered={setCaptionHovered}
-      modalRef={modalRef}
-      closeButtonRef={closeButtonRef}
-      prefersReducedMotion={prefersReducedMotion}
-      handlePrevImage={handlePrevImage}
-      handleNextImage={handleNextImage}
-      handleCloseModal={handleCloseModal}
-    />
-  ) : null
+  const lightbox =
+    selectedImage !== null ? (
+      <ImageGalleryLightbox
+        images={images}
+        selectedImage={selectedImage}
+        captionHovered={captionHovered}
+        setCaptionHovered={setCaptionHovered}
+        modalRef={modalRef}
+        closeButtonRef={closeButtonRef}
+        prefersReducedMotion={prefersReducedMotion}
+        handlePrevImage={handlePrevImage}
+        handleNextImage={handleNextImage}
+        handleCloseModal={handleCloseModal}
+      />
+    ) : null
 
   if (variant === "grid") {
     // CSS Grid layout
