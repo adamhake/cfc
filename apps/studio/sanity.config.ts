@@ -1,10 +1,12 @@
 import { createGenerateMetadataAction, schemas } from "@chimborazo/sanity-config"
-import { CogIcon, DocumentTextIcon, HomeIcon } from "@sanity/icons"
-import { createPreviewSecret } from "@sanity/preview-url-secret/create-secret"
+import { CogIcon } from "@sanity/icons/Cog"
+import { DocumentTextIcon } from "@sanity/icons/DocumentText"
+import { HomeIcon } from "@sanity/icons/Home"
 import {
   urlSearchParamPreviewPathname,
   urlSearchParamPreviewSecret,
 } from "@sanity/preview-url-secret/constants"
+import { createPreviewSecret } from "@sanity/preview-url-secret/create-secret"
 import { visionTool } from "@sanity/vision"
 import { defineConfig } from "sanity"
 import { defineDocuments, defineLocations, presentationTool } from "sanity/presentation"
@@ -129,9 +131,7 @@ const structure: StructureResolver = (S) =>
       S.listItem()
         .title("Survey Results Page")
         .icon(DocumentTextIcon)
-        .child(
-          S.document().schemaType("surveyResultsPage").documentId("surveyResultsPage"),
-        ),
+        .child(S.document().schemaType("surveyResultsPage").documentId("surveyResultsPage")),
 
       S.divider(),
 
@@ -376,9 +376,7 @@ export default defineConfig({
     actions: (prev, context) => {
       // Restrict actions for singleton documents
       if (singletonTypes.includes(context.schemaType)) {
-        return prev.filter(
-          (action) => !["delete", "duplicate"].includes(action.action ?? ""),
-        )
+        return prev.filter((action) => !["delete", "duplicate"].includes(action.action ?? ""))
       }
       // Add AI metadata generation action for mediaImage documents
       if (context.schemaType === "mediaImage") {

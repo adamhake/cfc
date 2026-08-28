@@ -1,18 +1,13 @@
-import Container from "@/components/Container/container";
-import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic";
-import { PortableText } from "@/components/PortableText/portable-text";
-import type { PortableTextBlock } from "@portabletext/react";
-import {
-  DonutChart,
-  HorizontalBarChart,
-  SplitBar,
-  SurveySection,
-} from "@/components/SurveyCharts";
-import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch";
-import type { SanitySurveyResultsPage } from "@/lib/sanity-types";
-import { generateBreadcrumbStructuredData, SITE_CONFIG } from "@/utils/seo";
-import { getSurveyResultsPageQuery } from "@chimborazo/sanity-config/queries";
-import type { Metadata } from "next";
+import { getSurveyResultsPageQuery } from "@chimborazo/sanity-config/queries"
+import type { PortableTextBlock } from "@portabletext/react"
+import type { Metadata } from "next"
+import Container from "@/components/Container/container"
+import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
+import { PortableText } from "@/components/PortableText/portable-text"
+import { DonutChart, HorizontalBarChart, SplitBar, SurveySection } from "@/components/SurveyCharts"
+import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import type { SanitySurveyResultsPage } from "@/lib/sanity-types"
+import { generateBreadcrumbStructuredData, SITE_CONFIG } from "@/utils/seo"
 import {
   Q1_FREQUENCY,
   Q2_USAGE,
@@ -24,7 +19,15 @@ import {
   Q8_HISTORIC,
   Q9_WALKWAY,
   SURVEY_META,
-} from "./survey-data";
+} from "./survey-data"
+
+/**
+ * Time-based ISR backstop. Content normally invalidates immediately via the
+ * Sanity webhook (`/api/webhooks/sanity`) calling `revalidateTag`; this is the
+ * safety net for a missed webhook. Previously supplied by `defineLive({
+ * fetchOptions: { revalidate: 1800 } })`, removed in next-sanity v13.
+ */
+export const revalidate = 1800
 
 export const metadata: Metadata = {
   title: "2022 Community Survey Results",
@@ -51,7 +54,7 @@ export const metadata: Metadata = {
     description:
       "Results from the 2022 Chimborazo Park community survey in Richmond, VA. See how Church Hill park users and neighbors prioritize safety, events, and historic restoration.",
   },
-};
+}
 
 // OKLCH palette for donut chart segments, ordered from most to least prominent
 const DONUT_PALETTE = [
@@ -62,22 +65,20 @@ const DONUT_PALETTE = [
   "oklch(0.55 0.01 250)", // grey-500
   "oklch(0.65 0.01 250)", // grey-400
   "oklch(0.75 0.01 250)", // grey-300
-];
+]
 
-function assignDonutColors(
-  options: { label: string; percent: number; count: number }[],
-) {
+function assignDonutColors(options: { label: string; percent: number; count: number }[]) {
   return options
     .filter((o) => o.percent > 0)
     .map((opt, i) => ({
       ...opt,
       color: DONUT_PALETTE[i % DONUT_PALETTE.length],
-    }));
+    }))
 }
 
 const dailyWeeklyPercent = Math.round(
   Q1_FREQUENCY.options[0].percent + Q1_FREQUENCY.options[1].percent,
-);
+)
 
 const surveyStructuredData = {
   "@context": "https://schema.org",
@@ -89,8 +90,7 @@ const surveyStructuredData = {
   mainEntity: {
     "@type": "Dataset",
     name: "2022 Chimborazo Park Community Survey",
-    description:
-      "Community survey of park usage, safety, events, and restoration priorities",
+    description: "Community survey of park usage, safety, events, and restoration priorities",
     creator: { "@type": "Organization", name: SITE_CONFIG.name },
     temporalCoverage: "2022",
     variableMeasured: [
@@ -101,7 +101,7 @@ const surveyStructuredData = {
       "Historic Restoration",
     ],
   },
-};
+}
 
 const breadcrumbStructuredData = generateBreadcrumbStructuredData([
   { name: "Home", url: SITE_CONFIG.url },
@@ -109,13 +109,13 @@ const breadcrumbStructuredData = generateBreadcrumbStructuredData([
     name: "2022 Community Survey Results",
     url: `${SITE_CONFIG.url}/2022-park-survey`,
   },
-]);
+])
 
 export default async function SurveyResultsPage() {
   const { data: pageData } = (await sanityFetch({
     query: getSurveyResultsPageQuery,
     tags: [CACHE_TAGS.SURVEY_RESULTS],
-  })) as { data: SanitySurveyResultsPage | null };
+  })) as { data: SanitySurveyResultsPage | null }
 
   return (
     <div>
@@ -141,8 +141,7 @@ export default async function SurveyResultsPage() {
         document={pageData}
         fallback={{
           title: "2022 Community Survey Results",
-          subtitle:
-            "What park users and neighbors told us about the future of Chimborazo Park.",
+          subtitle: "What park users and neighbors told us about the future of Chimborazo Park.",
         }}
         height="small"
         priority={true}
@@ -157,19 +156,10 @@ export default async function SurveyResultsPage() {
         )}
 
         {/* Survey overview stats */}
-        <dl
-          className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6"
-          aria-label="Survey overview"
-        >
-          <StatCard
-            value={`${SURVEY_META.totalRespondents}+`}
-            label="Respondents"
-          />
+        <dl className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6" aria-label="Survey overview">
+          <StatCard value={`${SURVEY_META.totalRespondents}+`} label="Respondents" />
           <StatCard value={`${SURVEY_META.questionCount}`} label="Questions" />
-          <StatCard
-            value={`${dailyWeeklyPercent}%`}
-            label="Visit daily or weekly"
-          />
+          <StatCard value={`${dailyWeeklyPercent}%`} label="Visit daily or weekly" />
         </dl>
 
         {/* Section 1: Who Uses the Park */}
@@ -264,7 +254,7 @@ export default async function SurveyResultsPage() {
         </SurveySection>
       </Container>
     </div>
-  );
+  )
 }
 
 function StatCard({ value, label }: { value: string; label: string }) {
@@ -277,5 +267,5 @@ function StatCard({ value, label }: { value: string; label: string }) {
         {label}
       </dd>
     </div>
-  );
+  )
 }

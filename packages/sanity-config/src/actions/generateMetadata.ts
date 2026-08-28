@@ -1,4 +1,4 @@
-import { SparklesIcon } from "@sanity/icons"
+import { SparklesIcon } from "@sanity/icons/Sparkles"
 import { useCallback, useState } from "react"
 import type { DocumentActionComponent } from "sanity"
 import { useDocumentOperation } from "sanity"

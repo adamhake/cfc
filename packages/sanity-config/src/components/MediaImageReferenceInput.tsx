@@ -73,11 +73,11 @@ export function MediaImageReferenceInput(props: ObjectInputProps) {
   }
 
   return (
-    <Stack space={3}>
+    <Stack gap={3}>
       <Text size={1} muted>
         Select a media image for the background
       </Text>
-      <Grid columns={[2, 3, 4]} gap={3}>
+      <Grid gridTemplateColumns={[2, 3, 4]} gap={3}>
         {mediaImages.map((image) => {
           const isSelected = image._id === selectedRef
           const assetRef = image.image?.asset?._ref
@@ -103,7 +103,7 @@ export function MediaImageReferenceInput(props: ObjectInputProps) {
               }}
               onClick={() => handleSelect(image._id)}
             >
-              <Stack space={2}>
+              <Stack gap={2}>
                 <Card
                   style={{
                     aspectRatio: "16/9",

@@ -17,20 +17,21 @@
   },
   "dependencies": {
     "@sanity/icons": "catalog:",
-    "@sanity/preview-url-secret": "^4.0.5",
-    "@sanity/ui": "^3.1.14",
-    "@sanity/vision": "^5.21.0",
+    "@sanity/preview-url-secret": "^4.1.5",
+    "@sanity/ui": "^4.0.6",
+    "@sanity/vision": "^6.11.0",
     "@t3-oss/env-core": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "sanity": "catalog:",
-    "styled-components": "^6.4.0",
+    "styled-components": "^6.5.3",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
     "@chimborazo/sanity-config": "workspace:*",
     "@total-typescript/ts-reset": "catalog:",
+    "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/styled-components": "^5.1.36",
     "typescript": "catalog:"

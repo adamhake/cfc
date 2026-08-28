@@ -13,6 +13,14 @@ import type { SanityAboutPage, SanityBoardMember, SanityHighlight } from "@/lib/
 import { getSiteSettings } from "@/lib/site-settings"
 import { SITE_CONFIG } from "@/utils/seo"
 
+/**
+ * Time-based ISR backstop. Content normally invalidates immediately via the
+ * Sanity webhook (`/api/webhooks/sanity`) calling `revalidateTag`; this is the
+ * safety net for a missed webhook. Previously supplied by `defineLive({
+ * fetchOptions: { revalidate: 1800 } })`, removed in next-sanity v13.
+ */
+export const revalidate = 1800
+
 export const metadata: Metadata = {
   title: "About the Chimborazo Park Conservancy",
   description:

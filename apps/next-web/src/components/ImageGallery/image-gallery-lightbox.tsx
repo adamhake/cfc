@@ -1,9 +1,9 @@
 "use client"
 
+import { AnimatePresence, motion } from "framer-motion"
+import { type RefObject, useCallback, useRef } from "react"
 import { Image } from "@/components/OptimizedImage/optimized-image"
 import { SanityImage } from "@/components/SanityImage"
-import { AnimatePresence, motion } from "framer-motion"
-import type { RefObject } from "react"
 import type { GalleryImage, SanityGalleryImage } from "./image-gallery"
 
 // Type guard to check if image is a Sanity image
@@ -81,6 +81,19 @@ export default function ImageGalleryLightbox({
   handleCloseModal,
 }: ImageGalleryLightboxProps) {
   const activeImage = selectedImage !== null ? images[selectedImage] : null
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  // Dismiss on backdrop click. Checking the target here rather than stopping
+  // propagation on the content wrapper keeps the wrapper a non-interactive
+  // element, and leaves keyboard events free to reach the window-level Escape
+  // handler in image-gallery.tsx.
+  const handleBackdropClick = useCallback(
+    (e: React.MouseEvent) => {
+      if (contentRef.current?.contains(e.target as Node)) return
+      handleCloseModal()
+    },
+    [handleCloseModal],
+  )
 
   return (
     <AnimatePresence>
@@ -96,7 +109,7 @@ export default function ImageGalleryLightbox({
           animate={{ opacity: 1 }}
           exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0 }}
           transition={prefersReducedMotion ? { duration: 0 } : undefined}
-          onClick={handleCloseModal}
+          onClick={handleBackdropClick}
           role="dialog"
           aria-modal="true"
           aria-labelledby="gallery-modal-title"
@@ -130,9 +143,8 @@ export default function ImageGalleryLightbox({
           </button>
           <div className="flex h-full flex-1 items-center justify-center p-4 pb-20 md:pb-4">
             <div
+              ref={contentRef}
               className="relative flex flex-col items-center gap-4 md:max-h-[90vh] md:flex-row"
-              onClick={(e) => e.stopPropagation()}
-              onKeyDown={(e) => e.stopPropagation()}
             >
               {/* Previous button - hidden on mobile, shown on desktop */}
               {selectedImage > 0 && (
@@ -233,9 +245,7 @@ export default function ImageGalleryLightbox({
                             className="absolute inset-0 hidden rounded-lg bg-black/85 p-6 backdrop-blur-sm md:flex md:items-end"
                             onMouseEnter={() => setCaptionHovered(true)}
                             onMouseLeave={() => setCaptionHovered(false)}
-                            initial={
-                              prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 10 }
-                            }
+                            initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
                             transition={

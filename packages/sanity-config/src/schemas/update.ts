@@ -1,4 +1,7 @@
-import { CogIcon, DocumentTextIcon, ImageIcon, LinkIcon } from "@sanity/icons"
+import { CogIcon } from "@sanity/icons/Cog"
+import { DocumentTextIcon } from "@sanity/icons/DocumentText"
+import { ImageIcon } from "@sanity/icons/Image"
+import { LinkIcon } from "@sanity/icons/Link"
 import { defineField, defineType } from "sanity"
 import { createInlineFile, createInlineImage, createRichTextBlocks } from "./shared"
 

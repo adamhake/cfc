@@ -17,6 +17,14 @@ import {
 } from "@/utils/seo"
 import { formatDateString } from "@/utils/time"
 
+/**
+ * Time-based ISR backstop. Content normally invalidates immediately via the
+ * Sanity webhook (`/api/webhooks/sanity`) calling `revalidateTag`; this is the
+ * safety net for a missed webhook. Previously supplied by `defineLive({
+ * fetchOptions: { revalidate: 1800 } })`, removed in next-sanity v13.
+ */
+export const revalidate = 1800
+
 interface UpdatePageProps {
   params: Promise<{ slug: string }>
 }

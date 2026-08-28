@@ -42,6 +42,7 @@ describe("Media API Route", () => {
       query: "mock-query",
       params: { start: 0, end: 9 },
       tags: ["media"],
+      stega: false,
     })
   })
 
@@ -54,6 +55,7 @@ describe("Media API Route", () => {
       query: "mock-query",
       params: { start: 10, end: 19 },
       tags: ["media"],
+      stega: false,
     })
   })
 
@@ -115,6 +117,7 @@ describe("Media API Route", () => {
       query: "mock-query",
       params: { start: 0, end: 100 },
       tags: ["media"],
+      stega: false,
     })
   })
 })

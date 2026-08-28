@@ -19,15 +19,15 @@ export function getLoggerProvider(): LoggerProvider {
     resource: resourceFromAttributes({ "service.name": "chimbo-park-next-web" }),
     processors: posthogKey
       ? [
-          new BatchLogRecordProcessor(
-            new OTLPLogExporter({
+          new BatchLogRecordProcessor({
+            exporter: new OTLPLogExporter({
               url: "https://d.chimborazoparkconservancy.org/i/v1/logs",
               headers: {
                 Authorization: `Bearer ${posthogKey}`,
                 "Content-Type": "application/json",
               },
             }),
-          ),
+          }),
         ]
       : [],
   })

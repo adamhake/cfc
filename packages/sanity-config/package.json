@@ -1,68 +1,68 @@
 {
-    "name": "@chimborazo/sanity-config",
-    "version": "1.0.0",
-    "private": true,
-    "type": "module",
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
-    "exports": {
-        ".": {
-            "import": "./src/index.ts",
-            "types": "./src/index.ts"
-        },
-        "./schemas": {
-            "import": "./src/schemas/index.ts",
-            "types": "./src/schemas/index.ts"
-        },
-        "./queries": {
-            "import": "./src/queries/index.ts",
-            "types": "./src/queries/index.ts"
-        },
-        "./client": {
-            "import": "./src/client.ts",
-            "types": "./src/client.ts"
-        },
-        "./components": {
-            "import": "./src/components/index.ts",
-            "types": "./src/components/index.ts"
-        },
-        "./types": {
-            "import": "./src/types.ts",
-            "types": "./src/types.ts"
-        }
+  "name": "@chimborazo/sanity-config",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
     },
-    "scripts": {
-        "build": "tsc",
-        "type-check": "tsc --noEmit",
-        "clean": "rm -rf dist",
-        "lint": "biome lint .",
-        "format": "biome format --write .",
-        "check": "biome check --write .",
-        "schema:extract": "sanity schema extract",
-        "schema:typegen": "sanity typegen generate",
-        "schema:generate": "pnpm schema:extract && pnpm schema:typegen"
+    "./schemas": {
+      "import": "./src/schemas/index.ts",
+      "types": "./src/schemas/index.ts"
     },
-    "dependencies": {
-        "@sanity/client": "catalog:",
-        "@sanity/icons": "catalog:",
-        "@sanity/image-url": "catalog:",
-        "@sanity/types": "catalog:",
-        "@t3-oss/env-core": "catalog:",
-        "groq": "^5.21.0",
-        "zod": "catalog:"
+    "./queries": {
+      "import": "./src/queries/index.ts",
+      "types": "./src/queries/index.ts"
     },
-    "peerDependencies": {
-        "@sanity/ui": "^3.0.0",
-        "react": "^19.0.0",
-        "react-dom": "^19.0.0",
-        "sanity": "^5.0.0"
+    "./client": {
+      "import": "./src/client.ts",
+      "types": "./src/client.ts"
     },
-    "devDependencies": {
-        "@biomejs/biome": "catalog:",
-        "@total-typescript/ts-reset": "catalog:",
-        "@types/node": "catalog:",
-        "@types/react": "catalog:",
-        "sanity": "catalog:",
-        "typescript": "catalog:"
+    "./components": {
+      "import": "./src/components/index.ts",
+      "types": "./src/components/index.ts"
+    },
+    "./types": {
+      "import": "./src/types.ts",
+      "types": "./src/types.ts"
     }
+  },
+  "scripts": {
+    "build": "tsc",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "check": "biome check --write .",
+    "schema:extract": "sanity schema extract",
+    "schema:typegen": "sanity typegen generate",
+    "schema:generate": "pnpm schema:extract && pnpm schema:typegen"
+  },
+  "dependencies": {
+    "@sanity/client": "catalog:",
+    "@sanity/icons": "catalog:",
+    "@sanity/image-url": "catalog:",
+    "@sanity/types": "catalog:",
+    "@t3-oss/env-core": "catalog:",
+    "groq": "^6.11.0",
+    "zod": "catalog:"
+  },
+  "peerDependencies": {
+    "@sanity/ui": "^4.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sanity": "^6.0.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@total-typescript/ts-reset": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "sanity": "catalog:",
+    "typescript": "catalog:"
+  }
 }

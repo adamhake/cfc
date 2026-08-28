@@ -2,8 +2,10 @@ import path from "node:path"
 import { defineConfig } from "vitest/config"
 
 export default defineConfig({
-  esbuild: {
-    jsx: "automatic",
+  // Vite 8 transforms with oxc, which honours the app tsconfig's
+  // `jsx: "preserve"` (required by Next.js). Tests need real JSX output.
+  oxc: {
+    jsx: { runtime: "automatic" },
   },
   test: {
     globals: true,
@@ -14,7 +16,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": path.resolve(import.meta.dirname, "./src"),
     },
   },
 })

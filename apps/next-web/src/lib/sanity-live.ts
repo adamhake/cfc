@@ -12,7 +12,4 @@ export const { sanityFetch, SanityLive } = defineLive({
   }),
   serverToken: token,
   browserToken: env.SANITY_API_BROWSER_TOKEN || false,
-  fetchOptions: {
-    revalidate: 1800,
-  },
 })

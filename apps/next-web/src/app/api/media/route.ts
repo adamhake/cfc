@@ -30,6 +30,9 @@ export async function GET(request: Request) {
       query: paginatedMediaImagesQuery,
       params: { start, end },
       tags: [CACHE_TAGS.MEDIA],
+      // JSON API response — stega encoding would put invisible characters in
+      // titles and alt text with no visual-editing overlay to make use of them.
+      stega: false,
     })) as { data: SanityMediaImage[] }
 
     return NextResponse.json(images)

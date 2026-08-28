@@ -1,4 +1,6 @@
-import { CalendarIcon, CogIcon, ImageIcon } from "@sanity/icons"
+import { CalendarIcon } from "@sanity/icons/Calendar"
+import { CogIcon } from "@sanity/icons/Cog"
+import { ImageIcon } from "@sanity/icons/Image"
 import { defineField, defineType } from "sanity"
 import { createInlineFile, createInlineImage, createRichTextBlocks } from "./shared"
 

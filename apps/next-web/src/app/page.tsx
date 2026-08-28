@@ -30,6 +30,14 @@ import HomepageEventsClient from "./homepage-events-client"
 import HomepageHeroClient from "./homepage-hero-client"
 import HomepageProjectsClient from "./homepage-projects-client"
 
+/**
+ * Time-based ISR backstop. Content normally invalidates immediately via the
+ * Sanity webhook (`/api/webhooks/sanity`) calling `revalidateTag`; this is the
+ * safety net for a missed webhook. Previously supplied by `defineLive({
+ * fetchOptions: { revalidate: 1800 } })`, removed in next-sanity v13.
+ */
+export const revalidate = 1800
+
 // ─── Portable Text renderers for section-specific styling ───
 
 const introBodyComponents: PortableTextComponents = {
@@ -181,19 +189,18 @@ export default async function HomePage() {
 
   // Prepare gallery data from Sanity or use defaults
   const galleryData =
-    homePageData?.gallery?.images
-      ?.flatMap((img) => {
-        const image = img?.image
-        if (!image?.asset?.url) return []
-        return [
-          {
-            ...image,
-            asset: image.asset,
-            alt: image.alt || "",
-            showOnMobile: img.showOnMobile ?? true,
-          },
-        ]
-      }) ?? []
+    homePageData?.gallery?.images?.flatMap((img) => {
+      const image = img?.image
+      if (!image?.asset?.url) return []
+      return [
+        {
+          ...image,
+          asset: image.asset,
+          alt: image.alt || "",
+          showOnMobile: img.showOnMobile ?? true,
+        },
+      ]
+    }) ?? []
 
   // Prepare park gallery data for rotating images
   const parkGalleryData =
@@ -260,7 +267,9 @@ export default async function HomePage() {
             {vision?.pillars && vision.pillars.length > 0
               ? vision.pillars
                   .filter(
-                    (pillar): pillar is typeof pillar & { pillar: NonNullable<typeof pillar.pillar> } =>
+                    (
+                      pillar,
+                    ): pillar is typeof pillar & { pillar: NonNullable<typeof pillar.pillar> } =>
                       pillar.pillar != null,
                   )
                   .map((pillar) => (

@@ -2,25 +2,55 @@ packages:
   - apps/**
   - packages/**
 
+# pnpm 11 renamed `onlyBuiltDependencies` to `allowBuilds`.
+allowBuilds:
+  '@parcel/watcher': true
+  # Fetches its platform binary in postinstall; the CLI is unusable without it.
+  '@posthog/cli': true
+  '@swc/core': true
+  # postinstall only prints a funding message.
+  core-js: false
+  esbuild: true
+  protobufjs: true
+  sharp: true
+
 catalog:
-  '@biomejs/biome': ^2.4.12
-  '@sanity/client': ^7.21.0
-  '@sanity/icons': ^3.7.4
+  '@biomejs/biome': ^2.5.10
+  '@sanity/client': ^8.3.0
+  '@sanity/icons': ^5.2.1
   '@sanity/image-url': ^2.1.1
-  '@sanity/types': ^5.21.0
+  '@sanity/types': ^6.11.0
   '@t3-oss/env-core': ^0.13.11
   '@total-typescript/ts-reset': ^0.6.1
   '@types/node': ^24.0.0
-  '@types/react': ^19.2.14
-  '@types/react-dom': ^19.2.3
-  react: ^19.2.5
-  react-dom: ^19.2.5
-  sanity: ^5.21.0
-  typescript: ^6.0.2
-  zod: ^4.3.6
+  '@types/react': ^19.2.18
+  '@types/react-dom': ^19.2.5
+  react: ^19.2.8
+  react-dom: ^19.2.8
+  sanity: ^6.11.0
+  typescript: ^7.0.2
+  zod: ^4.4.3
 
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - esbuild
-  - protobufjs
-  - sharp
+# `sanity` depends on @sanity/client ^8.2.0 and @sanity/ui ^4.0.x, which resolve
+# a patch behind our own direct deps and produce two copies in the graph — the
+# duplicate `SanityClient` types then fail to unify in apps/studio. Pin one 8.x
+# and one 4.x. Scoped by range so next-sanity's own @sanity/client ^7 is
+# untouched.
+overrides:
+  '@sanity/client@^8': 8.4.0
+  '@sanity/ui@^4': 4.0.7
+
+# pnpm 11 refuses packages published within the last 24h. These were all newer
+# than that on 2026-08-28 and are pinned above or by a `^latest` floor, so they
+# have no older candidate. Prune entries here as they age out — the policy is
+# the point, the exclusions are a dated exception to it.
+minimumReleaseAgeExclude:
+  - '@sanity/client@8.4.0'
+  - '@sanity/ui@4.0.7'
+  - '@posthog/browser-common@0.7.0'
+  - '@posthog/core@1.49.1 || 1.49.2'
+  - '@posthog/types@1.407.1'
+  - '@testing-library/react@16.3.3'
+  - lucide-react@1.35.0
+  - posthog-js@1.422.5
+  - posthog-node@5.51.4
