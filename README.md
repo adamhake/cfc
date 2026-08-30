@@ -127,7 +127,7 @@ pnpm run build
 
 ### Build individual apps
 ```bash
-pnpm --filter @chimborazo/web build
+pnpm --filter @chimborazo/next-web build
 pnpm --filter @chimborazo/studio build
 ```
 

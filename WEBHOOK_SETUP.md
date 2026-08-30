@@ -77,7 +77,7 @@ Add these variables to your deployment environment:
 
 ### For Local Development (.env.local)
 
-Create or update `apps/web/.env.local`:
+Create or update `apps/next-web/.env.local`:
 
 ```bash
 # Sanity Webhook Configuration

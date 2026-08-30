@@ -3,7 +3,9 @@
   package = "apps/next-web"
   command = "pnpm run build --filter=@chimborazo/next-web"
   publish = "apps/next-web/.next"
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- apps/next-web packages/sanity-config"
+  # Skip the build only when nothing this app depends on changed. See the script
+  # for why a bare `git diff` here skips builds forever once the cache expires.
+  ignore = "bash \"$(git rev-parse --show-toplevel)/scripts/netlify-ignore.sh\" apps/next-web"
 
 [build.environment]
   NODE_VERSION = "24"
