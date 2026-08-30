@@ -80,7 +80,7 @@
    Always use semantic tokens for theme-aware colors:
 
    Primary colors:  primary-{50-950}  (main brand color)
-   Accent colors:   accent-{50-950}   (CTAs, highlights)
+   Accent colors:   accent-{50-950}   (James River blue; CTAs, highlights)
    Neutral colors:  neutral-{50-950}  (backgrounds, borders)
    Grey palette:    grey-{50-950}     (text, dividers)
 
@@ -281,7 +281,7 @@
   --color-navy-900: oklch(0.235 0.05 264);
   --color-navy-950: oklch(0.18 0.038 265);
 
-  /* Soft Blue-Grey - Sophisticated cool accent for Olive palette */
+  /* James River Blue - Muted blue drawn from the park's view of the river */
   --color-soft-blue-50: oklch(0.97 0.01 240);
   --color-soft-blue-100: oklch(0.935 0.018 242);
   --color-soft-blue-200: oklch(0.865 0.032 244);
@@ -412,40 +412,40 @@
   --color-primary-950: var(--color-iron-950);
 
   /* ============================================
-     SEMANTIC ACCENT COLORS (Default: Sunset Clay)
+     SEMANTIC ACCENT COLORS (Default: James River Blue)
      Note: These are overridden by [data-palette] selectors below
      ============================================ */
-  --color-accent-50: var(--color-terra-50);
-  --color-accent-100: var(--color-terra-100);
-  --color-accent-200: var(--color-terra-200);
-  --color-accent-300: var(--color-terra-300);
-  --color-accent-400: var(--color-terra-400);
-  --color-accent-500: var(--color-terra-500);
-  --color-accent-600: var(--color-terra-600);
-  --color-accent-700: var(--color-terra-700);
-  --color-accent-800: var(--color-terra-800);
-  --color-accent-900: var(--color-terra-900);
-  --color-accent-950: var(--color-terra-950);
+  --color-accent-50: var(--color-soft-blue-50);
+  --color-accent-100: var(--color-soft-blue-100);
+  --color-accent-200: var(--color-soft-blue-200);
+  --color-accent-300: var(--color-soft-blue-300);
+  --color-accent-400: var(--color-soft-blue-400);
+  --color-accent-500: var(--color-soft-blue-500);
+  --color-accent-600: var(--color-soft-blue-600);
+  --color-accent-700: var(--color-soft-blue-700);
+  --color-accent-800: var(--color-soft-blue-800);
+  --color-accent-900: var(--color-soft-blue-900);
+  --color-accent-950: var(--color-soft-blue-950);
 
   /* ============================================
-     SEMANTIC NEUTRAL COLORS (Default: Warm Clay-Grey)
+     SEMANTIC NEUTRAL COLORS (Default: Soft Grey)
      Note: These are overridden by [data-palette] selectors below
      ============================================ */
-  --color-neutral-50: var(--color-clay-grey-50);
-  --color-neutral-100: var(--color-clay-grey-100);
-  --color-neutral-200: var(--color-clay-grey-200);
-  --color-neutral-300: var(--color-clay-grey-300);
-  --color-neutral-400: var(--color-clay-grey-400);
-  --color-neutral-500: var(--color-clay-grey-500);
-  --color-neutral-600: var(--color-clay-grey-600);
-  --color-neutral-700: var(--color-clay-grey-700);
-  --color-neutral-800: var(--color-clay-grey-800);
-  --color-neutral-900: var(--color-clay-grey-900);
-  --color-neutral-950: var(--color-clay-grey-950);
+  --color-neutral-50: var(--color-grey-50);
+  --color-neutral-100: var(--color-grey-100);
+  --color-neutral-200: var(--color-grey-200);
+  --color-neutral-300: var(--color-grey-300);
+  --color-neutral-400: var(--color-grey-400);
+  --color-neutral-500: var(--color-grey-500);
+  --color-neutral-600: var(--color-grey-600);
+  --color-neutral-700: var(--color-grey-700);
+  --color-neutral-800: var(--color-grey-800);
+  --color-neutral-900: var(--color-grey-900);
+  --color-neutral-950: var(--color-grey-950);
 }
 
 /* Apply palette overrides outside @theme but ensure variables cascade */
-/* Default: Chimborazo Heritage — iron green + sunset clay */
+/* Default: Chimborazo Heritage — iron green + James River blue */
 :root {
   /* Primary: Victorian iron green, close to the logo's #115740 */
   --color-primary-50: var(--color-iron-50);
@@ -460,31 +460,31 @@
   --color-primary-900: var(--color-iron-900);
   --color-primary-950: var(--color-iron-950);
 
-  /* Accent: Sunset clay echoes the logo and Church Hill brick */
-  --color-accent-50: var(--color-terra-50);
-  --color-accent-100: var(--color-terra-100);
-  --color-accent-200: var(--color-terra-200);
-  --color-accent-300: var(--color-terra-300);
-  --color-accent-400: var(--color-terra-400);
-  --color-accent-500: var(--color-terra-500);
-  --color-accent-600: var(--color-terra-600);
-  --color-accent-700: var(--color-terra-700);
-  --color-accent-800: var(--color-terra-800);
-  --color-accent-900: var(--color-terra-900);
-  --color-accent-950: var(--color-terra-950);
+  /* Accent: James River blue gives the supporting color a local meaning */
+  --color-accent-50: var(--color-soft-blue-50);
+  --color-accent-100: var(--color-soft-blue-100);
+  --color-accent-200: var(--color-soft-blue-200);
+  --color-accent-300: var(--color-soft-blue-300);
+  --color-accent-400: var(--color-soft-blue-400);
+  --color-accent-500: var(--color-soft-blue-500);
+  --color-accent-600: var(--color-soft-blue-600);
+  --color-accent-700: var(--color-soft-blue-700);
+  --color-accent-800: var(--color-soft-blue-800);
+  --color-accent-900: var(--color-soft-blue-900);
+  --color-accent-950: var(--color-soft-blue-950);
 
-  /* Neutral: Warm clay-grey */
-  --color-neutral-50: var(--color-clay-grey-50);
-  --color-neutral-100: var(--color-clay-grey-100);
-  --color-neutral-200: var(--color-clay-grey-200);
-  --color-neutral-300: var(--color-clay-grey-300);
-  --color-neutral-400: var(--color-clay-grey-400);
-  --color-neutral-500: var(--color-clay-grey-500);
-  --color-neutral-600: var(--color-clay-grey-600);
-  --color-neutral-700: var(--color-clay-grey-700);
-  --color-neutral-800: var(--color-clay-grey-800);
-  --color-neutral-900: var(--color-clay-grey-900);
-  --color-neutral-950: var(--color-clay-grey-950);
+  /* Neutral: Soft grey keeps surfaces clean beside green and river blue */
+  --color-neutral-50: var(--color-grey-50);
+  --color-neutral-100: var(--color-grey-100);
+  --color-neutral-200: var(--color-grey-200);
+  --color-neutral-300: var(--color-grey-300);
+  --color-neutral-400: var(--color-grey-400);
+  --color-neutral-500: var(--color-grey-500);
+  --color-neutral-600: var(--color-grey-600);
+  --color-neutral-700: var(--color-grey-700);
+  --color-neutral-800: var(--color-grey-800);
+  --color-neutral-900: var(--color-grey-900);
+  --color-neutral-950: var(--color-grey-950);
 
   --color-text-light: var(--color-text-light-warm);
   --color-text-dark: var(--color-text-dark-warm);
@@ -685,13 +685,13 @@ html[data-palette="green-navy"] {
   --color-text-dark: var(--color-text-dark-cool);
 }
 
-/* Default dark mode: lighter sunset-clay accents for contrast. */
+/* Default dark mode: lighter James River blue accents for contrast. */
 .dark {
-  --color-accent-300: var(--color-terra-200);
-  --color-accent-400: var(--color-terra-300);
-  --color-accent-500: var(--color-terra-400);
-  --color-accent-600: var(--color-terra-300);
-  --color-accent-700: var(--color-terra-200);
+  --color-accent-300: var(--color-soft-blue-200);
+  --color-accent-400: var(--color-soft-blue-300);
+  --color-accent-500: var(--color-soft-blue-400);
+  --color-accent-600: var(--color-soft-blue-300);
+  --color-accent-700: var(--color-soft-blue-200);
 }
 
 html.dark[data-palette="olive"] {

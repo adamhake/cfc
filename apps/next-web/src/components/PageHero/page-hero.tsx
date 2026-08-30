@@ -111,7 +111,7 @@ export default function PageHero({
         </div>
       </div>
 
-      {/* Organic wave divider */}
+      {/* James River wave divider */}
       <div className="absolute bottom-[-1px] left-0 w-full overflow-hidden leading-[0]">
         <svg
           viewBox="0 0 1200 120"
@@ -121,15 +121,14 @@ export default function PageHero({
           style={{ display: "block" }}
           aria-hidden="true"
         >
-          {/* Flowing natural curve */}
+          {/* The flowing curve and blue line reference the James River overlook. */}
           <path
             d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60 L1200,120 L0,120 Z"
             className="fill-grey-50 dark:fill-primary-900"
           />
-          {/* Accent color stroke following the curve */}
           <path
             d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60"
-            className="fill-none stroke-accent-600 dark:stroke-accent-500"
+            className="fill-none stroke-soft-blue-600 dark:stroke-soft-blue-400"
             strokeWidth="7"
           />
         </svg>

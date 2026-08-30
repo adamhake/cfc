@@ -12,7 +12,7 @@ interface FooterProps {
 export default function Footer({ facebookUrl, instagramUrl }: FooterProps) {
   return (
     <footer className="relative bg-grey-50 pt-24 pb-8 text-grey-800 dark:bg-primary-900 dark:text-grey-100">
-      {/* Curved divider at top */}
+      {/* James River wave divider */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0]">
         <svg
           viewBox="0 0 1200 120"
@@ -27,7 +27,7 @@ export default function Footer({ facebookUrl, instagramUrl }: FooterProps) {
           />
           <path
             d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60"
-            className="fill-none stroke-accent-500 dark:stroke-accent-500"
+            className="fill-none stroke-soft-blue-600 dark:stroke-soft-blue-400"
             strokeWidth="7"
           />
         </svg>

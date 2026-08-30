@@ -134,12 +134,7 @@ export type Update = {
           _key: string;
         }>;
         style?:
-          | "normal"
-          | "leading"
-          | "leading-lg"
-          | "h2"
-          | "h3"
-          | "blockquote";
+          "normal" | "leading" | "leading-lg" | "h2" | "h3" | "blockquote";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -231,12 +226,7 @@ export type Project = {
           _key: string;
         }>;
         style?:
-          | "normal"
-          | "leading"
-          | "leading-lg"
-          | "h2"
-          | "h3"
-          | "blockquote";
+          "normal" | "leading" | "leading-lg" | "h2" | "h3" | "blockquote";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -327,12 +317,7 @@ export type Event = {
           _key: string;
         }>;
         style?:
-          | "normal"
-          | "leading"
-          | "leading-lg"
-          | "h2"
-          | "h3"
-          | "blockquote";
+          "normal" | "leading" | "leading-lg" | "h2" | "h3" | "blockquote";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -371,12 +356,7 @@ export type Event = {
           _key: string;
         }>;
         style?:
-          | "normal"
-          | "leading"
-          | "leading-lg"
-          | "h2"
-          | "h3"
-          | "blockquote";
+          "normal" | "leading" | "leading-lg" | "h2" | "h3" | "blockquote";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -462,12 +442,7 @@ export type HistoryPage = {
           _key: string;
         }>;
         style?:
-          | "normal"
-          | "leading"
-          | "leading-lg"
-          | "h2"
-          | "h3"
-          | "blockquote";
+          "normal" | "leading" | "leading-lg" | "h2" | "h3" | "blockquote";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -827,6 +802,26 @@ export type SiteSettings = {
     zipCode?: string;
   };
   parkHours?: string;
+  siteAlert?: {
+    enabled?: boolean;
+    label?: string;
+    message?: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal";
+      listItem?: never;
+      markDefs?: null;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }>;
+    startsAt?: string;
+    expiresAt?: string;
+  };
   socialMedia?: {
     facebook?: string;
     instagram?: string;
@@ -906,12 +901,7 @@ export type AboutPage = {
           _key: string;
         }>;
         style?:
-          | "normal"
-          | "leading"
-          | "leading-lg"
-          | "h2"
-          | "h3"
-          | "blockquote";
+          "normal" | "leading" | "leading-lg" | "h2" | "h3" | "blockquote";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -1155,12 +1145,7 @@ export type GetAboutPageQueryResult = {
           _key: string;
         }>;
         style?:
-          | "blockquote"
-          | "h2"
-          | "h3"
-          | "leading-lg"
-          | "leading"
-          | "normal";
+          "blockquote" | "h2" | "h3" | "leading-lg" | "leading" | "normal";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -1612,12 +1597,7 @@ export type EventBySlugQueryResult = {
           _key: string;
         }>;
         style?:
-          | "blockquote"
-          | "h2"
-          | "h3"
-          | "leading-lg"
-          | "leading"
-          | "normal";
+          "blockquote" | "h2" | "h3" | "leading-lg" | "leading" | "normal";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -1671,12 +1651,7 @@ export type EventBySlugQueryResult = {
           _key: string;
         }>;
         style?:
-          | "blockquote"
-          | "h2"
-          | "h3"
-          | "leading-lg"
-          | "leading"
-          | "normal";
+          "blockquote" | "h2" | "h3" | "leading-lg" | "leading" | "normal";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -1926,12 +1901,7 @@ export type GetHistoryPageQueryResult = {
           _key: string;
         }>;
         style?:
-          | "blockquote"
-          | "h2"
-          | "h3"
-          | "leading-lg"
-          | "leading"
-          | "normal";
+          "blockquote" | "h2" | "h3" | "leading-lg" | "leading" | "normal";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -2051,11 +2021,7 @@ export type GetHomePageQueryResult = {
       _key: string;
       title: string | null;
       pillar:
-        | "connection"
-        | "preservation"
-        | "recreation"
-        | "restoration"
-        | null;
+        "connection" | "preservation" | "recreation" | "restoration" | null;
       description: Array<{
         children?: Array<{
           marks?: Array<string>;
@@ -2606,12 +2572,7 @@ export type ProjectBySlugQueryResult = {
           _key: string;
         }>;
         style?:
-          | "blockquote"
-          | "h2"
-          | "h3"
-          | "leading-lg"
-          | "leading"
-          | "normal";
+          "blockquote" | "h2" | "h3" | "leading-lg" | "leading" | "normal";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -2884,7 +2845,7 @@ export type GetQuotesByCategoryQueryResult = Array<{
 
 // Source: src/queries/siteSettings.ts
 // Variable: getSiteSettingsQuery
-// Query: *[_type == "siteSettings"][0]{    organizationName,    alternativeName,    description,    parkAddress,    parkHours,    socialMedia,    donationUrl,    contactEmail,    metaDefaults{      siteTitle,      ogImage{        asset->{          _id,          url,          metadata{            dimensions,            lqip          }        },        alt      }    },    getInvolvedGallery->{      _id,      title,      images[]{        "image": imageV2{            asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop        }      }    },    featuredQuote->{      _id,      quoteText,      attribution,      "backgroundImage": backgroundImageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    }  }
+// Query: *[_type == "siteSettings"][0]{    organizationName,    alternativeName,    description,    parkAddress,    parkHours,    siteAlert{      enabled,      label,      message,      startsAt,      expiresAt    },    socialMedia,    donationUrl,    contactEmail,    metaDefaults{      siteTitle,      ogImage{        asset->{          _id,          url,          metadata{            dimensions,            lqip          }        },        alt      }    },    getInvolvedGallery->{      _id,      title,      images[]{        "image": imageV2{            asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop        }      }    },    featuredQuote->{      _id,      quoteText,      attribution,      "backgroundImage": backgroundImageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    }  }
 export type GetSiteSettingsQueryResult = {
   organizationName: string | null;
   alternativeName: string | null;
@@ -2896,6 +2857,26 @@ export type GetSiteSettingsQueryResult = {
     zipCode?: string;
   } | null;
   parkHours: string | null;
+  siteAlert: {
+    enabled: boolean | null;
+    label: string | null;
+    message: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal";
+      listItem?: never;
+      markDefs?: null;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }> | null;
+    startsAt: string | null;
+    expiresAt: string | null;
+  } | null;
   socialMedia: {
     facebook?: string;
     instagram?: string;
@@ -3198,12 +3179,7 @@ export type UpdateBySlugQueryResult = {
           _key: string;
         }>;
         style?:
-          | "blockquote"
-          | "h2"
-          | "h3"
-          | "leading-lg"
-          | "leading"
-          | "normal";
+          "blockquote" | "h2" | "h3" | "leading-lg" | "leading" | "normal";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -3438,7 +3414,7 @@ declare module "@sanity/client" {
     '\n  *[_type == "quote"] | order(_createdAt desc){\n    _id,\n    quoteText,\n    attribution,\n    "backgroundImage": backgroundImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    featured,\n    category\n  }\n': GetQuotesQueryResult;
     '\n  *[_type == "quote" && featured == true][0]{\n    _id,\n    quoteText,\n    attribution,\n    "backgroundImage": backgroundImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    category\n  }\n': GetFeaturedQuoteQueryResult;
     '\n  *[_type == "quote" && category == $category] | order(_createdAt desc){\n    _id,\n    quoteText,\n    attribution,\n    "backgroundImage": backgroundImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    featured\n  }\n': GetQuotesByCategoryQueryResult;
-    '\n  *[_type == "siteSettings"][0]{\n    organizationName,\n    alternativeName,\n    description,\n    parkAddress,\n    parkHours,\n    socialMedia,\n    donationUrl,\n    contactEmail,\n    metaDefaults{\n      siteTitle,\n      ogImage{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt\n      }\n    },\n    getInvolvedGallery->{\n      _id,\n      title,\n      images[]{\n        "image": imageV2{\n          \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n        }\n      }\n    },\n    featuredQuote->{\n      _id,\n      quoteText,\n      attribution,\n      "backgroundImage": backgroundImageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    }\n  }\n': GetSiteSettingsQueryResult;
+    '\n  *[_type == "siteSettings"][0]{\n    organizationName,\n    alternativeName,\n    description,\n    parkAddress,\n    parkHours,\n    siteAlert{\n      enabled,\n      label,\n      message,\n      startsAt,\n      expiresAt\n    },\n    socialMedia,\n    donationUrl,\n    contactEmail,\n    metaDefaults{\n      siteTitle,\n      ogImage{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt\n      }\n    },\n    getInvolvedGallery->{\n      _id,\n      title,\n      images[]{\n        "image": imageV2{\n          \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n        }\n      }\n    },\n    featuredQuote->{\n      _id,\n      quoteText,\n      attribution,\n      "backgroundImage": backgroundImageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    }\n  }\n': GetSiteSettingsQueryResult;
     '\n  *[_type == "surveyResultsPage"][0]{\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    introduction\n  }\n': GetSurveyResultsPageQueryResult;
     '\n  *[_type == "update" && defined(slug.current)] | order(publishedAt desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    publishedAt\n  }\n': AllUpdatesQueryResult;
     '\n  *[_type == "update" && defined(slug.current)] | order(featured desc, publishedAt desc) [0...3] {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    publishedAt\n  }\n': FeaturedUpdatesQueryResult;

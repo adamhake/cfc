@@ -8,6 +8,13 @@ export const getSiteSettingsQuery = defineQuery(`
     description,
     parkAddress,
     parkHours,
+    siteAlert{
+      enabled,
+      label,
+      message,
+      startsAt,
+      expiresAt
+    },
     socialMedia,
     donationUrl,
     contactEmail,

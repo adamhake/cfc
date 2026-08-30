@@ -137,7 +137,7 @@ export default function Header({ facebookUrl, instagramUrl }: HeaderProps) {
                   aria-current={isActive ? "page" : undefined}
                   className={`rounded-lg px-2.5 py-2 font-body text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:outline-none xl:px-3 ${
                     isActive
-                      ? "bg-primary-100 text-primary-900 dark:bg-primary-800 dark:text-primary-100"
+                      ? "bg-accent-100 text-accent-900 dark:bg-accent-900/60 dark:text-accent-200"
                       : "text-grey-700 hover:bg-neutral-100 hover:text-primary-900 dark:text-grey-200 dark:hover:bg-primary-800/60 dark:hover:text-grey-50"
                   }`}
                 >
@@ -146,17 +146,6 @@ export default function Header({ facebookUrl, instagramUrl }: HeaderProps) {
               )
             })}
           </nav>
-
-          <Button
-            as="a"
-            variant="accent"
-            size="small"
-            href="/donate"
-            trackingLocation="mobile-header"
-            className="px-3 py-2 text-xs md:hidden"
-          >
-            Donate
-          </Button>
 
           {/* Mobile menu button */}
           <Button
@@ -180,7 +169,7 @@ export default function Header({ facebookUrl, instagramUrl }: HeaderProps) {
             size="small"
             href="/donate"
             trackingLocation="header"
-            className="hidden shrink-0 text-center md:inline-flex"
+            className="hidden shrink-0 text-center xl:inline-flex"
           >
             Donate
           </Button>

@@ -4,7 +4,7 @@
  */
 
 export type PaletteMode =
-  | "heritage" // Iron green + sunset clay (brand default)
+  | "heritage" // Iron green + James River blue (brand default)
   | "green" // Classic cool-toned green
   | "olive" // Warm olive + blue-grey accents
   | "green-terra" // Green + Terracotta accents
@@ -23,9 +23,9 @@ export const PALETTE_METADATA: Record<
 > = {
   heritage: {
     name: "Chimborazo Heritage",
-    description: "Iron green with sunset-clay accents drawn from the Conservancy logo",
+    description: "Iron green with James River blue accents rooted in the park's overlook",
     primary: "Iron Green",
-    accent: "Sunset Clay",
+    accent: "James River Blue",
   },
   green: {
     name: "Classic Green",

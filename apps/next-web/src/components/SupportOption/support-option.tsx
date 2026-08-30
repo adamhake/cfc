@@ -9,6 +9,7 @@ interface SupportOptionProps {
   ctaText?: string
   ctaLink?: string
   ctaHash?: string
+  variant?: "card" | "wall"
 }
 
 export default function SupportOption({
@@ -19,9 +20,16 @@ export default function SupportOption({
   ctaText,
   ctaLink,
   ctaHash,
+  variant = "card",
 }: SupportOptionProps) {
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-primary-200 bg-grey-50 p-6 transition-all duration-300 hover:border-accent-500 dark:border-primary-700 dark:bg-primary-950">
+    <div
+      className={
+        variant === "wall"
+          ? "group relative flex min-h-64 flex-col bg-grey-50 p-6 md:p-8 dark:bg-primary-950"
+          : "group relative overflow-hidden rounded-2xl border border-primary-200 bg-grey-50 p-6 transition-all duration-300 hover:border-accent-500 dark:border-primary-700 dark:bg-primary-950"
+      }
+    >
       {comingSoon && (
         <div className="absolute top-4 right-4">
           <Chip variant="comingSoon" />
@@ -29,7 +37,7 @@ export default function SupportOption({
       )}
       {/* Icon with circular background */}
       <div
-        className="relative mb-4 inline-flex rounded-full bg-accent-600/10 p-3 dark:bg-accent-500/10"
+        className="relative mb-4 inline-flex self-start rounded-full bg-accent-600/10 p-3 dark:bg-accent-500/10"
         role="img"
         aria-label={`${title} icon`}
       >
@@ -41,7 +49,7 @@ export default function SupportOption({
       </div>
 
       {ctaText && (ctaHash || ctaLink) && (
-        <div className="mt-8">
+        <div className="mt-auto pt-8">
           <Button
             variant="accent"
             size="small"

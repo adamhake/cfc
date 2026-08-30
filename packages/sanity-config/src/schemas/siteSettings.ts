@@ -63,6 +63,67 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "siteAlert",
+      title: "Homepage Alert",
+      type: "object",
+      description:
+        "A time-sensitive notice shown above the homepage introduction. Disable it when the notice is no longer needed.",
+      options: {
+        collapsible: true,
+        collapsed: false,
+      },
+      fields: [
+        defineField({
+          name: "enabled",
+          title: "Show Alert",
+          type: "boolean",
+          initialValue: false,
+        }),
+        defineField({
+          name: "label",
+          title: "Short Label",
+          type: "string",
+          description: 'A brief heading such as "Park access notice".',
+          initialValue: "Park access notice",
+          validation: (rule) => rule.max(60),
+        }),
+        defineField({
+          name: "message",
+          title: "Message",
+          type: "array",
+          of: [
+            {
+              type: "block",
+              styles: [{ title: "Normal", value: "normal" }],
+              lists: [],
+              marks: {
+                decorators: [
+                  { title: "Bold", value: "strong" },
+                  { title: "Italic", value: "em" },
+                  { title: "Underline", value: "underline" },
+                ],
+                annotations: [],
+              },
+            },
+          ],
+          description:
+            "Keep the notice concise so it remains easy to scan on mobile. Bold, italic, and underline formatting are available.",
+        }),
+        defineField({
+          name: "startsAt",
+          title: "Start Showing",
+          type: "datetime",
+          description: "Optional. Leave blank to show the alert immediately when enabled.",
+        }),
+        defineField({
+          name: "expiresAt",
+          title: "Stop Showing",
+          type: "datetime",
+          description: "Optional. The alert stops appearing at this date and time.",
+        }),
+      ],
+    }),
+    defineField({
       name: "socialMedia",
       title: "Social Media",
       type: "object",

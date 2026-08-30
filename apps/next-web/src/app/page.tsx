@@ -16,6 +16,7 @@ import Partners from "@/components/Partners/partners"
 import Quote from "@/components/Quote/quote"
 import RotatingImages from "@/components/RotatingImages/rotating-images"
 import SectionHeader from "@/components/SectionHeader/section-header"
+import { SiteAlert } from "@/components/SiteAlert/site-alert"
 import Vision from "@/components/Vision/vision"
 import { extractGetInvolvedGalleryImages } from "@/lib/gallery-extractors"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
@@ -25,6 +26,7 @@ import type {
   SanityImage as SanityImageType,
   SanityProject,
 } from "@/lib/sanity-types"
+import { CURRENT_SITE_ALERT } from "@/lib/site-alert"
 import { getSiteSettings } from "@/lib/site-settings"
 import { SITE_CONFIG } from "@/utils/seo"
 import HomepageEventsClient from "./homepage-events-client"
@@ -206,6 +208,7 @@ export default async function HomePage() {
 
   // Prepare get-involved gallery images (shared with About page)
   const getInvolvedGalleryImages = extractGetInvolvedGalleryImages(siteSettings)
+  const siteAlert = siteSettings?.siteAlert ?? CURRENT_SITE_ALERT
 
   // CMS section data with fallbacks
   const intro = homePageData?.introSection
@@ -223,6 +226,10 @@ export default async function HomePage() {
       {/* Intro + Gallery */}
       <div className="text-grey-900">
         <Container spacing="md">
+          <div className="mb-8 md:mb-10">
+            <SiteAlert settings={siteAlert} />
+          </div>
+
           <p className="max-w-4xl font-body text-2xl leading-snug font-medium md:text-3xl dark:text-grey-100">
             {intro?.heading || FALLBACKS.intro.heading}
           </p>

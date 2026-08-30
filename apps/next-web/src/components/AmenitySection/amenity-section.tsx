@@ -1,4 +1,6 @@
+import { ExternalLink } from "lucide-react"
 import { cloneElement, isValidElement } from "react"
+import { Button } from "@/components/Button/button"
 import SanityImageCarousel, {
   type SanityImageObject,
 } from "@/components/SanityImageCarousel/sanity-image-carousel"
@@ -36,7 +38,7 @@ export default function AmenitySection({
   // Apply consistent icon styling
   const styledIcon = isValidElement(icon)
     ? cloneElement(icon, {
-        className: "h-7 w-7 stroke-primary-700 dark:stroke-primary-400",
+        className: "h-7 w-7 stroke-accent-600 dark:stroke-accent-400",
       } as React.HTMLAttributes<HTMLElement>)
     : icon
 
@@ -100,17 +102,20 @@ export default function AmenitySection({
 
         {/* Link */}
         {link && (
-          <a
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center font-body font-semibold text-accent-700 transition-colors hover:text-accent-800 focus:ring-2 focus:ring-accent-600 focus:ring-offset-2 focus:outline-none dark:text-accent-400 dark:hover:text-accent-300 dark:focus:ring-accent-500"
-          >
-            {link.text}
-            <span className="ml-1" aria-hidden="true">
-              →
-            </span>
-          </a>
+          <div className="pt-2">
+            <Button
+              as="a"
+              href={link.url}
+              variant="outline"
+              size="small"
+              endIcon={<ExternalLink className="h-4 w-4" />}
+              trackingLocation="amenity"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {link.text}
+            </Button>
+          </div>
         )}
       </div>
     </div>

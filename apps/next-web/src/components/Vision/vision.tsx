@@ -55,10 +55,10 @@ const pillarStyles: Record<Pillar, PillarStyle> = {
   },
   recreation: {
     Icon: Trees,
-    iconBackground: "bg-navy-100 dark:bg-navy-800",
-    iconColor: "stroke-navy-800 dark:stroke-navy-200",
-    labelColor: "text-navy-700 dark:text-navy-300",
-    numeralColor: "text-navy-700/10 dark:text-navy-200/10",
+    iconBackground: "bg-soft-blue-100 dark:bg-soft-blue-800",
+    iconColor: "stroke-soft-blue-800 dark:stroke-soft-blue-200",
+    labelColor: "text-soft-blue-700 dark:text-soft-blue-300",
+    numeralColor: "text-soft-blue-700/10 dark:text-soft-blue-200/10",
     ordinal: "02",
   },
   connection: {
