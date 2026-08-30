@@ -6,7 +6,7 @@ import Container from "@/components/Container/container"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { PortableText } from "@/components/PortableText/portable-text"
 import { SanityImage } from "@/components/SanityImage/sanity-image"
-import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityUpdate, SanityUpdatesPage } from "@/lib/sanity-types"
 import { generateItemListStructuredData, SITE_CONFIG } from "@/utils/seo"
 import { formatDateString } from "@/utils/time"
@@ -37,10 +37,12 @@ export const metadata: Metadata = {
 export default async function UpdatesPage() {
   const [{ data: updates }, { data: pageData }] = (await Promise.all([
     sanityFetch({
+      ...(await getDynamicFetchOptions()),
       query: allUpdatesQuery,
       tags: [CACHE_TAGS.UPDATES_LIST, CACHE_TAGS.UPDATES],
     }),
     sanityFetch({
+      ...(await getDynamicFetchOptions()),
       query: updatesPageQuery,
       tags: [CACHE_TAGS.UPDATES_LIST],
     }),

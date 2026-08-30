@@ -4,11 +4,13 @@ vi.mock("@chimborazo/sanity-config/queries", () => ({
   paginatedMediaImagesQuery: "mock-query",
 }))
 
-vi.mock("@/lib/sanity-fetch", () => ({
-  CACHE_TAGS: {
-    MEDIA: "media",
-  },
+vi.mock("@/lib/sanity-fetch", async (importOriginal) => ({
+  // Real CACHE_TAGS via the import-free `cache-tags` module; only the pieces
+  // that touch env or request scope are stubbed.
+  CACHE_TAGS: (await vi.importActual<typeof import("@/lib/cache-tags")>("@/lib/cache-tags"))
+    .CACHE_TAGS,
   sanityFetch: vi.fn(),
+  getDynamicFetchOptions: vi.fn(async () => ({ perspective: "published", stega: false })),
 }))
 
 import { sanityFetch } from "@/lib/sanity-fetch"
@@ -39,6 +41,7 @@ describe("Media API Route", () => {
     expect(response.status).toBe(200)
     expect(json).toEqual(mockImages)
     expect(sanityFetch).toHaveBeenCalledWith({
+      perspective: "published",
       query: "mock-query",
       params: { start: 0, end: 9 },
       tags: ["media"],
@@ -52,6 +55,7 @@ describe("Media API Route", () => {
     await GET(makeRequest({ start: "10", end: "19" }))
 
     expect(sanityFetch).toHaveBeenCalledWith({
+      perspective: "published",
       query: "mock-query",
       params: { start: 10, end: 19 },
       tags: ["media"],
@@ -114,6 +118,7 @@ describe("Media API Route", () => {
 
     expect(response.status).toBe(200)
     expect(sanityFetch).toHaveBeenCalledWith({
+      perspective: "published",
       query: "mock-query",
       params: { start: 0, end: 100 },
       tags: ["media"],

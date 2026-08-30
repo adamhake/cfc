@@ -2,13 +2,6 @@ import { withPostHogConfig } from "@posthog/nextjs-config"
 import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  cacheLife: {
-    sanity: {
-      stale: 60,
-      revalidate: 1800,
-      expire: 7776000, // 90 days — Sanity Live handles on-demand revalidation
-    },
-  },
   experimental: {
     // Belt-and-suspenders tree-shaking for barrel-exported packages.
     // Next converts named imports to direct path imports at build time.

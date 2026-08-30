@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import Container from "@/components/Container/container"
 import { FAQSection } from "@/components/FAQSection/faq-section"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
-import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityDonatePage } from "@/lib/sanity-types"
 import { generateFAQStructuredData, SITE_CONFIG } from "@/utils/seo"
 import DonateFormClient from "./donate-form-client"
@@ -60,6 +60,7 @@ export const metadata: Metadata = {
 
 export default async function DonatePage() {
   const { data: donatePageData } = (await sanityFetch({
+    ...(await getDynamicFetchOptions()),
     query: getDonatePageQuery,
     tags: [CACHE_TAGS.DONATE],
   })) as { data: SanityDonatePage | null }

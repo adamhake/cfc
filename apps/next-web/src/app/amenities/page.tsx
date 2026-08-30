@@ -23,7 +23,7 @@ import GetInvolved from "@/components/GetInvolved/get-involved"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import SectionHeader from "@/components/SectionHeader/section-header"
 import SupportOption from "@/components/SupportOption/support-option"
-import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityAmenitiesPage } from "@/lib/sanity-types"
 import { SITE_CONFIG } from "@/utils/seo"
 
@@ -73,6 +73,7 @@ export const metadata: Metadata = {
 
 export default async function AmenitiesPage() {
   const { data: amenitiesPageData } = (await sanityFetch({
+    ...(await getDynamicFetchOptions()),
     query: getAmenitiesPageQuery,
     tags: [CACHE_TAGS.AMENITIES],
   })) as { data: SanityAmenitiesPage | null }

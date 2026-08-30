@@ -6,7 +6,7 @@ import {
 import type { Metadata } from "next"
 import Container from "@/components/Container/container"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
-import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityMediaImage, SanityMediaPage } from "@/lib/sanity-types"
 import { SITE_CONFIG } from "@/utils/seo"
 import MediaGalleryClient from "./media-gallery-client"
@@ -39,10 +39,12 @@ export default async function MediaPage() {
   const [{ data: mediaPageData }, { data: initialImages }, { data: totalCount }] =
     (await Promise.all([
       sanityFetch({
+        ...(await getDynamicFetchOptions()),
         query: getMediaPageQuery,
         tags: [CACHE_TAGS.MEDIA],
       }),
       sanityFetch({
+        ...(await getDynamicFetchOptions()),
         query: paginatedMediaImagesQuery,
         params: { start: 0, end: PAGE_SIZE },
         tags: [CACHE_TAGS.MEDIA],
@@ -51,6 +53,7 @@ export default async function MediaPage() {
         stega: false,
       }),
       sanityFetch({
+        ...(await getDynamicFetchOptions()),
         query: mediaImagesCountQuery,
         tags: [CACHE_TAGS.MEDIA],
       }),

@@ -8,7 +8,7 @@ import Container from "@/components/Container/container"
 import PageHero from "@/components/PageHero/page-hero"
 import { PortableText } from "@/components/PortableText/portable-text"
 import { sanityClient } from "@/lib/sanity"
-import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityUpdateDetail, UpdateSlug } from "@/lib/sanity-types"
 import {
   generateArticleStructuredData,
@@ -37,6 +37,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: UpdatePageProps): Promise<Metadata> {
   const { slug } = await params
   const { data: update } = (await sanityFetch({
+    ...(await getDynamicFetchOptions()),
     query: updateBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.UPDATE_DETAIL, CACHE_TAGS.UPDATES],
@@ -76,6 +77,7 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
 export default async function UpdatePage({ params }: UpdatePageProps) {
   const { slug } = await params
   const { data: update } = (await sanityFetch({
+    ...(await getDynamicFetchOptions()),
     query: updateBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.UPDATE_DETAIL, CACHE_TAGS.UPDATES],

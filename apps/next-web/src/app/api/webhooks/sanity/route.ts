@@ -1,6 +1,6 @@
 import { isValidSignature, SIGNATURE_HEADER_NAME } from "@sanity/webhook"
 import { revalidateTag } from "next/cache"
-import { CACHE_TAGS, type CacheTag } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, type CacheTag } from "@/lib/cache-tags"
 
 interface SanityWebhookPayload {
   _id: string
@@ -113,6 +113,11 @@ function getCacheTagsForDocumentType(docType: string): CacheTag[] {
     case "update":
       tags.push(CACHE_TAGS.UPDATES, CACHE_TAGS.UPDATES_LIST, CACHE_TAGS.UPDATE_DETAIL)
       break
+    // Update listings and detail pages both render `update.category.title`,
+    // so renaming a category has to invalidate them.
+    case "updateCategory":
+      tags.push(CACHE_TAGS.UPDATES, CACHE_TAGS.UPDATES_LIST, CACHE_TAGS.UPDATE_DETAIL)
+      break
     case "mediaImage":
       tags.push(CACHE_TAGS.MEDIA)
       tags.push(CACHE_TAGS.HOMEPAGE)
@@ -146,6 +151,9 @@ function getCacheTagsForDocumentType(docType: string): CacheTag[] {
       break
     case "amenitiesPage":
       tags.push(CACHE_TAGS.AMENITIES)
+      break
+    case "surveyResultsPage":
+      tags.push(CACHE_TAGS.SURVEY_RESULTS)
       break
     case "siteSettings":
       tags.push(...(Object.values(CACHE_TAGS) as CacheTag[]))

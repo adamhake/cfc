@@ -21,7 +21,7 @@ import { Image } from "@/components/OptimizedImage/optimized-image"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import SectionHeader from "@/components/SectionHeader/section-header"
 import SupportOption from "@/components/SupportOption/support-option"
-import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityGetInvolvedPage, SanitySiteSettings } from "@/lib/sanity-types"
 import { SITE_CONFIG } from "@/utils/seo"
 
@@ -50,10 +50,12 @@ export const metadata: Metadata = {
 export default async function GetInvolvedPage() {
   const [{ data: pageData }, { data: siteSettings }] = (await Promise.all([
     sanityFetch({
+      ...(await getDynamicFetchOptions()),
       query: getGetInvolvedPageQuery,
       tags: [CACHE_TAGS.GET_INVOLVED],
     }),
     sanityFetch({
+      ...(await getDynamicFetchOptions()),
       query: getSiteSettingsQuery,
       tags: [CACHE_TAGS.SITE_SETTINGS],
     }),

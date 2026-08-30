@@ -4,7 +4,7 @@ import type { Metadata } from "next"
 import Container from "@/components/Container/container"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { PortableText } from "@/components/PortableText/portable-text"
-import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityProject, SanityProjectsPage } from "@/lib/sanity-types"
 import { sortProjects } from "@/lib/sort-helpers"
 import { generateItemListStructuredData, SITE_CONFIG } from "@/utils/seo"
@@ -43,10 +43,12 @@ export const metadata: Metadata = {
 export default async function ProjectsPage() {
   const [{ data: projects }, { data: pageData }] = (await Promise.all([
     sanityFetch({
+      ...(await getDynamicFetchOptions()),
       query: allProjectsQuery,
       tags: [CACHE_TAGS.PROJECTS_LIST, CACHE_TAGS.PROJECTS],
     }),
     sanityFetch({
+      ...(await getDynamicFetchOptions()),
       query: getProjectsPageQuery,
       tags: [CACHE_TAGS.PROJECTS_LIST],
     }),

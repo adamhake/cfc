@@ -17,7 +17,7 @@ import RotatingImages from "@/components/RotatingImages/rotating-images"
 import SectionHeader from "@/components/SectionHeader/section-header"
 import Vision from "@/components/Vision/vision"
 import { extractGetInvolvedGalleryImages } from "@/lib/gallery-extractors"
-import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
 import type {
   SanityEvent,
   SanityHomePage,
@@ -168,14 +168,17 @@ export default async function HomePage() {
   const [{ data: homePageData }, { data: featuredProjects }, { data: recentEvents }, siteSettings] =
     (await Promise.all([
       sanityFetch({
+        ...(await getDynamicFetchOptions()),
         query: getHomePageQuery,
         tags: [CACHE_TAGS.HOMEPAGE],
       }),
       sanityFetch({
+        ...(await getDynamicFetchOptions()),
         query: featuredProjectsQuery,
         tags: [CACHE_TAGS.PROJECTS],
       }),
       sanityFetch({
+        ...(await getDynamicFetchOptions()),
         query: recentEventsQuery,
         tags: [CACHE_TAGS.EVENTS],
       }),

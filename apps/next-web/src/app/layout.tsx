@@ -123,7 +123,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <Footer facebookUrl={facebookUrl} instagramUrl={instagramUrl} />
           </div>
         </Providers>
-        <SanityLive />
+        {/* Draft events need a draft-capable live connection; published
+            visitors get the published-only stream. */}
+        <SanityLive includeDrafts={isDraftMode} />
         {isDraftMode && (
           <>
             <VisualEditing />

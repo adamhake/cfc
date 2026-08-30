@@ -8,7 +8,7 @@ import { PortableText } from "@/components/PortableText/portable-text"
 import { SanityImage } from "@/components/SanityImage/sanity-image"
 import SectionHeader from "@/components/SectionHeader/section-header"
 import { extractGetInvolvedGalleryImages } from "@/lib/gallery-extractors"
-import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityAboutPage, SanityBoardMember, SanityHighlight } from "@/lib/sanity-types"
 import { getSiteSettings } from "@/lib/site-settings"
 import { SITE_CONFIG } from "@/utils/seo"
@@ -38,6 +38,7 @@ export const metadata: Metadata = {
 export default async function AboutPage() {
   const [{ data: pageData }, siteSettings] = await Promise.all([
     sanityFetch({
+      ...(await getDynamicFetchOptions()),
       query: getAboutPageQuery,
       tags: [CACHE_TAGS.ABOUT],
     }) as Promise<{ data: SanityAboutPage | null }>,

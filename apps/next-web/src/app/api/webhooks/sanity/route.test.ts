@@ -11,33 +11,13 @@ vi.mock("next/cache", () => ({
   revalidateTag: vi.fn(),
 }))
 
-// Mock sanity-fetch to avoid env validation chain (sanity-fetch -> sanity-live -> @/env)
-vi.mock("@/lib/sanity-fetch", () => ({
-  sanityFetch: vi.fn(),
-  CACHE_TAGS: {
-    HOMEPAGE: "homepage",
-    EVENTS: "events",
-    EVENTS_LIST: "events-list",
-    EVENT_DETAIL: "event-detail",
-    UPDATES: "updates",
-    UPDATES_LIST: "updates-list",
-    UPDATE_DETAIL: "update-detail",
-    PROJECTS: "projects",
-    PROJECTS_LIST: "projects-list",
-    PROJECT_DETAIL: "project-detail",
-    MEDIA: "media",
-    ABOUT: "about",
-    HISTORY: "history",
-    DONATE: "donate",
-    GET_INVOLVED: "get-involved",
-    AMENITIES: "amenities",
-    SITE_SETTINGS: "site-settings",
-  },
-}))
-
+import { schemas } from "@chimborazo/sanity-config/schemas"
 import { isValidSignature } from "@sanity/webhook"
 import { revalidateTag } from "next/cache"
-import { CACHE_TAGS } from "@/lib/sanity-fetch"
+// Imported for real, not mocked: `cache-tags` has no imports, so it pulls in no
+// env-validation chain. A hand-copied mock of this object is what previously
+// hid the missing SURVEY_RESULTS tag.
+import { CACHE_TAGS } from "@/lib/cache-tags"
 import { GET, POST } from "./route"
 
 function makeRequest(body: object, signature?: string, secret?: string): Request {
@@ -185,6 +165,8 @@ describe("Sanity Webhook Route", () => {
       ["donatePage", [CACHE_TAGS.DONATE]],
       ["getInvolvedPage", [CACHE_TAGS.GET_INVOLVED]],
       ["amenitiesPage", [CACHE_TAGS.AMENITIES]],
+      ["surveyResultsPage", [CACHE_TAGS.SURVEY_RESULTS]],
+      ["updateCategory", [CACHE_TAGS.UPDATES, CACHE_TAGS.UPDATES_LIST, CACHE_TAGS.UPDATE_DETAIL]],
     ])("revalidates correct tags for %s", async (docType, expectedTags) => {
       vi.mocked(isValidSignature).mockReturnValue(true)
       const request = makeRequest({ _id: "doc-1", _type: docType }, "valid-sig")
@@ -218,6 +200,36 @@ describe("Sanity Webhook Route", () => {
       const json = await response.json()
 
       expect(json.tags).toContain(CACHE_TAGS.HOMEPAGE)
+    })
+
+    // Coverage guard. Every document type in the Sanity schema must have an
+    // explicit case in getCacheTagsForDocumentType. Falling through to the
+    // default only revalidates the homepage, which silently leaves that type's
+    // own pages stale — how `surveyResultsPage` and `updateCategory` went
+    // uninvalidated. Add a case (and a row above) when adding a document type.
+    describe("cache tag coverage", () => {
+      const documentTypes = schemas
+        .filter((schema) => schema.type === "document")
+        .map((schema) => schema.name)
+
+      it("finds document types to check", () => {
+        expect(documentTypes.length).toBeGreaterThan(15)
+      })
+
+      it.each(documentTypes)("handles %s explicitly", async (docType) => {
+        const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+        vi.mocked(isValidSignature).mockReturnValue(true)
+
+        const response = await POST(makeRequest({ _id: "doc-1", _type: docType }, "valid-sig"))
+        const json = await response.json()
+
+        expect(response.status).toBe(200)
+        expect(warn).not.toHaveBeenCalledWith(
+          expect.stringContaining(`Unknown document type: ${docType}`),
+        )
+        expect(json.tags.length).toBeGreaterThan(0)
+        expect(json.tags.every((tag: string) => tag !== undefined)).toBe(true)
+      })
     })
 
     it("returns 500 for malformed JSON body", async () => {

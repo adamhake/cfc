@@ -5,7 +5,7 @@ import Container from "@/components/Container/container"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { PortableText } from "@/components/PortableText/portable-text"
 import { DonutChart, HorizontalBarChart, SplitBar, SurveySection } from "@/components/SurveyCharts"
-import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanitySurveyResultsPage } from "@/lib/sanity-types"
 import { generateBreadcrumbStructuredData, SITE_CONFIG } from "@/utils/seo"
 import {
@@ -113,6 +113,7 @@ const breadcrumbStructuredData = generateBreadcrumbStructuredData([
 
 export default async function SurveyResultsPage() {
   const { data: pageData } = (await sanityFetch({
+    ...(await getDynamicFetchOptions()),
     query: getSurveyResultsPageQuery,
     tags: [CACHE_TAGS.SURVEY_RESULTS],
   })) as { data: SanitySurveyResultsPage | null }

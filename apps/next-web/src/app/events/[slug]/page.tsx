@@ -9,7 +9,7 @@ import Container from "@/components/Container/container"
 import type { SanityGalleryImage } from "@/components/ImageGallery/image-gallery"
 import { PortableText } from "@/components/PortableText/portable-text"
 import { sanityClient } from "@/lib/sanity"
-import { CACHE_TAGS, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
 import type { SanityEventDetail } from "@/lib/sanity-types"
 import {
   generateBreadcrumbStructuredData,
@@ -40,6 +40,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: EventPageProps): Promise<Metadata> {
   const { slug } = await params
   const { data: event } = (await sanityFetch({
+    ...(await getDynamicFetchOptions()),
     query: eventBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.EVENT_DETAIL, CACHE_TAGS.EVENTS],
@@ -79,6 +80,7 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
 export default async function EventPage({ params }: EventPageProps) {
   const { slug } = await params
   const { data: event } = (await sanityFetch({
+    ...(await getDynamicFetchOptions()),
     query: eventBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.EVENT_DETAIL, CACHE_TAGS.EVENTS],

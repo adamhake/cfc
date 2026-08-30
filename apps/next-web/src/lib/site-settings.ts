@@ -1,6 +1,6 @@
 import { getSiteSettingsQuery } from "@chimborazo/sanity-config/queries"
 import { cache } from "react"
-import { CACHE_TAGS, sanityFetch } from "./sanity-fetch"
+import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "./sanity-fetch"
 import type { SanitySiteSettings } from "./sanity-types"
 
 /**
@@ -13,6 +13,7 @@ export const getSiteSettings = cache(async (): Promise<SanitySiteSettings | null
   const { data } = (await sanityFetch({
     query: getSiteSettingsQuery,
     tags: [CACHE_TAGS.SITE_SETTINGS],
+    ...(await getDynamicFetchOptions()),
   })) as { data: SanitySiteSettings | null }
   return data
 })
