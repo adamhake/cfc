@@ -1,9 +1,8 @@
 import { allEventsQuery, getEventsPageQuery } from "@chimborazo/sanity-config/queries"
-import type { PortableTextBlock } from "@portabletext/react"
 import type { Metadata } from "next"
 import Container from "@/components/Container/container"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
-import { PortableText } from "@/components/PortableText/portable-text"
+import { PageIntroduction } from "@/components/PageIntroduction/page-introduction"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import type { SanityEvent, SanityEventsPage } from "@/lib/sanity-types"
 import { sortEventsByDate } from "@/lib/sort-helpers"
@@ -60,7 +59,6 @@ export default async function EventsPage() {
     <div className="space-y-14 pb-16 md:space-y-20 md:pb-24">
       <script
         type="application/ld+json"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(itemListData).replace(/</g, "\\u003c").replace(/>/g, "\\u003e"),
         }}
@@ -80,22 +78,13 @@ export default async function EventsPage() {
       />
 
       <Container spacing="md">
-        {pageData?.introduction && pageData.introduction.length > 0 ? (
-          <div className="mx-auto max-w-3xl text-center">
-            <PortableText value={pageData.introduction as PortableTextBlock[]} />
-          </div>
-        ) : (
-          <div className="mx-auto max-w-3xl space-y-4 text-center">
-            <p className="font-body text-xl leading-relaxed text-grey-800 md:text-2xl dark:text-grey-200">
-              From seasonal clean-ups to tree plantings and educational presentations, our events
-              bring together neighbors who care about this historic park.
-            </p>
-            <p className="font-body text-base text-grey-700 md:text-lg dark:text-grey-300">
-              Whether you're picking up litter, planting native species, or learning about urban
-              forestry, every contribution helps preserve Chimborazo for future generations.
-            </p>
-          </div>
-        )}
+        <PageIntroduction
+          content={pageData?.introduction}
+          fallback={[
+            "From seasonal clean-ups to tree plantings and educational presentations, our events bring together neighbors who care about this historic park.",
+            "Whether you're picking up litter, planting native species, or learning about urban forestry, every contribution helps preserve Chimborazo for future generations.",
+          ]}
+        />
 
         <EventsListClient events={sortedEvents} />
       </Container>

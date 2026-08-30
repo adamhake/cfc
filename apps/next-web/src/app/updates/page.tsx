@@ -1,10 +1,9 @@
 import { allUpdatesQuery, updatesPageQuery } from "@chimborazo/sanity-config/queries"
-import type { PortableTextBlock } from "@portabletext/react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import Container from "@/components/Container/container"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
-import { PortableText } from "@/components/PortableText/portable-text"
+import { PageIntroduction } from "@/components/PageIntroduction/page-introduction"
 import { SanityImage } from "@/components/SanityImage/sanity-image"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import type { SanityUpdate, SanityUpdatesPage } from "@/lib/sanity-types"
@@ -51,7 +50,6 @@ export default async function UpdatesPage() {
     <div className="space-y-14 pb-16 md:space-y-20 md:pb-24">
       <script
         type="application/ld+json"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(itemListData).replace(/</g, "\\u003c").replace(/>/g, "\\u003e"),
         }}
@@ -72,22 +70,13 @@ export default async function UpdatesPage() {
       />
 
       <Container spacing="md">
-        {pageData?.introduction && pageData.introduction.length > 0 ? (
-          <div className="mx-auto max-w-3xl text-center">
-            <PortableText value={pageData.introduction as PortableTextBlock[]} />
-          </div>
-        ) : (
-          <div className="mx-auto max-w-3xl space-y-4 text-center">
-            <p className="font-body text-xl leading-relaxed text-grey-800 md:text-2xl dark:text-grey-200">
-              Follow the work happening across the park, from restoration milestones to community
-              stewardship highlights.
-            </p>
-            <p className="font-body text-base text-grey-700 md:text-lg dark:text-grey-300">
-              These updates give neighbors and supporters a clearer view into what is changing, why
-              it matters, and where help is still needed.
-            </p>
-          </div>
-        )}
+        <PageIntroduction
+          content={pageData?.introduction}
+          fallback={[
+            "Follow the work happening across the park, from restoration milestones to community stewardship highlights.",
+            "These updates give neighbors and supporters a clearer view into what is changing, why it matters, and where help is still needed.",
+          ]}
+        />
 
         {updates.length > 0 ? (
           <div className="mt-12 space-y-8">

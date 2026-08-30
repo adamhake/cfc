@@ -230,7 +230,7 @@ export default async function HomePage() {
             <SiteAlert settings={siteAlert} />
           </div>
 
-          <p className="max-w-4xl font-body text-2xl leading-snug font-medium md:text-3xl dark:text-grey-100">
+          <p className="max-w-4xl font-body text-xl leading-snug font-medium md:text-2xl dark:text-grey-100">
             {intro?.heading || FALLBACKS.intro.heading}
           </p>
 
