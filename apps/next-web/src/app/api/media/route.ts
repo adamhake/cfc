@@ -1,5 +1,9 @@
 import { paginatedMediaImagesQuery } from "@chimborazo/sanity-config/queries"
 import { NextResponse } from "next/server"
+import { errorAttributes, logError } from "@/integrations/posthog/logger"
+import { scheduleFlush } from "@/integrations/posthog/otel"
+import { captureRequestError } from "@/integrations/posthog/server"
+import { withSpan } from "@/integrations/posthog/tracing"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import type { SanityMediaImage } from "@/lib/sanity-types"
 
@@ -25,20 +29,31 @@ export async function GET(request: Request) {
     )
   }
 
+  scheduleFlush()
+
   try {
-    const { data: images } = (await cachedSanityFetch({
-      ...(await getDynamicFetchOptions()),
-      query: paginatedMediaImagesQuery,
-      params: { start, end },
-      tags: [CACHE_TAGS.MEDIA],
-      // JSON API response — stega encoding would put invisible characters in
-      // titles and alt text with no visual-editing overlay to make use of them.
-      stega: false,
-    })) as { data: SanityMediaImage[] }
+    const images = await withSpan("sanity.media.paginate", { start, end }, async () => {
+      const { data } = (await cachedSanityFetch({
+        ...(await getDynamicFetchOptions()),
+        query: paginatedMediaImagesQuery,
+        params: { start, end },
+        tags: [CACHE_TAGS.MEDIA],
+        // JSON API response — stega encoding would put invisible characters in
+        // titles and alt text with no visual-editing overlay to make use of them.
+        stega: false,
+      })) as { data: SanityMediaImage[] }
+
+      return data
+    })
 
     return NextResponse.json(images)
   } catch (error) {
-    console.error("[API/media] Failed to fetch images:", error)
+    logError("[API/media] Failed to fetch images", { ...errorAttributes(error), start, end })
+    await captureRequestError(error, {
+      method: "GET",
+      path: "/api/media",
+      headers: request.headers,
+    })
     return NextResponse.json({ error: "Failed to fetch images" }, { status: 500 })
   }
 }

@@ -1,5 +1,8 @@
 import { isValidSignature, SIGNATURE_HEADER_NAME } from "@sanity/webhook"
 import { revalidateTag } from "next/cache"
+import { errorAttributes, logError, logInfo, logWarn } from "@/integrations/posthog/logger"
+import { scheduleFlush } from "@/integrations/posthog/otel"
+import { captureRequestError } from "@/integrations/posthog/server"
 import { CACHE_TAGS, type CacheTag } from "@/lib/cache-tags"
 
 interface SanityWebhookPayload {
@@ -18,13 +21,18 @@ export async function GET() {
 export async function POST(request: Request) {
   const startTime = Date.now()
 
+  // The webhook is the only thing standing between a Studio publish and a stale
+  // page, and it fails silently by design — Sanity retries, nobody watches.
+  // Flushing telemetry after the response is what makes those failures visible.
+  scheduleFlush()
+
   try {
     const body = await request.text()
 
     // Verify webhook signature
     const secret = process.env.SANITY_WEBHOOK_SECRET
     if (!secret) {
-      console.error("[Sanity Webhook] SANITY_WEBHOOK_SECRET not configured")
+      logError("[Sanity Webhook] SANITY_WEBHOOK_SECRET not configured")
       return Response.json(
         { error: "Server configuration error", message: "Webhook secret not configured" },
         { status: 500 },
@@ -33,7 +41,7 @@ export async function POST(request: Request) {
 
     const signature = request.headers.get(SIGNATURE_HEADER_NAME)
     if (!signature) {
-      console.warn("[Sanity Webhook] Missing signature header")
+      logWarn("[Sanity Webhook] Missing signature header")
       return Response.json(
         { error: "Unauthorized", message: "Missing webhook signature" },
         { status: 401 },
@@ -45,7 +53,7 @@ export async function POST(request: Request) {
     // could never reject anything.
     const isValid = await isValidSignature(body, signature, secret)
     if (!isValid) {
-      console.warn("[Sanity Webhook] Invalid signature - rejecting request")
+      logWarn("[Sanity Webhook] Invalid signature - rejecting request")
       return Response.json(
         { error: "Unauthorized", message: "Invalid webhook signature" },
         { status: 401 },
@@ -53,16 +61,7 @@ export async function POST(request: Request) {
     }
 
     const payload = JSON.parse(body) as SanityWebhookPayload
-
-    console.log("[Sanity Webhook] Validated payload:", {
-      id: payload._id,
-      type: payload._type,
-      slug: payload.slug?.current,
-    })
-
     const cacheTags = getCacheTagsForDocumentType(payload._type)
-
-    console.log("[Sanity Webhook] Revalidating tags:", cacheTags.join(", "))
 
     // Revalidate all affected cache tags
     for (const tag of cacheTags) {
@@ -70,10 +69,12 @@ export async function POST(request: Request) {
     }
 
     const totalDuration = Date.now() - startTime
-    console.log("[Sanity Webhook] Revalidation complete:", {
+    logInfo("[Sanity Webhook] Revalidation complete", {
       docType: payload._type,
       docId: payload._id,
-      tags: cacheTags,
+      slug: payload.slug?.current,
+      tags: cacheTags.join(","),
+      tagCount: cacheTags.length,
       durationMs: totalDuration,
     })
 
@@ -86,9 +87,14 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     const totalDuration = Date.now() - startTime
-    console.error("[Sanity Webhook] Unhandled error:", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logError("[Sanity Webhook] Unhandled error", {
+      ...errorAttributes(error),
       totalDurationMs: totalDuration,
+    })
+    await captureRequestError(error, {
+      method: "POST",
+      path: "/api/webhooks/sanity",
+      headers: request.headers,
     })
 
     return Response.json(
@@ -167,7 +173,7 @@ function getCacheTagsForDocumentType(docType: string): CacheTag[] {
       tags.push(CACHE_TAGS.HOMEPAGE)
       break
     default:
-      console.warn(`[Sanity Webhook] Unknown document type: ${docType}`)
+      logWarn(`[Sanity Webhook] Unknown document type: ${docType}`, { docType })
       tags.push(CACHE_TAGS.HOMEPAGE)
   }
 

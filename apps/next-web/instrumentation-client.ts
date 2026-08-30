@@ -1,9 +1,10 @@
 import posthog from "posthog-js"
+import { POSTHOG_HOST, POSTHOG_KEY, POSTHOG_UI_HOST } from "@/integrations/posthog/config"
 
-if (process.env.NEXT_PUBLIC_POSTHOG_KEY) {
-  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
-    api_host: "https://d.chimborazoparkconservancy.org",
-    ui_host: "https://us.posthog.com",
+if (POSTHOG_KEY) {
+  posthog.init(POSTHOG_KEY, {
+    api_host: POSTHOG_HOST,
+    ui_host: POSTHOG_UI_HOST,
     person_profiles: "identified_only",
 
     // MUST stay "history_change", never `true`. The App Router navigates by

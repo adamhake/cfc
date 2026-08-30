@@ -17,15 +17,7 @@
   [headers.values]
     Content-Security-Policy = "frame-ancestors 'self' https://chimborazo-park-conservancy.sanity.studio https://studio.chimborazoparkconservancy.org https://*.sanity.build"
 
-# PostHog reverse proxy — edge redirects are faster than Next.js rewrites
-[[redirects]]
-  from = "/ph/static/*"
-  to = "https://us-assets.i.posthog.com/static/:splat"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/ph/*"
-  to = "https://us.i.posthog.com/:splat"
-  status = 200
-  force = true
+# No PostHog redirects here on purpose. Ingestion goes to
+# d.chimborazoparkconservancy.org, PostHog's own managed reverse proxy, which is
+# configured in the PostHog dashboard rather than in this file. A `/ph/*`
+# redirect pair used to live here; nothing ever pointed at it.

@@ -3,6 +3,9 @@
 import { headers } from "next/headers"
 import { Resend } from "resend"
 import { env } from "@/env"
+import { errorAttributes, logError, logInfo, logWarn } from "@/integrations/posthog/logger"
+import { scheduleFlush } from "@/integrations/posthog/otel"
+import { withSpan } from "@/integrations/posthog/tracing"
 import { verifyTurnstileToken } from "@/lib/turnstile"
 import { type SubscribeResponse, subscribeRequestSchema } from "@/types/newsletter"
 
@@ -66,11 +69,19 @@ export async function subscribeToNewsletter(formData: {
   }
   const data = parsed.data
 
+  // Signup is the site's one conversion. Every early return below is a lost
+  // one, so each gets a log line and the whole action gets a flush.
+  scheduleFlush()
+
   const headersList = await headers()
   const clientIp = getClientIp(headersList)
 
   if (isRateLimited(clientIp)) {
+    // The IP goes to the console for local debugging but never to PostHog —
+    // it's personal data, and "how often are we rate limiting" is the only
+    // question the log needs to answer.
     console.warn(`[Newsletter] Rate limit exceeded for IP: ${clientIp}`)
+    logWarn("[Newsletter] Rate limit exceeded", { source: data.source })
     return {
       success: false,
       error: "rate_limited",
@@ -85,15 +96,20 @@ export async function subscribeToNewsletter(formData: {
   if (isDevBypassToken) {
     console.info("[Newsletter] Using dev bypass token, skipping Turnstile verification")
   } else if (turnstileSecret) {
-    const turnstileResult = await verifyTurnstileToken({
-      token: data.turnstileToken,
-      secret: turnstileSecret,
-      clientIp,
-      expectedHostname: env.TURNSTILE_EXPECTED_HOSTNAME,
-    })
+    const turnstileResult = await withSpan("turnstile.verify", {}, () =>
+      verifyTurnstileToken({
+        token: data.turnstileToken,
+        secret: turnstileSecret,
+        clientIp,
+        expectedHostname: env.TURNSTILE_EXPECTED_HOSTNAME,
+      }),
+    )
 
     if (!turnstileResult.success) {
-      console.warn("[Newsletter] Turnstile verification failed:", turnstileResult.errorCodes)
+      logWarn("[Newsletter] Turnstile verification failed", {
+        source: data.source,
+        errorCodes: turnstileResult.errorCodes?.join(",") ?? "none",
+      })
       return {
         success: false,
         error: "turnstile_failed",
@@ -102,7 +118,7 @@ export async function subscribeToNewsletter(formData: {
     }
   } else {
     if (process.env.NODE_ENV === "production") {
-      console.error("[Newsletter] TURNSTILE_SECRET_KEY not configured in production!")
+      logError("[Newsletter] TURNSTILE_SECRET_KEY not configured in production!")
       return {
         success: false,
         error: "server_error",
@@ -118,7 +134,7 @@ export async function subscribeToNewsletter(formData: {
   const segmentId = env.RESEND_SEGMENT_ID
 
   if (!resendApiKey) {
-    console.error("[Newsletter] RESEND_API_KEY not configured")
+    logError("[Newsletter] RESEND_API_KEY not configured")
     return {
       success: false,
       error: "server_error",
@@ -129,13 +145,22 @@ export async function subscribeToNewsletter(formData: {
   const resend = new Resend(resendApiKey)
   const normalizedEmail = data.email.trim().toLowerCase()
 
-  const { data: contact, error: contactError } = await resend.contacts.create({
-    email: normalizedEmail,
-    unsubscribed: false,
-  })
+  const { data: contact, error: contactError } = await withSpan(
+    "resend.contacts.create",
+    { "peer.service": "resend" },
+    () => resend.contacts.create({ email: normalizedEmail, unsubscribed: false }),
+  )
 
   if (contactError) {
-    console.error("[Newsletter] Failed to create contact:", contactError)
+    // The subscriber's address stays out of PostHog. `name` is what separates
+    // "they typed a bad address" from "our API key lost its permissions",
+    // which is the distinction worth alerting on.
+    logError("[Newsletter] Failed to create contact", {
+      source: data.source,
+      resendErrorName: contactError.name,
+      resendStatusCode: contactError.statusCode,
+      resendMessage: contactError.message,
+    })
     return {
       success: false,
       error: "contact_error",
@@ -146,20 +171,21 @@ export async function subscribeToNewsletter(formData: {
 
   if (segmentId && contact?.id) {
     try {
-      await resend.contacts.segments.add({
-        contactId: contact.id,
-        segmentId,
-      })
-      console.log("[Newsletter] Contact added to segment:", segmentId)
+      await withSpan("resend.contacts.segments.add", { "peer.service": "resend" }, () =>
+        resend.contacts.segments.add({ contactId: contact.id, segmentId }),
+      )
     } catch (segmentError) {
-      console.warn("[Newsletter] Failed to add contact to segment:", segmentError)
+      logWarn("[Newsletter] Failed to add contact to segment", {
+        segmentId,
+        ...errorAttributes(segmentError),
+      })
     }
   }
 
-  console.log("[Newsletter] Contact created:", {
-    id: contact?.id,
-    email: normalizedEmail,
+  logInfo("[Newsletter] Contact created", {
+    contactId: contact?.id,
     source: data.source,
+    addedToSegment: Boolean(segmentId && contact?.id),
   })
 
   // Send admin notification email
@@ -169,27 +195,30 @@ export async function subscribeToNewsletter(formData: {
 
   if (adminEmail) {
     if (!adminEmail.endsWith(verifiedDomain)) {
-      console.warn(
-        `[Newsletter] ADMIN_EMAIL not from verified domain (${verifiedDomain}), skipping notification`,
-      )
+      logWarn("[Newsletter] ADMIN_EMAIL not on verified domain, skipping notification", {
+        verifiedDomain,
+      })
     } else {
       try {
-        await resend.emails.send({
-          from: `Chimborazo Park Conservancy <${fromEmail}>`,
-          to: adminEmail,
-          subject: "New Newsletter Signup - Chimborazo Park Conservancy",
-          text: `
+        await withSpan("resend.emails.send", { "peer.service": "resend" }, () =>
+          resend.emails.send({
+            from: `Chimborazo Park Conservancy <${fromEmail}>`,
+            to: adminEmail,
+            subject: "New Newsletter Signup - Chimborazo Park Conservancy",
+            text: `
 New subscriber: ${normalizedEmail}
 Source: ${data.source}
 Date: ${new Date().toLocaleString()}
 
 View all contacts in Resend dashboard:
 https://resend.com/contacts
-          `.trim(),
-        })
-        console.log("[Newsletter] Admin notification email sent")
+            `.trim(),
+          }),
+        )
       } catch (emailError) {
-        console.error("[Newsletter] Failed to send admin notification:", emailError)
+        // The subscriber is already saved at this point, so this is an
+        // operator-visibility failure, not a user-facing one.
+        logError("[Newsletter] Failed to send admin notification", errorAttributes(emailError))
       }
     }
   }
