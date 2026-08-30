@@ -13,10 +13,10 @@ export default function ProjectHeroOptimistic({ project }: { project: SanityProj
       title={optimistic.title ?? ""}
       subtitle={optimistic.description ?? undefined}
       sanityImage={optimistic.heroImage ?? undefined}
-      height="auto"
+      variant="detail"
       priority={true}
       alignment="bottom-mobile-center-desktop"
-      titleSize="large"
+      titleSize="compact"
     >
       <div className="mb-6 lg:mt-16">
         {optimistic.status && <Chip variant={optimistic.status} className="px-4 py-2" />}

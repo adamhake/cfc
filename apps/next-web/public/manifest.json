@@ -33,7 +33,7 @@
   ],
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#166534",
+  "theme_color": "#115740",
   "background_color": "#f5f5f4",
   "orientation": "portrait-primary",
   "categories": ["lifestyle", "non-profit", "community"]

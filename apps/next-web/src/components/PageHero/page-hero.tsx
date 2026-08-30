@@ -12,11 +12,11 @@ interface PageHeroProps {
   imageHeight?: number
   sanityImage?: SanityImageObject
   children?: ReactNode
-  height?: "auto" | "small" | "medium" | "large" | "event"
+  variant?: "section" | "detail"
   priority?: boolean
   alignment?: "center" | "bottom-mobile-center-desktop"
   contentSpacing?: string
-  titleSize?: "standard" | "large"
+  titleSize?: "standard" | "compact"
 }
 
 export default function PageHero({
@@ -28,42 +28,27 @@ export default function PageHero({
   imageHeight,
   sanityImage,
   children,
-  height = "medium",
+  variant = "section",
   priority = false,
   alignment = "center",
   contentSpacing,
   titleSize = "standard",
 }: PageHeroProps) {
-  const heightClasses = {
-    auto: "min-h-[400px] sm:min-h-[480px] md:min-h-[520px]",
-    small: "min-h-[440px] sm:min-h-[500px] md:min-h-[540px]",
-    medium: "min-h-[480px] sm:min-h-[560px] md:min-h-[600px]",
-    large: "min-h-[540px] sm:min-h-[620px] md:min-h-[680px] lg:min-h-[720px]",
-    event: "min-h-[660px] sm:min-h-[740px] md:min-h-[780px]",
-  }
-
-  const selectedHeight = (heightClasses[height] ? height : "medium") as keyof typeof heightClasses
-
   const alignmentClasses = {
     center: "items-center",
     "bottom-mobile-center-desktop": "items-end lg:items-center",
   }
 
-  const paddingClasses = contentSpacing || "px-4"
+  const paddingClasses = contentSpacing || ""
 
-  const titleSizeClasses = {
-    standard: "text-5xl md:text-6xl",
-    large: "text-4xl md:text-5xl lg:text-6xl",
-  }
+  const useCompactTitle = titleSize === "compact" || title.length > 32
   const staticImageWidth = imageWidth ?? 1920
   const staticImageHeight = imageHeight ?? 1080
 
   const classes = cn("relative flex w-full flex-col overflow-visible", {
-    "min-h-[400px] sm:min-h-[480px] md:min-h-[520px]": selectedHeight === "auto",
-    "min-h-[440px] sm:min-h-[500px] md:min-h-[540px]": selectedHeight === "small",
-    "min-h-[480px] sm:min-h-[560px] md:min-h-[600px]": selectedHeight === "medium",
-    "min-h-[540px] sm:min-h-[620px] md:min-h-[680px] lg:min-h-[720px]": selectedHeight === "large",
-    "min-h-[660px] sm:min-h-[740px] md:min-h-[780px]": selectedHeight === "event",
+    "min-h-[clamp(24rem,46svh,30rem)]": variant === "section" && !subtitle && !children,
+    "min-h-[clamp(26rem,50svh,34rem)]": variant === "section" && Boolean(subtitle || children),
+    "min-h-[clamp(30rem,58svh,40rem)]": variant === "detail",
   })
 
   return (
@@ -91,15 +76,15 @@ export default function PageHero({
           priority={priority}
         />
       ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-800 via-primary-700 to-primary-600 dark:from-primary-900 dark:via-primary-800 dark:to-primary-700" />
+        <div className="absolute inset-0 bg-primary-800 dark:bg-primary-900" />
       )}
       <div
-        className="absolute inset-0 bg-gradient-to-br from-primary-900/60 via-primary-800/40 to-primary-700/20 dark:from-grey-900/70 dark:via-grey-900/50 dark:to-grey-800/30"
+        className="absolute inset-0 bg-primary-950/55 dark:bg-grey-950/65"
         aria-hidden="true"
       ></div>
       <div
         className={cn(
-          "relative z-10 flex flex-1 justify-center pt-20 pb-24 lg:pt-32 lg:pb-42",
+          "relative z-10 flex flex-1 justify-center px-4 pt-32 pb-20 sm:px-6 md:pt-36 md:pb-24 lg:px-8",
           alignmentClasses[alignment],
           paddingClasses,
         )}
@@ -109,14 +94,16 @@ export default function PageHero({
             {children}
             <h1
               className={cn(
-                "font-display text-primary-50 dark:text-grey-50",
-                titleSizeClasses[titleSize],
+                "mx-auto max-w-5xl text-balance font-display leading-[1.02] text-primary-50 dark:text-grey-50",
+                useCompactTitle
+                  ? "text-3xl sm:text-4xl lg:text-5xl"
+                  : "text-4xl sm:text-5xl lg:text-6xl",
               )}
             >
               {title}
             </h1>
             {subtitle && (
-              <p className="mx-auto mt-4 max-w-4xl font-body text-base leading-relaxed text-primary-100 md:mt-6 md:text-lg lg:text-xl dark:text-grey-200">
+              <p className="mx-auto mt-4 max-w-3xl text-balance font-body text-base leading-relaxed text-primary-100 md:mt-5 md:text-lg lg:text-xl dark:text-grey-200">
                 {subtitle}
               </p>
             )}

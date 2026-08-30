@@ -6,6 +6,7 @@ import Link from "next/link"
 import type { RefObject } from "react"
 import IconLogo from "@/components/IconLogo/icon-logo"
 import { SocialLinks } from "@/components/SocialLinks/social-links"
+import { isNavigationItemActive, NAVIGATION_ITEMS } from "@/lib/navigation"
 import { Button } from "../Button/button"
 import { ThemeToggle } from "../ThemeToggle/theme-toggle"
 
@@ -13,7 +14,6 @@ interface HeaderMobileMenuProps {
   menuOpen: boolean
   setMenuOpen: (open: boolean) => void
   currentPath: string
-  currentHash: string
   facebookUrl?: string
   instagramUrl?: string
   mobileMenuRef: RefObject<HTMLDivElement | null>
@@ -24,7 +24,6 @@ export default function HeaderMobileMenu({
   menuOpen,
   setMenuOpen,
   currentPath,
-  currentHash,
   facebookUrl,
   instagramUrl,
   mobileMenuRef,
@@ -40,7 +39,7 @@ export default function HeaderMobileMenu({
           animate={{ opacity: 1 }}
           exit={prefersReducedMotion ? {} : { opacity: 0 }}
           transition={{ duration: prefersReducedMotion ? 0 : 0.15 }}
-          className="fixed inset-0 z-50 overflow-y-auto bg-grey-50 md:hidden dark:bg-primary-900"
+          className="fixed inset-0 z-50 overflow-y-auto bg-grey-50 lg:hidden dark:bg-primary-900"
           role="dialog"
           aria-modal="true"
           aria-label="Mobile navigation menu"
@@ -76,66 +75,17 @@ export default function HeaderMobileMenu({
             {/* Navigation */}
             <nav className="flex-1">
               <motion.ul className="space-y-6">
-                {[
-                  {
-                    href: "/",
-                    label: "Home",
-                    isActive: currentPath === "/" && !currentHash,
-                    delay: 0.01,
-                  },
-                  {
-                    href: "/about",
-                    label: "About Us",
-                    isActive: currentPath === "/about" && !currentHash,
-                    delay: 0.01,
-                  },
-                  {
-                    href: "/amenities",
-                    label: "Amenities",
-                    isActive: currentPath === "/amenities",
-                    delay: 0.02,
-                  },
-                  {
-                    href: "/projects",
-                    label: "Projects",
-                    isActive: currentPath === "/projects",
-                    delay: 0.03,
-                  },
-                  {
-                    href: "/events",
-                    label: "Events",
-                    isActive: currentPath === "/events",
-                    delay: 0.03,
-                  },
-                  {
-                    href: "/get-involved",
-                    label: "Get Involved",
-                    isActive: currentPath === "/get-involved",
-                    delay: 0.04,
-                  },
-                  {
-                    href: "/history",
-                    label: "History",
-                    isActive: currentPath === "/history",
-                    delay: 0.045,
-                  },
-                  {
-                    href: "/media",
-                    label: "Media",
-                    isActive: currentPath === "/media",
-                    delay: 0.05,
-                  },
-                ].map(({ href, label, isActive, delay }) => (
+                {NAVIGATION_ITEMS.map(({ href, label }, index) => (
                   <motion.li
                     key={href}
                     initial={prefersReducedMotion ? {} : { opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: prefersReducedMotion ? 0 : delay }}
+                    transition={{ delay: prefersReducedMotion ? 0 : index * 0.012 }}
                   >
                     <Link
                       href={href}
                       onClick={() => setMenuOpen(false)}
-                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${isActive ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
+                      className={`block rounded-lg font-display text-3xl transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:hover:text-accent-400 ${isNavigationItemActive(currentPath, href) ? "text-accent-700 dark:text-accent-400" : "text-grey-800 dark:text-grey-100"}`}
                     >
                       {label}
                     </Link>

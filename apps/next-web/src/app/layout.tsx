@@ -49,7 +49,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const bootstrapScript = getAppearanceBootstrapScript({
     theme: "system",
     resolvedTheme: "light",
-    palette: "olive",
+    palette: "heritage",
   })
   const structuredData = generateOrganizationStructuredData()
   const parkStructuredData = generateParkStructuredData()
@@ -74,7 +74,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
         <link
           rel="preload"
-          href="/fonts/Montserrat/Montserrat-VariableFont_wght.woff2"
+          href="/fonts/Nebula_Sans/NebulaSans-Book.woff2"
           as="font"
           type="font/woff2"
           crossOrigin="anonymous"
@@ -108,7 +108,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
       </head>
       <body className="min-h-screen bg-grey-50 dark:bg-primary-900" suppressHydrationWarning>
-        <Providers initialTheme="system" initialResolvedTheme="light" initialPalette="olive">
+        <Providers initialTheme="system" initialResolvedTheme="light" initialPalette="heritage">
           <a
             href="#main-content"
             className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-primary-700 focus:px-4 focus:py-2 focus:text-primary-50 focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 focus:outline-none"

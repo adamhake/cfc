@@ -167,7 +167,7 @@ export default function SanityImageCarousel({
                   useHotspotPosition={true}
                 />
                 {showCaptions && captionPosition === "overlay" && item.caption && (
-                  <div className="absolute inset-0 flex items-end bg-gradient-to-t from-primary-900/80 via-primary-900/40 to-transparent p-4 md:p-6 dark:from-grey-900/80 dark:via-grey-900/40">
+                  <div className="absolute inset-x-0 bottom-0 bg-primary-950/90 p-4 md:p-6 dark:bg-grey-950/90">
                     <p className="font-body text-sm text-white/90 md:text-base">{item.caption}</p>
                   </div>
                 )}

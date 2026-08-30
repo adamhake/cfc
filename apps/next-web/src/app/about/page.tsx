@@ -48,11 +48,11 @@ export default async function AboutPage() {
           subtitle:
             "A 501(c)(3) nonprofit dedicated to the restoration, beautification, and preservation of historic Chimborazo Park.",
         }}
-        height="small"
+        variant="section"
         priority={true}
       />
 
-      <Container spacing="xl" className="space-y-16 py-16 pb-24 md:space-y-24">
+      <Container spacing="xl" className="space-y-20 py-16 pb-20 md:space-y-24 md:py-24 md:pb-28">
         {/* Mission & Vision */}
         {(pageData?.mission || pageData?.vision) && (
           <div className="space-y-8 md:space-y-10">
@@ -128,11 +128,11 @@ export default async function AboutPage() {
 
 function Highlights({ items }: { items: SanityHighlight[] }) {
   return (
-    <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-200 lg:grid-cols-4 dark:border-primary-700 dark:bg-primary-700">
       {items.map((item) => (
         <div
           key={item._key}
-          className="rounded-xl border border-primary-200 bg-primary-100 px-4 py-5 text-center md:px-6 md:py-7 dark:border-primary-800/70 dark:bg-primary-900/50"
+          className="bg-grey-50 px-4 py-7 text-center md:px-6 md:py-9 dark:bg-primary-950"
         >
           <p className="font-display text-4xl text-primary-800 md:text-5xl dark:text-primary-300">
             {item.value}
@@ -147,6 +147,16 @@ function Highlights({ items }: { items: SanityHighlight[] }) {
 }
 
 function BoardSection({ members }: { members: SanityBoardMember[] }) {
+  const collator = new Intl.Collator("en", { sensitivity: "base" })
+  const sortedMembers = [...members].sort((a, b) => {
+    const aName = a.name?.trim() ?? ""
+    const bName = b.name?.trim() ?? ""
+    const aLastName = aName.split(/\s+/).at(-1) ?? ""
+    const bLastName = bName.split(/\s+/).at(-1) ?? ""
+
+    return collator.compare(aLastName, bLastName) || collator.compare(aName, bName)
+  })
+
   return (
     <div>
       <SectionHeader title="Board of Directors" size="large" />
@@ -154,8 +164,8 @@ function BoardSection({ members }: { members: SanityBoardMember[] }) {
         The Conservancy is governed by a volunteer board of directors committed to preserving and
         enhancing Chimborazo Park for the community.
       </p>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {members.map((member) => (
+      <div className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-200 sm:grid-cols-2 lg:grid-cols-3 dark:border-primary-700 dark:bg-primary-700">
+        {sortedMembers.map((member) => (
           <MemberCard key={member._key} member={member} />
         ))}
       </div>
@@ -164,42 +174,18 @@ function BoardSection({ members }: { members: SanityBoardMember[] }) {
 }
 
 function MemberCard({ member }: { member: SanityBoardMember }) {
-  const initials = (member.name ?? "")
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-
   return (
-    <div className="rounded-xl border border-primary-200/50 bg-gradient-to-br from-primary-50/60 to-white p-6 shadow-sm transition-shadow hover:shadow-md dark:border-primary-700/40 dark:from-primary-900/20 dark:to-primary-950">
-      <div className="flex items-center gap-4">
-        {member.image?.asset ? (
-          <div className="h-16 w-16 shrink-0 overflow-hidden rounded-full">
-            <SanityImage
-              image={member.image}
-              alt={member.image.alt || member.name || ""}
-              className="h-full w-full object-cover"
-              sizes="56px"
-              maxWidth={112}
-            />
-          </div>
-        ) : (
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary-600 to-primary-700 dark:from-primary-700 dark:to-primary-800">
-            <span className="font-display text-base text-primary-100" aria-hidden="true">
-              {initials}
-            </span>
-          </div>
-        )}
-        <div className="min-w-0">
-          <h3 className="font-display text-lg text-grey-900 dark:text-grey-100">{member.name}</h3>
-          {member.role && (
-            <span className="mt-1 inline-block rounded-full bg-accent-100 px-3 py-0.5 font-body text-xs font-medium text-accent-800 dark:bg-primary-800 dark:text-primary-300">
-              {member.role}
-            </span>
-          )}
-        </div>
-      </div>
+    <div className="flex min-h-28 h-full flex-col justify-center bg-grey-50 p-6 md:p-7 dark:bg-primary-950">
+      <h3 className="font-display text-xl leading-tight text-grey-900 dark:text-grey-100">
+        {member.name}
+      </h3>
+      {member.role && (
+        <p className="mt-2 font-body text-[0.6875rem] font-medium tracking-[0.16em] text-grey-600 uppercase dark:text-grey-400">
+          {member.role}
+        </p>
+      )}
       {member.bio && (
-        <p className="mt-4 font-body text-sm leading-relaxed text-grey-700 dark:text-grey-300">
+        <p className="mt-6 border-t border-neutral-200 pt-5 font-body text-sm leading-relaxed text-grey-700 dark:border-primary-700 dark:text-grey-300">
           {member.bio}
         </p>
       )}

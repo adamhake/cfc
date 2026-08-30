@@ -16,8 +16,7 @@ interface HeroProps {
 }
 
 /**
- * Hero component with soft gradient overlay and wave divider
- * Combines the soft gradient layers with a very subtle, gentle wave transition
+ * Landing hero with a consistent solid image scrim and wave divider.
  */
 export default function HeroSoftGradientDivider({
   heading = "Restoring Chimborazo Park for Our Community",
@@ -56,11 +55,8 @@ export default function HeroSoftGradientDivider({
         />
       )}
 
-      {/* Soft flowing gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-900/60 via-primary-800/40 to-primary-700/20 dark:from-grey-900/70 dark:via-grey-900/50 dark:to-grey-800/30"></div>
-
-      {/* Radial glow for depth */}
-      <div className="bg-gradient-radial absolute inset-0 from-transparent via-transparent to-primary-900/40 dark:to-grey-900/50"></div>
+      {/* Solid scrim keeps contrast consistent across changing photography. */}
+      <div className="absolute inset-0 bg-primary-950/55 dark:bg-grey-950/65"></div>
 
       {/* Content */}
       <div className="absolute inset-0 z-10 flex items-center justify-center px-4 sm:items-end sm:px-6 lg:px-8">

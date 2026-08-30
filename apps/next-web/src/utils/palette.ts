@@ -4,6 +4,7 @@
  */
 
 export type PaletteMode =
+  | "heritage" // Iron green + sunset clay (brand default)
   | "green" // Classic cool-toned green
   | "olive" // Warm olive + blue-grey accents
   | "green-terra" // Green + Terracotta accents
@@ -20,6 +21,12 @@ export const PALETTE_METADATA: Record<
     accent: string | null
   }
 > = {
+  heritage: {
+    name: "Chimborazo Heritage",
+    description: "Iron green with sunset-clay accents drawn from the Conservancy logo",
+    primary: "Iron Green",
+    accent: "Sunset Clay",
+  },
   green: {
     name: "Classic Green",
     description: "Current cool-toned forest green (baseline)",
@@ -77,9 +84,9 @@ export function storePalette(palette: PaletteMode): void {
  * Validate palette string and return valid PaletteMode or default
  */
 export function validatePalette(palette: string): PaletteMode {
-  const validPalettes: PaletteMode[] = ["green", "olive", "green-terra", "green-navy"]
+  const validPalettes: PaletteMode[] = ["heritage", "green", "olive", "green-terra", "green-navy"]
 
-  return validPalettes.includes(palette as PaletteMode) ? (palette as PaletteMode) : "olive"
+  return validPalettes.includes(palette as PaletteMode) ? (palette as PaletteMode) : "heritage"
 }
 
 /**
@@ -90,7 +97,7 @@ export function applyPalette(palette: PaletteMode): void {
 
   const html = document.documentElement
 
-  if (palette === "olive") {
+  if (palette === "heritage") {
     // Default palette - remove attribute
     html.removeAttribute("data-palette")
   } else {
@@ -102,12 +109,12 @@ export function applyPalette(palette: PaletteMode): void {
  * Get current palette from DOM
  */
 export function getCurrentPalette(): PaletteMode {
-  if (typeof window === "undefined") return "olive"
+  if (typeof window === "undefined") return "heritage"
 
   const html = document.documentElement
   const palette = html.getAttribute("data-palette")
 
-  return palette ? validatePalette(palette) : "olive"
+  return palette ? validatePalette(palette) : "heritage"
 }
 
 /**
@@ -117,7 +124,7 @@ export class PaletteManager {
   private listeners: Set<(palette: PaletteMode) => void> = new Set()
   private currentPalette: PaletteMode
 
-  constructor(initialPalette: PaletteMode = "olive") {
+  constructor(initialPalette: PaletteMode = "heritage") {
     this.currentPalette = initialPalette
   }
 

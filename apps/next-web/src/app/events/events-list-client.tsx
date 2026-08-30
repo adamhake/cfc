@@ -12,7 +12,7 @@ export default function EventsListClient({ events }: { events: SanityEvent[] }) 
   const sorted = sortEventsByDate(optimisticEvents)
 
   return (
-    <div className="mt-20 grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
+    <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
       {sorted.map((event) => (
         <Event key={`event-${event._id}`} {...event} />
       ))}

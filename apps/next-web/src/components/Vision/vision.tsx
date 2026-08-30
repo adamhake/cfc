@@ -2,7 +2,7 @@
 
 import type { PortableTextBlock, PortableTextComponents } from "@portabletext/react"
 import { PortableText } from "@portabletext/react"
-import { BookOpenText, HeartHandshake, LeafyGreen, Trees } from "lucide-react"
+import { BookOpenText, HeartHandshake, LeafyGreen, type LucideIcon, Trees } from "lucide-react"
 import { useReducedMotion } from "@/hooks/useReducedMotion"
 import { cn } from "@/utils/cn"
 
@@ -35,53 +35,86 @@ const descriptionComponents: PortableTextComponents = {
   },
 }
 
-function getIcon(pillar: Pillar) {
-  switch (pillar) {
-    case "restoration":
-      return (
-        <div className="mb-6 inline-flex rounded-full bg-primary-100 p-3 dark:bg-primary-800">
-          <LeafyGreen className="h-8 w-8 stroke-primary-800 md:h-10 md:w-10 dark:stroke-primary-200" />
-        </div>
-      )
-    case "recreation":
-      return (
-        <div className="mb-6 inline-flex rounded-full bg-accent-100 p-3 dark:bg-accent-800">
-          <Trees className="h-8 w-8 stroke-accent-800 md:h-10 md:w-10 dark:stroke-accent-200" />
-        </div>
-      )
-    case "connection":
-      return (
-        <div className="mb-6 inline-flex rounded-full bg-heather-100 p-3 dark:bg-heather-800">
-          <HeartHandshake className="h-8 w-8 stroke-heather-900 md:h-10 md:w-10 dark:stroke-heather-200" />
-        </div>
-      )
-    case "preservation":
-      return (
-        <div className="mb-6 inline-flex rounded-full bg-terra-100 p-3 dark:bg-terra-800">
-          <BookOpenText className="h-8 w-8 stroke-terra-800 md:h-10 md:w-10 dark:stroke-terra-200" />
-        </div>
-      )
-    default:
-      return null
-  }
+interface PillarStyle {
+  Icon: LucideIcon
+  iconBackground: string
+  iconColor: string
+  labelColor: string
+  numeralColor: string
+  ordinal: string
 }
+
+const pillarStyles: Record<Pillar, PillarStyle> = {
+  restoration: {
+    Icon: LeafyGreen,
+    iconBackground: "bg-primary-100 dark:bg-primary-800",
+    iconColor: "stroke-primary-800 dark:stroke-primary-200",
+    labelColor: "text-primary-700 dark:text-primary-300",
+    numeralColor: "text-primary-700/10 dark:text-primary-200/10",
+    ordinal: "01",
+  },
+  recreation: {
+    Icon: Trees,
+    iconBackground: "bg-navy-100 dark:bg-navy-800",
+    iconColor: "stroke-navy-800 dark:stroke-navy-200",
+    labelColor: "text-navy-700 dark:text-navy-300",
+    numeralColor: "text-navy-700/10 dark:text-navy-200/10",
+    ordinal: "02",
+  },
+  connection: {
+    Icon: HeartHandshake,
+    iconBackground: "bg-heather-100 dark:bg-heather-800",
+    iconColor: "stroke-heather-900 dark:stroke-heather-200",
+    labelColor: "text-heather-700 dark:text-heather-300",
+    numeralColor: "text-heather-700/10 dark:text-heather-200/10",
+    ordinal: "03",
+  },
+  preservation: {
+    Icon: BookOpenText,
+    iconBackground: "bg-terra-100 dark:bg-terra-800",
+    iconColor: "stroke-terra-800 dark:stroke-terra-200",
+    labelColor: "text-terra-700 dark:text-terra-300",
+    numeralColor: "text-terra-700/10 dark:text-terra-200/10",
+    ordinal: "04",
+  },
+}
+
 export default function Vision({ title, description, content, pillar }: VisionProps) {
   const prefersReducedMotion = useReducedMotion()
+  const { Icon, iconBackground, iconColor, labelColor, numeralColor, ordinal } =
+    pillarStyles[pillar]
 
   return (
     <div
       className={cn(
-        "group relative overflow-hidden rounded-2xl border border-accent-600/20",
-        "bg-gradient-to-br from-grey-50 to-grey-100/90 p-8 shadow-sm lg:p-12",
-        "dark:border-accent-500/20 dark:from-primary-900 dark:to-primary-900/80",
+        "group relative h-full overflow-hidden rounded-2xl border border-neutral-200",
+        "bg-neutral-50 p-8 lg:p-10",
+        "dark:border-primary-700 dark:bg-primary-950",
         !prefersReducedMotion &&
-          "transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md",
+          "transition-all duration-300 hover:-translate-y-0.5 hover:border-neutral-300 dark:hover:border-primary-600",
       )}
     >
       <div className="relative">
-        {/* Icon with background circle */}
-        {getIcon(pillar)}
+        <div className="mb-7 flex items-start justify-between gap-4">
+          <div className={cn("inline-flex rounded-full p-3", iconBackground)}>
+            <Icon className={cn("h-8 w-8 md:h-10 md:w-10", iconColor)} aria-hidden="true" />
+          </div>
+          <span
+            className={cn("select-none font-display text-6xl leading-none", numeralColor)}
+            aria-hidden="true"
+          >
+            {ordinal}
+          </span>
+        </div>
 
+        <p
+          className={cn(
+            "mb-2 font-body text-xs font-semibold tracking-[0.14em] uppercase",
+            labelColor,
+          )}
+        >
+          Pillar {ordinal}
+        </p>
         <h3 className="mb-4 font-display text-2xl text-grey-900 md:text-3xl dark:text-grey-100">
           {title}
         </h3>

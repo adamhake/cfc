@@ -34,11 +34,72 @@ function isSanityLogo(logo: PartnerLogo | PartnerSanityLogo): logo is PartnerSan
 
 interface PartnersProps {
   partners?: Partner[]
+  variant?: "full" | "compact"
 }
 
-export default function Partners({ partners }: PartnersProps) {
+export default function Partners({ partners, variant = "full" }: PartnersProps) {
   if (!partners || partners.length === 0) {
     return null
+  }
+
+  if (variant === "compact") {
+    return (
+      <Container spacing="none">
+        <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-200 md:grid-cols-4 dark:border-neutral-300 dark:bg-neutral-300">
+          {partners.map((partner) => {
+            const logo = isSanityLogo(partner.logo) ? (
+              <SanityImage
+                image={partner.logo as Parameters<typeof SanityImage>[0]["image"]}
+                alt={partner.logo.alt || partner.name}
+                className="mx-auto max-h-12 w-auto max-w-40 object-contain"
+                sizes="(max-width: 768px) 160px, 200px"
+                maxWidth={240}
+                showPlaceholder={false}
+                quality={90}
+              />
+            ) : (
+              <Image
+                width={partner.logo.width}
+                height={partner.logo.height}
+                src={partner.logo.src}
+                alt={partner.logo.alt}
+                className="mx-auto max-h-12 w-auto max-w-40 object-contain"
+              />
+            )
+            const className =
+              "group flex min-h-36 flex-col items-center justify-center gap-4 bg-grey-50 p-6 text-center transition-colors hover:bg-neutral-100 dark:bg-neutral-200 dark:hover:bg-neutral-100"
+            const content = (
+              <>
+                {logo}
+                <span className="flex items-center justify-center gap-1.5 font-display text-sm leading-tight text-grey-700 transition-colors group-hover:text-accent-800 dark:text-grey-800 dark:group-hover:text-accent-800">
+                  {partner.name}
+                  {partner.url && (
+                    <ExternalLink className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                  )}
+                </span>
+              </>
+            )
+
+            return partner.url ? (
+              <a
+                key={partner.name}
+                href={partner.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={className}
+                aria-label={`${partner.name} (opens in a new window)`}
+              >
+                {content}
+              </a>
+            ) : (
+              <div key={partner.name} className={className}>
+                {content}
+              </div>
+            )
+          })}
+        </div>
+      </Container>
+    )
   }
 
   return (
@@ -89,7 +150,7 @@ export default function Partners({ partners }: PartnersProps) {
           )
 
           const sharedClassName =
-            "group relative overflow-hidden rounded-2xl border border-accent-600/20 bg-gradient-to-br from-grey-50 to-grey-100/90 p-8 shadow-sm transition-all duration-300 hover:shadow-md lg:p-12 dark:border-primary-600 dark:from-primary-900 dark:to-primary-900/80"
+            "group relative overflow-hidden rounded-2xl border border-primary-200 bg-grey-50 p-8 transition-all duration-300 hover:border-accent-500 lg:p-10 dark:border-primary-700 dark:bg-primary-950"
 
           return partner.url ? (
             <a

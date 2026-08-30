@@ -304,7 +304,7 @@ export default function ImageGalleryLightbox({
           </div>
           {/* Mobile navigation buttons - positioned at bottom */}
           <nav
-            className="fixed inset-x-0 bottom-0 flex justify-center gap-4 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-6 pb-8 md:hidden"
+            className="fixed inset-x-0 bottom-0 flex justify-center gap-4 bg-black/85 p-6 pb-8 md:hidden"
             aria-label="Image navigation"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => e.stopPropagation()}

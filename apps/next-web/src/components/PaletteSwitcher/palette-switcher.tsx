@@ -41,7 +41,7 @@ export function PaletteSwitcher({
 
   const currentPaletteName = PALETTE_METADATA[palette].name
 
-  const palettes: PaletteMode[] = ["green", "olive", "green-terra", "green-navy"]
+  const palettes: PaletteMode[] = ["heritage", "green", "olive", "green-terra", "green-navy"]
 
   const handleSelect = (newPalette: PaletteMode) => {
     setPalette(newPalette)

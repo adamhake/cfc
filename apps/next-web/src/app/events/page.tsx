@@ -57,7 +57,7 @@ export default async function EventsPage() {
   )
 
   return (
-    <div className="space-y-24 pb-24">
+    <div className="space-y-14 pb-16 md:space-y-20 md:pb-24">
       <script
         type="application/ld+json"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
@@ -75,7 +75,7 @@ export default async function EventsPage() {
           imageWidth: 2000,
           imageHeight: 1333,
         }}
-        height="medium"
+        variant="section"
         priority={true}
       />
 

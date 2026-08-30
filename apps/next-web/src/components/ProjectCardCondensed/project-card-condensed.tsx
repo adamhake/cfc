@@ -32,7 +32,7 @@ export default function ProjectCardCondensed({ project, onClick }: ProjectCardCo
       </div>
 
       {/* Content */}
-      <div className="bg-gradient-to-br from-grey-50 to-grey-50/80 p-4 dark:from-primary-900 dark:to-primary-900/80">
+      <div className="bg-grey-50 p-4 dark:bg-primary-900">
         <h3 className="line-clamp-2 font-display text-base leading-tight text-grey-900 dark:text-grey-100">
           {title}
         </h3>

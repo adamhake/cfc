@@ -75,11 +75,11 @@ export default async function DonatePage() {
           imageWidth: 2000,
           imageHeight: 1262,
         }}
-        height="medium"
+        variant="section"
         priority={true}
       />
       <div>
-        <Container spacing="xl" className="py-24">
+        <Container spacing="xl" className="py-12 md:py-20">
           <div className="space-y-8">
             {/* Opening statement */}
             <div className="max-w-3xl space-y-4">
@@ -101,7 +101,7 @@ export default async function DonatePage() {
           <DonateFormClient />
 
           {/* Donation info callout */}
-          <div className="mt-12 rounded-2xl border border-primary-200/50 bg-gradient-to-br from-primary-100/60 to-primary-50/40 p-6 md:p-8 dark:border-primary-700/30 dark:from-primary-900/30 dark:to-primary-800/20">
+          <div className="mt-10 rounded-2xl border border-neutral-200 bg-neutral-100 p-6 md:p-8 dark:border-primary-700 dark:bg-primary-950">
             <h3 className="mb-3 font-display text-xl font-semibold text-primary-800 md:text-2xl dark:text-primary-200">
               Powered by Zeffy
             </h3>

@@ -176,7 +176,7 @@ export default async function EventPage({ params }: EventPageProps) {
               ) : event.body ? (
                 <PortableText value={event.body as PortableTextBlock[]} />
               ) : (
-                <div className="rounded-2xl border border-primary-200 bg-primary-50/30 p-8 md:p-12 dark:border-primary-700/30 dark:bg-primary-900/20">
+                <div className="rounded-2xl border border-neutral-200 bg-neutral-100/60 p-8 md:p-12 dark:border-primary-700/30 dark:bg-primary-900/20">
                   <p className="font-body text-lg leading-relaxed text-grey-700 dark:text-grey-300">
                     Event details coming soon. Check back later for more information about this
                     event.
@@ -191,7 +191,7 @@ export default async function EventPage({ params }: EventPageProps) {
                 <EventSidebarOptimistic event={event} />
 
                 {/* Call to Action */}
-                <div className="rounded-2xl border border-primary-200 bg-gradient-to-br from-primary-50 to-primary-100/50 p-6 dark:border-primary-700/30 dark:from-primary-900/20 dark:to-primary-800/10">
+                <div className="rounded-2xl border border-neutral-200 bg-neutral-100 p-6 dark:border-primary-700 dark:bg-primary-950">
                   <h3 className="mb-3 font-display text-lg font-semibold text-grey-900 dark:text-grey-100">
                     Stay Connected
                   </h3>

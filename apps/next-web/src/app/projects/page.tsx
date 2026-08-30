@@ -57,7 +57,7 @@ export default async function ProjectsPage() {
   )
 
   return (
-    <div className="space-y-24 pb-24">
+    <div className="space-y-14 pb-16 md:space-y-20 md:pb-24">
       <script
         type="application/ld+json"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
@@ -75,7 +75,7 @@ export default async function ProjectsPage() {
           imageWidth: 2000,
           imageHeight: 1333,
         }}
-        height="small"
+        variant="section"
         priority={true}
       />
 

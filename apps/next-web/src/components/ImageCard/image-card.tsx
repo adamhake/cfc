@@ -53,7 +53,7 @@ export default function ImageCard({
             height={image.height}
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-primary-900/90 via-primary-900/40 to-transparent dark:from-grey-900/90 dark:via-grey-900/40" />
+          <div className="absolute inset-0 bg-primary-950/50 dark:bg-grey-950/60" />
         </div>
         <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8">
           {title && <h3 className="mb-2 font-display text-2xl text-white md:text-3xl">{title}</h3>}

@@ -10,7 +10,7 @@ interface PaletteContextValue {
 }
 
 export const PaletteContext = createContext<PaletteContextValue>({
-  palette: "olive",
+  palette: "heritage",
   setPalette: () => {},
 })
 

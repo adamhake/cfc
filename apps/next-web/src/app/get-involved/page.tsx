@@ -73,12 +73,12 @@ export default async function GetInvolvedPage() {
           imageWidth: 800,
           imageHeight: 600,
         }}
-        height="medium"
+        variant="section"
         priority={true}
       />
 
       <div>
-        <Container spacing="xl" className="space-y-24 py-16 pb-24">
+        <Container spacing="xl" className="space-y-16 py-12 pb-16 md:space-y-20 md:py-20 md:pb-24">
           {/* Opening Statement */}
           <div className="max-w-4xl space-y-4">
             <p className="font-body text-xl leading-relaxed font-medium text-grey-800 md:text-2xl dark:text-grey-100">
@@ -358,7 +358,7 @@ export default async function GetInvolvedPage() {
 
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
               {/* Email Signup */}
-              <div className="rounded-2xl border border-accent-200/50 bg-gradient-to-br from-accent-50/40 to-white p-8 shadow-sm dark:border-accent-700/30 dark:from-primary-950/90 dark:to-transparent">
+              <div className="rounded-2xl border border-accent-200 bg-accent-50/50 p-8 dark:border-accent-700/50 dark:bg-primary-950">
                 <div className="mb-6 flex items-center gap-3">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-600 dark:bg-accent-900">
                     <Mail className="h-5 w-5 stroke-accent-100 dark:stroke-accent-200" />
@@ -374,7 +374,7 @@ export default async function GetInvolvedPage() {
               </div>
 
               {/* Social Media */}
-              <div className="rounded-2xl border border-accent-200/50 bg-gradient-to-br from-accent-50/40 to-white p-8 shadow-sm dark:border-accent-700/30 dark:from-primary-950/90 dark:to-transparent">
+              <div className="rounded-2xl border border-accent-200 bg-accent-50/50 p-8 dark:border-accent-700/50 dark:bg-primary-950">
                 <div className="mb-6 flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent-600 dark:bg-accent-900">
                     <Users className="h-5 w-5 stroke-accent-100 dark:stroke-accent-200" />
@@ -434,7 +434,7 @@ export default async function GetInvolvedPage() {
           </div>
 
           {/* Closing CTA */}
-          <div className="rounded-2xl border border-primary-200/50 bg-gradient-to-br from-primary-100/60 to-primary-50/40 p-8 md:p-12 dark:border-primary-700/30 dark:from-primary-900/30 dark:to-primary-800/20">
+          <div className="rounded-2xl border border-neutral-200 bg-neutral-100 p-8 md:p-12 dark:border-primary-700 dark:bg-primary-950">
             <h3 className="mb-4 font-display text-2xl font-semibold text-primary-800 md:text-3xl dark:text-primary-200">
               Questions?
             </h3>

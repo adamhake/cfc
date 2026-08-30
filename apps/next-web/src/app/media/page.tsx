@@ -63,10 +63,10 @@ export default async function MediaPage() {
           imageWidth: 2000,
           imageHeight: 1262,
         }}
-        height="small"
+        variant="section"
         priority={true}
       />
-      <Container maxWidth="6xl" spacing="md" className="py-16 md:py-24">
+      <Container maxWidth="6xl" spacing="md" className="py-12 md:py-20">
         <MediaGalleryClient
           initialImages={initialImages}
           totalCount={totalCount}

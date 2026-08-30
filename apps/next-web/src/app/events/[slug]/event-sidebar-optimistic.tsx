@@ -10,7 +10,7 @@ export default function EventSidebarOptimistic({ event }: { event: SanityEvent }
 
   return (
     <div className="overflow-hidden rounded-2xl border border-accent-200 bg-white shadow-sm dark:border-accent-700/30 dark:bg-primary-900">
-      <div className="bg-linear-to-br from-accent-50 to-accent-100/50 px-6 py-5 dark:from-primary-950/30 dark:to-primary-950/20">
+      <div className="bg-accent-50 px-6 py-5 dark:bg-primary-950">
         <h2 className="font-display text-xl font-semibold text-grey-900 md:text-2xl dark:text-grey-100">
           Event Details
         </h2>

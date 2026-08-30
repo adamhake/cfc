@@ -15,7 +15,7 @@ export const SITE_CONFIG = {
   description:
     "A 501(c)(3) non-profit dedicated to preserving and enhancing Chimborazo Park in Richmond, VA's Church Hill neighborhood through community stewardship.",
   locale: "en_US",
-  themeColor: "#166534",
+  themeColor: "#115740",
   twitterHandle: undefined, // Add when available (no Twitter/X account currently)
   socialProfiles: [
     "https://www.facebook.com/friendsofchimborazopark",

@@ -24,10 +24,10 @@ interface PageHeroOptimisticProps {
     imageWidth?: number
     imageHeight?: number
   }
-  height?: "auto" | "small" | "medium" | "large" | "event"
+  variant?: "section" | "detail"
   priority?: boolean
   alignment?: "center" | "bottom-mobile-center-desktop"
-  titleSize?: "standard" | "large"
+  titleSize?: "standard" | "compact"
   children?: ReactNode
 }
 

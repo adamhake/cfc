@@ -48,7 +48,7 @@ export default async function UpdatesPage() {
   )
 
   return (
-    <div className="space-y-24 pb-24">
+    <div className="space-y-14 pb-16 md:space-y-20 md:pb-24">
       <script
         type="application/ld+json"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
@@ -67,7 +67,7 @@ export default async function UpdatesPage() {
           imageWidth: 2000,
           imageHeight: 1333,
         }}
-        height="small"
+        variant="section"
         priority={true}
       />
 
@@ -98,7 +98,7 @@ export default async function UpdatesPage() {
                 className="group block overflow-hidden rounded-2xl border border-primary-200/70 bg-grey-50/70 transition-all hover:-translate-y-0.5 hover:shadow-lg dark:border-primary-700/30 dark:bg-primary-900/20"
               >
                 <div className="grid gap-0 md:grid-cols-[320px_minmax(0,1fr)]">
-                  <div className="relative min-h-[240px] overflow-hidden bg-primary-100 dark:bg-primary-800/40">
+                  <div className="relative min-h-[240px] overflow-hidden bg-neutral-200 dark:bg-primary-800/40">
                     {update.heroImage && (
                       <SanityImage
                         image={update.heroImage}
@@ -142,7 +142,7 @@ export default async function UpdatesPage() {
             ))}
           </div>
         ) : (
-          <div className="mx-auto mt-12 max-w-2xl rounded-2xl border border-primary-200 bg-primary-50/30 p-12 text-center dark:border-primary-700/30 dark:bg-primary-900/20">
+          <div className="mx-auto mt-12 max-w-2xl rounded-2xl border border-neutral-200 bg-neutral-100/60 p-12 text-center dark:border-primary-700/30 dark:bg-primary-900/20">
             <h2 className="mb-3 font-display text-2xl font-semibold text-grey-900 dark:text-grey-100">
               No Updates Yet
             </h2>

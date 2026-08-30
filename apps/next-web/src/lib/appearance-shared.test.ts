@@ -41,7 +41,7 @@ describe("getAppearanceFromCookieValues", () => {
     })
     expect(result.theme).toBe("system")
     expect(result.resolvedTheme).toBe("light")
-    expect(result.palette).toBe("olive")
+    expect(result.palette).toBe("heritage")
   })
 
   it("parses valid theme from cookies", () => {
@@ -68,7 +68,7 @@ describe("getAppearanceFromCookieValues", () => {
 
   it("falls back to default palette for invalid value", () => {
     const result = getAppearanceFromCookieValues({ palette: "neon-pink" })
-    expect(result.palette).toBe("olive")
+    expect(result.palette).toBe("heritage")
   })
 
   it("uses resolvedTheme cookie when theme is system", () => {

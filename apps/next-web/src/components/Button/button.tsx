@@ -26,6 +26,9 @@ export interface ButtonProps {
    */
   children: React.ReactNode
 
+  /** Optional icon rendered after the label. */
+  endIcon?: React.ReactNode
+
   /**
    * Click handler function
    */
@@ -113,6 +116,7 @@ export const Button: React.FC<ButtonProps> = ({
   size = "standard",
   hash,
   children,
+  endIcon,
   onClick,
   disabled = false,
   type = "button",
@@ -127,7 +131,7 @@ export const Button: React.FC<ButtonProps> = ({
   trackingLocation,
 }) => {
   const baseStyles =
-    "cursor-pointer rounded-xl border-2 font-body font-semibold tracking-wider uppercase transition-all duration-150 no-underline"
+    "group inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 font-body font-semibold tracking-wider uppercase transition-all duration-150 no-underline"
 
   const sizeStyles = {
     small: "px-4 py-3 md:py-2 text-sm",
@@ -143,16 +147,16 @@ export const Button: React.FC<ButtonProps> = ({
     ),
     secondary: cn(
       "border-primary-300 bg-primary-100 text-primary-800",
-      "hover:bg-primary-50 active:scale-[0.97]",
+      "hover:bg-neutral-100 active:scale-[0.97]",
       "dark:border-primary-800 dark:bg-primary-900 dark:text-primary-300 dark:hover:bg-primary-800",
     ),
     outline: cn(
       "border-primary-800 bg-transparent text-primary-800",
-      "hover:bg-primary-50 active:scale-[0.97]",
+      "hover:bg-neutral-100 active:scale-[0.97]",
       "dark:border-primary-500 dark:bg-transparent dark:text-primary-400 dark:hover:bg-primary-900/50",
     ),
     accent: cn(
-      "border-accent-700 bg-accent-600 text-white shadow-sm",
+      "border-accent-800 bg-accent-700 text-white shadow-sm",
       "hover:shadow-md hover:brightness-105 active:scale-[0.97]",
       "dark:border-accent-600 dark:bg-accent-500 dark:text-primary-900",
     ),
@@ -183,6 +187,17 @@ export const Button: React.FC<ButtonProps> = ({
     onClick?.()
   }
 
+  const content = (
+    <>
+      <span>{children}</span>
+      {endIcon && (
+        <span className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">
+          {endIcon}
+        </span>
+      )}
+    </>
+  )
+
   // Build optional props object for clean rendering
   const dataProps = zeffyFormLink ? { "data-zeffy-form-link": zeffyFormLink } : {}
 
@@ -199,7 +214,7 @@ export const Button: React.FC<ButtonProps> = ({
         className={combinedClassName}
         {...dataProps}
       >
-        {children}
+        {content}
       </Link>
     )
   }
@@ -213,7 +228,7 @@ export const Button: React.FC<ButtonProps> = ({
       className={combinedClassName}
       {...dataProps}
     >
-      {children}
+      {content}
     </button>
   )
 }

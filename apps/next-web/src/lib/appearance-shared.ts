@@ -18,7 +18,7 @@ export interface AppearanceState {
 export const DEFAULT_APPEARANCE: AppearanceState = {
   theme: "system",
   resolvedTheme: "light",
-  palette: "olive",
+  palette: "heritage",
 }
 
 export function buildAppearanceCookie(
@@ -81,7 +81,7 @@ export function getAppearanceBootstrapScript(initialAppearance: AppearanceState)
       }
 
       function isPalette(value) {
-        return value === "green" || value === "olive" || value === "green-terra" || value === "green-navy";
+        return value === "heritage" || value === "green" || value === "olive" || value === "green-terra" || value === "green-navy";
       }
 
       function readStorage(key) {
@@ -121,7 +121,7 @@ export function getAppearanceBootstrapScript(initialAppearance: AppearanceState)
       }
 
       if (!isPalette(palette)) {
-        palette = "olive";
+        palette = "heritage";
       }
 
       var systemDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -129,7 +129,7 @@ export function getAppearanceBootstrapScript(initialAppearance: AppearanceState)
 
       applyResolvedTheme(resolvedTheme);
 
-      if (palette === "olive") {
+      if (palette === "heritage") {
         root.removeAttribute("data-palette");
       } else {
         root.setAttribute("data-palette", palette);

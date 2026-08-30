@@ -164,7 +164,7 @@ export default function ImageCarousel({
                 {showCaptions &&
                   captionPosition === "overlay" &&
                   (image.caption || image.title) && (
-                    <div className="absolute inset-0 flex items-end bg-gradient-to-t from-primary-900/90 via-primary-900/50 to-transparent p-6 md:p-8 dark:from-grey-900/90 dark:via-grey-900/50">
+                    <div className="absolute inset-x-0 bottom-0 bg-primary-950/90 p-6 md:p-8 dark:bg-grey-950/90">
                       <div>
                         {image.title && (
                           <h3 className="mb-1 font-display text-xl text-white md:text-2xl">

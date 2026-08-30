@@ -5,8 +5,9 @@ import {
 } from "@chimborazo/sanity-config/queries"
 import type { PortableTextBlock, PortableTextComponents } from "@portabletext/react"
 import { PortableText } from "@portabletext/react"
+import { ArrowRight } from "lucide-react"
 import type { Metadata } from "next"
-import Link from "next/link"
+import { Button } from "@/components/Button/button"
 import Container from "@/components/Container/container"
 import GetInvolved from "@/components/GetInvolved/get-involved"
 import ImageGallery from "@/components/ImageGallery/image-gallery"
@@ -216,7 +217,7 @@ export default async function HomePage() {
   const partnersHeader = homePageData?.partnersSectionHeader
 
   return (
-    <div className="space-y-24 pb-24 text-grey-900 dark:text-grey-100">
+    <div className="space-y-20 pb-20 text-grey-900 md:space-y-24 md:pb-24 dark:text-grey-100">
       <HomepageHeroClient homePageData={homePageData} />
 
       {/* Intro + Gallery */}
@@ -239,9 +240,9 @@ export default async function HomePage() {
             ))
           )}
 
-          <div className="mt-12">
+          <div className="mt-10">
             <ImageGallery
-              images={galleryData}
+              images={galleryData.slice(0, 4)}
               variant="masonry"
               showCaptions={true}
               captionPosition="hover"
@@ -258,7 +259,7 @@ export default async function HomePage() {
           <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
             {vision?.description || FALLBACKS.vision.description}
           </p>
-          <div className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-14">
+          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
             {vision?.pillars && vision.pillars.length > 0
               ? vision.pillars
                   .filter(
@@ -289,7 +290,7 @@ export default async function HomePage() {
 
       {/* Featured Projects */}
       {featuredProjects && featuredProjects.length > 0 && (
-        <div>
+        <div className="bg-neutral-100/70 py-12 md:py-16 dark:bg-primary-950">
           <Container>
             <SectionHeader title={projectsHeader?.title || FALLBACKS.projects.title} size="large" />
             <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
@@ -299,27 +300,17 @@ export default async function HomePage() {
             <HomepageProjectsClient projects={featuredProjects} />
 
             {/* View All Projects CTA */}
-            <div className="mt-12 flex justify-center">
-              <Link
+            <div className="mt-10 flex justify-center">
+              <Button
+                as="a"
                 href="/projects"
-                className="group inline-flex items-center gap-2 rounded-xl border-2 border-accent-600 bg-transparent px-6 py-3 font-body text-base font-semibold text-accent-700 uppercase transition-all hover:bg-accent-600 hover:text-white focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:border-accent-500 dark:text-accent-400 dark:hover:bg-accent-500 dark:hover:text-primary-900"
+                variant="outline"
+                trackingLocation="homepage-projects"
+                endIcon={<ArrowRight className="h-5 w-5" />}
+                className="group border-accent-700 text-accent-800 hover:border-accent-800 hover:bg-accent-50 dark:border-accent-500 dark:text-accent-300 dark:hover:bg-primary-800"
               >
-                <span>View All Projects</span>
-                <svg
-                  className="h-5 w-5 transition-transform group-hover:translate-x-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </Link>
+                View All Projects
+              </Button>
             </div>
           </Container>
         </div>
@@ -336,7 +327,7 @@ export default async function HomePage() {
           </p>
 
           {/* Content with subtle background and integrated image */}
-          <div className="mt-10 rounded-3xl bg-primary-50/30 md:px-4 md:py-8 lg:px-8 lg:py-10 dark:bg-primary-900/10">
+          <div className="mt-10 rounded-3xl bg-neutral-100/60 md:px-4 md:py-8 lg:px-8 lg:py-10 dark:bg-primary-900/10">
             <div className="grid gap-8 md:grid-cols-2 md:gap-10 lg:gap-12">
               {/* Text content */}
               <div className="space-y-6">
@@ -387,7 +378,7 @@ export default async function HomePage() {
               </p>
 
               {/* Call-out final paragraph */}
-              <div className="space-y-6 rounded-2xl border border-primary-200/50 bg-gradient-to-br from-primary-100/60 to-primary-50/40 p-6 md:p-8 dark:border-primary-700/30 dark:from-primary-900/30 dark:to-primary-800/20">
+              <div className="space-y-6 rounded-2xl border border-neutral-200 bg-neutral-100 p-6 md:p-8 dark:border-primary-700 dark:bg-primary-950">
                 {park?.callout ? (
                   <PortableText value={park.callout} components={parkCalloutComponents} />
                 ) : (
@@ -424,27 +415,17 @@ export default async function HomePage() {
           <HomepageEventsClient events={recentEvents} />
 
           {/* View All Events CTA */}
-          <div className="mt-12 flex justify-center">
-            <Link
+          <div className="mt-10 flex justify-center">
+            <Button
+              as="a"
               href="/events"
-              className="group inline-flex items-center gap-2 rounded-xl border-2 border-accent-600 bg-transparent px-6 py-3 font-body text-base font-semibold text-accent-700 uppercase transition-all hover:bg-accent-600 hover:text-white focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 dark:border-accent-500 dark:text-accent-400 dark:hover:bg-accent-500 dark:hover:text-primary-900"
+              variant="outline"
+              trackingLocation="homepage-events"
+              endIcon={<ArrowRight className="h-5 w-5" />}
+              className="group border-accent-700 text-accent-800 hover:border-accent-800 hover:bg-accent-50 dark:border-accent-500 dark:text-accent-300 dark:hover:bg-primary-800"
             >
-              <span>View All Events</span>
-              <svg
-                className="h-5 w-5 transition-transform group-hover:translate-x-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </Link>
+              View All Events
+            </Button>
           </div>
         </Container>
       </div>
@@ -467,8 +448,9 @@ export default async function HomePage() {
           <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
             {partnersHeader?.description || FALLBACKS.partners.description}
           </p>
-          <div className="mt-12">
+          <div className="mt-10">
             <Partners
+              variant="compact"
               partners={
                 homePageData?.partners?.flatMap((partner) => {
                   const logo = partner?.logo

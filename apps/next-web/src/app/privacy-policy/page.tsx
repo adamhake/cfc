@@ -244,7 +244,7 @@ export default function PrivacyPolicyPage() {
               </div>
             </section>
 
-            <section className="rounded-lg border-2 border-primary-200 bg-primary-50 p-6 dark:border-primary-700 dark:bg-primary-900">
+            <section className="rounded-lg border-2 border-neutral-200 bg-neutral-100 p-6 dark:border-primary-700 dark:bg-primary-900">
               <h2 className="font-display text-2xl text-primary-800 md:text-3xl dark:text-primary-400">
                 Donations and Payment Processing
               </h2>

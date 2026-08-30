@@ -106,7 +106,7 @@ export function Markdown({ content }: MarkdownProps) {
           </div>
         ),
         thead: ({ children }) => (
-          <thead className="bg-primary-50 dark:bg-primary-900/30">{children}</thead>
+          <thead className="bg-neutral-100 dark:bg-primary-900/30">{children}</thead>
         ),
         tbody: ({ children }) => (
           <tbody className="divide-y divide-grey-200 bg-white dark:divide-grey-700 dark:bg-grey-800">

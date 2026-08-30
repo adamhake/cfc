@@ -93,12 +93,12 @@ export default async function AmenitiesPage() {
           imageWidth: 2000,
           imageHeight: 1262,
         }}
-        height="small"
+        variant="section"
         priority={true}
       />
 
       {/* Main Content */}
-      <Container spacing="none" className="space-y-24 py-16 pb-24">
+      <Container spacing="none" className="space-y-16 py-12 pb-16 md:space-y-20 md:py-20 md:pb-24">
         {/* Introduction */}
         <div className="max-w-4xl space-y-4">
           <p className="font-body text-lg text-grey-800 md:text-xl dark:text-grey-200">
@@ -115,7 +115,7 @@ export default async function AmenitiesPage() {
 
         {/* Location and Hours */}
         <div className="max-w-3xl">
-          <div className="group overflow-hidden rounded-2xl border border-accent-600/20 bg-gradient-to-br from-grey-100/10 to-grey-100/50 p-8 shadow-sm transition-all duration-300 hover:shadow-md dark:border-accent-500/20 dark:from-primary-900 dark:to-primary-900/80">
+          <div className="group overflow-hidden rounded-2xl border border-primary-200 bg-grey-50 p-8 transition-colors duration-300 hover:border-accent-500 dark:border-primary-700 dark:bg-primary-950">
             <div className="flex flex-col items-start gap-6 md:flex-row md:gap-12">
               <div className="flex items-start gap-4">
                 <div

@@ -21,7 +21,7 @@ export default function SupportOption({
   ctaHash,
 }: SupportOptionProps) {
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-accent-600/20 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md dark:bg-transparent dark:bg-gradient-to-br dark:from-primary-950/90 dark:to-primary-950/10">
+    <div className="group relative overflow-hidden rounded-2xl border border-primary-200 bg-grey-50 p-6 transition-all duration-300 hover:border-accent-500 dark:border-primary-700 dark:bg-primary-950">
       {comingSoon && (
         <div className="absolute top-4 right-4">
           <Chip variant="comingSoon" />

@@ -136,7 +136,7 @@ export default async function SurveyResultsPage() {
           title: "2022 Community Survey Results",
           subtitle: "What park users and neighbors told us about the future of Chimborazo Park.",
         }}
-        height="small"
+        variant="section"
         priority={true}
       />
 
@@ -252,7 +252,7 @@ export default async function SurveyResultsPage() {
 
 function StatCard({ value, label }: { value: string; label: string }) {
   return (
-    <div className="rounded-xl border border-primary-200 bg-primary-100 px-4 py-5 text-center md:px-6 md:py-7 dark:border-primary-800/70 dark:bg-primary-900/50">
+    <div className="rounded-xl border border-neutral-200 bg-neutral-100 px-4 py-5 text-center md:px-6 md:py-7 dark:border-primary-800/70 dark:bg-primary-900/50">
       <dt className="font-display text-4xl text-primary-800 md:text-5xl dark:text-primary-300">
         {value}
       </dt>

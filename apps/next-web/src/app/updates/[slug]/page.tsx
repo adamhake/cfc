@@ -115,9 +115,9 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
           title={update.title ?? ""}
           subtitle={update.description ?? undefined}
           sanityImage={update.heroImage ?? undefined}
-          height="medium"
+          variant="detail"
           priority={true}
-          titleSize="large"
+          titleSize="compact"
         />
 
         <Container spacing="md" className="pt-8">
@@ -152,7 +152,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
               {update.body && update.body.length > 0 ? (
                 <PortableText value={update.body as PortableTextBlock[]} />
               ) : (
-                <div className="rounded-2xl border border-primary-200 bg-primary-50/30 p-8 md:p-12 dark:border-primary-700/30 dark:bg-primary-900/20">
+                <div className="rounded-2xl border border-neutral-200 bg-neutral-100/60 p-8 md:p-12 dark:border-primary-700/30 dark:bg-primary-900/20">
                   <p className="font-body text-lg leading-relaxed text-grey-700 dark:text-grey-300">
                     More details for this update are coming soon.
                   </p>
@@ -169,7 +169,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
                       <Link
                         key={event._id}
                         href={`/events/${event.slug?.current}`}
-                        className="block rounded-2xl border border-primary-200 bg-grey-50/70 p-5 transition-colors hover:bg-primary-50 dark:border-primary-700/30 dark:bg-primary-900/20 dark:hover:bg-primary-900/35"
+                        className="block rounded-2xl border border-neutral-200 bg-grey-50/70 p-5 transition-colors hover:bg-neutral-100 dark:border-primary-700/30 dark:bg-primary-900/20 dark:hover:bg-primary-900/35"
                       >
                         <h3 className="font-display text-xl text-grey-900 dark:text-grey-100">
                           {event.title}
@@ -198,7 +198,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
                       <Link
                         key={project._id}
                         href={`/projects/${project.slug?.current}`}
-                        className="block rounded-2xl border border-primary-200 bg-grey-50/70 p-5 transition-colors hover:bg-primary-50 dark:border-primary-700/30 dark:bg-primary-900/20 dark:hover:bg-primary-900/35"
+                        className="block rounded-2xl border border-neutral-200 bg-grey-50/70 p-5 transition-colors hover:bg-neutral-100 dark:border-primary-700/30 dark:bg-primary-900/20 dark:hover:bg-primary-900/35"
                       >
                         <div className="flex flex-wrap items-center gap-3">
                           <h3 className="font-display text-xl text-grey-900 dark:text-grey-100">
@@ -221,7 +221,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
             </div>
 
             <aside className="space-y-6">
-              <div className="rounded-2xl border border-primary-200 bg-primary-50/40 p-6 dark:border-primary-700/30 dark:bg-primary-900/20">
+              <div className="rounded-2xl border border-neutral-200 bg-neutral-100/60 p-6 dark:border-primary-700/30 dark:bg-primary-900/20">
                 <h2 className="font-display text-xl font-semibold text-grey-900 dark:text-grey-100">
                   At a Glance
                 </h2>

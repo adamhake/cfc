@@ -173,7 +173,7 @@ describe("Button", () => {
 
     it("applies accent variant classes", () => {
       render(<Button variant="accent">Accent</Button>)
-      expect(screen.getByRole("button").className).toContain("bg-accent-600")
+      expect(screen.getByRole("button").className).toContain("bg-accent-700")
     })
   })
 

@@ -61,7 +61,7 @@ export default function EventDetailClient({
       {body ? (
         <PortableText value={body} />
       ) : (
-        <div className="rounded-2xl border border-primary-200 bg-primary-50/30 p-8 md:p-12 dark:border-primary-700/30 dark:bg-primary-900/20">
+        <div className="rounded-2xl border border-neutral-200 bg-neutral-100/60 p-8 md:p-12 dark:border-primary-700/30 dark:bg-primary-900/20">
           <p className="font-body text-lg leading-relaxed text-grey-700 dark:text-grey-300">
             No original event details available.
           </p>

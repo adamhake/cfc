@@ -138,7 +138,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <div className="lg:col-span-8">
               {/* Project Goal Card */}
               {project.goal && (
-                <div className="mb-8 rounded-2xl border border-accent-200 bg-gradient-to-br from-accent-50 to-accent-100/50 p-6 md:p-8 dark:border-accent-700/30 dark:from-accent-900/20 dark:to-accent-800/10">
+                <div className="mb-8 rounded-2xl border border-accent-200 bg-accent-50 p-6 md:p-8 dark:border-accent-700/50 dark:bg-primary-950">
                   <div className="mb-3 flex items-center gap-2">
                     <Target className="h-5 w-5 stroke-accent-600 dark:stroke-accent-400" />
                     <h2 className="font-display text-xl font-semibold text-grey-900 md:text-2xl dark:text-grey-100">
@@ -154,7 +154,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               {project.body && project.body.length > 0 ? (
                 <PortableText value={project.body as PortableTextBlock[]} />
               ) : (
-                <div className="rounded-2xl border border-primary-200 bg-primary-50/30 p-8 md:p-12 dark:border-primary-700/30 dark:bg-primary-900/20">
+                <div className="rounded-2xl border border-neutral-200 bg-neutral-100/60 p-8 md:p-12 dark:border-primary-700/30 dark:bg-primary-900/20">
                   <p className="font-body text-lg leading-relaxed text-grey-700 dark:text-grey-300">
                     Project details coming soon. Check back later for more information about this
                     initiative.
@@ -223,7 +223,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 <ProjectSidebarOptimistic project={project} />
 
                 {/* Call to Action */}
-                <div className="rounded-2xl border border-primary-200 bg-gradient-to-br from-primary-50 to-primary-100/50 p-6 dark:border-primary-700/30 dark:from-primary-900/20 dark:to-primary-800/10">
+                <div className="rounded-2xl border border-neutral-200 bg-neutral-100 p-6 dark:border-primary-700 dark:bg-primary-950">
                   <h3 className="mb-3 font-display text-lg font-semibold text-grey-900 dark:text-grey-100">
                     Get Involved
                   </h3>

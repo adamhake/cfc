@@ -46,10 +46,7 @@ export default function AmenityCard({
   }, [prefersReducedMotion, images.length])
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-accent-600/20 bg-gradient-to-br from-grey-50 to-grey-50/80 shadow-sm transition-all duration-300 hover:shadow-md dark:border-accent-500/20 dark:from-primary-900 dark:to-primary-900/80">
-      {/* Subtle accent gradient overlay on hover */}
-      <div className="absolute top-0 right-0 h-32 w-32 bg-gradient-to-br from-accent-600/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-accent-500/10"></div>
-
+    <div className="group relative overflow-hidden rounded-2xl border border-primary-200 bg-grey-50 transition-all duration-300 hover:border-accent-500 dark:border-primary-700 dark:bg-primary-950">
       {images.length > 0 && (
         <div className="relative h-80 w-full overflow-hidden bg-grey-200 dark:bg-primary-700">
           <AnimatePresence initial={false}>

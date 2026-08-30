@@ -1,6 +1,7 @@
 import { cacheLife } from "next/cache"
 import Link from "next/link"
 import { SocialLinks } from "@/components/SocialLinks/social-links"
+import { NAVIGATION_ITEMS } from "@/lib/navigation"
 import { ThemeToggle } from "../ThemeToggle/theme-toggle"
 
 interface FooterProps {
@@ -58,54 +59,15 @@ export default function Footer({ facebookUrl, instagramUrl }: FooterProps) {
               aria-label="Footer navigation"
               className="grid grid-cols-1 gap-y-2 sm:grid-cols-2 sm:gap-x-6"
             >
-              <Link
-                href="/"
-                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
-              >
-                Home
-              </Link>
-              <Link
-                href="/events"
-                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
-              >
-                Events
-              </Link>
-              <Link
-                href="/about"
-                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
-              >
-                About Us
-              </Link>
-              <Link
-                href="/get-involved"
-                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
-              >
-                Get Involved
-              </Link>
-              <Link
-                href="/history"
-                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
-              >
-                History
-              </Link>
-              <Link
-                href="/amenities"
-                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
-              >
-                Amenities
-              </Link>
-              <Link
-                href="/media"
-                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
-              >
-                Media
-              </Link>
-              <Link
-                href="/projects"
-                className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
-              >
-                Projects
-              </Link>
+              {NAVIGATION_ITEMS.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
+                >
+                  {item.label}
+                </Link>
+              ))}
             </nav>
           </div>
 

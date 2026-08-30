@@ -25,7 +25,7 @@ import { applyPalette, getStoredPalette, storePalette } from "@/utils/palette"
 describe("usePalette", () => {
   it("returns default context values", () => {
     const { result } = renderHook(() => usePalette())
-    expect(result.current.palette).toBe("olive")
+    expect(result.current.palette).toBe("heritage")
     expect(typeof result.current.setPalette).toBe("function")
   })
 

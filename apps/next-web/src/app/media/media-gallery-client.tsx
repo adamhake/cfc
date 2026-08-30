@@ -62,7 +62,7 @@ export default function MediaGalleryClient({
 
   if (totalCount === 0) {
     return (
-      <div className="mx-auto max-w-2xl rounded-2xl border border-primary-200 bg-primary-50/30 p-12 text-center dark:border-primary-700/30 dark:bg-primary-900/20">
+      <div className="mx-auto max-w-2xl rounded-2xl border border-neutral-200 bg-neutral-100/60 p-12 text-center dark:border-primary-700/30 dark:bg-primary-900/20">
         <h2 className="mb-3 font-display text-2xl font-semibold text-grey-900 dark:text-grey-100">
           No Images Yet
         </h2>
@@ -75,7 +75,7 @@ export default function MediaGalleryClient({
 
   if (galleryImages.length === 0) {
     return (
-      <div className="mx-auto max-w-2xl rounded-2xl border border-primary-200 bg-primary-50/30 p-12 text-center dark:border-primary-700/30 dark:bg-primary-900/20">
+      <div className="mx-auto max-w-2xl rounded-2xl border border-neutral-200 bg-neutral-100/60 p-12 text-center dark:border-primary-700/30 dark:bg-primary-900/20">
         <h2 className="mb-3 font-display text-2xl font-semibold text-grey-900 dark:text-grey-100">
           No Valid Images
         </h2>

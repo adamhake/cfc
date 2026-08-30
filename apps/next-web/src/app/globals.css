@@ -16,7 +16,7 @@
 
    Font families:
    - font-display: Vollkorn SC (headings, emphasis)
-   - font-body: Montserrat (body text, UI elements)
+   - font-body: Nebula Sans (body text, UI elements)
 */
 
 /* BORDER RADIUS SCALE
@@ -42,7 +42,7 @@
    - Spacious: gap-12  (48px)
 
    Section spacing:
-   - Between sections: space-y-16 md:space-y-24 (64px -> 96px)
+   - Between major sections: space-y-20 md:space-y-24 (80px -> 96px)
 */
 
 /* SHADOW SCALE
@@ -53,20 +53,16 @@
    Modals/overlays:    shadow-xl
 */
 
-/* OVERLAY OPACITY STANDARDS
-   Standardized opacity values for image overlays:
+/* IMAGE SCRIM STANDARDS
+   Decorative UI gradients are intentionally excluded from the design system.
+   Use one solid scrim when text sits on photography:
 
-   Hero overlays (gradient over hero images):
-   - Light mode: from-primary-900/60 via-primary-800/40 to-primary-700/20
-   - Dark mode:  from-grey-900/70 via-grey-900/50 to-grey-800/30
+   Hero scrim:
+   - Light mode: bg-primary-950/55
+   - Dark mode:  bg-grey-950/65
 
-   Card overlays (solid color over card images):
-   - Light mode: bg-primary-900/55
-   - Dark mode:  bg-grey-900/60
-
-   Accent washes (subtle tints on images):
-   - Light mode: from-accent-600/20 to-accent-800/25
-   - Dark mode:  from-accent-900/20 to-accent-950/30
+   Caption scrim:
+   - Light/dark mode: bg-primary-950/90 or bg-grey-950/90
 */
 
 /* BORDER TREATMENT STANDARDS
@@ -105,19 +101,43 @@
    Self-hosted fonts for optimal performance
    ============================================ */
 
-/* Montserrat - Variable Font */
+/* Nebula Sans - Static Web Fonts */
 @font-face {
-  font-family: "Montserrat";
-  src: url("/fonts/Montserrat/Montserrat-VariableFont_wght.woff2") format("woff2");
-  font-weight: 100 900;
+  font-family: "Nebula Sans";
+  src: url("/fonts/Nebula_Sans/NebulaSans-Book.woff2") format("woff2");
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Montserrat";
-  src: url("/fonts/Montserrat/Montserrat-Italic-VariableFont_wght.woff2") format("woff2");
-  font-weight: 100 900;
+  font-family: "Nebula Sans";
+  src: url("/fonts/Nebula_Sans/NebulaSans-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nebula Sans";
+  src: url("/fonts/Nebula_Sans/NebulaSans-Semibold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nebula Sans";
+  src: url("/fonts/Nebula_Sans/NebulaSans-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nebula Sans";
+  src: url("/fonts/Nebula_Sans/NebulaSans-BookItalic.woff2") format("woff2");
+  font-weight: 400;
   font-style: italic;
   font-display: swap;
 }
@@ -161,13 +181,13 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-body: "Montserrat", sans-serif;
+  --font-body: "Nebula Sans", sans-serif;
   --font-display: "Vollkorn SC", serif;
 
   --color-*: initial;
 
   /* ============================================
-     PALETTE A: CURRENT GREEN (Baseline)
+   PALETTE A: FOREST GREEN
      Cool-toned forest green
      ============================================ */
   --color-green-50: oklch(0.968 0.012 161.87);
@@ -183,7 +203,7 @@
   --color-green-950: oklch(0.167 0.016 165.36);
 
   /* ============================================
-     PALETTE B: WARM OLIVE GREEN
+   PALETTE B: WARM OLIVE GREEN
      Warmer, more approachable olive-toned greens
      ============================================ */
   --color-olive-50: oklch(0.97 0.015 135);
@@ -219,10 +239,10 @@
      Deep, traditional iron/patina green
      Victorian park aesthetic
      ============================================ */
-  --color-iron-50: oklch(0.96 0.018 165);
-  --color-iron-100: oklch(0.92 0.035 167);
-  --color-iron-200: oklch(0.85 0.065 169);
-  --color-iron-300: oklch(0.775 0.095 170);
+  --color-iron-50: oklch(0.97 0.006 150);
+  --color-iron-100: oklch(0.94 0.012 155);
+  --color-iron-200: oklch(0.88 0.025 160);
+  --color-iron-300: oklch(0.8 0.065 166);
   --color-iron-400: oklch(0.695 0.12 171);
   --color-iron-500: oklch(0.615 0.125 172);
   --color-iron-600: oklch(0.52 0.105 173);
@@ -235,7 +255,7 @@
      SECONDARY COLORS - ACCENT PALETTES
      ============================================ */
 
-  /* Terracotta/Clay - Warm brick tones for historical feel */
+  /* Sunset Clay - Warm tones drawn from the logo and Richmond brick */
   --color-terra-50: oklch(0.97 0.018 55);
   --color-terra-100: oklch(0.935 0.04 58);
   --color-terra-200: oklch(0.875 0.08 62);
@@ -376,99 +396,143 @@
   --color-black: oklch(0.155 0.024 150.65);
 
   /* ============================================
-     SEMANTIC PRIMARY COLORS (Default: Warm Olive)
+     SEMANTIC PRIMARY COLORS (Default: Chimborazo Heritage)
      Note: These are overridden by [data-palette] selectors below
      ============================================ */
-  --color-primary-50: var(--color-olive-50);
-  --color-primary-100: var(--color-olive-100);
-  --color-primary-200: var(--color-olive-200);
-  --color-primary-300: var(--color-olive-300);
-  --color-primary-400: var(--color-olive-400);
-  --color-primary-500: var(--color-olive-500);
-  --color-primary-600: var(--color-olive-600);
-  --color-primary-700: var(--color-olive-700);
-  --color-primary-800: var(--color-olive-800);
-  --color-primary-900: var(--color-olive-900);
-  --color-primary-950: var(--color-olive-950);
+  --color-primary-50: var(--color-iron-50);
+  --color-primary-100: var(--color-iron-100);
+  --color-primary-200: var(--color-iron-200);
+  --color-primary-300: var(--color-iron-300);
+  --color-primary-400: var(--color-iron-400);
+  --color-primary-500: var(--color-iron-500);
+  --color-primary-600: var(--color-iron-600);
+  --color-primary-700: var(--color-iron-700);
+  --color-primary-800: var(--color-iron-800);
+  --color-primary-900: var(--color-iron-900);
+  --color-primary-950: var(--color-iron-950);
 
   /* ============================================
-     SEMANTIC ACCENT COLORS (Default: Soft Blue-Grey)
+     SEMANTIC ACCENT COLORS (Default: Sunset Clay)
      Note: These are overridden by [data-palette] selectors below
      ============================================ */
-  --color-accent-50: var(--color-soft-blue-50);
-  --color-accent-100: var(--color-soft-blue-100);
-  --color-accent-200: var(--color-soft-blue-200);
-  --color-accent-300: var(--color-soft-blue-300);
-  --color-accent-400: var(--color-soft-blue-400);
-  --color-accent-500: var(--color-soft-blue-500);
-  --color-accent-600: var(--color-soft-blue-600);
-  --color-accent-700: var(--color-soft-blue-700);
-  --color-accent-800: var(--color-soft-blue-800);
-  --color-accent-900: var(--color-soft-blue-900);
-  --color-accent-950: var(--color-soft-blue-950);
+  --color-accent-50: var(--color-terra-50);
+  --color-accent-100: var(--color-terra-100);
+  --color-accent-200: var(--color-terra-200);
+  --color-accent-300: var(--color-terra-300);
+  --color-accent-400: var(--color-terra-400);
+  --color-accent-500: var(--color-terra-500);
+  --color-accent-600: var(--color-terra-600);
+  --color-accent-700: var(--color-terra-700);
+  --color-accent-800: var(--color-terra-800);
+  --color-accent-900: var(--color-terra-900);
+  --color-accent-950: var(--color-terra-950);
 
   /* ============================================
-     SEMANTIC NEUTRAL COLORS (Default: Balanced Cool-Warm Grey)
+     SEMANTIC NEUTRAL COLORS (Default: Warm Clay-Grey)
      Note: These are overridden by [data-palette] selectors below
      ============================================ */
-  --color-neutral-50: var(--color-balanced-grey-50);
-  --color-neutral-100: var(--color-balanced-grey-100);
-  --color-neutral-200: var(--color-balanced-grey-200);
-  --color-neutral-300: var(--color-balanced-grey-300);
-  --color-neutral-400: var(--color-balanced-grey-400);
-  --color-neutral-500: var(--color-balanced-grey-500);
-  --color-neutral-600: var(--color-balanced-grey-600);
-  --color-neutral-700: var(--color-balanced-grey-700);
-  --color-neutral-800: var(--color-balanced-grey-800);
-  --color-neutral-900: var(--color-balanced-grey-900);
-  --color-neutral-950: var(--color-balanced-grey-950);
+  --color-neutral-50: var(--color-clay-grey-50);
+  --color-neutral-100: var(--color-clay-grey-100);
+  --color-neutral-200: var(--color-clay-grey-200);
+  --color-neutral-300: var(--color-clay-grey-300);
+  --color-neutral-400: var(--color-clay-grey-400);
+  --color-neutral-500: var(--color-clay-grey-500);
+  --color-neutral-600: var(--color-clay-grey-600);
+  --color-neutral-700: var(--color-clay-grey-700);
+  --color-neutral-800: var(--color-clay-grey-800);
+  --color-neutral-900: var(--color-clay-grey-900);
+  --color-neutral-950: var(--color-clay-grey-950);
 }
 
 /* Apply palette overrides outside @theme but ensure variables cascade */
-/* Default: Warm Olive + Blue-Grey */
+/* Default: Chimborazo Heritage — iron green + sunset clay */
 :root {
-  /* Primary: Warm Olive */
-  --color-primary-50: var(--color-olive-50);
-  --color-primary-100: var(--color-olive-100);
-  --color-primary-200: var(--color-olive-200);
-  --color-primary-300: var(--color-olive-300);
-  --color-primary-400: var(--color-olive-400);
-  --color-primary-500: var(--color-olive-500);
-  --color-primary-600: var(--color-olive-600);
-  --color-primary-700: var(--color-olive-700);
-  --color-primary-800: var(--color-olive-800);
-  --color-primary-900: var(--color-olive-900);
-  --color-primary-950: var(--color-olive-950);
+  /* Primary: Victorian iron green, close to the logo's #115740 */
+  --color-primary-50: var(--color-iron-50);
+  --color-primary-100: var(--color-iron-100);
+  --color-primary-200: var(--color-iron-200);
+  --color-primary-300: var(--color-iron-300);
+  --color-primary-400: var(--color-iron-400);
+  --color-primary-500: var(--color-iron-500);
+  --color-primary-600: var(--color-iron-600);
+  --color-primary-700: var(--color-iron-700);
+  --color-primary-800: var(--color-iron-800);
+  --color-primary-900: var(--color-iron-900);
+  --color-primary-950: var(--color-iron-950);
 
-  /* Accent: Soft Blue-Grey */
-  --color-accent-50: var(--color-soft-blue-50);
-  --color-accent-100: var(--color-soft-blue-100);
-  --color-accent-200: var(--color-soft-blue-200);
-  --color-accent-300: var(--color-soft-blue-300);
-  --color-accent-400: var(--color-soft-blue-400);
-  --color-accent-500: var(--color-soft-blue-500);
-  --color-accent-600: var(--color-soft-blue-600);
-  --color-accent-700: var(--color-soft-blue-700);
-  --color-accent-800: var(--color-soft-blue-800);
-  --color-accent-900: var(--color-soft-blue-900);
-  --color-accent-950: var(--color-soft-blue-950);
+  /* Accent: Sunset clay echoes the logo and Church Hill brick */
+  --color-accent-50: var(--color-terra-50);
+  --color-accent-100: var(--color-terra-100);
+  --color-accent-200: var(--color-terra-200);
+  --color-accent-300: var(--color-terra-300);
+  --color-accent-400: var(--color-terra-400);
+  --color-accent-500: var(--color-terra-500);
+  --color-accent-600: var(--color-terra-600);
+  --color-accent-700: var(--color-terra-700);
+  --color-accent-800: var(--color-terra-800);
+  --color-accent-900: var(--color-terra-900);
+  --color-accent-950: var(--color-terra-950);
 
-  /* Neutral: Balanced Cool-Warm Grey */
-  --color-neutral-50: var(--color-balanced-grey-50);
-  --color-neutral-100: var(--color-balanced-grey-100);
-  --color-neutral-200: var(--color-balanced-grey-200);
-  --color-neutral-300: var(--color-balanced-grey-300);
-  --color-neutral-400: var(--color-balanced-grey-400);
-  --color-neutral-500: var(--color-balanced-grey-500);
-  --color-neutral-600: var(--color-balanced-grey-600);
-  --color-neutral-700: var(--color-balanced-grey-700);
-  --color-neutral-800: var(--color-balanced-grey-800);
-  --color-neutral-900: var(--color-balanced-grey-900);
-  --color-neutral-950: var(--color-balanced-grey-950);
+  /* Neutral: Warm clay-grey */
+  --color-neutral-50: var(--color-clay-grey-50);
+  --color-neutral-100: var(--color-clay-grey-100);
+  --color-neutral-200: var(--color-clay-grey-200);
+  --color-neutral-300: var(--color-clay-grey-300);
+  --color-neutral-400: var(--color-clay-grey-400);
+  --color-neutral-500: var(--color-clay-grey-500);
+  --color-neutral-600: var(--color-clay-grey-600);
+  --color-neutral-700: var(--color-clay-grey-700);
+  --color-neutral-800: var(--color-clay-grey-800);
+  --color-neutral-900: var(--color-clay-grey-900);
+  --color-neutral-950: var(--color-clay-grey-950);
 
-  /* Text colors (neutral balanced) */
-  --color-text-light: var(--color-text-light-neutral);
-  --color-text-dark: var(--color-text-dark-neutral);
+  --color-text-light: var(--color-text-light-warm);
+  --color-text-dark: var(--color-text-dark-warm);
+}
+
+/* ============================================
+   PALETTE A: CLASSIC FOREST GREEN
+   ============================================ */
+:root[data-palette="green"],
+html[data-palette="green"] {
+  --color-primary-50: var(--color-green-50);
+  --color-primary-100: var(--color-green-100);
+  --color-primary-200: var(--color-green-200);
+  --color-primary-300: var(--color-green-300);
+  --color-primary-400: var(--color-green-400);
+  --color-primary-500: var(--color-green-500);
+  --color-primary-600: var(--color-green-600);
+  --color-primary-700: var(--color-green-700);
+  --color-primary-800: var(--color-green-800);
+  --color-primary-900: var(--color-green-900);
+  --color-primary-950: var(--color-green-950);
+
+  --color-accent-50: var(--color-green-50);
+  --color-accent-100: var(--color-green-100);
+  --color-accent-200: var(--color-green-200);
+  --color-accent-300: var(--color-green-300);
+  --color-accent-400: var(--color-green-400);
+  --color-accent-500: var(--color-green-500);
+  --color-accent-600: var(--color-green-600);
+  --color-accent-700: var(--color-green-700);
+  --color-accent-800: var(--color-green-800);
+  --color-accent-900: var(--color-green-900);
+  --color-accent-950: var(--color-green-950);
+
+  --color-neutral-50: var(--color-grey-50);
+  --color-neutral-100: var(--color-grey-100);
+  --color-neutral-200: var(--color-grey-200);
+  --color-neutral-300: var(--color-grey-300);
+  --color-neutral-400: var(--color-grey-400);
+  --color-neutral-500: var(--color-grey-500);
+  --color-neutral-600: var(--color-grey-600);
+  --color-neutral-700: var(--color-grey-700);
+  --color-neutral-800: var(--color-grey-800);
+  --color-neutral-900: var(--color-grey-900);
+  --color-neutral-950: var(--color-grey-950);
+
+  --color-text-light: var(--color-text-light-cool);
+  --color-text-dark: var(--color-text-dark-cool);
 }
 
 /* ============================================
@@ -621,13 +685,37 @@ html[data-palette="green-navy"] {
   --color-text-dark: var(--color-text-dark-cool);
 }
 
-/* Dark mode accent color overrides - lighter blue for better contrast */
+/* Default dark mode: lighter sunset-clay accents for contrast. */
 .dark {
+  --color-accent-300: var(--color-terra-200);
+  --color-accent-400: var(--color-terra-300);
+  --color-accent-500: var(--color-terra-400);
+  --color-accent-600: var(--color-terra-300);
+  --color-accent-700: var(--color-terra-200);
+}
+
+html.dark[data-palette="olive"] {
   --color-accent-300: var(--color-soft-blue-200);
   --color-accent-400: var(--color-soft-blue-300);
   --color-accent-500: var(--color-soft-blue-400);
   --color-accent-600: var(--color-soft-blue-300);
   --color-accent-700: var(--color-soft-blue-200);
+}
+
+html.dark[data-palette="green-navy"] {
+  --color-accent-300: var(--color-navy-200);
+  --color-accent-400: var(--color-navy-300);
+  --color-accent-500: var(--color-navy-400);
+  --color-accent-600: var(--color-navy-300);
+  --color-accent-700: var(--color-navy-200);
+}
+
+html.dark[data-palette="green"] {
+  --color-accent-300: var(--color-green-200);
+  --color-accent-400: var(--color-green-300);
+  --color-accent-500: var(--color-green-400);
+  --color-accent-600: var(--color-green-300);
+  --color-accent-700: var(--color-green-200);
 }
 
 /* Custom scrollbar styles */

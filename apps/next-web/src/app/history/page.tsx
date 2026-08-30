@@ -38,10 +38,10 @@ export default async function HistoryPage() {
           subtitle:
             "Explore the rich and complex history of Chimborazo Park, from its role as a Civil War hospital to the emancipated community that called it home during Reconstruction.",
         }}
-        height="small"
+        variant="section"
       />
 
-      <Container spacing="xl" className="py-16 pb-24">
+      <Container spacing="xl" className="py-12 pb-16 md:py-20 md:pb-24">
         <article className="mx-auto max-w-3xl">
           <PortableText value={(pageData?.content || []) as PortableTextBlock[]} />
         </article>
