@@ -1,6 +1,7 @@
 import { z } from "zod"
 
-export const runtime = "nodejs"
+// `export const runtime` is incompatible with cacheComponents. Node is already
+// the default runtime for route handlers, so the declaration was redundant.
 
 const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages"
 const ANTHROPIC_MODEL = "claude-sonnet-4-20250514"

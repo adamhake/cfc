@@ -1,7 +1,8 @@
 import { Calendar, Clock, MapPin } from "lucide-react"
 import Link from "next/link"
+import EventStatusChip from "@/components/EventStatusChip/event-status-chip"
 import type { SanityEvent } from "@/lib/sanity-types"
-import { formatDateString, isPastDate } from "@/utils/time"
+import { formatDateString } from "@/utils/time"
 import Chip from "../Chip/chip"
 import { SanityImage } from "../SanityImage/sanity-image"
 
@@ -32,7 +33,6 @@ export default function Event({
   imageBreakpoints = DEFAULT_EVENT_IMAGE_BREAKPOINTS,
   imageQuality = DEFAULT_EVENT_IMAGE_QUALITY,
 }: EventProps) {
-  const past = isPast ?? isPastDate(date ?? "")
   const fmtDate = formatDateString(date ?? "", "short")
 
   return (
@@ -54,7 +54,15 @@ export default function Event({
       )}
       <div className="absolute top-0 left-0 h-full w-full bg-primary-900/55 dark:bg-primary-950/60"></div>
       <div className="relative z-10 space-y-6 p-8 md:space-y-8">
-        <Chip variant={past ? "past" : "upcoming"} />
+        {/* Whether an event is past depends on the current date, which can't be
+            read during prerendering — it would freeze into the static shell.
+            When the caller hasn't already decided, defer to the client chip so
+            the badge is correct on every render rather than as of build time. */}
+        {isPast === undefined ? (
+          <EventStatusChip eventDate={date ?? ""} />
+        ) : (
+          <Chip variant={isPast ? "past" : "upcoming"} />
+        )}
         <h3 className="font-display text-3xl text-primary-50 dark:text-grey-100">{title}</h3>
         <p className="font-body text-lg text-primary-50 dark:text-grey-200">{description}</p>
         <div className="mt-4 flex flex-col gap-2">

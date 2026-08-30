@@ -4,6 +4,7 @@ import {
   type LivePerspective,
   resolvePerspectiveFromCookies,
   resolveVariantFromCookies,
+  type StrictDefinedFetchType,
 } from "next-sanity/live"
 import { cache } from "react"
 import { env } from "@/env"
@@ -26,6 +27,23 @@ export const { sanityFetch, SanityLive } = defineLive({
   // entries rather than one that leaks between them.
   strict: true,
 })
+
+/**
+ * The app's single `use cache` boundary.
+ *
+ * `sanityFetch` registers `cacheTag`/`cacheLife` internally but deliberately
+ * does not open the boundary itself, so this wrapper provides it once — callers
+ * must not add their own `use cache`. Everything the query depends on
+ * (`perspective`, `stega`, `params`) arrives as an argument and therefore
+ * becomes part of the cache key.
+ *
+ * Cached entries live for a year and are invalidated by tag, never by expiry.
+ * See `cacheLife` in next.config.ts.
+ */
+export const cachedSanityFetch: StrictDefinedFetchType = async (options) => {
+  "use cache"
+  return sanityFetch(options)
+}
 
 export interface DynamicFetchOptions {
   perspective: LivePerspective

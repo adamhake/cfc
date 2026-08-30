@@ -21,17 +21,9 @@ import { Image } from "@/components/OptimizedImage/optimized-image"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import SectionHeader from "@/components/SectionHeader/section-header"
 import SupportOption from "@/components/SupportOption/support-option"
-import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import type { SanityGetInvolvedPage, SanitySiteSettings } from "@/lib/sanity-types"
 import { SITE_CONFIG } from "@/utils/seo"
-
-/**
- * Time-based ISR backstop. Content normally invalidates immediately via the
- * Sanity webhook (`/api/webhooks/sanity`) calling `revalidateTag`; this is the
- * safety net for a missed webhook. Previously supplied by `defineLive({
- * fetchOptions: { revalidate: 1800 } })`, removed in next-sanity v13.
- */
-export const revalidate = 1800
 
 export const metadata: Metadata = {
   title: "Get Involved",
@@ -49,12 +41,12 @@ export const metadata: Metadata = {
 
 export default async function GetInvolvedPage() {
   const [{ data: pageData }, { data: siteSettings }] = (await Promise.all([
-    sanityFetch({
+    cachedSanityFetch({
       ...(await getDynamicFetchOptions()),
       query: getGetInvolvedPageQuery,
       tags: [CACHE_TAGS.GET_INVOLVED],
     }),
-    sanityFetch({
+    cachedSanityFetch({
       ...(await getDynamicFetchOptions()),
       query: getSiteSettingsQuery,
       tags: [CACHE_TAGS.SITE_SETTINGS],

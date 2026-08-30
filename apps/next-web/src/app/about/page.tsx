@@ -8,18 +8,10 @@ import { PortableText } from "@/components/PortableText/portable-text"
 import { SanityImage } from "@/components/SanityImage/sanity-image"
 import SectionHeader from "@/components/SectionHeader/section-header"
 import { extractGetInvolvedGalleryImages } from "@/lib/gallery-extractors"
-import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import type { SanityAboutPage, SanityBoardMember, SanityHighlight } from "@/lib/sanity-types"
 import { getSiteSettings } from "@/lib/site-settings"
 import { SITE_CONFIG } from "@/utils/seo"
-
-/**
- * Time-based ISR backstop. Content normally invalidates immediately via the
- * Sanity webhook (`/api/webhooks/sanity`) calling `revalidateTag`; this is the
- * safety net for a missed webhook. Previously supplied by `defineLive({
- * fetchOptions: { revalidate: 1800 } })`, removed in next-sanity v13.
- */
-export const revalidate = 1800
 
 export const metadata: Metadata = {
   title: "About the Chimborazo Park Conservancy",
@@ -37,7 +29,7 @@ export const metadata: Metadata = {
 
 export default async function AboutPage() {
   const [{ data: pageData }, siteSettings] = await Promise.all([
-    sanityFetch({
+    cachedSanityFetch({
       ...(await getDynamicFetchOptions()),
       query: getAboutPageQuery,
       tags: [CACHE_TAGS.ABOUT],

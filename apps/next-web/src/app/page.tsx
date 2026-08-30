@@ -17,7 +17,7 @@ import RotatingImages from "@/components/RotatingImages/rotating-images"
 import SectionHeader from "@/components/SectionHeader/section-header"
 import Vision from "@/components/Vision/vision"
 import { extractGetInvolvedGalleryImages } from "@/lib/gallery-extractors"
-import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import type {
   SanityEvent,
   SanityHomePage,
@@ -29,14 +29,6 @@ import { SITE_CONFIG } from "@/utils/seo"
 import HomepageEventsClient from "./homepage-events-client"
 import HomepageHeroClient from "./homepage-hero-client"
 import HomepageProjectsClient from "./homepage-projects-client"
-
-/**
- * Time-based ISR backstop. Content normally invalidates immediately via the
- * Sanity webhook (`/api/webhooks/sanity`) calling `revalidateTag`; this is the
- * safety net for a missed webhook. Previously supplied by `defineLive({
- * fetchOptions: { revalidate: 1800 } })`, removed in next-sanity v13.
- */
-export const revalidate = 1800
 
 // ─── Portable Text renderers for section-specific styling ───
 
@@ -167,17 +159,17 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   const [{ data: homePageData }, { data: featuredProjects }, { data: recentEvents }, siteSettings] =
     (await Promise.all([
-      sanityFetch({
+      cachedSanityFetch({
         ...(await getDynamicFetchOptions()),
         query: getHomePageQuery,
         tags: [CACHE_TAGS.HOMEPAGE],
       }),
-      sanityFetch({
+      cachedSanityFetch({
         ...(await getDynamicFetchOptions()),
         query: featuredProjectsQuery,
         tags: [CACHE_TAGS.PROJECTS],
       }),
-      sanityFetch({
+      cachedSanityFetch({
         ...(await getDynamicFetchOptions()),
         query: recentEventsQuery,
         tags: [CACHE_TAGS.EVENTS],

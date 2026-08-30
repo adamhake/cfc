@@ -23,17 +23,9 @@ import GetInvolved from "@/components/GetInvolved/get-involved"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import SectionHeader from "@/components/SectionHeader/section-header"
 import SupportOption from "@/components/SupportOption/support-option"
-import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import type { SanityAmenitiesPage } from "@/lib/sanity-types"
 import { SITE_CONFIG } from "@/utils/seo"
-
-/**
- * Time-based ISR backstop. Content normally invalidates immediately via the
- * Sanity webhook (`/api/webhooks/sanity`) calling `revalidateTag`; this is the
- * safety net for a missed webhook. Previously supplied by `defineLive({
- * fetchOptions: { revalidate: 1800 } })`, removed in next-sanity v13.
- */
-export const revalidate = 1800
 
 // Icon mapping based on schema icon values
 const iconMap = {
@@ -72,7 +64,7 @@ export const metadata: Metadata = {
 }
 
 export default async function AmenitiesPage() {
-  const { data: amenitiesPageData } = (await sanityFetch({
+  const { data: amenitiesPageData } = (await cachedSanityFetch({
     ...(await getDynamicFetchOptions()),
     query: getAmenitiesPageQuery,
     tags: [CACHE_TAGS.AMENITIES],

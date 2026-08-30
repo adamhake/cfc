@@ -8,8 +8,9 @@ import Container from "@/components/Container/container"
 import PageHero from "@/components/PageHero/page-hero"
 import { PortableText } from "@/components/PortableText/portable-text"
 import { sanityClient } from "@/lib/sanity"
-import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import type { SanityUpdateDetail, UpdateSlug } from "@/lib/sanity-types"
+import { withPlaceholderSlug } from "@/lib/static-params"
 import {
   generateArticleStructuredData,
   generateBreadcrumbStructuredData,
@@ -17,26 +18,18 @@ import {
 } from "@/utils/seo"
 import { formatDateString } from "@/utils/time"
 
-/**
- * Time-based ISR backstop. Content normally invalidates immediately via the
- * Sanity webhook (`/api/webhooks/sanity`) calling `revalidateTag`; this is the
- * safety net for a missed webhook. Previously supplied by `defineLive({
- * fetchOptions: { revalidate: 1800 } })`, removed in next-sanity v13.
- */
-export const revalidate = 1800
-
 interface UpdatePageProps {
   params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
   const slugs = await sanityClient.fetch<UpdateSlug[]>(updateSlugsQuery)
-  return slugs.map(({ slug }) => ({ slug }))
+  return withPlaceholderSlug(slugs.map(({ slug }) => ({ slug })))
 }
 
 export async function generateMetadata({ params }: UpdatePageProps): Promise<Metadata> {
   const { slug } = await params
-  const { data: update } = (await sanityFetch({
+  const { data: update } = (await cachedSanityFetch({
     ...(await getDynamicFetchOptions()),
     query: updateBySlugQuery,
     params: { slug },
@@ -76,7 +69,7 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
 
 export default async function UpdatePage({ params }: UpdatePageProps) {
   const { slug } = await params
-  const { data: update } = (await sanityFetch({
+  const { data: update } = (await cachedSanityFetch({
     ...(await getDynamicFetchOptions()),
     query: updateBySlugQuery,
     params: { slug },

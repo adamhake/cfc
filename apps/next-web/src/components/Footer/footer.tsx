@@ -1,3 +1,4 @@
+import { cacheLife } from "next/cache"
 import Link from "next/link"
 import { SocialLinks } from "@/components/SocialLinks/social-links"
 import { ThemeToggle } from "../ThemeToggle/theme-toggle"
@@ -143,8 +144,18 @@ export default function Footer({ facebookUrl, instagramUrl }: FooterProps) {
   )
 }
 
-/** Client component for dynamic copyright year */
-function FooterCopyright() {
+/**
+ * `new Date()` can't be read during prerendering — the value would be frozen
+ * into the static shell with nothing to correct it. Caching it on a daily
+ * revalidate keeps the footer in the shell while bounding how long a stale year
+ * can survive a New Year to under a day.
+ *
+ * (Despite the previous comment here, this was never a client component.)
+ */
+async function FooterCopyright() {
+  "use cache"
+  cacheLife({ revalidate: 86_400 })
+
   return (
     <p className="text-center font-body text-sm text-grey-600 md:text-left dark:text-grey-400">
       &copy; {new Date().getFullYear()} Chimborazo Park Conservancy. All rights reserved.

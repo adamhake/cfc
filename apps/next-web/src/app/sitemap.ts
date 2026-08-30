@@ -1,8 +1,6 @@
 import type { MetadataRoute } from "next"
-import { sanityClient } from "@/lib/sanity"
+import { CACHE_TAGS, cachedSanityFetch } from "@/lib/sanity-fetch"
 import { SITE_CONFIG } from "@/utils/seo"
-
-export const revalidate = 3600
 
 const sitemapSlugsQuery = `{
   "events": *[_type == "event"] { "slug": slug.current, _updatedAt },
@@ -30,12 +28,27 @@ interface SitemapData {
   pages: Record<string, string | null>
 }
 
-function toDate(isoString: string | null | undefined): Date {
-  return isoString ? new Date(isoString) : new Date()
+/**
+ * Falls back to `undefined` rather than `new Date()`. `lastModified` is
+ * optional in the sitemap spec, and "now" can't be read while prerendering —
+ * it would freeze a build timestamp into the output and claim every URL was
+ * modified then.
+ */
+function toDate(isoString: string | null | undefined): Date | undefined {
+  return isoString ? new Date(isoString) : undefined
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const data = await sanityClient.fetch<SitemapData>(sitemapSlugsQuery)
+  // Tagged with every cache tag: any published document can change the set of
+  // URLs or their lastModified, and regenerating a sitemap is cheap. Previously
+  // this used a raw client fetch with a 1h timer and no tags, so new content
+  // could take an hour to appear.
+  const { data } = (await cachedSanityFetch({
+    query: sitemapSlugsQuery,
+    tags: Object.values(CACHE_TAGS),
+    perspective: "published",
+    stega: false,
+  })) as { data: SitemapData }
   const pages = data.pages
 
   const staticRoutes: MetadataRoute.Sitemap = [

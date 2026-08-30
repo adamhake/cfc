@@ -10,8 +10,9 @@ import Event from "@/components/Event/event"
 import { PortableText } from "@/components/PortableText/portable-text"
 import { SanityImage } from "@/components/SanityImage/sanity-image"
 import { sanityClient } from "@/lib/sanity"
-import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import type { SanityProjectDetail } from "@/lib/sanity-types"
+import { withPlaceholderSlug } from "@/lib/static-params"
 import {
   generateArticleStructuredData,
   generateBreadcrumbStructuredData,
@@ -20,26 +21,18 @@ import {
 import ProjectHeroOptimistic from "./project-hero-optimistic"
 import ProjectSidebarOptimistic from "./project-sidebar-optimistic"
 
-/**
- * Time-based ISR backstop. Content normally invalidates immediately via the
- * Sanity webhook (`/api/webhooks/sanity`) calling `revalidateTag`; this is the
- * safety net for a missed webhook. Previously supplied by `defineLive({
- * fetchOptions: { revalidate: 1800 } })`, removed in next-sanity v13.
- */
-export const revalidate = 1800
-
 interface ProjectPageProps {
   params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
   const slugs = await sanityClient.fetch<Array<{ slug: string }>>(projectSlugsQuery)
-  return slugs.map(({ slug }) => ({ slug }))
+  return withPlaceholderSlug(slugs.map(({ slug }) => ({ slug })))
 }
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params
-  const { data: project } = (await sanityFetch({
+  const { data: project } = (await cachedSanityFetch({
     ...(await getDynamicFetchOptions()),
     query: projectBySlugQuery,
     params: { slug },
@@ -79,7 +72,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params
-  const { data: project } = (await sanityFetch({
+  const { data: project } = (await cachedSanityFetch({
     ...(await getDynamicFetchOptions()),
     query: projectBySlugQuery,
     params: { slug },

@@ -4,4 +4,9 @@
  * so a single `vi.mock("@/lib/sanity-fetch")` covers the whole surface in tests.
  */
 export { CACHE_TAGS, type CacheTag } from "./cache-tags"
-export { type DynamicFetchOptions, getDynamicFetchOptions, sanityFetch } from "./sanity-live"
+export {
+  cachedSanityFetch,
+  type DynamicFetchOptions,
+  getDynamicFetchOptions,
+  sanityFetch,
+} from "./sanity-live"

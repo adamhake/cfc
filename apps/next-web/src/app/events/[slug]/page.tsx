@@ -9,8 +9,9 @@ import Container from "@/components/Container/container"
 import type { SanityGalleryImage } from "@/components/ImageGallery/image-gallery"
 import { PortableText } from "@/components/PortableText/portable-text"
 import { sanityClient } from "@/lib/sanity"
-import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import type { SanityEventDetail } from "@/lib/sanity-types"
+import { withPlaceholderSlug } from "@/lib/static-params"
 import {
   generateBreadcrumbStructuredData,
   generateEventStructuredData,
@@ -20,26 +21,18 @@ import EventDetailClient from "./event-detail-client"
 import EventHeroOptimistic from "./event-hero-optimistic"
 import EventSidebarOptimistic from "./event-sidebar-optimistic"
 
-/**
- * Time-based ISR backstop. Content normally invalidates immediately via the
- * Sanity webhook (`/api/webhooks/sanity`) calling `revalidateTag`; this is the
- * safety net for a missed webhook. Previously supplied by `defineLive({
- * fetchOptions: { revalidate: 1800 } })`, removed in next-sanity v13.
- */
-export const revalidate = 1800
-
 interface EventPageProps {
   params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
   const slugs = await sanityClient.fetch<Array<{ slug: string }>>(eventSlugsQuery)
-  return slugs.map(({ slug }) => ({ slug }))
+  return withPlaceholderSlug(slugs.map(({ slug }) => ({ slug })))
 }
 
 export async function generateMetadata({ params }: EventPageProps): Promise<Metadata> {
   const { slug } = await params
-  const { data: event } = (await sanityFetch({
+  const { data: event } = (await cachedSanityFetch({
     ...(await getDynamicFetchOptions()),
     query: eventBySlugQuery,
     params: { slug },
@@ -79,7 +72,7 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
 
 export default async function EventPage({ params }: EventPageProps) {
   const { slug } = await params
-  const { data: event } = (await sanityFetch({
+  const { data: event } = (await cachedSanityFetch({
     ...(await getDynamicFetchOptions()),
     query: eventBySlugQuery,
     params: { slug },

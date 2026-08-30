@@ -1,6 +1,6 @@
 import { paginatedMediaImagesQuery } from "@chimborazo/sanity-config/queries"
 import { NextResponse } from "next/server"
-import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import type { SanityMediaImage } from "@/lib/sanity-types"
 
 const MAX_PAGE_SIZE = 100
@@ -26,7 +26,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const { data: images } = (await sanityFetch({
+    const { data: images } = (await cachedSanityFetch({
       ...(await getDynamicFetchOptions()),
       query: paginatedMediaImagesQuery,
       params: { start, end },

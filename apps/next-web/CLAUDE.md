@@ -11,16 +11,31 @@
 
 ## Tech Stack
 
-- **Next.js** with App Router, SSR, and ISR
+- **Next.js** with App Router and Cache Components (`cacheComponents: true`)
 - **React 19**
 - **Tailwind CSS v4** via `@tailwindcss/postcss`
 - **Framer Motion** for animations
-- **TanStack Query** for client-side data fetching
-- **Sanity CMS** via `@chimborazo/sanity-config`
+- **Sanity CMS** via `@chimborazo/sanity-config` and `next-sanity`
 
 ## Routing
 
 App Router with file-based routing in `src/app/`.
+
+## Caching
+
+**Read [CACHING.md](./CACHING.md) before touching data fetching or adding a
+Sanity document type.** In short:
+
+- All Sanity access goes through `cachedSanityFetch` (`src/lib/sanity-fetch.ts`),
+  the app's single `use cache` boundary. Don't add your own `use cache` around it.
+- `defineLive` runs with `strict: true`, so `perspective` and `stega` are
+  required at every call site. Get them from `getDynamicFetchOptions()`, called
+  outside the cache boundary.
+- Cache lifetime is a year; freshness comes from `revalidateTag` in the Sanity
+  webhook. A new document type without a case in `getCacheTagsForDocumentType`
+  will never invalidate its pages — a test enforces this.
+- `export const revalidate` and `export const runtime` are incompatible with
+  `cacheComponents` and will fail the build.
 
 ## Environment Variables
 

@@ -7,7 +7,7 @@ This is the monorepo for the Chimborazo Park Conservancy website and Sanity CMS 
 ```
 chimborazo-park-conservancy/
 ├── apps/
-│   ├── web/           # Main website (TanStack Start + React)
+│   ├── next-web/      # Main website (Next.js App Router)
 │   └── studio/        # Sanity Studio CMS
 ├── packages/
 │   └── sanity-config/ # Shared Sanity schemas, queries, and types
@@ -19,8 +19,8 @@ chimborazo-park-conservancy/
 
 ### Prerequisites
 
-- **Node.js >= 22.0.0** (enforced via `.nvmrc` and `engines` field)
-- **pnpm >= 8.0.0** (package manager)
+- **Node.js >= 24.0.0** (enforced via `.nvmrc` and `engines` field)
+- **pnpm >= 11.0.0** (pinned via the `packageManager` field)
 - A Sanity account (sign up at [sanity.io](https://sanity.io))
 
 **Note:** If you use `nvm`, run `nvm use` in the project root to automatically switch to Node 22.
@@ -49,18 +49,18 @@ chimborazo-park-conservancy/
 
    This project uses [T3 Env](https://env.t3.gg/) for type-safe environment variable validation. Each workspace has its own `.env.example` file showing required variables.
 
-   **For the web app** (`apps/web/.env`):
+   **For the web app** (`apps/next-web/.env`):
    ```bash
    # Copy the example file
-   cp apps/web/.env.example apps/web/.env
+   cp apps/next-web/.env.example apps/next-web/.env
    ```
 
-   Then edit `apps/web/.env` with your values:
+   Then edit `apps/next-web/.env` with your values:
    ```bash
    # Required - Sanity CMS Configuration
-   VITE_SANITY_PROJECT_ID=your_project_id_here
-   VITE_SANITY_DATASET=production
-   VITE_SANITY_API_VERSION=2024-01-01
+   NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id_here
+   NEXT_PUBLIC_SANITY_DATASET=production
+   NEXT_PUBLIC_SANITY_API_VERSION=2024-01-01
 
    # Optional - Server-side only (not exposed to browser)
    SANITY_API_TOKEN=your_api_token_here
@@ -155,23 +155,22 @@ pnpm run format
 
 ## 📦 Packages
 
-### `@chimborazo/web`
+### `@chimborazo/next-web`
 The main website built with:
-- **TanStack Start** - Full-stack React framework with SSR
-- **TanStack Router** - File-based routing
-- **TanStack Query** - Data fetching and caching
+- **Next.js** - App Router with Cache Components
 - **Tailwind CSS v4** - Utility-first styling
-- **Sanity Client** - CMS integration
+- **next-sanity** - CMS integration, live content, and Visual Editing
 - **T3 Env** - Type-safe environment variable validation
 
 **Key files:**
-- `apps/web/src/lib/sanity.ts` - Sanity client configuration
-- `apps/web/src/env.ts` - Environment variable validation with T3 Env
-- `apps/web/netlify.toml` - Netlify deployment config
+- `apps/next-web/src/lib/sanity-fetch.ts` - The app-facing Sanity data entry point
+- `apps/next-web/src/env.ts` - Environment variable validation with T3 Env
+- `apps/next-web/netlify.toml` - Netlify deployment config
+- `apps/next-web/CACHING.md` - Caching and invalidation architecture
 
 **Environment variables:**
-- **Client-side** (VITE_ prefix): `VITE_SANITY_PROJECT_ID`, `VITE_SANITY_DATASET`, `VITE_SANITY_API_VERSION`
-- **Server-side only**: `SANITY_API_TOKEN`, `ANTHROPIC_API_KEY`, `NETLIFY_AUTH_TOKEN`, etc.
+- **Client-side** (NEXT_PUBLIC_ prefix): `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `NEXT_PUBLIC_SANITY_API_VERSION`
+- **Server-side only**: `SANITY_API_TOKEN`, `ANTHROPIC_API_KEY`, etc.
 
 ### `@chimborazo/studio`
 Sanity Studio for content management.
@@ -221,23 +220,22 @@ const imageUrl = urlForImage(event.heroImage)
 
 1. **Connect your repo to Netlify**
 2. **Configure build settings:**
-   - Build command: `pnpm run build --filter=@chimborazo/web`
-   - Publish directory: `apps/web/dist/client`
-   - Functions directory: `apps/web/.netlify/functions`
+   - Build command: `pnpm run build --filter=@chimborazo/next-web`
+   - Publish directory: `apps/next-web/.next`
+
+   These are already declared in `apps/next-web/netlify.toml`.
 
 3. **Add environment variables** in Netlify Dashboard:
 
    **Required:**
-   - `VITE_SANITY_PROJECT_ID` - Your Sanity project ID
-   - `VITE_SANITY_DATASET` - Dataset name (usually "production")
-   - `VITE_SANITY_API_VERSION` - API version (e.g., "2024-01-01")
+   - `NEXT_PUBLIC_SANITY_PROJECT_ID` - Your Sanity project ID
+   - `NEXT_PUBLIC_SANITY_DATASET` - Dataset name (usually "production")
+   - `NEXT_PUBLIC_SANITY_API_VERSION` - API version (e.g., "2024-01-01")
 
    **Optional (server-side only):**
    - `SANITY_API_TOKEN` - For mutations and preview mode
    - `ANTHROPIC_API_KEY` - For AI metadata generation
-   - `NETLIFY_AUTH_TOKEN` - For cache purging
-   - `NETLIFY_SITE_ID` - For cache purging
-   - `SANITY_WEBHOOK_SECRET` - For webhook validation
+   - `SANITY_WEBHOOK_SECRET` - For webhook validation (see apps/next-web/CACHING.md)
 
    > **Note:** All env vars are validated using T3 Env. Missing required vars will cause build failures with clear error messages.
 
@@ -324,38 +322,29 @@ pnpm --filter @chimborazo/sanity-config build
 ### Environment variable errors
 ```bash
 # T3 Env will show clear errors if variables are missing or invalid
-# Example: "VITE_SANITY_PROJECT_ID is required but was not set"
+# Example: "NEXT_PUBLIC_SANITY_PROJECT_ID is required but was not set"
 
 # Check your .env files match the .env.example templates
 # Validation schemas are in:
-# - apps/web/src/env.ts
+# - apps/next-web/src/env.ts
 # - apps/studio/src/env.ts
 # - packages/sanity-config/src/env-schema.ts
 ```
 
 ## 📚 Additional Resources
 
-- [TanStack Start Documentation](https://tanstack.com/start/latest)
+- [Next.js Documentation](https://nextjs.org/docs)
 - [Sanity Documentation](https://www.sanity.io/docs)
 - [Turborepo Documentation](https://turbo.build/repo/docs)
 - [Netlify Documentation](https://docs.netlify.com/)
 - [T3 Env Documentation](https://env.t3.gg/) - Type-safe environment variable validation
 
-## 🎯 Next Steps
+## 🎯 Where to look next
 
-The monorepo infrastructure is set up! Here's what remains:
-
-1. **Migrate existing content to Sanity**
-   - Events from `apps/web/src/data/events.ts`
-   - Media from Netlify Blobs
-
-2. **Update web app to fetch from Sanity**
-   - Replace static data with Sanity queries
-   - Update components to render Sanity data
-
-3. **Set up live preview** (Presentation tool)
-4. **Configure webhooks** for instant cache invalidation
-5. **Deploy both apps** to Netlify
+- **Caching and invalidation** — `apps/next-web/CACHING.md`. Read this before
+  adding a Sanity document type or changing how a page fetches data.
+- **Schema and query conventions** — `packages/sanity-config/CLAUDE.md`
+- **App conventions** — `apps/next-web/CLAUDE.md`
 
 ## 📝 License
 

@@ -4,19 +4,11 @@ import type { Metadata } from "next"
 import Container from "@/components/Container/container"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { PortableText } from "@/components/PortableText/portable-text"
-import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import type { SanityEvent, SanityEventsPage } from "@/lib/sanity-types"
 import { sortEventsByDate } from "@/lib/sort-helpers"
 import { generateItemListStructuredData, SITE_CONFIG } from "@/utils/seo"
 import EventsListClient from "./events-list-client"
-
-/**
- * Time-based ISR backstop. Content normally invalidates immediately via the
- * Sanity webhook (`/api/webhooks/sanity`) calling `revalidateTag`; this is the
- * safety net for a missed webhook. Previously supplied by `defineLive({
- * fetchOptions: { revalidate: 1800 } })`, removed in next-sanity v13.
- */
-export const revalidate = 1800
 
 export const metadata: Metadata = {
   title: "Events",
@@ -42,12 +34,12 @@ export const metadata: Metadata = {
 
 export default async function EventsPage() {
   const [{ data: events }, { data: pageData }] = (await Promise.all([
-    sanityFetch({
+    cachedSanityFetch({
       ...(await getDynamicFetchOptions()),
       query: allEventsQuery,
       tags: [CACHE_TAGS.EVENTS_LIST, CACHE_TAGS.EVENTS],
     }),
-    sanityFetch({
+    cachedSanityFetch({
       ...(await getDynamicFetchOptions()),
       query: getEventsPageQuery,
       tags: [CACHE_TAGS.EVENTS_LIST],

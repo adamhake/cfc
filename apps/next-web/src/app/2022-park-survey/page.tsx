@@ -5,7 +5,7 @@ import Container from "@/components/Container/container"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { PortableText } from "@/components/PortableText/portable-text"
 import { DonutChart, HorizontalBarChart, SplitBar, SurveySection } from "@/components/SurveyCharts"
-import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import type { SanitySurveyResultsPage } from "@/lib/sanity-types"
 import { generateBreadcrumbStructuredData, SITE_CONFIG } from "@/utils/seo"
 import {
@@ -20,14 +20,6 @@ import {
   Q9_WALKWAY,
   SURVEY_META,
 } from "./survey-data"
-
-/**
- * Time-based ISR backstop. Content normally invalidates immediately via the
- * Sanity webhook (`/api/webhooks/sanity`) calling `revalidateTag`; this is the
- * safety net for a missed webhook. Previously supplied by `defineLive({
- * fetchOptions: { revalidate: 1800 } })`, removed in next-sanity v13.
- */
-export const revalidate = 1800
 
 export const metadata: Metadata = {
   title: "2022 Community Survey Results",
@@ -112,7 +104,7 @@ const breadcrumbStructuredData = generateBreadcrumbStructuredData([
 ])
 
 export default async function SurveyResultsPage() {
-  const { data: pageData } = (await sanityFetch({
+  const { data: pageData } = (await cachedSanityFetch({
     ...(await getDynamicFetchOptions()),
     query: getSurveyResultsPageQuery,
     tags: [CACHE_TAGS.SURVEY_RESULTS],

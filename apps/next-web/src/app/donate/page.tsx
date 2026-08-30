@@ -3,18 +3,10 @@ import type { Metadata } from "next"
 import Container from "@/components/Container/container"
 import { FAQSection } from "@/components/FAQSection/faq-section"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
-import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import type { SanityDonatePage } from "@/lib/sanity-types"
 import { generateFAQStructuredData, SITE_CONFIG } from "@/utils/seo"
 import DonateFormClient from "./donate-form-client"
-
-/**
- * Time-based ISR backstop. Content normally invalidates immediately via the
- * Sanity webhook (`/api/webhooks/sanity`) calling `revalidateTag`; this is the
- * safety net for a missed webhook. Previously supplied by `defineLive({
- * fetchOptions: { revalidate: 1800 } })`, removed in next-sanity v13.
- */
-export const revalidate = 1800
 
 const DONATE_FAQS = [
   {
@@ -59,7 +51,7 @@ export const metadata: Metadata = {
 }
 
 export default async function DonatePage() {
-  const { data: donatePageData } = (await sanityFetch({
+  const { data: donatePageData } = (await cachedSanityFetch({
     ...(await getDynamicFetchOptions()),
     query: getDonatePageQuery,
     tags: [CACHE_TAGS.DONATE],

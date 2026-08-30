@@ -6,18 +6,10 @@ import {
 import type { Metadata } from "next"
 import Container from "@/components/Container/container"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
-import { CACHE_TAGS, getDynamicFetchOptions, sanityFetch } from "@/lib/sanity-fetch"
+import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import type { SanityMediaImage, SanityMediaPage } from "@/lib/sanity-types"
 import { SITE_CONFIG } from "@/utils/seo"
 import MediaGalleryClient from "./media-gallery-client"
-
-/**
- * Time-based ISR backstop. Content normally invalidates immediately via the
- * Sanity webhook (`/api/webhooks/sanity`) calling `revalidateTag`; this is the
- * safety net for a missed webhook. Previously supplied by `defineLive({
- * fetchOptions: { revalidate: 1800 } })`, removed in next-sanity v13.
- */
-export const revalidate = 1800
 
 export const metadata: Metadata = {
   title: "Media Gallery",
@@ -38,12 +30,12 @@ const PAGE_SIZE = 9
 export default async function MediaPage() {
   const [{ data: mediaPageData }, { data: initialImages }, { data: totalCount }] =
     (await Promise.all([
-      sanityFetch({
+      cachedSanityFetch({
         ...(await getDynamicFetchOptions()),
         query: getMediaPageQuery,
         tags: [CACHE_TAGS.MEDIA],
       }),
-      sanityFetch({
+      cachedSanityFetch({
         ...(await getDynamicFetchOptions()),
         query: paginatedMediaImagesQuery,
         params: { start: 0, end: PAGE_SIZE },
@@ -52,7 +44,7 @@ export default async function MediaPage() {
         // grid; keeps alt text free of invisible stega characters.
         stega: false,
       }),
-      sanityFetch({
+      cachedSanityFetch({
         ...(await getDynamicFetchOptions()),
         query: mediaImagesCountQuery,
         tags: [CACHE_TAGS.MEDIA],
