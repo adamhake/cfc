@@ -28,9 +28,11 @@ vi.mock("@/env", () => ({
     RESEND_SEGMENT_ID: "seg_123",
     TURNSTILE_SECRET_KEY: "turnstile_secret",
     TURNSTILE_EXPECTED_HOSTNAME: "example.com",
-    ADMIN_EMAIL: "admin@chimborazoparkconservancy.org",
-    NEWSLETTER_FROM_EMAIL: "newsletter@chimborazoparkconservancy.org",
-    VERIFIED_EMAIL_DOMAIN: "chimborazoparkconservancy.org",
+    // Mirrors production: the admin inbox is on the apex domain while sending is
+    // verified on the `updates.` subdomain. Only the From address is constrained.
+    ADMIN_EMAIL: "info@chimborazoparkconservancy.org",
+    NEWSLETTER_FROM_EMAIL: "noreply@updates.chimborazoparkconservancy.org",
+    VERIFIED_EMAIL_DOMAIN: "@updates.chimborazoparkconservancy.org",
   },
 }))
 
@@ -197,7 +199,7 @@ describe("subscribeToNewsletter", () => {
       })
     })
 
-    it("sends admin notification email", async () => {
+    it("sends admin notification email even though the admin inbox is off the sending domain", async () => {
       await subscribeToNewsletter({
         email: "test@example.com",
         source: "footer",
@@ -206,7 +208,8 @@ describe("subscribeToNewsletter", () => {
 
       expect(mockEmails.send).toHaveBeenCalledWith(
         expect.objectContaining({
-          to: "admin@chimborazoparkconservancy.org",
+          from: "Chimborazo Park Conservancy <noreply@updates.chimborazoparkconservancy.org>",
+          to: "info@chimborazoparkconservancy.org",
           subject: expect.stringContaining("New Newsletter Signup"),
         }),
       )
@@ -214,10 +217,10 @@ describe("subscribeToNewsletter", () => {
   })
 
   describe("error handling", () => {
-    it("returns contact_error when Resend fails", async () => {
+    it("returns contact_error when Resend rejects the address itself", async () => {
       mockContacts.create.mockResolvedValue({
         data: null,
-        error: { message: "Invalid email" },
+        error: { name: "validation_error", statusCode: 422, message: "Invalid email" },
       })
 
       const result = await subscribeToNewsletter({
@@ -229,7 +232,85 @@ describe("subscribeToNewsletter", () => {
       expect(result.success).toBe(false)
       if (!result.success) {
         expect(result.error).toBe("contact_error")
+        expect(result.message).toContain("check your email address")
       }
+    })
+
+    // Regression: a sending-only API key produced the "check your email address"
+    // message, sending subscribers after a fault only we could fix.
+    it.each(["restricted_api_key", "invalid_api_key", "missing_api_key", "monthly_quota_exceeded"])(
+      "returns server_error, not contact_error, for %s",
+      async (name) => {
+        mockContacts.create.mockResolvedValue({
+          data: null,
+          error: {
+            name,
+            statusCode: 401,
+            message: "This API key is restricted to only send emails",
+          },
+        })
+
+        const result = await subscribeToNewsletter({
+          email: "test@example.com",
+          source: "footer",
+          turnstileToken: "token",
+        })
+
+        expect(result.success).toBe(false)
+        if (!result.success) {
+          expect(result.error).toBe("server_error")
+          expect(result.message).toContain("on our end")
+          expect(result.message).not.toContain("check your email address")
+        }
+      },
+    )
+
+    it("returns resend_rate_limited when Resend throttles us", async () => {
+      mockContacts.create.mockResolvedValue({
+        data: null,
+        error: { name: "rate_limit_exceeded", statusCode: 429, message: "Too many requests" },
+      })
+
+      const result = await subscribeToNewsletter({
+        email: "test@example.com",
+        source: "footer",
+        turnstileToken: "token",
+      })
+
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error).toBe("resend_rate_limited")
+      }
+    })
+
+    it("still succeeds when the segment add returns an error response", async () => {
+      mockContacts.segments.add.mockResolvedValue({
+        data: null,
+        error: { name: "not_found", statusCode: 404, message: "Segment not found" },
+      })
+
+      const result = await subscribeToNewsletter({
+        email: "test@example.com",
+        source: "footer",
+        turnstileToken: "token",
+      })
+
+      expect(result.success).toBe(true)
+    })
+
+    it("still succeeds when the admin email returns an error response", async () => {
+      mockEmails.send.mockResolvedValue({
+        data: null,
+        error: { name: "invalid_from_address", statusCode: 403, message: "Domain not verified" },
+      })
+
+      const result = await subscribeToNewsletter({
+        email: "test@example.com",
+        source: "footer",
+        turnstileToken: "token",
+      })
+
+      expect(result.success).toBe(true)
     })
 
     it("still succeeds when segment add fails", async () => {

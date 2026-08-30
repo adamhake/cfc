@@ -6,6 +6,29 @@ import { env } from "@/env"
 import { verifyTurnstileToken } from "@/lib/turnstile"
 import { type SubscribeResponse, subscribeRequestSchema } from "@/types/newsletter"
 
+const CONTACT_EMAIL = "info@chimborazoparkconservancy.org"
+
+/**
+ * Resend error codes that mean *we* are misconfigured, not that the subscriber
+ * typed a bad address. Telling someone to "check your email address" when the
+ * API key lacks contact permissions sends them chasing a problem they can't fix.
+ *
+ * @see https://resend.com/docs/api-reference/errors
+ */
+const RESEND_CONFIG_ERROR_NAMES: ReadonlySet<string> = new Set([
+  "missing_api_key",
+  "restricted_api_key",
+  "invalid_api_key",
+  "invalid_access",
+  "not_found",
+  "method_not_allowed",
+  "monthly_quota_exceeded",
+  "daily_quota_exceeded",
+  "security_error",
+  "application_error",
+  "internal_server_error",
+])
+
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
 const RATE_LIMIT_WINDOW_MS = 60 * 1000
 const RATE_LIMIT_MAX_REQUESTS = 5
@@ -135,22 +158,61 @@ export async function subscribeToNewsletter(formData: {
   })
 
   if (contactError) {
-    console.error("[Newsletter] Failed to create contact:", contactError)
+    const failure = {
+      name: contactError.name,
+      statusCode: contactError.statusCode,
+      message: contactError.message,
+    }
+
+    if (contactError.name === "rate_limit_exceeded") {
+      console.warn("[Newsletter] Resend rate limit hit:", failure)
+      return {
+        success: false,
+        error: "resend_rate_limited",
+        message: "We're a little busy right now. Please try again in a moment.",
+      }
+    }
+
+    if (RESEND_CONFIG_ERROR_NAMES.has(contactError.name)) {
+      console.error(
+        "[Newsletter] Resend rejected contact creation for a configuration reason — " +
+          "check RESEND_API_KEY permissions (it needs full access, not sending-only) " +
+          "and the account's quota status:",
+        failure,
+      )
+      return {
+        success: false,
+        error: "server_error",
+        message: `Something went wrong on our end and we couldn't save your subscription. Please try again later, or email us at ${CONTACT_EMAIL} and we'll add you manually.`,
+      }
+    }
+
+    console.warn("[Newsletter] Resend rejected contact creation:", failure)
     return {
       success: false,
       error: "contact_error",
-      message:
-        "We couldn't complete your subscription. Please check your email address and try again. If the problem persists, contact us at info@chimborazoparkconservancy.org",
+      message: `We couldn't complete your subscription. Please check your email address and try again. If the problem persists, contact us at ${CONTACT_EMAIL}`,
     }
   }
 
-  if (segmentId && contact?.id) {
+  if (!segmentId) {
+    console.warn(
+      "[Newsletter] RESEND_SEGMENT_ID not configured — contact created but not added to any segment",
+    )
+  } else if (contact?.id) {
     try {
-      await resend.contacts.segments.add({
+      // The SDK reports API failures on the returned `error`, not by throwing,
+      // so both paths have to be checked or a failed add looks like a success.
+      const { error: segmentError } = await resend.contacts.segments.add({
         contactId: contact.id,
         segmentId,
       })
-      console.log("[Newsletter] Contact added to segment:", segmentId)
+
+      if (segmentError) {
+        console.warn("[Newsletter] Failed to add contact to segment:", segmentError)
+      } else {
+        console.log("[Newsletter] Contact added to segment:", segmentId)
+      }
     } catch (segmentError) {
       console.warn("[Newsletter] Failed to add contact to segment:", segmentError)
     }
@@ -168,13 +230,16 @@ export async function subscribeToNewsletter(formData: {
   const verifiedDomain = env.VERIFIED_EMAIL_DOMAIN
 
   if (adminEmail) {
-    if (!adminEmail.endsWith(verifiedDomain)) {
+    // Resend constrains the *From* address to a verified domain; the recipient can
+    // be any address. Checking `adminEmail` here instead of `fromEmail` skipped
+    // every notification whenever the admin inbox lived off the sending domain.
+    if (!fromEmail.endsWith(verifiedDomain)) {
       console.warn(
-        `[Newsletter] ADMIN_EMAIL not from verified domain (${verifiedDomain}), skipping notification`,
+        `[Newsletter] NEWSLETTER_FROM_EMAIL (${fromEmail}) is not on the verified sending domain (${verifiedDomain}), skipping notification`,
       )
     } else {
       try {
-        await resend.emails.send({
+        const { error: emailError } = await resend.emails.send({
           from: `Chimborazo Park Conservancy <${fromEmail}>`,
           to: adminEmail,
           subject: "New Newsletter Signup - Chimborazo Park Conservancy",
@@ -187,7 +252,12 @@ View all contacts in Resend dashboard:
 https://resend.com/contacts
           `.trim(),
         })
-        console.log("[Newsletter] Admin notification email sent")
+
+        if (emailError) {
+          console.error("[Newsletter] Failed to send admin notification:", emailError)
+        } else {
+          console.log("[Newsletter] Admin notification email sent")
+        }
       } catch (emailError) {
         console.error("[Newsletter] Failed to send admin notification:", emailError)
       }
