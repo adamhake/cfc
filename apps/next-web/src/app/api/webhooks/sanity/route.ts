@@ -40,7 +40,10 @@ export async function POST(request: Request) {
       )
     }
 
-    const isValid = isValidSignature(body, signature, secret)
+    // `isValidSignature` is async. Without the await this is a Promise, which
+    // is always truthy, so `!isValid` was always false and the check below
+    // could never reject anything.
+    const isValid = await isValidSignature(body, signature, secret)
     if (!isValid) {
       console.warn("[Sanity Webhook] Invalid signature - rejecting request")
       return Response.json(
