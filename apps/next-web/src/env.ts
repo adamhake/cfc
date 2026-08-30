@@ -12,8 +12,14 @@ export const env = createEnv({
     TURNSTILE_SECRET_KEY: z.string().optional(),
     TURNSTILE_EXPECTED_HOSTNAME: z.string().optional(),
     ADMIN_EMAIL: z.string().email().optional().default("info@chimborazoparkconservancy.org"),
-    NEWSLETTER_FROM_EMAIL: z.string().email().optional().default("noreply@chimborazopark.org"),
-    VERIFIED_EMAIL_DOMAIN: z.string().optional().default("@chimborazopark.org"),
+    // Must be on VERIFIED_EMAIL_DOMAIN — Resend only accepts a From address on a
+    // domain verified in the account.
+    NEWSLETTER_FROM_EMAIL: z
+      .string()
+      .email()
+      .optional()
+      .default("noreply@updates.chimborazoparkconservancy.org"),
+    VERIFIED_EMAIL_DOMAIN: z.string().optional().default("@updates.chimborazoparkconservancy.org"),
   },
   client: {
     NEXT_PUBLIC_SANITY_PROJECT_ID: z.string().min(1),

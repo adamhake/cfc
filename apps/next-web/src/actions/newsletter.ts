@@ -9,6 +9,29 @@ import { withSpan } from "@/integrations/posthog/tracing"
 import { verifyTurnstileToken } from "@/lib/turnstile"
 import { type SubscribeResponse, subscribeRequestSchema } from "@/types/newsletter"
 
+const CONTACT_EMAIL = "info@chimborazoparkconservancy.org"
+
+/**
+ * Resend error codes that mean *we* are misconfigured, not that the subscriber
+ * typed a bad address. Telling someone to "check your email address" when the
+ * API key lacks contact permissions sends them chasing a problem they can't fix.
+ *
+ * @see https://resend.com/docs/api-reference/errors
+ */
+const RESEND_CONFIG_ERROR_NAMES: ReadonlySet<string> = new Set([
+  "missing_api_key",
+  "restricted_api_key",
+  "invalid_api_key",
+  "invalid_access",
+  "not_found",
+  "method_not_allowed",
+  "monthly_quota_exceeded",
+  "daily_quota_exceeded",
+  "security_error",
+  "application_error",
+  "internal_server_error",
+])
+
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
 const RATE_LIMIT_WINDOW_MS = 60 * 1000
 const RATE_LIMIT_MAX_REQUESTS = 5
@@ -164,12 +187,15 @@ export async function subscribeToNewsletter(formData: {
     return {
       success: false,
       error: "contact_error",
-      message:
-        "We couldn't complete your subscription. Please check your email address and try again. If the problem persists, contact us at info@chimborazoparkconservancy.org",
+      message: `We couldn't complete your subscription. Please check your email address and try again. If the problem persists, contact us at ${CONTACT_EMAIL}`,
     }
   }
 
-  if (segmentId && contact?.id) {
+  if (!segmentId) {
+    console.warn(
+      "[Newsletter] RESEND_SEGMENT_ID not configured — contact created but not added to any segment",
+    )
+  } else if (contact?.id) {
     try {
       await withSpan("resend.contacts.segments.add", { "peer.service": "resend" }, () =>
         resend.contacts.segments.add({ contactId: contact.id, segmentId }),
