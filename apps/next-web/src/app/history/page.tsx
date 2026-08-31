@@ -30,7 +30,7 @@ export default async function HistoryPage() {
   })) as { data: SanityHistoryPage | null }
 
   return (
-    <div>
+    <div className="space-y-14 pb-16 md:space-y-20 md:pb-24">
       <PageHeroOptimistic
         document={pageData}
         fallback={{
@@ -41,9 +41,12 @@ export default async function HistoryPage() {
         variant="section"
       />
 
-      <Container spacing="xl" className="py-12 pb-16 md:py-20 md:pb-24">
+      <Container spacing="none">
         <article className="mx-auto max-w-3xl">
-          <PortableText value={(pageData?.content || []) as PortableTextBlock[]} />
+          <PortableText
+            value={(pageData?.content || []) as PortableTextBlock[]}
+            className="[&>p]:mb-6 [&>p]:text-base [&>p:first-child]:text-xl [&>p:first-child]:leading-snug [&>p:first-child]:font-medium [&>h2]:mt-12 [&>h2]:mb-5 [&>h2]:text-balance [&>h2]:leading-tight [&>figure]:mx-auto [&>figure]:my-10 [&>figure]:table [&>figure]:max-w-full [&>blockquote]:my-10 [&>blockquote]:rounded-r-2xl [&>blockquote]:border-accent-600 [&>blockquote]:bg-neutral-100 [&_a]:text-accent-700 [&_a]:decoration-accent-300 [&_figure_img]:rounded-2xl [&_figure_img]:border [&_figure_img]:border-neutral-200 [&_figure_img]:shadow-none [&_figure_figcaption]:table-caption [&_figure_figcaption]:caption-bottom [&_figure_figcaption]:mt-3 [&_figure_figcaption]:text-left [&_figure_figcaption]:leading-relaxed [&_strong]:font-semibold md:[&>p]:text-lg md:[&>p:first-child]:text-2xl md:[&>h2]:mt-16 lg:[&>figure]:relative lg:[&>figure]:left-1/2 lg:[&>figure]:mx-0 lg:[&>figure]:max-w-[calc(100%+8rem)] lg:[&>figure]:-translate-x-1/2 dark:[&>blockquote]:border-accent-500 dark:[&>blockquote]:bg-primary-950 dark:[&_a]:text-accent-400 dark:[&_a]:decoration-accent-600 dark:[&_figure_img]:border-primary-700"
+          />
         </article>
       </Container>
     </div>

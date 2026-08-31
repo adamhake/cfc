@@ -1,5 +1,4 @@
 import { ExternalLink } from "lucide-react"
-import { cloneElement, isValidElement } from "react"
 import { Button } from "@/components/Button/button"
 import SanityImageCarousel, {
   type SanityImageObject,
@@ -7,7 +6,6 @@ import SanityImageCarousel, {
 
 interface AmenitySectionProps {
   title: string
-  icon: React.ReactElement
   description: string
   details?: string[]
   link?: {
@@ -27,7 +25,6 @@ interface AmenitySectionProps {
 
 export default function AmenitySection({
   title,
-  icon,
   description,
   details,
   link,
@@ -35,13 +32,6 @@ export default function AmenitySection({
   imagePosition = "left",
   priority = false,
 }: AmenitySectionProps) {
-  // Apply consistent icon styling
-  const styledIcon = isValidElement(icon)
-    ? cloneElement(icon, {
-        className: "h-7 w-7 stroke-accent-600 dark:stroke-accent-400",
-      } as React.HTMLAttributes<HTMLElement>)
-    : icon
-
   const imageContent = (
     <div
       className={`order-1 w-full lg:w-3/5 ${imagePosition === "right" ? "lg:order-2" : "lg:order-1"}`}
@@ -66,19 +56,9 @@ export default function AmenitySection({
       className={`order-2 flex w-full flex-col justify-center lg:w-2/5 ${imagePosition === "right" ? "lg:order-1" : "lg:order-2"}`}
     >
       <div className="space-y-4">
-        {/* Icon and Title */}
-        <div className="flex items-center gap-3">
-          <div
-            className="inline-flex shrink-0 rounded-full bg-accent-600/10 p-3 dark:bg-accent-500/15"
-            role="img"
-            aria-label={`${title} icon`}
-          >
-            {styledIcon}
-          </div>
-          <h3 className="font-display text-2xl text-grey-900 md:text-3xl dark:text-grey-100">
-            {title}
-          </h3>
-        </div>
+        <h3 className="font-display text-2xl text-grey-900 md:text-3xl dark:text-grey-100">
+          {title}
+        </h3>
 
         {/* Description */}
         <p className="font-body text-base leading-relaxed text-grey-700 md:text-lg dark:text-grey-300">

@@ -1,21 +1,5 @@
 import { getAmenitiesPageQuery } from "@chimborazo/sanity-config/queries"
-import {
-  Building2,
-  Car,
-  Clock,
-  Dog,
-  Droplet,
-  Flag,
-  Flower2,
-  Heart,
-  MapPin,
-  ShoppingBasket,
-  Sofa,
-  Toilet,
-  TreeDeciduous,
-  TreePine,
-  Trees,
-} from "lucide-react"
+import { Clock, MapPin } from "lucide-react"
 import type { Metadata } from "next"
 import AmenitySection from "@/components/AmenitySection/amenity-section"
 import Container from "@/components/Container/container"
@@ -23,31 +7,11 @@ import GetInvolved from "@/components/GetInvolved/get-involved"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import SectionHeader from "@/components/SectionHeader/section-header"
 import SupportOption from "@/components/SupportOption/support-option"
+import { extractGetInvolvedGalleryImages } from "@/lib/gallery-extractors"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import type { SanityAmenitiesPage } from "@/lib/sanity-types"
+import { getSiteSettings } from "@/lib/site-settings"
 import { SITE_CONFIG } from "@/utils/seo"
-
-// Icon mapping based on schema icon values
-const iconMap = {
-  building: Building2,
-  gazebo: ShoppingBasket,
-  monument: Flag,
-  restroom: Toilet,
-  dog: Dog,
-  trail: TreePine,
-  trees: Trees,
-  bench: Sofa,
-  parking: Car,
-  playground: TreeDeciduous,
-  fountain: Droplet,
-  garden: Flower2,
-} as const
-
-// Helper to get icon component from string
-const getIconComponent = (iconName: string) => {
-  const IconComponent = iconMap[iconName as keyof typeof iconMap]
-  return IconComponent ? <IconComponent /> : <Building2 />
-}
 
 export const metadata: Metadata = {
   title: "Park Amenities",
@@ -64,11 +28,16 @@ export const metadata: Metadata = {
 }
 
 export default async function AmenitiesPage() {
-  const { data: amenitiesPageData } = (await cachedSanityFetch({
-    ...(await getDynamicFetchOptions()),
-    query: getAmenitiesPageQuery,
-    tags: [CACHE_TAGS.AMENITIES],
-  })) as { data: SanityAmenitiesPage | null }
+  const [{ data: amenitiesPageData }, siteSettings] = await Promise.all([
+    cachedSanityFetch({
+      ...(await getDynamicFetchOptions()),
+      query: getAmenitiesPageQuery,
+      tags: [CACHE_TAGS.AMENITIES],
+    }) as Promise<{ data: SanityAmenitiesPage | null }>,
+    getSiteSettings(),
+  ])
+
+  const getInvolvedGalleryImages = extractGetInvolvedGalleryImages(siteSettings)
 
   // Filter amenities by section
   const upperParkAmenities =
@@ -171,7 +140,6 @@ export default async function AmenitiesPage() {
               <AmenitySection
                 key={amenity.slug?.current ?? index}
                 title={amenity.title ?? ""}
-                icon={getIconComponent(amenity.icon ?? "")}
                 description={amenity.description ?? ""}
                 details={amenity.details ?? undefined}
                 link={
@@ -205,7 +173,6 @@ export default async function AmenitiesPage() {
               <AmenitySection
                 key={amenity.slug?.current ?? index}
                 title={amenity.title ?? ""}
-                icon={getIconComponent(amenity.icon ?? "")}
                 description={amenity.description ?? ""}
                 details={amenity.details ?? undefined}
                 link={
@@ -237,7 +204,6 @@ export default async function AmenitiesPage() {
             <SupportOption
               title="Volunteer with Us"
               description="Join Friends of Chimborazo Park and the Chimborazo Park Conservancy for clean-up days, plantings, and restoration projects. Every helping hand makes a difference."
-              icon={<Heart className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />}
               ctaText="Volunteer With Us"
               ctaLink="/get-involved"
               variant="wall"
@@ -246,7 +212,6 @@ export default async function AmenitiesPage() {
             <SupportOption
               title="Adopt a Bench"
               description="Honor a loved one or celebrate a special occasion with a personalized dedication plaque on one of our park benches."
-              icon={<Building2 className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />}
               comingSoon
               variant="wall"
             />
@@ -254,7 +219,6 @@ export default async function AmenitiesPage() {
             <SupportOption
               title="Adopt a Tree"
               description="Support the park's urban canopy with a tree dedication. Each adopted tree receives a sign with the species name and your dedication."
-              icon={<Trees className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />}
               comingSoon
               variant="wall"
             />
@@ -262,7 +226,6 @@ export default async function AmenitiesPage() {
             <SupportOption
               title="Plant Spring Color"
               description="Donate tulips and daffodils to naturalize the hillsides along the bluff and brighten our flower beds each spring. We'll handle the planting."
-              icon={<TreePine className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />}
               comingSoon
               variant="wall"
             />
@@ -273,6 +236,9 @@ export default async function AmenitiesPage() {
         <GetInvolved
           title="Ready to Get Involved?"
           description="Contact us to learn more about volunteer opportunities, dedications, and donation options. Together, we can ensure Chimborazo Park remains a vibrant community treasure."
+          galleryImages={getInvolvedGalleryImages}
+          facebookUrl={siteSettings?.socialMedia?.facebook}
+          instagramUrl={siteSettings?.socialMedia?.instagram}
           gutter="none"
         />
       </Container>

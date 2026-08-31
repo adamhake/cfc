@@ -4,7 +4,7 @@ import { Button } from "../Button/button"
 interface SupportOptionProps {
   title: string
   description: string
-  icon: React.ReactNode
+  icon?: React.ReactNode
   comingSoon?: boolean
   ctaText?: string
   ctaLink?: string
@@ -35,14 +35,15 @@ export default function SupportOption({
           <Chip variant="comingSoon" />
         </div>
       )}
-      {/* Icon with circular background */}
-      <div
-        className="relative mb-4 inline-flex self-start rounded-full bg-accent-600/10 p-3 dark:bg-accent-500/10"
-        role="img"
-        aria-label={`${title} icon`}
-      >
-        {icon}
-      </div>
+      {icon && (
+        <div
+          className="relative mb-4 inline-flex self-start rounded-full bg-accent-600/10 p-3 dark:bg-accent-500/10"
+          role="img"
+          aria-label={`${title} icon`}
+        >
+          {icon}
+        </div>
+      )}
       <div className="relative">
         <h3 className="mb-2 font-display text-xl text-grey-900 dark:text-grey-100">{title}</h3>
         <p className="font-body leading-relaxed text-grey-700 dark:text-grey-300">{description}</p>
