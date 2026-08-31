@@ -15,21 +15,21 @@ allowBuilds:
   sharp: true
 
 catalog:
-  '@biomejs/biome': ^2.5.10
-  '@sanity/client': ^8.3.0
+  '@biomejs/biome': ^2.5.11
+  '@sanity/client': ^8.4.0
   '@sanity/icons': ^5.2.1
   '@sanity/image-url': ^2.1.1
   '@sanity/types': ^6.11.0
   '@t3-oss/env-core': ^0.13.11
   '@total-typescript/ts-reset': ^0.6.1
-  '@types/node': ^24.0.0
+  '@types/node': ^24.13.3
   '@types/react': ^19.2.18
   '@types/react-dom': ^19.2.5
   react: ^19.2.8
   react-dom: ^19.2.8
   sanity: ^6.11.0
   typescript: ^7.0.2
-  zod: ^4.4.3
+  zod: ^4.5.4
 
 # `sanity` depends on @sanity/client ^8.2.0 and @sanity/ui ^4.0.x, which resolve
 # a patch behind our own direct deps and produce two copies in the graph — the
