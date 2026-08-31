@@ -79,7 +79,7 @@ describe("Sanity Webhook Route", () => {
     })
 
     it("returns 401 when signature is invalid", async () => {
-      vi.mocked(isValidSignature).mockReturnValue(false)
+      vi.mocked(isValidSignature).mockResolvedValue(false)
       const request = makeRequest({ _id: "test", _type: "event" }, "invalid-sig")
 
       const response = await POST(request)
@@ -90,7 +90,7 @@ describe("Sanity Webhook Route", () => {
     })
 
     it("revalidates correct tags for event document", async () => {
-      vi.mocked(isValidSignature).mockReturnValue(true)
+      vi.mocked(isValidSignature).mockResolvedValue(true)
       const request = makeRequest({ _id: "event-1", _type: "event" }, "valid-sig")
 
       const response = await POST(request)
@@ -106,7 +106,7 @@ describe("Sanity Webhook Route", () => {
     })
 
     it("revalidates correct tags for project document", async () => {
-      vi.mocked(isValidSignature).mockReturnValue(true)
+      vi.mocked(isValidSignature).mockResolvedValue(true)
       const request = makeRequest({ _id: "proj-1", _type: "project" }, "valid-sig")
 
       const response = await POST(request)
@@ -119,7 +119,7 @@ describe("Sanity Webhook Route", () => {
     })
 
     it("revalidates correct tags for update document", async () => {
-      vi.mocked(isValidSignature).mockReturnValue(true)
+      vi.mocked(isValidSignature).mockResolvedValue(true)
       const request = makeRequest({ _id: "update-1", _type: "update" }, "valid-sig")
 
       const response = await POST(request)
@@ -131,7 +131,7 @@ describe("Sanity Webhook Route", () => {
     })
 
     it("revalidates correct tags for mediaImage document", async () => {
-      vi.mocked(isValidSignature).mockReturnValue(true)
+      vi.mocked(isValidSignature).mockResolvedValue(true)
       const request = makeRequest({ _id: "img-1", _type: "mediaImage" }, "valid-sig")
 
       const response = await POST(request)
@@ -142,7 +142,7 @@ describe("Sanity Webhook Route", () => {
     })
 
     it("revalidates all tags for siteSettings document", async () => {
-      vi.mocked(isValidSignature).mockReturnValue(true)
+      vi.mocked(isValidSignature).mockResolvedValue(true)
       const request = makeRequest({ _id: "settings", _type: "siteSettings" }, "valid-sig")
 
       const response = await POST(request)
@@ -168,7 +168,7 @@ describe("Sanity Webhook Route", () => {
       ["surveyResultsPage", [CACHE_TAGS.SURVEY_RESULTS]],
       ["updateCategory", [CACHE_TAGS.UPDATES, CACHE_TAGS.UPDATES_LIST, CACHE_TAGS.UPDATE_DETAIL]],
     ])("revalidates correct tags for %s", async (docType, expectedTags) => {
-      vi.mocked(isValidSignature).mockReturnValue(true)
+      vi.mocked(isValidSignature).mockResolvedValue(true)
       const request = makeRequest({ _id: "doc-1", _type: docType }, "valid-sig")
 
       const response = await POST(request)
@@ -182,7 +182,7 @@ describe("Sanity Webhook Route", () => {
     it.each(["partner", "quote", "gallery"])(
       "revalidates homepage for %s document",
       async (docType) => {
-        vi.mocked(isValidSignature).mockReturnValue(true)
+        vi.mocked(isValidSignature).mockResolvedValue(true)
         const request = makeRequest({ _id: "doc-1", _type: docType }, "valid-sig")
 
         const response = await POST(request)
@@ -193,7 +193,7 @@ describe("Sanity Webhook Route", () => {
     )
 
     it("revalidates homepage for unknown document type", async () => {
-      vi.mocked(isValidSignature).mockReturnValue(true)
+      vi.mocked(isValidSignature).mockResolvedValue(true)
       const request = makeRequest({ _id: "doc-1", _type: "unknownType" }, "valid-sig")
 
       const response = await POST(request)
@@ -218,7 +218,7 @@ describe("Sanity Webhook Route", () => {
 
       it.each(documentTypes)("handles %s explicitly", async (docType) => {
         const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
-        vi.mocked(isValidSignature).mockReturnValue(true)
+        vi.mocked(isValidSignature).mockResolvedValue(true)
 
         const response = await POST(makeRequest({ _id: "doc-1", _type: docType }, "valid-sig"))
         const json = await response.json()
@@ -234,7 +234,7 @@ describe("Sanity Webhook Route", () => {
 
     it("returns 500 for malformed JSON body", async () => {
       vi.stubEnv("SANITY_WEBHOOK_SECRET", "test-secret")
-      vi.mocked(isValidSignature).mockReturnValue(true)
+      vi.mocked(isValidSignature).mockResolvedValue(true)
 
       const headers = new Headers({ "Content-Type": "application/json" })
       headers.set("x-sanity-signature", "valid-sig")
@@ -250,7 +250,7 @@ describe("Sanity Webhook Route", () => {
     })
 
     it("includes duration in successful response", async () => {
-      vi.mocked(isValidSignature).mockReturnValue(true)
+      vi.mocked(isValidSignature).mockResolvedValue(true)
       const request = makeRequest({ _id: "doc-1", _type: "event" }, "valid-sig")
 
       const response = await POST(request)
