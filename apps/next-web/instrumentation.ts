@@ -11,7 +11,12 @@ export async function register() {
   if (process.env.NEXT_RUNTIME !== "nodejs") return
 
   const { registerOtel } = await import("@/integrations/posthog/otel")
-  registerOtel()
+
+  // Awaited, not fire-and-forget. Next serves requests as soon as register()
+  // resolves; returning before the tracer provider is registered would hand
+  // out no-op tracers for the whole cold-start window, and on a low-traffic
+  // site a large share of requests are the first on their container.
+  await registerOtel()
 }
 
 export async function onRequestError(
@@ -23,7 +28,10 @@ export async function onRequestError(
 
   const { captureRequestError } = await import("@/integrations/posthog/server")
 
-  await captureRequestError(error, request, {
+  // Not awaited: captureRequestError registers its own completion with
+  // `after()`. React discards this function's return value on the render path
+  // anyway, so awaiting here would buy nothing and only delay the response.
+  captureRequestError(error, request, {
     routerKind: context.routerKind,
     routePath: context.routePath,
     routeType: context.routeType,

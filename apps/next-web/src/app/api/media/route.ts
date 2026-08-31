@@ -49,7 +49,7 @@ export async function GET(request: Request) {
     return NextResponse.json(images)
   } catch (error) {
     logError("[API/media] Failed to fetch images", { ...errorAttributes(error), start, end })
-    await captureRequestError(error, {
+    captureRequestError(error, {
       method: "GET",
       path: "/api/media",
       headers: request.headers,

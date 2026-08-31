@@ -91,7 +91,7 @@ export async function POST(request: Request) {
       ...errorAttributes(error),
       totalDurationMs: totalDuration,
     })
-    await captureRequestError(error, {
+    captureRequestError(error, {
       method: "POST",
       path: "/api/webhooks/sanity",
       headers: request.headers,

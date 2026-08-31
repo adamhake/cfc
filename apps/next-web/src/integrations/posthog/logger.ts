@@ -1,7 +1,6 @@
 import { trace } from "@opentelemetry/api"
-import { SeverityNumber } from "@opentelemetry/api-logs"
+import { logs, SeverityNumber } from "@opentelemetry/api-logs"
 import { SERVICE_NAME } from "./config"
-import { getLoggerProvider } from "./otel"
 
 /**
  * Structured server-side logging that lands in PostHog Logs.
@@ -19,8 +18,18 @@ import { getLoggerProvider } from "./otel"
 // is more noise than it's worth. Nullish values are dropped before export.
 type LogAttributes = Record<string, string | number | boolean | null | undefined>
 
-/** Lazy logger accessor — avoids eager OTel SDK init at module import. */
-const getLogger = () => getLoggerProvider().getLogger(SERVICE_NAME)
+/**
+ * Resolved from the OpenTelemetry global registry on every call, never cached
+ * in module scope. `instrumentation.ts` is a separate bundle entry, so a
+ * provider held in a module variable there is a different object from the one
+ * a route handler would see — see the note at the top of `otel.ts`. The global
+ * registry lives on `globalThis` and is shared.
+ *
+ * Before `register()` runs (and under Vitest, where it never does) this returns
+ * a no-op logger, so the console mirror below is the only output. That is the
+ * intended degradation, not a failure.
+ */
+const getLogger = () => logs.getLogger(SERVICE_NAME)
 
 function emit(
   severityNumber: SeverityNumber,

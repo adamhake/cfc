@@ -150,7 +150,7 @@ export async function POST(request: Request) {
     return Response.json(metadata)
   } catch (error) {
     logError("[AI Metadata] Failed to parse metadata", errorAttributes(error))
-    await captureRequestError(error, {
+    captureRequestError(error, {
       method: "POST",
       path: "/api/generate-metadata",
       headers: request.headers,
