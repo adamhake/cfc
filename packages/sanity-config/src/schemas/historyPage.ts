@@ -1,47 +1,19 @@
-import { defineField, defineType } from "sanity"
-import { createInlineFile, createInlineImage, createRichTextBlocks } from "./shared"
+import { ClockIcon } from "@sanity/icons/Clock"
+import { defineType } from "sanity"
+import { createBodyField, createPageHeroField } from "./shared"
 
 export default defineType({
   name: "historyPage",
   title: "History Page",
   type: "document",
+  icon: ClockIcon,
   fields: [
-    defineField({
-      name: "pageHero",
-      title: "Page Hero",
-      type: "object",
-      fields: [
-        defineField({
-          name: "title",
-          title: "Title",
-          type: "string",
-          validation: (rule) => rule.required(),
-        }),
-        defineField({
-          name: "description",
-          title: "Description",
-          type: "text",
-          validation: (rule) => rule.max(500),
-        }),
-        defineField({
-          name: "imageV2",
-          title: "Hero Image (Direct Upload)",
-          type: "contentImage",
-          description: "Upload/select an image.",
-        }),
-      ],
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
+    createPageHeroField(),
+    createBodyField({
       name: "content",
       title: "Content",
-      type: "array",
-      of: [
-        createRichTextBlocks({ includeBlockquote: true }),
-        createInlineImage(),
-        createInlineFile(),
-      ],
-      validation: (rule) => rule.required(),
+      description: "The history of the park, told in the editor's own sections and images.",
+      required: true,
     }),
   ],
   preview: {

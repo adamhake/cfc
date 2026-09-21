@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity"
+import { requiredImage } from "./shared"
 
 export default defineType({
   name: "quote",
@@ -24,13 +25,7 @@ export default defineType({
       title: "Background Image (Direct Upload)",
       type: "contentImage",
       description: "Upload/select an image.",
-      validation: (rule) =>
-        rule.custom((value) => {
-          const hasAsset = Boolean(
-            (value as { asset?: { _ref?: string } } | undefined)?.asset?._ref,
-          )
-          return hasAsset ? true : "Background image is required"
-        }),
+      validation: (rule) => rule.custom(requiredImage("Background image is required")),
     }),
     defineField({
       name: "featured",
@@ -63,9 +58,10 @@ export default defineType({
       featured: "featured",
     },
     prepare({ title, subtitle, media, featured }) {
+      const text = title ? `${title.slice(0, 60)}${title.length > 60 ? "…" : ""}` : "Untitled quote"
       return {
-        title: featured ? `⭐ ${title.substring(0, 60)}...` : `${title.substring(0, 60)}...`,
-        subtitle: `— ${subtitle}`,
+        title: featured ? `⭐ ${text}` : text,
+        subtitle: subtitle ? `— ${subtitle}` : "No attribution",
         media,
       }
     },

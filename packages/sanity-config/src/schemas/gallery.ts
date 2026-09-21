@@ -1,9 +1,12 @@
+import { ImagesIcon } from "@sanity/icons/Images"
 import { defineField, defineType } from "sanity"
+import { requiredImage } from "./shared"
 
 export default defineType({
   name: "gallery",
   title: "Galleries",
   type: "document",
+  icon: ImagesIcon,
   fields: [
     defineField({
       name: "title",
@@ -41,13 +44,7 @@ export default defineType({
               title: "Image (Direct Upload)",
               type: "contentImage",
               description: "Upload/select an image.",
-              validation: (rule) =>
-                rule.custom((value) => {
-                  const hasAsset = Boolean(
-                    (value as { asset?: { _ref?: string } } | undefined)?.asset?._ref,
-                  )
-                  return hasAsset ? true : "Image is required"
-                }),
+              validation: (rule) => rule.custom(requiredImage()),
             }),
             defineField({
               name: "showOnMobile",
@@ -93,10 +90,25 @@ export default defineType({
     },
     prepare({ title, subtitle, media }) {
       return {
-        title,
-        subtitle: `${subtitle} gallery`,
+        title: title || "Untitled gallery",
+        subtitle: subtitle ? `${subtitle} gallery` : "No gallery type set",
         media: media,
       }
     },
   },
+  orderings: [
+    {
+      title: "Type, then Display Order",
+      name: "typeThenOrder",
+      by: [
+        { field: "galleryType", direction: "asc" },
+        { field: "order", direction: "asc" },
+      ],
+    },
+    {
+      title: "Title, A-Z",
+      name: "titleAsc",
+      by: [{ field: "title", direction: "asc" }],
+    },
+  ],
 })

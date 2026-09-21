@@ -3,12 +3,13 @@ import { DocumentTextIcon } from "@sanity/icons/DocumentText"
 import { ImageIcon } from "@sanity/icons/Image"
 import { LinkIcon } from "@sanity/icons/Link"
 import { defineField, defineType } from "sanity"
-import { createInlineFile, createInlineImage, createRichTextBlocks } from "./shared"
+import { createBodyField } from "./shared"
 
 export const updateSchema = defineType({
   name: "update",
   title: "Updates",
   type: "document",
+  icon: DocumentTextIcon,
   groups: [
     {
       name: "editorial",
@@ -62,28 +63,24 @@ export const updateSchema = defineType({
     }),
     defineField({
       name: "heroImageV2",
-      title: "Hero Image (Direct Upload)",
+      title: "Hero Image",
       type: "contentImage",
-      description: "Upload/select an image.",
-      validation: (Rule) =>
-        Rule.custom((value) => {
-          const hasAsset = Boolean(
-            (value as { asset?: { _ref?: string } } | undefined)?.asset?._ref,
-          )
-          return hasAsset ? true : "Hero image is required"
-        }),
+      description: "Optional. Short notices can be published without a photo.",
       group: "media",
     }),
-    defineField({
+    createBodyField({
       name: "body",
       title: "Update Content",
-      type: "array",
-      of: [
-        createRichTextBlocks({ includeBlockquote: true }),
-        createInlineImage(),
-        createInlineFile(),
-      ],
-      description: "Rich text content for the update",
+      description:
+        "Optional details, links, images, or attachments. The short description can stand alone for brief notices.",
+      group: "editorial",
+    }),
+    defineField({
+      name: "endDate",
+      title: "End Date",
+      type: "date",
+      description:
+        "Optional last day this notice applies. After this date (Richmond time), it is labeled Ended. The article stays published and readable.",
       group: "editorial",
     }),
     defineField({
@@ -91,7 +88,8 @@ export const updateSchema = defineType({
       title: "Category",
       type: "reference",
       to: [{ type: "updateCategory" }],
-      description: "Categorize this update for filtering",
+      description: "Categorize this update for filtering on the Updates page",
+      validation: (Rule) => Rule.required(),
       group: "editorial",
     }),
     defineField({
@@ -105,6 +103,7 @@ export const updateSchema = defineType({
         },
       ],
       description: "Events associated with this update",
+      validation: (Rule) => Rule.unique(),
       group: "relationships",
     }),
     defineField({
@@ -118,6 +117,7 @@ export const updateSchema = defineType({
         },
       ],
       description: "Projects associated with this update",
+      validation: (Rule) => Rule.unique(),
       group: "relationships",
     }),
     defineField({
@@ -130,7 +130,9 @@ export const updateSchema = defineType({
     }),
     defineField({
       name: "publishedAt",
-      title: "Published at",
+      title: "Publication Date",
+      description:
+        "Date shown to readers and used for ordering. This does not schedule publication; use Publish to make the update live.",
       type: "datetime",
       initialValue: () => new Date().toISOString(),
       validation: (Rule) => Rule.required(),

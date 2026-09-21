@@ -1,4 +1,6 @@
 import React from "react"
+import { defineArrayMember, defineField } from "sanity"
+import { altRequiredWithImage } from "./validation"
 
 /**
  * Shared Portable Text (rich text) block configuration.
@@ -20,19 +22,27 @@ export function createLinkAnnotation(options: CreateLinkAnnotationOptions = {}) 
   const { title = "URL" } = options
   return {
     name: "link",
-    type: "object",
+    type: "object" as const,
     title,
     fields: [
-      {
+      defineField({
         title: "URL",
         name: "href",
         type: "url",
-        validation: (Rule: { uri: (opts: object) => unknown }) =>
-          Rule.uri({
-            allowRelative: true,
-            scheme: ["http", "https", "mailto", "tel"],
-          }),
-      },
+        description:
+          "A full URL (https://...), an internal path (/events), an email (mailto:...), or a phone number (tel:...).",
+        // Warning, not error: production contains a few orphaned link markDefs
+        // with no href that are not reachable from the editor, so a hard rule
+        // would make those documents permanently unpublishable.
+        validation: (rule) =>
+          rule
+            .uri({
+              allowRelative: true,
+              scheme: ["http", "https", "mailto", "tel"],
+            })
+            .required()
+            .warning("This link has no destination and will render as plain text"),
+      }),
     ],
   }
 }
@@ -81,8 +91,8 @@ export function createRichTextBlocks(options: CreateRichTextBlocksOptions = {}) 
     styles.push({ title: "Quote", value: "blockquote" })
   }
 
-  return {
-    type: "block" as const,
+  return defineArrayMember({
+    type: "block",
     styles,
     lists: [
       { title: "Bullet", value: "bullet" },
@@ -95,7 +105,45 @@ export function createRichTextBlocks(options: CreateRichTextBlocksOptions = {}) 
       ],
       annotations: [createLinkAnnotation({ title: linkAnnotationTitle })],
     },
-  }
+  })
+}
+
+// ---------------------------------------------------------------------------
+// Simple block configuration (section prose)
+// ---------------------------------------------------------------------------
+
+export interface CreateSimpleBlocksOptions {
+  /** Enable bullet lists. Defaults to false. */
+  includeLists?: boolean
+  /** Enable the link annotation. Defaults to true. */
+  includeLinks?: boolean
+  /** Title used for the link annotation. Defaults to "Link". */
+  linkAnnotationTitle?: string
+}
+
+/**
+ * Returns a restricted Portable Text `block` configuration for section prose:
+ * paragraphs with bold/italic and (by default) links. No headings, images, or
+ * file attachments -- those belong in full `body` fields.
+ *
+ * Used by the homepage sections, which are laid out by the design rather than
+ * by the editor.
+ */
+export function createSimpleBlocks(options: CreateSimpleBlocksOptions = {}) {
+  const { includeLists = false, includeLinks = true, linkAnnotationTitle = "Link" } = options
+
+  return defineArrayMember({
+    type: "block",
+    styles: [{ title: "Normal", value: "normal" }],
+    lists: includeLists ? [{ title: "Bullet", value: "bullet" }] : [],
+    marks: {
+      decorators: [
+        { title: "Bold", value: "strong" },
+        { title: "Italic", value: "em" },
+      ],
+      annotations: includeLinks ? [createLinkAnnotation({ title: linkAnnotationTitle })] : [],
+    },
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -107,25 +155,28 @@ export function createRichTextBlocks(options: CreateRichTextBlocksOptions = {}) 
  * and an optional caption.
  */
 export function createInlineImage() {
-  return {
-    type: "image" as const,
+  return defineArrayMember({
+    type: "image",
     options: {
       hotspot: true,
     },
     fields: [
-      {
+      defineField({
         name: "alt",
         type: "string",
         title: "Alternative text",
-        validation: (Rule: { required: () => unknown }) => Rule.required(),
-      },
-      {
+        description:
+          'Describe what the image shows, for screen readers. Don\'t start with "Image of".',
+        validation: (rule) => rule.custom(altRequiredWithImage()),
+      }),
+      defineField({
         name: "caption",
         type: "string",
         title: "Caption",
-      },
+        description: "Optional. Visible text printed below the image.",
+      }),
     ],
-  }
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -136,28 +187,28 @@ export function createInlineImage() {
  * Returns an inline file attachment type that accepts common document formats.
  */
 export function createInlineFile() {
-  return {
-    type: "file" as const,
+  return defineArrayMember({
+    type: "file",
     name: "fileAttachment",
     title: "File Attachment",
     options: {
       accept: ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.csv,.txt",
     },
     fields: [
-      {
+      defineField({
         name: "title",
         type: "string",
         title: "File Title",
-        description: "Optional custom label for the file",
-      },
-      {
+        description: "Optional custom label for the file. Defaults to the uploaded filename.",
+      }),
+      defineField({
         name: "description",
         type: "text",
         title: "Description",
         description: "Optional description of the file content",
-      },
+      }),
     ],
-  }
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -188,10 +239,7 @@ export interface CreateBodyFieldOptions {
  *
  * By default it includes blockquote styles, inline images (with required alt),
  * and file attachments -- matching the "full" variant used by event, project,
- * update, and historyPage schemas.
- *
- * For "introduction" variants (eventsPage, projectsPage, etc.) pass
- * `{ includeBlockquote: false, includeImages: false, includeFiles: false }`.
+ * update, aboutPage, and historyPage schemas.
  */
 export function createBodyField(options: CreateBodyFieldOptions = {}) {
   const {
@@ -205,24 +253,29 @@ export function createBodyField(options: CreateBodyFieldOptions = {}) {
     required = false,
   } = options
 
-  const ofArray: unknown[] = [createRichTextBlocks({ includeBlockquote })]
+  type BodyMember =
+    | ReturnType<typeof createRichTextBlocks>
+    | ReturnType<typeof createInlineImage>
+    | ReturnType<typeof createInlineFile>
+
+  const of: BodyMember[] = [createRichTextBlocks({ includeBlockquote })]
 
   if (includeImages) {
-    ofArray.push(createInlineImage())
+    of.push(createInlineImage())
   }
   if (includeFiles) {
-    ofArray.push(createInlineFile())
+    of.push(createInlineFile())
   }
 
-  return {
+  return defineField({
     name,
     title,
-    type: "array" as const,
-    of: ofArray,
+    type: "array",
+    of,
     ...(description ? { description } : {}),
     ...(group ? { group } : {}),
-    ...(required ? { validation: (rule: { required: () => unknown }) => rule.required() } : {}),
-  }
+    validation: required ? (rule) => rule.required() : undefined,
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -252,11 +305,11 @@ export function createIntroductionField(options: CreateIntroductionFieldOptions 
     description = "Rich text content for the page introduction",
   } = options
 
-  return {
+  return defineField({
     name,
     title,
-    type: "array" as const,
+    type: "array",
     description,
     of: [createRichTextBlocks({ includeBlockquote: false, linkAnnotationTitle: "Link" })],
-  }
+  })
 }

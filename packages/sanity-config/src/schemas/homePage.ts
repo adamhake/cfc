@@ -1,52 +1,42 @@
+import { BlockquoteIcon } from "@sanity/icons/Blockquote"
+import { CalendarIcon } from "@sanity/icons/Calendar"
+import { HeartIcon } from "@sanity/icons/Heart"
+import { HomeIcon } from "@sanity/icons/Home"
+import { ImageIcon } from "@sanity/icons/Image"
+import { RocketIcon } from "@sanity/icons/Rocket"
+import { SparklesIcon } from "@sanity/icons/Sparkles"
+import { TextIcon } from "@sanity/icons/Text"
+import { UsersIcon } from "@sanity/icons/Users"
 import { defineField, defineType } from "sanity"
+import { createSimpleBlocks, internalPathOrAnchor, requiredImage } from "./shared"
 
 /**
  * Restricted block content for section body text.
- * Paragraphs only with bold/italic. No headings, images, or links.
+ * Paragraphs with bold/italic and links. No headings, images, or files --
+ * the homepage layout is fixed by the design, not by the editor.
  */
-const simpleBlockContent = {
-  type: "block" as const,
-  styles: [{ title: "Normal", value: "normal" as const }],
-  lists: [],
-  marks: {
-    decorators: [
-      { title: "Bold", value: "strong" as const },
-      { title: "Italic", value: "em" as const },
-    ],
-    annotations: [],
-  },
-}
+const simpleBlockContent = createSimpleBlocks()
 
 /**
  * Same as simpleBlockContent but with bullet lists enabled.
  */
-const simpleBlockContentWithLists = {
-  type: "block" as const,
-  styles: [{ title: "Normal", value: "normal" as const }],
-  lists: [{ title: "Bullet", value: "bullet" as const }],
-  marks: {
-    decorators: [
-      { title: "Bold", value: "strong" as const },
-      { title: "Italic", value: "em" as const },
-    ],
-    annotations: [],
-  },
-}
+const simpleBlockContentWithLists = createSimpleBlocks({ includeLists: true })
 
 export default defineType({
   name: "homePage",
   title: "Homepage",
   type: "document",
+  icon: HomeIcon,
   groups: [
-    { name: "hero", title: "Hero", default: true },
-    { name: "intro", title: "Intro" },
-    { name: "vision", title: "Our Vision" },
-    { name: "projects", title: "Projects" },
-    { name: "park", title: "The Park" },
-    { name: "events", title: "Events" },
-    { name: "getInvolved", title: "Get Involved" },
-    { name: "partners", title: "Partners" },
-    { name: "quote", title: "Quote" },
+    { name: "hero", title: "Hero", icon: ImageIcon, default: true },
+    { name: "intro", title: "Intro", icon: TextIcon },
+    { name: "vision", title: "Our Vision", icon: SparklesIcon },
+    { name: "projects", title: "Projects", icon: RocketIcon },
+    { name: "park", title: "The Park", icon: HomeIcon },
+    { name: "events", title: "Events", icon: CalendarIcon },
+    { name: "getInvolved", title: "Get Involved", icon: HeartIcon },
+    { name: "partners", title: "Partners", icon: UsersIcon },
+    { name: "quote", title: "Quote", icon: BlockquoteIcon },
   ],
   fields: [
     // ─── Hero Section (existing) ───
@@ -72,14 +62,9 @@ export default defineType({
           name: "heroImageV2",
           title: "Hero Image (Direct Upload)",
           type: "contentImage",
-          description: "Upload/select an image.",
-          validation: (rule) =>
-            rule.custom((value) => {
-              const hasAsset = Boolean(
-                (value as { asset?: { _ref?: string } } | undefined)?.asset?._ref,
-              )
-              return hasAsset ? true : "Hero image is required"
-            }),
+          description:
+            "The full-width image behind the hero heading. A wide landscape photo works best.",
+          validation: (rule) => rule.custom(requiredImage("Hero image is required")),
         }),
         defineField({
           name: "ctaButton",
@@ -96,8 +81,9 @@ export default defineType({
               name: "link",
               title: "Button Link",
               type: "string",
-              description: 'Internal path (e.g., "/donate") or anchor (e.g., "#get-involved")',
-              validation: (rule) => rule.required(),
+              description:
+                'Internal path (e.g., "/donate") or anchor (e.g., "#get-involved"). External links are not supported here.',
+              validation: (rule) => rule.required().custom(internalPathOrAnchor()),
             }),
           ],
         }),
@@ -357,7 +343,9 @@ export default defineType({
       type: "array",
       of: [{ type: "reference", to: [{ type: "partner" }] }],
       group: "partners",
-      description: "Select partner organizations to display on the homepage",
+      description:
+        "Select partner organizations to display on the homepage. They appear in the order set by each Partner's own Display Order field.",
+      validation: (rule) => rule.unique(),
     }),
 
     // ─── Quote Section (existing) ───
@@ -367,7 +355,8 @@ export default defineType({
       type: "reference",
       to: [{ type: "quote" }],
       group: "quote",
-      description: "Select a quote to display on the homepage",
+      description:
+        "Select a quote to display on the homepage. Takes precedence over the fallback in Site Settings.",
     }),
   ],
   preview: {

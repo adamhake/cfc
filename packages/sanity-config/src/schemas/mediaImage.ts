@@ -1,30 +1,20 @@
+import { ImagesIcon } from "@sanity/icons/Images"
 import { defineField, defineType } from "sanity"
-
-type ReferenceLike = {
-  _ref?: string
-}
-
-type ImageValueLike = {
-  asset?: ReferenceLike
-}
-
-const hasAssetRef = (value: unknown): boolean =>
-  typeof (value as ImageValueLike | undefined)?.asset?._ref === "string"
+import { requiredImage } from "./shared"
 
 export const mediaImageSchema = defineType({
   name: "mediaImage",
   title: "Media Items",
   type: "document",
+  icon: ImagesIcon,
   fields: [
     defineField({
       name: "imageV2",
       title: "Image (Direct Upload)",
       type: "contentImage",
-      description: "Upload/select an image with title, category, tags, alt text, and caption.",
-      validation: (Rule) =>
-        Rule.custom((value) => {
-          return hasAssetRef(value) ? true : "Image is required."
-        }),
+      description:
+        "Upload an image, then fill in its title, category, alt text, and caption. Use Generate metadata to draft them automatically.",
+      validation: (Rule) => Rule.custom(requiredImage("Image is required.")),
     }),
   ],
   preview: {

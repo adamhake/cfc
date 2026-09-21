@@ -12,7 +12,7 @@ export const updateCategorySchema = defineType({
       title: "Title",
       type: "string",
       validation: (Rule) => Rule.required(),
-      description: "Category name (e.g., 'News', 'Volunteer Spotlight')",
+      description: "Category name (e.g., 'Seasonal Updates', 'Construction', 'Park Access')",
     }),
     defineField({
       name: "slug",

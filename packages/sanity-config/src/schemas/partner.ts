@@ -1,9 +1,12 @@
+import { UsersIcon } from "@sanity/icons/Users"
 import { defineField, defineType } from "sanity"
+import { altRequiredWithImage } from "./shared"
 
 export default defineType({
   name: "partner",
   title: "Partner",
   type: "document",
+  icon: UsersIcon,
   fields: [
     defineField({
       name: "name",
@@ -34,7 +37,7 @@ export default defineType({
           name: "alt",
           title: "Alternative text",
           type: "string",
-          validation: (rule) => rule.required(),
+          validation: (rule) => rule.custom(altRequiredWithImage()),
         }),
       ],
       validation: (rule) => rule.required(),
@@ -66,7 +69,7 @@ export default defineType({
       name: "order",
       title: "Display Order",
       type: "number",
-      description: "Order in which this partner appears",
+      description: "Lower numbers appear first. Partners with the same number fall back to name.",
       validation: (rule) => rule.required().min(0),
       initialValue: 0,
     }),
@@ -79,11 +82,27 @@ export default defineType({
       featured: "featured",
     },
     prepare({ title, subtitle, media, featured }) {
+      const name = title || "Untitled partner"
       return {
-        title: featured ? `⭐ ${title}` : title,
-        subtitle,
+        title: featured ? `⭐ ${name}` : name,
+        subtitle: subtitle || "No website set",
         media,
       }
     },
   },
+  orderings: [
+    {
+      title: "Display Order",
+      name: "displayOrder",
+      by: [
+        { field: "order", direction: "asc" },
+        { field: "name", direction: "asc" },
+      ],
+    },
+    {
+      title: "Name, A-Z",
+      name: "nameAsc",
+      by: [{ field: "name", direction: "asc" }],
+    },
+  ],
 })

@@ -3,12 +3,13 @@ import { ImageIcon } from "@sanity/icons/Image"
 import { LinkIcon } from "@sanity/icons/Link"
 import { RocketIcon } from "@sanity/icons/Rocket"
 import { defineField, defineType } from "sanity"
-import { createInlineFile, createInlineImage, createRichTextBlocks } from "./shared"
+import { createBodyField, createInlineImage, notBeforeSibling, requiredImage } from "./shared"
 
 export const projectSchema = defineType({
   name: "project",
   title: "Projects",
   type: "document",
+  icon: RocketIcon,
   groups: [
     {
       name: "editorial",
@@ -64,14 +65,8 @@ export const projectSchema = defineType({
       name: "heroImageV2",
       title: "Hero Image (Direct Upload)",
       type: "contentImage",
-      description: "Upload/select an image.",
-      validation: (Rule) =>
-        Rule.custom((value) => {
-          const hasAsset = Boolean(
-            (value as { asset?: { _ref?: string } } | undefined)?.asset?._ref,
-          )
-          return hasAsset ? true : "Hero image is required"
-        }),
+      description: "Shown at the top of the project page and on project cards in listings.",
+      validation: (Rule) => Rule.custom(requiredImage("Hero image is required")),
       group: "media",
     }),
     defineField({
@@ -94,6 +89,7 @@ export const projectSchema = defineType({
       name: "startDate",
       title: "Start Date",
       type: "date",
+      description: "Used to sort projects. Always set a real date, even if you override the label.",
       validation: (Rule) => Rule.required(),
       group: "editorial",
     }),
@@ -110,6 +106,10 @@ export const projectSchema = defineType({
       title: "Completion Date",
       type: "date",
       description: "Optional - leave blank for ongoing projects",
+      validation: (Rule) =>
+        Rule.custom(
+          notBeforeSibling("startDate", "Completion date must be on or after the start date"),
+        ),
       group: "editorial",
     }),
     defineField({
@@ -153,19 +153,15 @@ export const projectSchema = defineType({
           { title: "Connection", value: "connection" },
           { title: "Preservation", value: "preservation" },
         ],
+        layout: "radio",
       },
       description: "Aligns with the Conservancy's vision pillars",
+      validation: (Rule) => Rule.required(),
       group: "editorial",
     }),
-    defineField({
+    createBodyField({
       name: "body",
       title: "Project Details",
-      type: "array",
-      of: [
-        createRichTextBlocks({ includeBlockquote: true }),
-        createInlineImage(),
-        createInlineFile(),
-      ],
       description: "Extended project information and updates",
       group: "editorial",
     }),
@@ -173,27 +169,7 @@ export const projectSchema = defineType({
       name: "gallery",
       title: "Project Gallery",
       type: "array",
-      of: [
-        {
-          type: "image",
-          options: {
-            hotspot: true,
-          },
-          fields: [
-            {
-              name: "alt",
-              type: "string",
-              title: "Alternative text",
-              validation: (Rule) => Rule.required(),
-            },
-            {
-              name: "caption",
-              type: "string",
-              title: "Caption",
-            },
-          ],
-        },
-      ],
+      of: [createInlineImage()],
       description: "Additional images showcasing the project",
       group: "media",
     }),
@@ -208,6 +184,7 @@ export const projectSchema = defineType({
         },
       ],
       description: "Events associated with this project",
+      validation: (Rule) => Rule.unique(),
       group: "relationships",
     }),
     defineField({
@@ -221,6 +198,7 @@ export const projectSchema = defineType({
         },
       ],
       description: "Organizations partnering on this project",
+      validation: (Rule) => Rule.unique(),
       group: "relationships",
     }),
     defineField({
@@ -233,9 +211,12 @@ export const projectSchema = defineType({
     }),
     defineField({
       name: "publishedAt",
-      title: "Published at",
+      title: "Publication Date",
       type: "datetime",
+      description:
+        "Date this project was first announced. This does not schedule publication; use Publish to make the project live.",
       initialValue: () => new Date().toISOString(),
+      validation: (Rule) => Rule.required(),
       group: "settings",
     }),
   ],
@@ -248,11 +229,15 @@ export const projectSchema = defineType({
     },
     prepare(selection) {
       const { title, status, startDate, media } = selection
-      const statusLabel =
-        status === "planned" ? "Planned" : status === "active" ? "Active" : "Completed"
+      const statusLabels: Record<string, string> = {
+        planned: "Planned",
+        active: "Active",
+        completed: "Completed",
+      }
+      const statusLabel = statusLabels[status as string] ?? "No status"
       const dateStr = startDate ? new Date(startDate).toLocaleDateString() : "No date"
       return {
-        title: title,
+        title: title || "Untitled project",
         subtitle: `${statusLabel} • ${dateStr}`,
         media: media,
       }

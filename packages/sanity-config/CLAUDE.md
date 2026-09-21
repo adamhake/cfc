@@ -9,8 +9,6 @@ After changing a schema or a GROQ query:
 pnpm schema:generate   # schema:extract + schema:typegen
 ```
 
-Subpath exports are declared in `package.json` under `exports`.
-
 ## Query Conventions
 
 ### Shared Projections
@@ -35,12 +33,44 @@ Detail queries filter by `slug.current == $slug` which implicitly requires a slu
 
 ## Schema Conventions
 
-### Rich Text Fields
+Shared helpers live in `src/schemas/shared/` and are re-exported from
+`./shared`. Prefer them over hand-writing an equivalent — a field spelled two
+different ways in two schemas is the main source of drift here.
 
-Use helpers from `src/schemas/shared/richText.ts`:
+### Rich Text Fields (`shared/richText.ts`)
 
-- `createBodyField()` — Full rich text with blockquote, images, and file attachments
+- `createBodyField()` — Full rich text with blockquote, images, and file attachments.
+  Returns a complete field; use it directly, not wrapped in another `defineField()`.
 - `createIntroductionField()` — Simplified rich text (no images/files)
+- `createSimpleBlocks()` — Section prose: paragraphs, bold/italic, links, optional bullets.
+  Used by the homepage. **If you enable links here, the consuming renderer needs a
+  `link` mark handler** — `@portabletext/react` drops unhandled annotations silently.
 - `createRichTextBlocks()` — Block config with styles, lists, decorators
-- `createInlineImage()` — Image with hotspot, alt (required), caption
-- `createInlineFile()` — File attachment accepting PDF, Office docs, etc.
+- `createInlineImage()` / `createInlineFile()` — array members for body fields
+
+### Page Heroes (`shared/pageHero.ts`)
+
+- `createPageHeroField({ group })` — the title/description/image block shared by
+  all eleven singleton page documents. Never re-declare it inline.
+
+### Validation (`shared/validation.ts`)
+
+- `requiredImage(msg)` / `requiredImageList(msg)` — `rule.required()` passes on an
+  empty image object, so image fields need this asset-ref check instead.
+- `notBeforeSibling(field, msg)` — cross-field date ordering. Only compare
+  like-typed fields: a `date` and a `datetime` on the same calendar day will
+  compare as out of order.
+- `internalPathOrAnchor(msg)` — for link fields that take `/path` or `#anchor`.
+
+### Retroactive validation
+
+Before tightening a rule on an existing field, check production first:
+
+```bash
+curl -sG https://pntpob7k.apicdn.sanity.io/v2025-03-04/data/query/production \
+  --data-urlencode 'query=count(*[_type=="project" && !defined(category)])'
+```
+
+If any published document would fail, use `.warning()` rather than an error —
+an error blocks republishing, and for unreachable data (orphaned Portable Text
+`markDefs`, for instance) it can make a document permanently unpublishable.

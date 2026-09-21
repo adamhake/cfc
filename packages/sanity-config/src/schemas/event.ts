@@ -2,12 +2,13 @@ import { CalendarIcon } from "@sanity/icons/Calendar"
 import { CogIcon } from "@sanity/icons/Cog"
 import { ImageIcon } from "@sanity/icons/Image"
 import { defineField, defineType } from "sanity"
-import { createInlineFile, createInlineImage, createRichTextBlocks } from "./shared"
+import { altRequiredWithImage, createBodyField, requiredImage } from "./shared"
 
 export const eventSchema = defineType({
   name: "event",
   title: "Events",
   type: "document",
+  icon: CalendarIcon,
   groups: [
     {
       name: "editorial",
@@ -68,7 +69,7 @@ export const eventSchema = defineType({
           name: "alt",
           type: "string",
           title: "Alternative text",
-          validation: (Rule) => Rule.required(),
+          validation: (rule) => rule.custom(altRequiredWithImage()),
         },
         {
           name: "caption",
@@ -76,13 +77,15 @@ export const eventSchema = defineType({
           title: "Caption",
         },
       ],
-      validation: (Rule) => Rule.required(),
+      description: "Shown at the top of the event page and on event cards in listings.",
+      validation: (Rule) => Rule.custom(requiredImage("Hero image is required")),
       group: "media",
     }),
     defineField({
       name: "date",
       title: "Event Date",
       type: "date",
+      description: "The day the event happens. Used to sort events and to mark them as past.",
       validation: (Rule) => Rule.required(),
       group: "editorial",
     }),
@@ -91,6 +94,8 @@ export const eventSchema = defineType({
       title: "Event Time",
       type: "string",
       placeholder: "9am - 12pm",
+      description:
+        'Displayed exactly as typed, so keep the format consistent across events (e.g. "9am - 12pm").',
       validation: (Rule) => Rule.required(),
       group: "editorial",
     }),
@@ -98,30 +103,19 @@ export const eventSchema = defineType({
       name: "location",
       title: "Location",
       type: "string",
+      description: 'Where in (or near) the park to meet, e.g. "Upper park, near the gazebo"',
       validation: (Rule) => Rule.required(),
       group: "editorial",
     }),
-    defineField({
+    createBodyField({
       name: "body",
       title: "Event Details",
-      type: "array",
-      of: [
-        createRichTextBlocks({ includeBlockquote: true }),
-        createInlineImage(),
-        createInlineFile(),
-      ],
       description: "Extended event information",
       group: "editorial",
     }),
-    defineField({
+    createBodyField({
       name: "recap",
       title: "Event Recap",
-      type: "array",
-      of: [
-        createRichTextBlocks({ includeBlockquote: true }),
-        createInlineImage(),
-        createInlineFile(),
-      ],
       description:
         "Retrospective content shown for past events. When populated, this replaces the Event Details on the public page.",
       group: "editorial",
@@ -144,9 +138,12 @@ export const eventSchema = defineType({
     }),
     defineField({
       name: "publishedAt",
-      title: "Published at",
+      title: "Publication Date",
       type: "datetime",
+      description:
+        "Date this event was announced, used for ordering. This does not schedule publication; use Publish to make the event live.",
       initialValue: () => new Date().toISOString(),
+      validation: (Rule) => Rule.required(),
       group: "settings",
     }),
   ],
@@ -159,7 +156,7 @@ export const eventSchema = defineType({
     prepare(selection) {
       const { title, date, media } = selection
       return {
-        title: title,
+        title: title || "Untitled event",
         subtitle: date ? new Date(date).toLocaleDateString() : "No date",
         media: media,
       }

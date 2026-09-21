@@ -1,39 +1,13 @@
-import { defineField, defineType } from "sanity"
-import { createIntroductionField } from "./shared"
+import { DocumentTextIcon } from "@sanity/icons/DocumentText"
+import { defineType } from "sanity"
+import { createIntroductionField, createPageHeroField } from "./shared"
 
 export default defineType({
   name: "updatesPage",
   title: "Updates Page",
   type: "document",
-  fields: [
-    defineField({
-      name: "pageHero",
-      title: "Page Hero",
-      type: "object",
-      fields: [
-        defineField({
-          name: "title",
-          title: "Title",
-          type: "string",
-          validation: (rule) => rule.required(),
-        }),
-        defineField({
-          name: "description",
-          title: "Description",
-          type: "text",
-          validation: (rule) => rule.max(500),
-        }),
-        defineField({
-          name: "imageV2",
-          title: "Hero Image (Direct Upload)",
-          type: "contentImage",
-          description: "Upload/select an image.",
-        }),
-      ],
-      validation: (rule) => rule.required(),
-    }),
-    defineField(createIntroductionField()),
-  ],
+  icon: DocumentTextIcon,
+  fields: [createPageHeroField(), createIntroductionField()],
   preview: {
     prepare() {
       return {

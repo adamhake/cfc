@@ -1,37 +1,13 @@
-import { defineField, defineType } from "sanity"
+import { HeartIcon } from "@sanity/icons/Heart"
+import { defineType } from "sanity"
+import { createPageHeroField } from "./shared"
 
 export default defineType({
   name: "donatePage",
   title: "Donate Page",
   type: "document",
-  fields: [
-    defineField({
-      name: "pageHero",
-      title: "Page Hero",
-      type: "object",
-      fields: [
-        defineField({
-          name: "title",
-          title: "Title",
-          type: "string",
-          validation: (rule) => rule.required(),
-        }),
-        defineField({
-          name: "description",
-          title: "Description",
-          type: "text",
-          validation: (rule) => rule.max(500),
-        }),
-        defineField({
-          name: "imageV2",
-          title: "Hero Image (Direct Upload)",
-          type: "contentImage",
-          description: "Upload/select an image.",
-        }),
-      ],
-      validation: (rule) => rule.required(),
-    }),
-  ],
+  icon: HeartIcon,
+  fields: [createPageHeroField()],
   preview: {
     prepare() {
       return {

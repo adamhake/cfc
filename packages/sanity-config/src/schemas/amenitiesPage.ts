@@ -1,39 +1,16 @@
+import { PinIcon } from "@sanity/icons/Pin"
 import type { SlugSourceContext } from "sanity"
 import { defineField, defineType } from "sanity"
-import { createIntroductionField } from "./shared"
+import { createIntroductionField, createPageHeroField, requiredImageList } from "./shared"
 
 export default defineType({
   name: "amenitiesPage",
   title: "Amenities Page",
   type: "document",
+  icon: PinIcon,
   fields: [
-    defineField({
-      name: "pageHero",
-      title: "Page Hero",
-      type: "object",
-      fields: [
-        defineField({
-          name: "title",
-          title: "Title",
-          type: "string",
-          validation: (rule) => rule.required(),
-        }),
-        defineField({
-          name: "description",
-          title: "Description",
-          type: "text",
-          validation: (rule) => rule.max(500),
-        }),
-        defineField({
-          name: "imageV2",
-          title: "Hero Image (Direct Upload)",
-          type: "contentImage",
-          description: "Upload/select an image.",
-        }),
-      ],
-      validation: (rule) => rule.required(),
-    }),
-    defineField(createIntroductionField()),
+    createPageHeroField(),
+    createIntroductionField(),
     defineField({
       name: "amenities",
       title: "Amenities",
@@ -102,12 +79,8 @@ export default defineType({
               title: "Images (Direct Upload)",
               type: "array",
               of: [{ type: "contentImage" }],
-              description: "Upload/select images directly. Preferred for new content.",
-              validation: (rule) =>
-                rule.custom((value) => {
-                  const hasV2 = Array.isArray(value) && value.length > 0
-                  return hasV2 ? true : "At least one image is required"
-                }),
+              description: "Photos of this amenity. The first one is used as the card image.",
+              validation: (rule) => rule.custom(requiredImageList()),
             }),
             defineField({
               name: "externalLink",
@@ -125,6 +98,14 @@ export default defineType({
               type: "string",
               description: "Display text for the external link (e.g., 'Reserve the Round House')",
               hidden: ({ parent }) => !parent?.externalLink,
+              validation: (rule) =>
+                rule.custom((value, context) => {
+                  const hasLink = Boolean(
+                    (context.parent as { externalLink?: string } | undefined)?.externalLink,
+                  )
+                  if (!hasLink) return true
+                  return value ? true : "Add link text so the button has a label"
+                }),
             }),
             defineField({
               name: "section",
@@ -156,8 +137,8 @@ export default defineType({
               const sectionLabel = sectionLabels[section as string] || section
 
               return {
-                title: title,
-                subtitle: `${sectionLabel} Park`,
+                title: title || "Untitled amenity",
+                subtitle: sectionLabel ? `${sectionLabel} Park` : "No section set",
                 media: media,
               }
             },

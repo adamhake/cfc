@@ -1,44 +1,23 @@
+import { ImageIcon } from "@sanity/icons/Image"
+import { InfoOutlineIcon } from "@sanity/icons/InfoOutline"
+import { TextIcon } from "@sanity/icons/Text"
+import { UsersIcon } from "@sanity/icons/Users"
 import { defineArrayMember, defineField, defineType } from "sanity"
-import { createInlineFile, createInlineImage, createRichTextBlocks } from "./shared"
+import { altRequiredWithImage, createBodyField, createPageHeroField } from "./shared"
 
 export default defineType({
   name: "aboutPage",
   title: "About Page",
   type: "document",
+  icon: InfoOutlineIcon,
   groups: [
-    { name: "hero", title: "Hero" },
-    { name: "missionVision", title: "Mission & Vision" },
-    { name: "content", title: "Content" },
-    { name: "board", title: "Board Members" },
+    { name: "hero", title: "Hero", icon: ImageIcon, default: true },
+    { name: "missionVision", title: "Mission & Vision", icon: InfoOutlineIcon },
+    { name: "content", title: "Content", icon: TextIcon },
+    { name: "board", title: "Board Members", icon: UsersIcon },
   ],
   fields: [
-    defineField({
-      name: "pageHero",
-      title: "Page Hero",
-      type: "object",
-      group: "hero",
-      fields: [
-        defineField({
-          name: "title",
-          title: "Title",
-          type: "string",
-          validation: (rule) => rule.required(),
-        }),
-        defineField({
-          name: "description",
-          title: "Description",
-          type: "text",
-          validation: (rule) => rule.max(500),
-        }),
-        defineField({
-          name: "imageV2",
-          title: "Hero Image (Direct Upload)",
-          type: "contentImage",
-          description: "Upload/select an image.",
-        }),
-      ],
-      validation: (rule) => rule.required(),
-    }),
+    defineField(createPageHeroField({ group: "hero" })),
     defineField({
       name: "mission",
       title: "Mission Statement",
@@ -101,18 +80,12 @@ export default defineType({
       description:
         "Full-width image displayed between the mission/vision section and the body content. A wide landscape image works best.",
     }),
-    defineField({
+    createBodyField({
       name: "content",
       title: "Content",
-      type: "array",
       group: "content",
       description:
         "Main body content — tell the story of the organization, its founding, values, and work.",
-      of: [
-        createRichTextBlocks({ includeBlockquote: true }),
-        createInlineImage(),
-        createInlineFile(),
-      ],
     }),
     defineField({
       name: "calloutImage",
@@ -165,6 +138,8 @@ export default defineType({
                   name: "alt",
                   title: "Alternative text",
                   type: "string",
+                  description: 'Describe the person in the photo, e.g. "Jane Doe, smiling".',
+                  validation: (rule) => rule.custom(altRequiredWithImage()),
                 }),
               ],
             }),
@@ -174,6 +149,13 @@ export default defineType({
               title: "name",
               subtitle: "role",
               media: "image",
+            },
+            prepare({ title, subtitle, media }) {
+              return {
+                title: title || "Unnamed board member",
+                subtitle: subtitle || "No role set",
+                media,
+              }
             },
           },
         }),
