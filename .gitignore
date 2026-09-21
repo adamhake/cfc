@@ -22,7 +22,10 @@ storybook-static
 *.tsbuildinfo
 
 
-.claude
+# Claude Code: share project config and agents, keep personal overrides local.
+# settings.local.json holds machine-specific paths and per-user permissions.
+.claude/settings.local.json
+.claude/*.local.json
 .playwright-mcp
 .omc
 
