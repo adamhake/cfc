@@ -20,9 +20,22 @@ export const subscribeRequestSchema = z.object({
 export type SubscribeRequest = z.infer<typeof subscribeRequestSchema>
 
 /**
+ * Why a subscription failed. `rate_limited` is our own per-IP throttle;
+ * `resend_rate_limited` is Resend throttling us, which the subscriber can
+ * retry but we may need to know about.
+ */
+export type SubscribeErrorCode =
+  | "validation_error"
+  | "rate_limited"
+  | "resend_rate_limited"
+  | "turnstile_failed"
+  | "contact_error"
+  | "server_error"
+
+/**
  * Response from the newsletter subscription API
  * Uses discriminated union for type-safe success/error handling
  */
 export type SubscribeResponse =
   | { success: true; message: string }
-  | { success: false; error: string; message: string }
+  | { success: false; error: SubscribeErrorCode; message: string }

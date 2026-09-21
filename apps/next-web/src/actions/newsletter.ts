@@ -184,6 +184,23 @@ export async function subscribeToNewsletter(formData: {
       resendStatusCode: contactError.statusCode,
       resendMessage: contactError.message,
     })
+
+    if (RESEND_CONFIG_ERROR_NAMES.has(contactError.name)) {
+      return {
+        success: false,
+        error: "server_error",
+        message: `Something went wrong on our end. Please try again later, or contact us at ${CONTACT_EMAIL}`,
+      }
+    }
+
+    if (contactError.name === "rate_limit_exceeded") {
+      return {
+        success: false,
+        error: "resend_rate_limited",
+        message: "We're handling a lot of signups right now. Please try again in a moment.",
+      }
+    }
+
     return {
       success: false,
       error: "contact_error",
@@ -220,8 +237,10 @@ export async function subscribeToNewsletter(formData: {
   const verifiedDomain = env.VERIFIED_EMAIL_DOMAIN
 
   if (adminEmail) {
-    if (!adminEmail.endsWith(verifiedDomain)) {
-      logWarn("[Newsletter] ADMIN_EMAIL not on verified domain, skipping notification", {
+    // Resend only constrains the From address — the recipient can be any inbox,
+    // and ours is on the apex domain while sending is verified on `updates.`.
+    if (!fromEmail.endsWith(verifiedDomain)) {
+      logWarn("[Newsletter] NEWSLETTER_FROM_EMAIL not on verified domain, skipping notification", {
         verifiedDomain,
       })
     } else {
