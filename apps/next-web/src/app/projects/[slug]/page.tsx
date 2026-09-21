@@ -8,10 +8,11 @@ import { Button } from "@/components/Button/button"
 import Container from "@/components/Container/container"
 import Event from "@/components/Event/event"
 import { PortableText } from "@/components/PortableText/portable-text"
+import { RelatedUpdates } from "@/components/RelatedUpdates/related-updates"
 import { SanityImage } from "@/components/SanityImage/sanity-image"
 import { sanityClient } from "@/lib/sanity"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
-import type { SanityProjectDetail } from "@/lib/sanity-types"
+
 import { withPlaceholderSlug } from "@/lib/static-params"
 import {
   generateArticleStructuredData,
@@ -32,12 +33,12 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params
-  const { data: project } = (await cachedSanityFetch({
+  const { data: project } = await cachedSanityFetch({
     ...(await getDynamicFetchOptions()),
     query: projectBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.PROJECT_DETAIL, CACHE_TAGS.PROJECTS],
-  })) as { data: SanityProjectDetail | null }
+  })
 
   if (!project) {
     return {
@@ -72,12 +73,12 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params
-  const { data: project } = (await cachedSanityFetch({
+  const { data: project } = await cachedSanityFetch({
     ...(await getDynamicFetchOptions()),
     query: projectBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.PROJECT_DETAIL, CACHE_TAGS.PROJECTS],
-  })) as { data: SanityProjectDetail | null }
+  })
 
   if (!project) {
     notFound()
@@ -240,6 +241,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </div>
             </aside>
           </div>
+          <RelatedUpdates documentId={project._id} type="project" />
         </Container>
       </div>
     </>

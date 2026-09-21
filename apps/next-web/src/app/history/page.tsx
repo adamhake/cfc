@@ -5,7 +5,7 @@ import Container from "@/components/Container/container"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { PortableText } from "@/components/PortableText/portable-text"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
-import type { SanityHistoryPage } from "@/lib/sanity-types"
+
 import { SITE_CONFIG } from "@/utils/seo"
 
 export const metadata: Metadata = {
@@ -23,11 +23,11 @@ export const metadata: Metadata = {
 }
 
 export default async function HistoryPage() {
-  const { data: pageData } = (await cachedSanityFetch({
+  const { data: pageData } = await cachedSanityFetch({
     ...(await getDynamicFetchOptions()),
     query: getHistoryPageQuery,
     tags: [CACHE_TAGS.HISTORY],
-  })) as { data: SanityHistoryPage | null }
+  })
 
   return (
     <div className="space-y-14 pb-16 md:space-y-20 md:pb-24">

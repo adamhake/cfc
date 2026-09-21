@@ -164,6 +164,7 @@ export type Update = {
         _key: string;
       }
   >;
+  endDate?: string;
   category?: UpdateCategoryReference;
   relatedEvents?: Array<
     {
@@ -698,7 +699,11 @@ export type HomePage = {
       }>;
       style?: "normal";
       listItem?: never;
-      markDefs?: null;
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
       level?: number;
       _type: "block";
       _key: string;
@@ -720,7 +725,11 @@ export type HomePage = {
         }>;
         style?: "normal";
         listItem?: "bullet";
-        markDefs?: null;
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
         level?: number;
         _type: "block";
         _key: string;
@@ -744,7 +753,11 @@ export type HomePage = {
       }>;
       style?: "normal";
       listItem?: never;
-      markDefs?: null;
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
       level?: number;
       _type: "block";
       _key: string;
@@ -759,7 +772,11 @@ export type HomePage = {
       }>;
       style?: "normal";
       listItem?: never;
-      markDefs?: null;
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
       level?: number;
       _type: "block";
       _key: string;
@@ -795,6 +812,7 @@ export type SiteSettings = {
   organizationName?: string;
   alternativeName?: string;
   description?: string;
+  contactEmail?: string;
   parkAddress?: {
     street?: string;
     city?: string;
@@ -822,12 +840,11 @@ export type SiteSettings = {
     startsAt?: string;
     expiresAt?: string;
   };
+  donationUrl?: string;
   socialMedia?: {
     facebook?: string;
     instagram?: string;
   };
-  donationUrl?: string;
-  contactEmail?: string;
   metaDefaults?: {
     siteTitle?: string;
     ogImage?: {
@@ -1090,9 +1107,10 @@ export type AllSanitySchemaTypes =
 
 // Source: src/queries/aboutPage.ts
 // Variable: getAboutPageQuery
-// Query: *[_type == "aboutPage"][0]{    _id,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    mission,    vision,    highlights[]{      _key,      value,      label    },    "storyImage": storyImage{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    content[]{        ...,  _type == "image" => {    ...,    asset->{      _id,      url,      metadata{        dimensions,        lqip,        blurhash      }    }  },  _type == "fileAttachment" => {    ...,    asset->{      _id,      url,      originalFilename,      size,      extension,      mimeType    }  }    },    "calloutImage": calloutImage{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    boardMembers[]{      _key,      name,      role,      bio,      image{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    }  }
+// Query: *[_type == "aboutPage"][0]{    _id,    _type,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    mission,    vision,    highlights[]{      _key,      value,      label    },    "storyImage": storyImage{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    content[]{        ...,  _type == "image" => {    ...,    asset->{      _id,      url,      metadata{        dimensions,        lqip,        blurhash      }    }  },  _type == "fileAttachment" => {    ...,    asset->{      _id,      url,      originalFilename,      size,      extension,      mimeType    }  }    },    "calloutImage": calloutImage{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    boardMembers[]{      _key,      name,      role,      bio,      image{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    }  }
 export type GetAboutPageQueryResult = {
   _id: string;
+  _type: "aboutPage";
   pageHero: {
     title: string | null;
     description: string | null;
@@ -1232,9 +1250,10 @@ export type GetAboutPageQueryResult = {
 
 // Source: src/queries/amenitiesPage.ts
 // Variable: getAmenitiesPageQuery
-// Query: *[_type == "amenitiesPage"][0]{    _id,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    introduction,    amenities[]{      title,      slug,      icon,      description,      details,      "images": imagesV2[defined(asset)][]{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      },      externalLink,      linkText,      section    }  }
+// Query: *[_type == "amenitiesPage"][0]{    _id,    _type,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    introduction,    amenities[]{      title,      slug,      icon,      description,      details,      "images": imagesV2[defined(asset)][]{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      },      externalLink,      linkText,      section    }  }
 export type GetAmenitiesPageQueryResult = {
   _id: string;
+  _type: "amenitiesPage";
   pageHero: {
     title: string | null;
     description: string | null;
@@ -1314,73 +1333,12 @@ export type GetAmenitiesPageQueryResult = {
   }> | null;
 } | null;
 
-// Source: src/queries/amenitiesPage.ts
-// Variable: getAmenitiesBySectionQuery
-// Query: *[_type == "amenitiesPage"][0]{    "upperParkAmenities": amenities[section == "upper-park" || section == "both"],    "lowerParkAmenities": amenities[section == "lower-park" || section == "both"]  }
-export type GetAmenitiesBySectionQueryResult = {
-  upperParkAmenities: Array<{
-    title?: string;
-    slug?: Slug;
-    icon?:
-      | "bench"
-      | "building"
-      | "dog"
-      | "fountain"
-      | "garden"
-      | "gazebo"
-      | "monument"
-      | "parking"
-      | "playground"
-      | "restroom"
-      | "trail"
-      | "trees";
-    description?: string;
-    details?: Array<string>;
-    imagesV2?: Array<
-      {
-        _key: string;
-      } & ContentImage
-    >;
-    externalLink?: string;
-    linkText?: string;
-    section?: "both" | "lower-park" | "upper-park";
-    _key: string;
-  }> | null;
-  lowerParkAmenities: Array<{
-    title?: string;
-    slug?: Slug;
-    icon?:
-      | "bench"
-      | "building"
-      | "dog"
-      | "fountain"
-      | "garden"
-      | "gazebo"
-      | "monument"
-      | "parking"
-      | "playground"
-      | "restroom"
-      | "trail"
-      | "trees";
-    description?: string;
-    details?: Array<string>;
-    imagesV2?: Array<
-      {
-        _key: string;
-      } & ContentImage
-    >;
-    externalLink?: string;
-    linkText?: string;
-    section?: "both" | "lower-park" | "upper-park";
-    _key: string;
-  }> | null;
-} | null;
-
 // Source: src/queries/donatePage.ts
 // Variable: getDonatePageQuery
-// Query: *[_type == "donatePage"][0]{    _id,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    }  }
+// Query: *[_type == "donatePage"][0]{    _id,    _type,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    }  }
 export type GetDonatePageQueryResult = {
   _id: string;
+  _type: "donatePage";
   pageHero: {
     title: string | null;
     description: string | null;
@@ -1407,99 +1365,6 @@ export type GetDonatePageQueryResult = {
 // Variable: allEventsQuery
 // Query: *[_type == "event" && defined(slug.current)] | order(date desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImage{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    date,    time,    location,    featured,    publishedAt  }
 export type AllEventsQueryResult = Array<{
-  _id: string;
-  _type: "event";
-  title: string | null;
-  slug: Slug | null;
-  description: string | null;
-  heroImage: {
-    asset: {
-      _id: string;
-      url: string | null;
-      metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-        blurhash: null;
-      } | null;
-    } | null;
-    alt: string | null;
-    caption: string | null;
-    hotspot: SanityImageHotspot | null;
-    crop: SanityImageCrop | null;
-  } | null;
-  date: string | null;
-  time: string | null;
-  location: string | null;
-  featured: boolean | null;
-  publishedAt: string | null;
-}>;
-
-// Source: src/queries/events.ts
-// Variable: upcomingEventsQuery
-// Query: *[_type == "event" && defined(slug.current) && date >= now()] | order(date asc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImage{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    date,    time,    location,    featured,    publishedAt  }
-export type UpcomingEventsQueryResult = Array<{
-  _id: string;
-  _type: "event";
-  title: string | null;
-  slug: Slug | null;
-  description: string | null;
-  heroImage: {
-    asset: {
-      _id: string;
-      url: string | null;
-      metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-        blurhash: null;
-      } | null;
-    } | null;
-    alt: string | null;
-    caption: string | null;
-    hotspot: SanityImageHotspot | null;
-    crop: SanityImageCrop | null;
-  } | null;
-  date: string | null;
-  time: string | null;
-  location: string | null;
-  featured: boolean | null;
-  publishedAt: string | null;
-}>;
-
-// Source: src/queries/events.ts
-// Variable: pastEventsQuery
-// Query: *[_type == "event" && defined(slug.current) && date < now()] | order(date desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImage{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    date,    time,    location,    featured,    publishedAt  }
-export type PastEventsQueryResult = Array<{
-  _id: string;
-  _type: "event";
-  title: string | null;
-  slug: Slug | null;
-  description: string | null;
-  heroImage: {
-    asset: {
-      _id: string;
-      url: string | null;
-      metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-        blurhash: null;
-      } | null;
-    } | null;
-    alt: string | null;
-    caption: string | null;
-    hotspot: SanityImageHotspot | null;
-    crop: SanityImageCrop | null;
-  } | null;
-  date: string | null;
-  time: string | null;
-  location: string | null;
-  featured: boolean | null;
-  publishedAt: string | null;
-}>;
-
-// Source: src/queries/events.ts
-// Variable: featuredEventsQuery
-// Query: *[_type == "event" && defined(slug.current) && featured == true] | order(date desc) [0...3] {    _id,    _type,    title,    slug,    description,    "heroImage": heroImage{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    date,    time,    location,    featured,    publishedAt  }
-export type FeaturedEventsQueryResult = Array<{
   _id: string;
   _type: "event";
   title: string | null;
@@ -1730,9 +1595,10 @@ export type EventSlugsQueryResult = Array<{
 
 // Source: src/queries/eventsPage.ts
 // Variable: getEventsPageQuery
-// Query: *[_type == "eventsPage"][0]{    _id,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    introduction  }
+// Query: *[_type == "eventsPage"][0]{    _id,    _type,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    introduction  }
 export type GetEventsPageQueryResult = {
   _id: string;
+  _type: "eventsPage";
   pageHero: {
     title: string | null;
     description: string | null;
@@ -1773,98 +1639,12 @@ export type GetEventsPageQueryResult = {
   }> | null;
 } | null;
 
-// Source: src/queries/gallery.ts
-// Variable: getGalleriesQuery
-// Query: *[_type == "gallery"] | order(order asc){    _id,    title,    galleryType,    images[]{      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      },      showOnMobile    },    order  }
-export type GetGalleriesQueryResult = Array<{
-  _id: string;
-  title: string | null;
-  galleryType: "about" | "amenities" | "events" | "homepage" | null;
-  images: Array<{
-    image: {
-      asset: {
-        _id: string;
-        url: string | null;
-        metadata: {
-          dimensions: SanityImageDimensions | null;
-          lqip: string | null;
-          blurhash: null;
-          palette: SanityImagePalette | null;
-        } | null;
-      } | null;
-      alt: string | null;
-      caption: string | null;
-      hotspot: SanityImageHotspot | null;
-      crop: SanityImageCrop | null;
-    } | null;
-    showOnMobile: boolean | null;
-  }> | null;
-  order: number | null;
-}>;
-
-// Source: src/queries/gallery.ts
-// Variable: getGalleryByTypeQuery
-// Query: *[_type == "gallery" && galleryType == $type] | order(order asc){    _id,    title,    galleryType,    images[]{      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      },      showOnMobile    },    order  }
-export type GetGalleryByTypeQueryResult = Array<{
-  _id: string;
-  title: string | null;
-  galleryType: "about" | "amenities" | "events" | "homepage" | null;
-  images: Array<{
-    image: {
-      asset: {
-        _id: string;
-        url: string | null;
-        metadata: {
-          dimensions: SanityImageDimensions | null;
-          lqip: string | null;
-          blurhash: null;
-          palette: SanityImagePalette | null;
-        } | null;
-      } | null;
-      alt: string | null;
-      caption: string | null;
-      hotspot: SanityImageHotspot | null;
-      crop: SanityImageCrop | null;
-    } | null;
-    showOnMobile: boolean | null;
-  }> | null;
-  order: number | null;
-}>;
-
-// Source: src/queries/gallery.ts
-// Variable: getGalleryByIdQuery
-// Query: *[_type == "gallery" && _id == $id][0]{    _id,    title,    galleryType,    images[]{      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      },      showOnMobile    },    order  }
-export type GetGalleryByIdQueryResult = {
-  _id: string;
-  title: string | null;
-  galleryType: "about" | "amenities" | "events" | "homepage" | null;
-  images: Array<{
-    image: {
-      asset: {
-        _id: string;
-        url: string | null;
-        metadata: {
-          dimensions: SanityImageDimensions | null;
-          lqip: string | null;
-          blurhash: null;
-          palette: SanityImagePalette | null;
-        } | null;
-      } | null;
-      alt: string | null;
-      caption: string | null;
-      hotspot: SanityImageHotspot | null;
-      crop: SanityImageCrop | null;
-    } | null;
-    showOnMobile: boolean | null;
-  }> | null;
-  order: number | null;
-} | null;
-
 // Source: src/queries/getInvolvedPage.ts
 // Variable: getGetInvolvedPageQuery
-// Query: *[_type == "getInvolvedPage"][0]{    _id,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },  }
+// Query: *[_type == "getInvolvedPage"][0]{    _id,    _type,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },  }
 export type GetGetInvolvedPageQueryResult = {
   _id: string;
+  _type: "getInvolvedPage";
   pageHero: {
     title: string | null;
     description: string | null;
@@ -1889,9 +1669,10 @@ export type GetGetInvolvedPageQueryResult = {
 
 // Source: src/queries/historyPage.ts
 // Variable: getHistoryPageQuery
-// Query: *[_type == "historyPage"][0]{    _id,    content[]{        ...,  _type == "image" => {    ...,    asset->{      _id,      url,      metadata{        dimensions,        lqip,        blurhash      }    }  },  _type == "fileAttachment" => {    ...,    asset->{      _id,      url,      originalFilename,      size,      extension,      mimeType    }  }    },    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },  }
+// Query: *[_type == "historyPage"][0]{    _id,    _type,    content[]{        ...,  _type == "image" => {    ...,    asset->{      _id,      url,      metadata{        dimensions,        lqip,        blurhash      }    }  },  _type == "fileAttachment" => {    ...,    asset->{      _id,      url,      originalFilename,      size,      extension,      mimeType    }  }    },    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },  }
 export type GetHistoryPageQueryResult = {
   _id: string;
+  _type: "historyPage";
   content: Array<
     | {
         children?: Array<{
@@ -1970,9 +1751,10 @@ export type GetHistoryPageQueryResult = {
 
 // Source: src/queries/homePage.ts
 // Variable: getHomePageQuery
-// Query: *[_type == "homePage"][0]{    _id,    hero{      heading,      subheading,      "heroImage": heroImageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      },      ctaButton    },    introSection{      heading,      body    },    visionSection{      title,      description,      pillars[]{        _key,        title,        pillar,        description      }    },    projectsSectionHeader{      title,      description    },    parkSection{      title,      intro,      body,      today,      callout    },    eventsSectionHeader{      title,      description    },    getInvolvedSection{      title,      description    },    partnersSectionHeader{      title,      description    },    "partners": featuredPartners[]->{      _id,      name,      slug,      logo{        asset->{          _id,          url,          metadata{            dimensions,            lqip          }        },        alt      },      description,      websiteUrl,      order    } | order(order asc),    "quote": featuredQuote->{      _id,      quoteText,      attribution,      "backgroundImage": backgroundImageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    "gallery": homepageGallery->{      _id,      title,      images[]{        "image": imageV2{            asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop        },        showOnMobile      }    },    "parkGallery": parkGallery->{      _id,      title,      images[]{        "image": imageV2{            asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop        },        showOnMobile      }    }  }
+// Query: *[_type == "homePage"][0]{    _id,    _type,    hero{      heading,      subheading,      "heroImage": heroImageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      },      ctaButton    },    introSection{      heading,      body    },    visionSection{      title,      description,      pillars[]{        _key,        title,        pillar,        description      }    },    projectsSectionHeader{      title,      description    },    parkSection{      title,      intro,      body,      today,      callout    },    eventsSectionHeader{      title,      description    },    getInvolvedSection{      title,      description    },    partnersSectionHeader{      title,      description    },    "partners": featuredPartners[]->{      _id,      name,      slug,      logo{        asset->{          _id,          url,          metadata{            dimensions,            lqip          }        },        alt      },      description,      websiteUrl,      order    } | order(order asc),    "quote": featuredQuote->{      _id,      quoteText,      attribution,      "backgroundImage": backgroundImageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    "gallery": homepageGallery->{      _id,      title,      images[]{        "image": imageV2{            asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop        },        showOnMobile      }    },    "parkGallery": parkGallery->{      _id,      title,      images[]{        "image": imageV2{            asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop        },        showOnMobile      }    }  }
 export type GetHomePageQueryResult = {
   _id: string;
+  _type: "homePage";
   hero: {
     heading: string | null;
     subheading: string | null;
@@ -2008,7 +1790,11 @@ export type GetHomePageQueryResult = {
       }>;
       style?: "normal";
       listItem?: never;
-      markDefs?: null;
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
       level?: number;
       _type: "block";
       _key: string;
@@ -2031,7 +1817,11 @@ export type GetHomePageQueryResult = {
         }>;
         style?: "normal";
         listItem?: "bullet";
-        markDefs?: null;
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
         level?: number;
         _type: "block";
         _key: string;
@@ -2054,7 +1844,11 @@ export type GetHomePageQueryResult = {
       }>;
       style?: "normal";
       listItem?: never;
-      markDefs?: null;
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
       level?: number;
       _type: "block";
       _key: string;
@@ -2069,7 +1863,11 @@ export type GetHomePageQueryResult = {
       }>;
       style?: "normal";
       listItem?: never;
-      markDefs?: null;
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
       level?: number;
       _type: "block";
       _key: string;
@@ -2176,82 +1974,6 @@ export type GetHomePageQueryResult = {
 } | null;
 
 // Source: src/queries/media.ts
-// Variable: allMediaImagesQuery
-// Query: *[_type == "mediaImage" && defined(imageV2.asset)] | order(_createdAt desc) {    _id,    _type,    "title": coalesce(imageV2.title, "Untitled image"),    "image": imageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": coalesce(imageV2.category, "park-views")  }
-export type AllMediaImagesQueryResult = Array<{
-  _id: string;
-  _type: "mediaImage";
-  title: string | "Untitled image";
-  image: {
-    asset: {
-      _id: string;
-      url: string | null;
-      metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-        blurhash: null;
-      } | null;
-    } | null;
-    alt: string | null;
-    caption: string | null;
-    hotspot: SanityImageHotspot | null;
-    crop: SanityImageCrop | null;
-  } | null;
-  category: "community" | "events" | "history" | "nature" | "park-views";
-}>;
-
-// Source: src/queries/media.ts
-// Variable: mediaImagesByCategoryQuery
-// Query: *[    _type == "mediaImage" &&    defined(imageV2.asset) &&    imageV2.category == $category  ] | order(_createdAt desc) {    _id,    _type,    "title": coalesce(imageV2.title, "Untitled image"),    "image": imageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": coalesce(imageV2.category, "park-views")  }
-export type MediaImagesByCategoryQueryResult = Array<{
-  _id: string;
-  _type: "mediaImage";
-  title: string | "Untitled image";
-  image: {
-    asset: {
-      _id: string;
-      url: string | null;
-      metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-        blurhash: null;
-      } | null;
-    } | null;
-    alt: string | null;
-    caption: string | null;
-    hotspot: SanityImageHotspot | null;
-    crop: SanityImageCrop | null;
-  } | null;
-  category: "community" | "events" | "history" | "nature" | "park-views";
-}>;
-
-// Source: src/queries/media.ts
-// Variable: mediaImageByIdQuery
-// Query: *[_type == "mediaImage" && defined(imageV2.asset) && _id == $id][0] {    _id,    _type,    "title": coalesce(imageV2.title, "Untitled image"),    "image": imageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    "category": coalesce(imageV2.category, "park-views")  }
-export type MediaImageByIdQueryResult = {
-  _id: string;
-  _type: "mediaImage";
-  title: string | "Untitled image";
-  image: {
-    asset: {
-      _id: string;
-      url: string | null;
-      metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-        blurhash: null;
-        palette: SanityImagePalette | null;
-      } | null;
-    } | null;
-    alt: string | null;
-    caption: string | null;
-    hotspot: SanityImageHotspot | null;
-    crop: SanityImageCrop | null;
-  } | null;
-  category: "community" | "events" | "history" | "nature" | "park-views";
-} | null;
-
-// Source: src/queries/media.ts
 // Variable: paginatedMediaImagesQuery
 // Query: *[_type == "mediaImage" && defined(imageV2.asset)] | order(_createdAt desc) [$start...$end] {    _id,    _type,    "title": coalesce(imageV2.title, "Untitled image"),    "image": imageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": coalesce(imageV2.category, "park-views")  }
 export type PaginatedMediaImagesQueryResult = Array<{
@@ -2283,9 +2005,10 @@ export type MediaImagesCountQueryResult = number;
 
 // Source: src/queries/mediaPage.ts
 // Variable: getMediaPageQuery
-// Query: *[_type == "mediaPage"][0]{    _id,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    }  }
+// Query: *[_type == "mediaPage"][0]{    _id,    _type,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    }  }
 export type GetMediaPageQueryResult = {
   _id: string;
+  _type: "mediaPage";
   pageHero: {
     title: string | null;
     description: string | null;
@@ -2306,77 +2029,6 @@ export type GetMediaPageQueryResult = {
       crop: SanityImageCrop | null;
     } | null;
   } | null;
-} | null;
-
-// Source: src/queries/partners.ts
-// Variable: getPartnersQuery
-// Query: *[_type == "partner"] | order(order asc){    _id,    name,    slug,    logo{      asset->{        _id,        url,        metadata{          dimensions,          lqip        }      },      alt    },    description,    websiteUrl,    featured,    order  }
-export type GetPartnersQueryResult = Array<{
-  _id: string;
-  name: string | null;
-  slug: Slug | null;
-  logo: {
-    asset: {
-      _id: string;
-      url: string | null;
-      metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-      } | null;
-    } | null;
-    alt: string | null;
-  } | null;
-  description: string | null;
-  websiteUrl: string | null;
-  featured: boolean | null;
-  order: number | null;
-}>;
-
-// Source: src/queries/partners.ts
-// Variable: getFeaturedPartnersQuery
-// Query: *[_type == "partner" && featured == true] | order(order asc){    _id,    name,    slug,    logo{      asset->{        _id,        url,        metadata{          dimensions,          lqip        }      },      alt    },    description,    websiteUrl,    order  }
-export type GetFeaturedPartnersQueryResult = Array<{
-  _id: string;
-  name: string | null;
-  slug: Slug | null;
-  logo: {
-    asset: {
-      _id: string;
-      url: string | null;
-      metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-      } | null;
-    } | null;
-    alt: string | null;
-  } | null;
-  description: string | null;
-  websiteUrl: string | null;
-  order: number | null;
-}>;
-
-// Source: src/queries/partners.ts
-// Variable: getPartnerBySlugQuery
-// Query: *[_type == "partner" && slug.current == $slug][0]{    _id,    name,    slug,    logo{      asset->{        _id,        url,        metadata{          dimensions,          lqip        }      },      alt    },    description,    websiteUrl,    featured,    order  }
-export type GetPartnerBySlugQueryResult = {
-  _id: string;
-  name: string | null;
-  slug: Slug | null;
-  logo: {
-    asset: {
-      _id: string;
-      url: string | null;
-      metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-      } | null;
-    } | null;
-    alt: string | null;
-  } | null;
-  description: string | null;
-  websiteUrl: string | null;
-  featured: boolean | null;
-  order: number | null;
 } | null;
 
 // Source: src/queries/projects.ts
@@ -2415,80 +2067,6 @@ export type AllProjectsQueryResult = Array<{
   featured: boolean | null;
   publishedAt: string | null;
 }>;
-
-// Source: src/queries/projects.ts
-// Variable: activeProjectsQuery
-// Query: *[_type == "project" && defined(slug.current) && status == "active"] | order(startDate desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    status,    startDate,    startDateOverride,    completionDate,    completionDateOverride,    goal,    location,    budget,    category,    featured,    publishedAt  }
-export type ActiveProjectsQueryResult = Array<{
-  _id: string;
-  _type: "project";
-  title: string | null;
-  slug: Slug | null;
-  description: string | null;
-  heroImage: {
-    asset: {
-      _id: string;
-      url: string | null;
-      metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-        blurhash: null;
-      } | null;
-    } | null;
-    alt: string | null;
-    caption: string | null;
-    hotspot: SanityImageHotspot | null;
-    crop: SanityImageCrop | null;
-  } | null;
-  status: "active" | "completed" | "planned" | null;
-  startDate: string | null;
-  startDateOverride: string | null;
-  completionDate: string | null;
-  completionDateOverride: string | null;
-  goal: string | null;
-  location: string | null;
-  budget: string | null;
-  category: "connection" | "preservation" | "recreation" | "restoration" | null;
-  featured: boolean | null;
-  publishedAt: string | null;
-}>;
-
-// Source: src/queries/projects.ts
-// Variable: featuredProjectQuery
-// Query: *[_type == "project" && defined(slug.current) && featured == true] | order(startDate desc) [0] {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    status,    startDate,    startDateOverride,    completionDate,    completionDateOverride,    goal,    location,    budget,    category,    featured,    publishedAt  }
-export type FeaturedProjectQueryResult = {
-  _id: string;
-  _type: "project";
-  title: string | null;
-  slug: Slug | null;
-  description: string | null;
-  heroImage: {
-    asset: {
-      _id: string;
-      url: string | null;
-      metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-        blurhash: null;
-      } | null;
-    } | null;
-    alt: string | null;
-    caption: string | null;
-    hotspot: SanityImageHotspot | null;
-    crop: SanityImageCrop | null;
-  } | null;
-  status: "active" | "completed" | "planned" | null;
-  startDate: string | null;
-  startDateOverride: string | null;
-  completionDate: string | null;
-  completionDateOverride: string | null;
-  goal: string | null;
-  location: string | null;
-  budget: string | null;
-  category: "connection" | "preservation" | "recreation" | "restoration" | null;
-  featured: boolean | null;
-  publishedAt: string | null;
-} | null;
 
 // Source: src/queries/projects.ts
 // Variable: featuredProjectsQuery
@@ -2686,33 +2264,6 @@ export type ProjectBySlugQueryResult = {
 } | null;
 
 // Source: src/queries/projects.ts
-// Variable: projectCardBySlugQuery
-// Query: *[_type == "project" && slug.current == $slug][0] {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    }  }
-export type ProjectCardBySlugQueryResult = {
-  _id: string;
-  _type: "project";
-  title: string | null;
-  slug: Slug | null;
-  description: string | null;
-  heroImage: {
-    asset: {
-      _id: string;
-      url: string | null;
-      metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-        blurhash: null;
-        palette: SanityImagePalette | null;
-      } | null;
-    } | null;
-    alt: string | null;
-    caption: string | null;
-    hotspot: SanityImageHotspot | null;
-    crop: SanityImageCrop | null;
-  } | null;
-} | null;
-
-// Source: src/queries/projects.ts
 // Variable: projectSlugsQuery
 // Query: *[_type == "project" && defined(slug.current)] {    "slug": slug.current  }
 export type ProjectSlugsQueryResult = Array<{
@@ -2721,9 +2272,10 @@ export type ProjectSlugsQueryResult = Array<{
 
 // Source: src/queries/projectsPage.ts
 // Variable: getProjectsPageQuery
-// Query: *[_type == "projectsPage"][0]{    _id,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    introduction  }
+// Query: *[_type == "projectsPage"][0]{    _id,    _type,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    introduction  }
 export type GetProjectsPageQueryResult = {
   _id: string;
+  _type: "projectsPage";
   pageHero: {
     title: string | null;
     description: string | null;
@@ -2763,85 +2315,6 @@ export type GetProjectsPageQueryResult = {
     _key: string;
   }> | null;
 } | null;
-
-// Source: src/queries/quotes.ts
-// Variable: getQuotesQuery
-// Query: *[_type == "quote"] | order(_createdAt desc){    _id,    quoteText,    attribution,    "backgroundImage": backgroundImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    featured,    category  }
-export type GetQuotesQueryResult = Array<{
-  _id: string;
-  quoteText: string | null;
-  attribution: string | null;
-  backgroundImage: {
-    asset: {
-      _id: string;
-      url: string | null;
-      metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-        blurhash: null;
-        palette: SanityImagePalette | null;
-      } | null;
-    } | null;
-    alt: string | null;
-    caption: string | null;
-    hotspot: SanityImageHotspot | null;
-    crop: SanityImageCrop | null;
-  } | null;
-  featured: boolean | null;
-  category: "community" | "conservation" | "history" | "nature" | null;
-}>;
-
-// Source: src/queries/quotes.ts
-// Variable: getFeaturedQuoteQuery
-// Query: *[_type == "quote" && featured == true][0]{    _id,    quoteText,    attribution,    "backgroundImage": backgroundImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    category  }
-export type GetFeaturedQuoteQueryResult = {
-  _id: string;
-  quoteText: string | null;
-  attribution: string | null;
-  backgroundImage: {
-    asset: {
-      _id: string;
-      url: string | null;
-      metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-        blurhash: null;
-        palette: SanityImagePalette | null;
-      } | null;
-    } | null;
-    alt: string | null;
-    caption: string | null;
-    hotspot: SanityImageHotspot | null;
-    crop: SanityImageCrop | null;
-  } | null;
-  category: "community" | "conservation" | "history" | "nature" | null;
-} | null;
-
-// Source: src/queries/quotes.ts
-// Variable: getQuotesByCategoryQuery
-// Query: *[_type == "quote" && category == $category] | order(_createdAt desc){    _id,    quoteText,    attribution,    "backgroundImage": backgroundImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    featured  }
-export type GetQuotesByCategoryQueryResult = Array<{
-  _id: string;
-  quoteText: string | null;
-  attribution: string | null;
-  backgroundImage: {
-    asset: {
-      _id: string;
-      url: string | null;
-      metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-        blurhash: null;
-        palette: SanityImagePalette | null;
-      } | null;
-    } | null;
-    alt: string | null;
-    caption: string | null;
-    hotspot: SanityImageHotspot | null;
-    crop: SanityImageCrop | null;
-  } | null;
-  featured: boolean | null;
-}>;
 
 // Source: src/queries/siteSettings.ts
 // Variable: getSiteSettingsQuery
@@ -2942,11 +2415,43 @@ export type GetSiteSettingsQueryResult = {
   } | null;
 } | null;
 
+// Source: src/queries/sitemap.ts
+// Variable: sitemapQuery
+// Query: {  "events": *[_type == "event" && defined(slug.current)] { "slug": slug.current, _updatedAt },  "projects": *[_type == "project" && defined(slug.current)] { "slug": slug.current, _updatedAt },  "updates": *[_type == "update" && defined(slug.current)] { "slug": slug.current, _updatedAt },  "pages": {    "home": *[_type == "homePage"][0]._updatedAt,    "about": *[_type == "aboutPage"][0]._updatedAt,    "events": *[_type == "eventsPage"][0]._updatedAt,    "projects": *[_type == "projectsPage"][0]._updatedAt,    "updates": *[_type == "updatesPage"][0]._updatedAt,    "amenities": *[_type == "amenitiesPage"][0]._updatedAt,    "history": *[_type == "historyPage"][0]._updatedAt,    "getInvolved": *[_type == "getInvolvedPage"][0]._updatedAt,    "donate": *[_type == "donatePage"][0]._updatedAt,    "media": *[_type == "mediaPage"][0]._updatedAt,    "surveyResults": *[_type == "surveyResultsPage"][0]._updatedAt  }}
+export type SitemapQueryResult = {
+  events: Array<{
+    slug: string | null;
+    _updatedAt: string;
+  }>;
+  projects: Array<{
+    slug: string | null;
+    _updatedAt: string;
+  }>;
+  updates: Array<{
+    slug: string | null;
+    _updatedAt: string;
+  }>;
+  pages: {
+    home: string | null;
+    about: string | null;
+    events: string | null;
+    projects: string | null;
+    updates: string | null;
+    amenities: string | null;
+    history: string | null;
+    getInvolved: string | null;
+    donate: string | null;
+    media: string | null;
+    surveyResults: string | null;
+  };
+};
+
 // Source: src/queries/surveyResultsPage.ts
 // Variable: getSurveyResultsPageQuery
-// Query: *[_type == "surveyResultsPage"][0]{    _id,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    introduction  }
+// Query: *[_type == "surveyResultsPage"][0]{    _id,    _type,    pageHero{      title,      description,      "image": imageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    introduction  }
 export type GetSurveyResultsPageQueryResult = {
   _id: string;
+  _type: "surveyResultsPage";
   pageHero: {
     title: string | null;
     description: string | null;
@@ -2989,7 +2494,7 @@ export type GetSurveyResultsPageQueryResult = {
 
 // Source: src/queries/updates.ts
 // Variable: allUpdatesQuery
-// Query: *[_type == "update" && defined(slug.current)] | order(publishedAt desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": category->{      _id,      title,      slug,      color    },    featured,    publishedAt  }
+// Query: *[_type == "update" && defined(slug.current)] | order(coalesce(featured, false) desc, publishedAt desc, _id desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": category->{      _id,      title,      slug,      color    },    featured,    endDate,    publishedAt  }
 export type AllUpdatesQueryResult = Array<{
   _id: string;
   _type: "update";
@@ -3018,12 +2523,13 @@ export type AllUpdatesQueryResult = Array<{
     color: "blue" | "green" | "orange" | "purple" | "teal" | null;
   } | null;
   featured: boolean | null;
+  endDate: string | null;
   publishedAt: string | null;
 }>;
 
 // Source: src/queries/updates.ts
 // Variable: featuredUpdatesQuery
-// Query: *[_type == "update" && defined(slug.current)] | order(featured desc, publishedAt desc) [0...3] {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": category->{      _id,      title,      slug,      color    },    featured,    publishedAt  }
+// Query: *[_type == "update" && defined(slug.current)] | order(coalesce(featured, false) desc, publishedAt desc, _id desc) [0...3] {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": category->{      _id,      title,      slug,      color    },    featured,    endDate,    publishedAt  }
 export type FeaturedUpdatesQueryResult = Array<{
   _id: string;
   _type: "update";
@@ -3052,48 +2558,16 @@ export type FeaturedUpdatesQueryResult = Array<{
     color: "blue" | "green" | "orange" | "purple" | "teal" | null;
   } | null;
   featured: boolean | null;
-  publishedAt: string | null;
-}>;
-
-// Source: src/queries/updates.ts
-// Variable: updatesByCategoryQuery
-// Query: *[_type == "update" && defined(slug.current) && category->slug.current == $categorySlug] | order(publishedAt desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": category->{      _id,      title,      slug,      color    },    featured,    publishedAt  }
-export type UpdatesByCategoryQueryResult = Array<{
-  _id: string;
-  _type: "update";
-  title: string | null;
-  slug: Slug | null;
-  description: string | null;
-  heroImage: {
-    asset: {
-      _id: string;
-      url: string | null;
-      metadata: {
-        dimensions: SanityImageDimensions | null;
-        lqip: string | null;
-        blurhash: null;
-      } | null;
-    } | null;
-    alt: string | null;
-    caption: string | null;
-    hotspot: SanityImageHotspot | null;
-    crop: SanityImageCrop | null;
-  } | null;
-  category: {
-    _id: string;
-    title: string | null;
-    slug: Slug | null;
-    color: "blue" | "green" | "orange" | "purple" | "teal" | null;
-  } | null;
-  featured: boolean | null;
+  endDate: string | null;
   publishedAt: string | null;
 }>;
 
 // Source: src/queries/updates.ts
 // Variable: updateBySlugQuery
-// Query: *[_type == "update" && slug.current == $slug][0] {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    "category": category->{      _id,      title,      slug,      color    },    featured,    publishedAt,    "relatedEvents": relatedEvents[]->{      _id,      _type,      title,      slug,      description,      date,      "heroImage": heroImage{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    "relatedProjects": relatedProjects[]->{      _id,      _type,      title,      slug,      description,      status,      "heroImage": heroImageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    body[]{        ...,  _type == "image" => {    ...,    asset->{      _id,      url,      metadata{        dimensions,        lqip,        blurhash      }    }  },  _type == "fileAttachment" => {    ...,    asset->{      _id,      url,      originalFilename,      size,      extension,      mimeType    }  }    }  }
+// Query: *[_type == "update" && slug.current == $slug][0] {    _id,    _updatedAt,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop    },    "category": category->{      _id,      title,      slug,      color    },    featured,    endDate,    publishedAt,    "relatedEvents": (relatedEvents[]->)[defined(slug.current)]{      _id,      _type,      title,      slug,      description,      date,      "heroImage": heroImage{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    "relatedProjects": (relatedProjects[]->)[defined(slug.current)]{      _id,      _type,      title,      slug,      description,      status,      "heroImage": heroImageV2{          asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash,      palette    }  },  alt,  caption,  hotspot,  crop      }    },    body[]{        ...,  _type == "image" => {    ...,    asset->{      _id,      url,      metadata{        dimensions,        lqip,        blurhash      }    }  },  _type == "fileAttachment" => {    ...,    asset->{      _id,      url,      originalFilename,      size,      extension,      mimeType    }  }    }  }
 export type UpdateBySlugQueryResult = {
   _id: string;
+  _updatedAt: string;
   _type: "update";
   title: string | null;
   slug: Slug | null;
@@ -3121,6 +2595,7 @@ export type UpdateBySlugQueryResult = {
     color: "blue" | "green" | "orange" | "purple" | "teal" | null;
   } | null;
   featured: boolean | null;
+  endDate: string | null;
   publishedAt: string | null;
   relatedEvents: Array<{
     _id: string;
@@ -3235,7 +2710,7 @@ export type UpdateSlugsQueryResult = Array<{
 
 // Source: src/queries/updates.ts
 // Variable: updatesByEventQuery
-// Query: *[_type == "update" && defined(slug.current) && references($eventId)] | order(publishedAt desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": category->{      _id,      title,      slug,      color    },    featured,    publishedAt  }
+// Query: *[_type == "update" && defined(slug.current) && $eventId in relatedEvents[]._ref] | order(publishedAt desc, _id desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": category->{      _id,      title,      slug,      color    },    featured,    endDate,    publishedAt  }
 export type UpdatesByEventQueryResult = Array<{
   _id: string;
   _type: "update";
@@ -3264,12 +2739,13 @@ export type UpdatesByEventQueryResult = Array<{
     color: "blue" | "green" | "orange" | "purple" | "teal" | null;
   } | null;
   featured: boolean | null;
+  endDate: string | null;
   publishedAt: string | null;
 }>;
 
 // Source: src/queries/updates.ts
 // Variable: updatesByProjectQuery
-// Query: *[_type == "update" && defined(slug.current) && references($projectId)] | order(publishedAt desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": category->{      _id,      title,      slug,      color    },    featured,    publishedAt  }
+// Query: *[_type == "update" && defined(slug.current) && $projectId in relatedProjects[]._ref] | order(publishedAt desc, _id desc) {    _id,    _type,    title,    slug,    description,    "heroImage": heroImageV2{        asset->{    _id,    url,    metadata{      dimensions,      lqip,      blurhash    }  },  alt,  caption,  hotspot,  crop    },    "category": category->{      _id,      title,      slug,      color    },    featured,    endDate,    publishedAt  }
 export type UpdatesByProjectQueryResult = Array<{
   _id: string;
   _type: "update";
@@ -3298,12 +2774,13 @@ export type UpdatesByProjectQueryResult = Array<{
     color: "blue" | "green" | "orange" | "purple" | "teal" | null;
   } | null;
   featured: boolean | null;
+  endDate: string | null;
   publishedAt: string | null;
 }>;
 
 // Source: src/queries/updates.ts
 // Variable: updateCategoriesQuery
-// Query: *[_type == "updateCategory"] | order(title asc) {    _id,    title,    slug,    color  }
+// Query: *[_type == "updateCategory" && defined(slug.current)] | order(title asc) {    _id,    title,    slug,    color  }
 export type UpdateCategoriesQueryResult = Array<{
   _id: string;
   title: string | null;
@@ -3313,7 +2790,7 @@ export type UpdateCategoriesQueryResult = Array<{
 
 // Source: src/queries/updates.ts
 // Variable: updateNavigationQuery
-// Query: {    "previous": *[_type == "update" && (publishedAt < $publishedAt || (publishedAt == $publishedAt && _id < $id))] | order(publishedAt desc, _id desc) [0] {      _id,      title,      slug    },    "next": *[_type == "update" && (publishedAt > $publishedAt || (publishedAt == $publishedAt && _id > $id))] | order(publishedAt asc, _id asc) [0] {      _id,      title,      slug    }  }
+// Query: {    "previous": *[_type == "update" && defined(slug.current) && (publishedAt < $publishedAt || (publishedAt == $publishedAt && _id < $id))] | order(publishedAt desc, _id desc) [0] {      _id,      title,      slug    },    "next": *[_type == "update" && defined(slug.current) && (publishedAt > $publishedAt || (publishedAt == $publishedAt && _id > $id))] | order(publishedAt asc, _id asc) [0] {      _id,      title,      slug    }  }
 export type UpdateNavigationQueryResult = {
   previous: {
     _id: string;
@@ -3373,58 +2850,42 @@ export type UpdatesPageQueryResult = {
 } | null;
 
 // Query TypeMap
-import "@sanity/client";
-declare module "@sanity/client" {
+declare global {
   interface SanityQueries {
-    '\n  *[_type == "aboutPage"][0]{\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    mission,\n    vision,\n    highlights[]{\n      _key,\n      value,\n      label\n    },\n    "storyImage": storyImage{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    content[]{\n      \n  ...,\n  _type == "image" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      metadata{\n        dimensions,\n        lqip,\n        blurhash\n      }\n    }\n  },\n  _type == "fileAttachment" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      originalFilename,\n      size,\n      extension,\n      mimeType\n    }\n  }\n\n    },\n    "calloutImage": calloutImage{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    boardMembers[]{\n      _key,\n      name,\n      role,\n      bio,\n      image{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    }\n  }\n': GetAboutPageQueryResult;
-    '\n  *[_type == "amenitiesPage"][0]{\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    introduction,\n    amenities[]{\n      title,\n      slug,\n      icon,\n      description,\n      details,\n      "images": imagesV2[defined(asset)][]{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      externalLink,\n      linkText,\n      section\n    }\n  }\n': GetAmenitiesPageQueryResult;
-    '\n  *[_type == "amenitiesPage"][0]{\n    "upperParkAmenities": amenities[section == "upper-park" || section == "both"],\n    "lowerParkAmenities": amenities[section == "lower-park" || section == "both"]\n  }\n': GetAmenitiesBySectionQueryResult;
-    '\n  *[_type == "donatePage"][0]{\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    }\n  }\n': GetDonatePageQueryResult;
+    '\n  *[_type == "aboutPage"][0]{\n    _id,\n    _type,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    mission,\n    vision,\n    highlights[]{\n      _key,\n      value,\n      label\n    },\n    "storyImage": storyImage{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    content[]{\n      \n  ...,\n  _type == "image" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      metadata{\n        dimensions,\n        lqip,\n        blurhash\n      }\n    }\n  },\n  _type == "fileAttachment" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      originalFilename,\n      size,\n      extension,\n      mimeType\n    }\n  }\n\n    },\n    "calloutImage": calloutImage{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    boardMembers[]{\n      _key,\n      name,\n      role,\n      bio,\n      image{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    }\n  }\n': GetAboutPageQueryResult;
+    '\n  *[_type == "amenitiesPage"][0]{\n    _id,\n    _type,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    introduction,\n    amenities[]{\n      title,\n      slug,\n      icon,\n      description,\n      details,\n      "images": imagesV2[defined(asset)][]{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      externalLink,\n      linkText,\n      section\n    }\n  }\n': GetAmenitiesPageQueryResult;
+    '\n  *[_type == "donatePage"][0]{\n    _id,\n    _type,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    }\n  }\n': GetDonatePageQueryResult;
     '\n  *[_type == "event" && defined(slug.current)] | order(date desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImage{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    date,\n    time,\n    location,\n    featured,\n    publishedAt\n  }\n': AllEventsQueryResult;
-    '\n  *[_type == "event" && defined(slug.current) && date >= now()] | order(date asc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImage{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    date,\n    time,\n    location,\n    featured,\n    publishedAt\n  }\n': UpcomingEventsQueryResult;
-    '\n  *[_type == "event" && defined(slug.current) && date < now()] | order(date desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImage{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    date,\n    time,\n    location,\n    featured,\n    publishedAt\n  }\n': PastEventsQueryResult;
-    '\n  *[_type == "event" && defined(slug.current) && featured == true] | order(date desc) [0...3] {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImage{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    date,\n    time,\n    location,\n    featured,\n    publishedAt\n  }\n': FeaturedEventsQueryResult;
     '\n  *[_type == "event" && defined(slug.current)] | order(date desc) [0...3] {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImage{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    date,\n    time,\n    location,\n    featured,\n    publishedAt\n  }\n': RecentEventsQueryResult;
     '\n  *[_type == "event" && slug.current == $slug][0] {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImage{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    date,\n    time,\n    location,\n    featured,\n    publishedAt,\n    body[]{\n      \n  ...,\n  _type == "image" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      metadata{\n        dimensions,\n        lqip,\n        blurhash\n      }\n    }\n  },\n  _type == "fileAttachment" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      originalFilename,\n      size,\n      extension,\n      mimeType\n    }\n  }\n\n    },\n    recap[]{\n      \n  ...,\n  _type == "image" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      metadata{\n        dimensions,\n        lqip,\n        blurhash\n      }\n    }\n  },\n  _type == "fileAttachment" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      originalFilename,\n      size,\n      extension,\n      mimeType\n    }\n  }\n\n    },\n    "recapGallery": recapGallery->{\n      _id,\n      title,\n      images[]{\n        "image": imageV2{\n          \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n        },\n        showOnMobile\n      }\n    }\n  }\n': EventBySlugQueryResult;
     '\n  *[_type == "event" && defined(slug.current)] {\n    "slug": slug.current\n  }\n': EventSlugsQueryResult;
-    '\n  *[_type == "eventsPage"][0]{\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    introduction\n  }\n': GetEventsPageQueryResult;
-    '\n  *[_type == "gallery"] | order(order asc){\n    _id,\n    title,\n    galleryType,\n    images[]{\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      showOnMobile\n    },\n    order\n  }\n': GetGalleriesQueryResult;
-    '\n  *[_type == "gallery" && galleryType == $type] | order(order asc){\n    _id,\n    title,\n    galleryType,\n    images[]{\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      showOnMobile\n    },\n    order\n  }\n': GetGalleryByTypeQueryResult;
-    '\n  *[_type == "gallery" && _id == $id][0]{\n    _id,\n    title,\n    galleryType,\n    images[]{\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      showOnMobile\n    },\n    order\n  }\n': GetGalleryByIdQueryResult;
-    '\n  *[_type == "getInvolvedPage"][0]{\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n  }\n': GetGetInvolvedPageQueryResult;
-    '\n  *[_type == "historyPage"][0]{\n    _id,\n    content[]{\n      \n  ...,\n  _type == "image" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      metadata{\n        dimensions,\n        lqip,\n        blurhash\n      }\n    }\n  },\n  _type == "fileAttachment" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      originalFilename,\n      size,\n      extension,\n      mimeType\n    }\n  }\n\n    },\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n  }\n': GetHistoryPageQueryResult;
-    '\n  *[_type == "homePage"][0]{\n    _id,\n    hero{\n      heading,\n      subheading,\n      "heroImage": heroImageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      ctaButton\n    },\n    introSection{\n      heading,\n      body\n    },\n    visionSection{\n      title,\n      description,\n      pillars[]{\n        _key,\n        title,\n        pillar,\n        description\n      }\n    },\n    projectsSectionHeader{\n      title,\n      description\n    },\n    parkSection{\n      title,\n      intro,\n      body,\n      today,\n      callout\n    },\n    eventsSectionHeader{\n      title,\n      description\n    },\n    getInvolvedSection{\n      title,\n      description\n    },\n    partnersSectionHeader{\n      title,\n      description\n    },\n    "partners": featuredPartners[]->{\n      _id,\n      name,\n      slug,\n      logo{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt\n      },\n      description,\n      websiteUrl,\n      order\n    } | order(order asc),\n    "quote": featuredQuote->{\n      _id,\n      quoteText,\n      attribution,\n      "backgroundImage": backgroundImageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    "gallery": homepageGallery->{\n      _id,\n      title,\n      images[]{\n        "image": imageV2{\n          \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n        },\n        showOnMobile\n      }\n    },\n    "parkGallery": parkGallery->{\n      _id,\n      title,\n      images[]{\n        "image": imageV2{\n          \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n        },\n        showOnMobile\n      }\n    }\n  }\n': GetHomePageQueryResult;
-    '\n  *[_type == "mediaImage" && defined(imageV2.asset)] | order(_createdAt desc) {\n    _id,\n    _type,\n    "title": coalesce(imageV2.title, "Untitled image"),\n    "image": imageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": coalesce(imageV2.category, "park-views")\n  }\n': AllMediaImagesQueryResult;
-    '\n  *[\n    _type == "mediaImage" &&\n    defined(imageV2.asset) &&\n    imageV2.category == $category\n  ] | order(_createdAt desc) {\n    _id,\n    _type,\n    "title": coalesce(imageV2.title, "Untitled image"),\n    "image": imageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": coalesce(imageV2.category, "park-views")\n  }\n': MediaImagesByCategoryQueryResult;
-    '\n  *[_type == "mediaImage" && defined(imageV2.asset) && _id == $id][0] {\n    _id,\n    _type,\n    "title": coalesce(imageV2.title, "Untitled image"),\n    "image": imageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": coalesce(imageV2.category, "park-views")\n  }\n': MediaImageByIdQueryResult;
+    '\n  *[_type == "eventsPage"][0]{\n    _id,\n    _type,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    introduction\n  }\n': GetEventsPageQueryResult;
+    '\n  *[_type == "getInvolvedPage"][0]{\n    _id,\n    _type,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n  }\n': GetGetInvolvedPageQueryResult;
+    '\n  *[_type == "historyPage"][0]{\n    _id,\n    _type,\n    content[]{\n      \n  ...,\n  _type == "image" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      metadata{\n        dimensions,\n        lqip,\n        blurhash\n      }\n    }\n  },\n  _type == "fileAttachment" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      originalFilename,\n      size,\n      extension,\n      mimeType\n    }\n  }\n\n    },\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n  }\n': GetHistoryPageQueryResult;
+    '\n  *[_type == "homePage"][0]{\n    _id,\n    _type,\n    hero{\n      heading,\n      subheading,\n      "heroImage": heroImageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      ctaButton\n    },\n    introSection{\n      heading,\n      body\n    },\n    visionSection{\n      title,\n      description,\n      pillars[]{\n        _key,\n        title,\n        pillar,\n        description\n      }\n    },\n    projectsSectionHeader{\n      title,\n      description\n    },\n    parkSection{\n      title,\n      intro,\n      body,\n      today,\n      callout\n    },\n    eventsSectionHeader{\n      title,\n      description\n    },\n    getInvolvedSection{\n      title,\n      description\n    },\n    partnersSectionHeader{\n      title,\n      description\n    },\n    "partners": featuredPartners[]->{\n      _id,\n      name,\n      slug,\n      logo{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt\n      },\n      description,\n      websiteUrl,\n      order\n    } | order(order asc),\n    "quote": featuredQuote->{\n      _id,\n      quoteText,\n      attribution,\n      "backgroundImage": backgroundImageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    "gallery": homepageGallery->{\n      _id,\n      title,\n      images[]{\n        "image": imageV2{\n          \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n        },\n        showOnMobile\n      }\n    },\n    "parkGallery": parkGallery->{\n      _id,\n      title,\n      images[]{\n        "image": imageV2{\n          \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n        },\n        showOnMobile\n      }\n    }\n  }\n': GetHomePageQueryResult;
     '\n  *[_type == "mediaImage" && defined(imageV2.asset)] | order(_createdAt desc) [$start...$end] {\n    _id,\n    _type,\n    "title": coalesce(imageV2.title, "Untitled image"),\n    "image": imageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": coalesce(imageV2.category, "park-views")\n  }\n': PaginatedMediaImagesQueryResult;
     '\n  count(*[_type == "mediaImage" && defined(imageV2.asset)])\n': MediaImagesCountQueryResult;
-    '\n  *[_type == "mediaPage"][0]{\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    }\n  }\n': GetMediaPageQueryResult;
-    '\n  *[_type == "partner"] | order(order asc){\n    _id,\n    name,\n    slug,\n    logo{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt\n    },\n    description,\n    websiteUrl,\n    featured,\n    order\n  }\n': GetPartnersQueryResult;
-    '\n  *[_type == "partner" && featured == true] | order(order asc){\n    _id,\n    name,\n    slug,\n    logo{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt\n    },\n    description,\n    websiteUrl,\n    order\n  }\n': GetFeaturedPartnersQueryResult;
-    '\n  *[_type == "partner" && slug.current == $slug][0]{\n    _id,\n    name,\n    slug,\n    logo{\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip\n        }\n      },\n      alt\n    },\n    description,\n    websiteUrl,\n    featured,\n    order\n  }\n': GetPartnerBySlugQueryResult;
+    '\n  *[_type == "mediaPage"][0]{\n    _id,\n    _type,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    }\n  }\n': GetMediaPageQueryResult;
     '\n  *[_type == "project" && defined(slug.current)] | order(startDate desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    status,\n    startDate,\n    startDateOverride,\n    completionDate,\n    completionDateOverride,\n    goal,\n    location,\n    budget,\n    category,\n    featured,\n    publishedAt\n  }\n': AllProjectsQueryResult;
-    '\n  *[_type == "project" && defined(slug.current) && status == "active"] | order(startDate desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    status,\n    startDate,\n    startDateOverride,\n    completionDate,\n    completionDateOverride,\n    goal,\n    location,\n    budget,\n    category,\n    featured,\n    publishedAt\n  }\n': ActiveProjectsQueryResult;
-    '\n  *[_type == "project" && defined(slug.current) && featured == true] | order(startDate desc) [0] {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    status,\n    startDate,\n    startDateOverride,\n    completionDate,\n    completionDateOverride,\n    goal,\n    location,\n    budget,\n    category,\n    featured,\n    publishedAt\n  }\n': FeaturedProjectQueryResult;
     '\n  *[_type == "project" && defined(slug.current) && featured == true] | order(startDate desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    status,\n    startDate,\n    startDateOverride,\n    completionDate,\n    completionDateOverride,\n    goal,\n    location,\n    budget,\n    category,\n    featured,\n    publishedAt\n  }\n': FeaturedProjectsQueryResult;
     '\n  *[_type == "project" && slug.current == $slug][0] {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    status,\n    startDate,\n    startDateOverride,\n    completionDate,\n    completionDateOverride,\n    goal,\n    location,\n    budget,\n    category,\n    featured,\n    publishedAt,\n    body[]{\n      \n  ...,\n  _type == "image" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      metadata{\n        dimensions,\n        lqip,\n        blurhash\n      }\n    }\n  },\n  _type == "fileAttachment" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      originalFilename,\n      size,\n      extension,\n      mimeType\n    }\n  }\n\n    },\n    gallery[]{\n      ...,\n      asset->{\n        _id,\n        url,\n        metadata{\n          dimensions,\n          lqip,\n          blurhash,\n          palette\n        }\n      },\n      alt,\n      caption,\n      hotspot,\n      crop\n    },\n    "relatedEvents": relatedEvents[]->{\n      _id,\n      _type,\n      title,\n      slug,\n      description,\n      "heroImage": heroImage{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      },\n      date,\n      time,\n      location\n    },\n    "partners": partners[]->{\n      _id,\n      _type,\n      name,\n      logo{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    }\n  }\n': ProjectBySlugQueryResult;
-    '\n  *[_type == "project" && slug.current == $slug][0] {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    }\n  }\n': ProjectCardBySlugQueryResult;
     '\n  *[_type == "project" && defined(slug.current)] {\n    "slug": slug.current\n  }\n': ProjectSlugsQueryResult;
-    '\n  *[_type == "projectsPage"][0]{\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    introduction\n  }\n': GetProjectsPageQueryResult;
-    '\n  *[_type == "quote"] | order(_createdAt desc){\n    _id,\n    quoteText,\n    attribution,\n    "backgroundImage": backgroundImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    featured,\n    category\n  }\n': GetQuotesQueryResult;
-    '\n  *[_type == "quote" && featured == true][0]{\n    _id,\n    quoteText,\n    attribution,\n    "backgroundImage": backgroundImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    category\n  }\n': GetFeaturedQuoteQueryResult;
-    '\n  *[_type == "quote" && category == $category] | order(_createdAt desc){\n    _id,\n    quoteText,\n    attribution,\n    "backgroundImage": backgroundImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    featured\n  }\n': GetQuotesByCategoryQueryResult;
+    '\n  *[_type == "projectsPage"][0]{\n    _id,\n    _type,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    introduction\n  }\n': GetProjectsPageQueryResult;
     '\n  *[_type == "siteSettings"][0]{\n    organizationName,\n    alternativeName,\n    description,\n    parkAddress,\n    parkHours,\n    siteAlert{\n      enabled,\n      label,\n      message,\n      startsAt,\n      expiresAt\n    },\n    socialMedia,\n    donationUrl,\n    contactEmail,\n    metaDefaults{\n      siteTitle,\n      ogImage{\n        asset->{\n          _id,\n          url,\n          metadata{\n            dimensions,\n            lqip\n          }\n        },\n        alt\n      }\n    },\n    getInvolvedGallery->{\n      _id,\n      title,\n      images[]{\n        "image": imageV2{\n          \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n        }\n      }\n    },\n    featuredQuote->{\n      _id,\n      quoteText,\n      attribution,\n      "backgroundImage": backgroundImageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    }\n  }\n': GetSiteSettingsQueryResult;
-    '\n  *[_type == "surveyResultsPage"][0]{\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    introduction\n  }\n': GetSurveyResultsPageQueryResult;
-    '\n  *[_type == "update" && defined(slug.current)] | order(publishedAt desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    publishedAt\n  }\n': AllUpdatesQueryResult;
-    '\n  *[_type == "update" && defined(slug.current)] | order(featured desc, publishedAt desc) [0...3] {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    publishedAt\n  }\n': FeaturedUpdatesQueryResult;
-    '\n  *[_type == "update" && defined(slug.current) && category->slug.current == $categorySlug] | order(publishedAt desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    publishedAt\n  }\n': UpdatesByCategoryQueryResult;
-    '\n  *[_type == "update" && slug.current == $slug][0] {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    publishedAt,\n    "relatedEvents": relatedEvents[]->{\n      _id,\n      _type,\n      title,\n      slug,\n      description,\n      date,\n      "heroImage": heroImage{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    "relatedProjects": relatedProjects[]->{\n      _id,\n      _type,\n      title,\n      slug,\n      description,\n      status,\n      "heroImage": heroImageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    body[]{\n      \n  ...,\n  _type == "image" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      metadata{\n        dimensions,\n        lqip,\n        blurhash\n      }\n    }\n  },\n  _type == "fileAttachment" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      originalFilename,\n      size,\n      extension,\n      mimeType\n    }\n  }\n\n    }\n  }\n': UpdateBySlugQueryResult;
+    '{\n  "events": *[_type == "event" && defined(slug.current)] { "slug": slug.current, _updatedAt },\n  "projects": *[_type == "project" && defined(slug.current)] { "slug": slug.current, _updatedAt },\n  "updates": *[_type == "update" && defined(slug.current)] { "slug": slug.current, _updatedAt },\n  "pages": {\n    "home": *[_type == "homePage"][0]._updatedAt,\n    "about": *[_type == "aboutPage"][0]._updatedAt,\n    "events": *[_type == "eventsPage"][0]._updatedAt,\n    "projects": *[_type == "projectsPage"][0]._updatedAt,\n    "updates": *[_type == "updatesPage"][0]._updatedAt,\n    "amenities": *[_type == "amenitiesPage"][0]._updatedAt,\n    "history": *[_type == "historyPage"][0]._updatedAt,\n    "getInvolved": *[_type == "getInvolvedPage"][0]._updatedAt,\n    "donate": *[_type == "donatePage"][0]._updatedAt,\n    "media": *[_type == "mediaPage"][0]._updatedAt,\n    "surveyResults": *[_type == "surveyResultsPage"][0]._updatedAt\n  }\n}': SitemapQueryResult;
+    '\n  *[_type == "surveyResultsPage"][0]{\n    _id,\n    _type,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    introduction\n  }\n': GetSurveyResultsPageQueryResult;
+    '\n  *[_type == "update" && defined(slug.current)] | order(coalesce(featured, false) desc, publishedAt desc, _id desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    endDate,\n    publishedAt\n  }\n': AllUpdatesQueryResult;
+    '\n  *[_type == "update" && defined(slug.current)] | order(coalesce(featured, false) desc, publishedAt desc, _id desc) [0...3] {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    endDate,\n    publishedAt\n  }\n': FeaturedUpdatesQueryResult;
+    '\n  *[_type == "update" && slug.current == $slug][0] {\n    _id,\n    _updatedAt,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    endDate,\n    publishedAt,\n    "relatedEvents": (relatedEvents[]->)[defined(slug.current)]{\n      _id,\n      _type,\n      title,\n      slug,\n      description,\n      date,\n      "heroImage": heroImage{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    "relatedProjects": (relatedProjects[]->)[defined(slug.current)]{\n      _id,\n      _type,\n      title,\n      slug,\n      description,\n      status,\n      "heroImage": heroImageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    body[]{\n      \n  ...,\n  _type == "image" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      metadata{\n        dimensions,\n        lqip,\n        blurhash\n      }\n    }\n  },\n  _type == "fileAttachment" => {\n    ...,\n    asset->{\n      _id,\n      url,\n      originalFilename,\n      size,\n      extension,\n      mimeType\n    }\n  }\n\n    }\n  }\n': UpdateBySlugQueryResult;
     '\n  *[_type == "update" && defined(slug.current)] {\n    "slug": slug.current\n  }\n': UpdateSlugsQueryResult;
-    '\n  *[_type == "update" && defined(slug.current) && references($eventId)] | order(publishedAt desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    publishedAt\n  }\n': UpdatesByEventQueryResult;
-    '\n  *[_type == "update" && defined(slug.current) && references($projectId)] | order(publishedAt desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    publishedAt\n  }\n': UpdatesByProjectQueryResult;
-    '\n  *[_type == "updateCategory"] | order(title asc) {\n    _id,\n    title,\n    slug,\n    color\n  }\n': UpdateCategoriesQueryResult;
-    '\n  {\n    "previous": *[_type == "update" && (publishedAt < $publishedAt || (publishedAt == $publishedAt && _id < $id))] | order(publishedAt desc, _id desc) [0] {\n      _id,\n      title,\n      slug\n    },\n    "next": *[_type == "update" && (publishedAt > $publishedAt || (publishedAt == $publishedAt && _id > $id))] | order(publishedAt asc, _id asc) [0] {\n      _id,\n      title,\n      slug\n    }\n  }\n': UpdateNavigationQueryResult;
+    '\n  *[_type == "update" && defined(slug.current) && $eventId in relatedEvents[]._ref] | order(publishedAt desc, _id desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    endDate,\n    publishedAt\n  }\n': UpdatesByEventQueryResult;
+    '\n  *[_type == "update" && defined(slug.current) && $projectId in relatedProjects[]._ref] | order(publishedAt desc, _id desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    description,\n    "heroImage": heroImageV2{\n      \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n    },\n    "category": category->{\n      _id,\n      title,\n      slug,\n      color\n    },\n    featured,\n    endDate,\n    publishedAt\n  }\n': UpdatesByProjectQueryResult;
+    '\n  *[_type == "updateCategory" && defined(slug.current)] | order(title asc) {\n    _id,\n    title,\n    slug,\n    color\n  }\n': UpdateCategoriesQueryResult;
+    '\n  {\n    "previous": *[_type == "update" && defined(slug.current) && (publishedAt < $publishedAt || (publishedAt == $publishedAt && _id < $id))] | order(publishedAt desc, _id desc) [0] {\n      _id,\n      title,\n      slug\n    },\n    "next": *[_type == "update" && defined(slug.current) && (publishedAt > $publishedAt || (publishedAt == $publishedAt && _id > $id))] | order(publishedAt asc, _id asc) [0] {\n      _id,\n      title,\n      slug\n    }\n  }\n': UpdateNavigationQueryResult;
     '\n  *[_type == "updatesPage"][0] {\n    _id,\n    pageHero{\n      title,\n      description,\n      "image": imageV2{\n        \n  asset->{\n    _id,\n    url,\n    metadata{\n      dimensions,\n      lqip,\n      blurhash,\n      palette\n    }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n\n      }\n    },\n    introduction\n  }\n': UpdatesPageQueryResult;
   }
+}
+// Lets @sanity/client releases that predate the global registry read it too
+declare module "@sanity/client" {
+  interface SanityQueries extends globalThis.SanityQueries {}
 }

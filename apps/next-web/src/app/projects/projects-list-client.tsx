@@ -2,10 +2,14 @@
 
 import Project from "@/components/Project/project"
 import { useOptimisticList } from "@/hooks/use-optimistic-sanity"
-import type { SanityProject } from "@/lib/sanity-types"
+import type { MaybeStega, SanityProject } from "@/lib/sanity-types"
 import { sortProjects } from "@/lib/sort-helpers"
 
-export default function ProjectsListClient({ projects }: { projects: SanityProject[] }) {
+export default function ProjectsListClient({
+  projects,
+}: {
+  projects: MaybeStega<SanityProject>[]
+}) {
   const optimisticProjects = useOptimisticList(projects)
 
   // Re-sort after optimistic adds/removes/edits.

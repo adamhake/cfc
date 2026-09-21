@@ -9,7 +9,6 @@
 export type {
   // Re-export all generated query result types
   AllEventsQueryResult,
-  AllMediaImagesQueryResult,
   AllProjectsQueryResult,
   AllUpdatesQueryResult,
   EventBySlugQueryResult,
@@ -25,11 +24,8 @@ export type {
   GetProjectsPageQueryResult,
   GetSiteSettingsQueryResult,
   GetSurveyResultsPageQueryResult,
-  MediaImageByIdQueryResult,
-  MediaImagesByCategoryQueryResult,
   PaginatedMediaImagesQueryResult,
   ProjectBySlugQueryResult,
-  ProjectCardBySlugQueryResult,
   ProjectSlugsQueryResult,
   // Re-export schema primitives used by consumers
   SanityImageCrop,
@@ -45,7 +41,6 @@ export type {
 
 import type {
   AllEventsQueryResult,
-  AllMediaImagesQueryResult,
   AllProjectsQueryResult,
   AllUpdatesQueryResult,
   EventBySlugQueryResult,
@@ -61,8 +56,8 @@ import type {
   GetProjectsPageQueryResult,
   GetSiteSettingsQueryResult,
   GetSurveyResultsPageQueryResult,
+  PaginatedMediaImagesQueryResult,
   ProjectBySlugQueryResult,
-  ProjectCardBySlugQueryResult,
   ProjectSlugsQueryResult,
   UpdateBySlugQueryResult,
   UpdateSlugsQueryResult,
@@ -80,7 +75,7 @@ export type SanityImage = NonNullable<AllEventsQueryResult[number]["heroImage"]>
 export type SanityEvent = AllEventsQueryResult[number]
 export type SanityProject = AllProjectsQueryResult[number]
 export type SanityUpdate = AllUpdatesQueryResult[number]
-export type SanityMediaImage = AllMediaImagesQueryResult[number]
+export type SanityMediaImage = PaginatedMediaImagesQueryResult[number]
 
 // ---------------------------------------------------------------------------
 // Entity types — detail shapes (from by-slug queries, non-null)
@@ -88,11 +83,6 @@ export type SanityMediaImage = AllMediaImagesQueryResult[number]
 export type SanityEventDetail = NonNullable<EventBySlugQueryResult>
 export type SanityProjectDetail = NonNullable<ProjectBySlugQueryResult>
 export type SanityUpdateDetail = NonNullable<UpdateBySlugQueryResult>
-
-// ---------------------------------------------------------------------------
-// Card / condensed shapes
-// ---------------------------------------------------------------------------
-export type SanityProjectCard = NonNullable<ProjectCardBySlugQueryResult>
 
 // ---------------------------------------------------------------------------
 // Singleton page types (non-null wrappers)

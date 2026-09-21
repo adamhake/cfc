@@ -10,10 +10,10 @@ import type { SanitySiteSettings } from "./sanity-types"
  * a single Sanity round trip per request.
  */
 export const getSiteSettings = cache(async (): Promise<SanitySiteSettings | null> => {
-  const { data } = (await cachedSanityFetch({
+  const { data } = await cachedSanityFetch({
     query: getSiteSettingsQuery,
     tags: [CACHE_TAGS.SITE_SETTINGS],
     ...(await getDynamicFetchOptions()),
-  })) as { data: SanitySiteSettings | null }
+  })
   return data
 })

@@ -21,63 +21,6 @@ export const allEventsQuery = defineQuery(`
   }
 `)
 
-// Get upcoming events
-export const upcomingEventsQuery = defineQuery(`
-  *[_type == "event" && defined(slug.current) && date >= now()] | order(date asc) {
-    _id,
-    _type,
-    title,
-    slug,
-    description,
-    "heroImage": heroImage{
-      ${imageFieldProjectionSlim}
-    },
-    date,
-    time,
-    location,
-    featured,
-    publishedAt
-  }
-`)
-
-// Get past events
-export const pastEventsQuery = defineQuery(`
-  *[_type == "event" && defined(slug.current) && date < now()] | order(date desc) {
-    _id,
-    _type,
-    title,
-    slug,
-    description,
-    "heroImage": heroImage{
-      ${imageFieldProjectionSlim}
-    },
-    date,
-    time,
-    location,
-    featured,
-    publishedAt
-  }
-`)
-
-// Get featured events
-export const featuredEventsQuery = defineQuery(`
-  *[_type == "event" && defined(slug.current) && featured == true] | order(date desc) [0...3] {
-    _id,
-    _type,
-    title,
-    slug,
-    description,
-    "heroImage": heroImage{
-      ${imageFieldProjectionSlim}
-    },
-    date,
-    time,
-    location,
-    featured,
-    publishedAt
-  }
-`)
-
 // Get recent events (3 most recent by date)
 export const recentEventsQuery = defineQuery(`
   *[_type == "event" && defined(slug.current)] | order(date desc) [0...3] {

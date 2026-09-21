@@ -3,9 +3,14 @@
 import Chip from "@/components/Chip/chip"
 import PageHero from "@/components/PageHero/page-hero"
 import { useOptimisticDocument } from "@/hooks/use-optimistic-sanity"
-import type { SanityProjectDetail } from "@/lib/sanity-types"
+import { sanityAttr } from "@/lib/sanity-data-attribute"
+import type { MaybeStega, SanityProjectDetail } from "@/lib/sanity-types"
 
-export default function ProjectHeroOptimistic({ project }: { project: SanityProjectDetail }) {
+export default function ProjectHeroOptimistic({
+  project,
+}: {
+  project: MaybeStega<SanityProjectDetail>
+}) {
   const optimistic = useOptimisticDocument(project) ?? project
 
   return (
@@ -13,6 +18,7 @@ export default function ProjectHeroOptimistic({ project }: { project: SanityProj
       title={optimistic.title ?? ""}
       subtitle={optimistic.description ?? undefined}
       sanityImage={optimistic.heroImage ?? undefined}
+      imageDataAttr={sanityAttr(optimistic, "heroImageV2")}
       variant="detail"
       priority={true}
       alignment="bottom-mobile-center-desktop"

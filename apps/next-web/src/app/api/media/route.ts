@@ -5,7 +5,6 @@ import { scheduleFlush } from "@/integrations/posthog/otel"
 import { captureRequestError } from "@/integrations/posthog/server"
 import { withSpan } from "@/integrations/posthog/tracing"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
-import type { SanityMediaImage } from "@/lib/sanity-types"
 
 const MAX_PAGE_SIZE = 100
 
@@ -33,7 +32,7 @@ export async function GET(request: Request) {
 
   try {
     const images = await withSpan("sanity.media.paginate", { start, end }, async () => {
-      const { data } = (await cachedSanityFetch({
+      const { data } = await cachedSanityFetch({
         ...(await getDynamicFetchOptions()),
         query: paginatedMediaImagesQuery,
         params: { start, end },
@@ -41,7 +40,7 @@ export async function GET(request: Request) {
         // JSON API response — stega encoding would put invisible characters in
         // titles and alt text with no visual-editing overlay to make use of them.
         stega: false,
-      })) as { data: SanityMediaImage[] }
+      })
 
       return data
     })

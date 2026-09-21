@@ -4,6 +4,7 @@ import { imageFieldProjection } from "./imageProjections"
 export const getMediaPageQuery = defineQuery(`
   *[_type == "mediaPage"][0]{
     _id,
+    _type,
     pageHero{
       title,
       description,

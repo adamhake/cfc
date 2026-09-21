@@ -4,6 +4,7 @@ import { imageFieldProjection } from "./imageProjections"
 export const getAmenitiesPageQuery = defineQuery(`
   *[_type == "amenitiesPage"][0]{
     _id,
+    _type,
     pageHero{
       title,
       description,
@@ -25,12 +26,5 @@ export const getAmenitiesPageQuery = defineQuery(`
       linkText,
       section
     }
-  }
-`)
-
-export const getAmenitiesBySectionQuery = defineQuery(`
-  *[_type == "amenitiesPage"][0]{
-    "upperParkAmenities": amenities[section == "upper-park" || section == "both"],
-    "lowerParkAmenities": amenities[section == "lower-park" || section == "both"]
   }
 `)

@@ -5,6 +5,7 @@ import { richTextProjection } from "./richTextProjection"
 export const getHistoryPageQuery = defineQuery(`
   *[_type == "historyPage"][0]{
     _id,
+    _type,
     content[]{
       ${richTextProjection}
     },

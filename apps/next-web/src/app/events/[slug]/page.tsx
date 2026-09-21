@@ -8,9 +8,10 @@ import { Button } from "@/components/Button/button"
 import Container from "@/components/Container/container"
 import type { SanityGalleryImage } from "@/components/ImageGallery/image-gallery"
 import { PortableText } from "@/components/PortableText/portable-text"
+import { RelatedUpdates } from "@/components/RelatedUpdates/related-updates"
 import { sanityClient } from "@/lib/sanity"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
-import type { SanityEventDetail } from "@/lib/sanity-types"
+
 import { withPlaceholderSlug } from "@/lib/static-params"
 import {
   generateBreadcrumbStructuredData,
@@ -32,12 +33,12 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: EventPageProps): Promise<Metadata> {
   const { slug } = await params
-  const { data: event } = (await cachedSanityFetch({
+  const { data: event } = await cachedSanityFetch({
     ...(await getDynamicFetchOptions()),
     query: eventBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.EVENT_DETAIL, CACHE_TAGS.EVENTS],
-  })) as { data: SanityEventDetail | null }
+  })
 
   if (!event) {
     return {
@@ -72,12 +73,12 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
 
 export default async function EventPage({ params }: EventPageProps) {
   const { slug } = await params
-  const { data: event } = (await cachedSanityFetch({
+  const { data: event } = await cachedSanityFetch({
     ...(await getDynamicFetchOptions()),
     query: eventBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.EVENT_DETAIL, CACHE_TAGS.EVENTS],
-  })) as { data: SanityEventDetail | null }
+  })
 
   if (!event) {
     notFound()
@@ -207,6 +208,7 @@ export default async function EventPage({ params }: EventPageProps) {
               </div>
             </aside>
           </div>
+          <RelatedUpdates documentId={event._id} type="event" />
         </Container>
       </div>
     </>

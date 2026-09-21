@@ -2,11 +2,13 @@
 
 import type { ReactNode } from "react"
 import { useOptimisticDocument } from "@/hooks/use-optimistic-sanity"
+import { sanityAttr } from "@/lib/sanity-data-attribute"
 import type { SanityImage } from "@/lib/sanity-types"
 import PageHero from "./page-hero"
 
 interface PageDocument {
   _id: string
+  _type?: string | null
   pageHero: {
     title: string | null
     description: string | null
@@ -44,6 +46,7 @@ export default function PageHeroOptimistic({
         title: optimistic.pageHero.title ?? fallback.title,
         subtitle: optimistic.pageHero.description ?? fallback.subtitle,
         sanityImage: optimistic.pageHero.image,
+        imageDataAttr: sanityAttr(optimistic, "pageHero.imageV2"),
       }
     : {
         title: fallback.title,

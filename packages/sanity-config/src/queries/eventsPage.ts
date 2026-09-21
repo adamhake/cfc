@@ -4,6 +4,7 @@ import { imageFieldProjection } from "./imageProjections"
 export const getEventsPageQuery = defineQuery(`
   *[_type == "eventsPage"][0]{
     _id,
+    _type,
     pageHero{
       title,
       description,

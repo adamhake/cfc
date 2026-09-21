@@ -4,7 +4,7 @@ import { richTextProjection } from "./richTextProjection"
 
 // Get all published updates
 export const allUpdatesQuery = defineQuery(`
-  *[_type == "update" && defined(slug.current)] | order(publishedAt desc) {
+  *[_type == "update" && defined(slug.current)] | order(coalesce(featured, false) desc, publishedAt desc, _id desc) {
     _id,
     _type,
     title,
@@ -20,13 +20,14 @@ export const allUpdatesQuery = defineQuery(`
       color
     },
     featured,
+    endDate,
     publishedAt
   }
 `)
 
 // Up to 3 updates, featured first; falls back to most recent when fewer than 3 are featured.
 export const featuredUpdatesQuery = defineQuery(`
-  *[_type == "update" && defined(slug.current)] | order(featured desc, publishedAt desc) [0...3] {
+  *[_type == "update" && defined(slug.current)] | order(coalesce(featured, false) desc, publishedAt desc, _id desc) [0...3] {
     _id,
     _type,
     title,
@@ -42,28 +43,7 @@ export const featuredUpdatesQuery = defineQuery(`
       color
     },
     featured,
-    publishedAt
-  }
-`)
-
-// Get updates by category slug
-export const updatesByCategoryQuery = defineQuery(`
-  *[_type == "update" && defined(slug.current) && category->slug.current == $categorySlug] | order(publishedAt desc) {
-    _id,
-    _type,
-    title,
-    slug,
-    description,
-    "heroImage": heroImageV2{
-      ${imageFieldProjectionSlim}
-    },
-    "category": category->{
-      _id,
-      title,
-      slug,
-      color
-    },
-    featured,
+    endDate,
     publishedAt
   }
 `)
@@ -72,6 +52,7 @@ export const updatesByCategoryQuery = defineQuery(`
 export const updateBySlugQuery = defineQuery(`
   *[_type == "update" && slug.current == $slug][0] {
     _id,
+    _updatedAt,
     _type,
     title,
     slug,
@@ -86,8 +67,9 @@ export const updateBySlugQuery = defineQuery(`
       color
     },
     featured,
+    endDate,
     publishedAt,
-    "relatedEvents": relatedEvents[]->{
+    "relatedEvents": (relatedEvents[]->)[defined(slug.current)]{
       _id,
       _type,
       title,
@@ -98,7 +80,7 @@ export const updateBySlugQuery = defineQuery(`
         ${imageFieldProjection}
       }
     },
-    "relatedProjects": relatedProjects[]->{
+    "relatedProjects": (relatedProjects[]->)[defined(slug.current)]{
       _id,
       _type,
       title,
@@ -124,7 +106,7 @@ export const updateSlugsQuery = defineQuery(`
 
 // Get updates that reference a specific event
 export const updatesByEventQuery = defineQuery(`
-  *[_type == "update" && defined(slug.current) && references($eventId)] | order(publishedAt desc) {
+  *[_type == "update" && defined(slug.current) && $eventId in relatedEvents[]._ref] | order(publishedAt desc, _id desc) {
     _id,
     _type,
     title,
@@ -140,13 +122,14 @@ export const updatesByEventQuery = defineQuery(`
       color
     },
     featured,
+    endDate,
     publishedAt
   }
 `)
 
 // Get updates that reference a specific project
 export const updatesByProjectQuery = defineQuery(`
-  *[_type == "update" && defined(slug.current) && references($projectId)] | order(publishedAt desc) {
+  *[_type == "update" && defined(slug.current) && $projectId in relatedProjects[]._ref] | order(publishedAt desc, _id desc) {
     _id,
     _type,
     title,
@@ -162,13 +145,14 @@ export const updatesByProjectQuery = defineQuery(`
       color
     },
     featured,
+    endDate,
     publishedAt
   }
 `)
 
 // Get all update categories
 export const updateCategoriesQuery = defineQuery(`
-  *[_type == "updateCategory"] | order(title asc) {
+  *[_type == "updateCategory" && defined(slug.current)] | order(title asc) {
     _id,
     title,
     slug,
@@ -179,12 +163,12 @@ export const updateCategoriesQuery = defineQuery(`
 // Get previous and next updates for navigation
 export const updateNavigationQuery = defineQuery(`
   {
-    "previous": *[_type == "update" && (publishedAt < $publishedAt || (publishedAt == $publishedAt && _id < $id))] | order(publishedAt desc, _id desc) [0] {
+    "previous": *[_type == "update" && defined(slug.current) && (publishedAt < $publishedAt || (publishedAt == $publishedAt && _id < $id))] | order(publishedAt desc, _id desc) [0] {
       _id,
       title,
       slug
     },
-    "next": *[_type == "update" && (publishedAt > $publishedAt || (publishedAt == $publishedAt && _id > $id))] | order(publishedAt asc, _id asc) [0] {
+    "next": *[_type == "update" && defined(slug.current) && (publishedAt > $publishedAt || (publishedAt == $publishedAt && _id > $id))] | order(publishedAt asc, _id asc) [0] {
       _id,
       title,
       slug

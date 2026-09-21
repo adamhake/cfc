@@ -9,8 +9,6 @@ export { createGenerateMetadataAction, type GenerateMetadataActionConfig } from 
 export type { SanityConfig } from "./client"
 // Export client utilities
 export { createImageUrlBuilder, createSanityClient, urlForImage } from "./client"
-// Export components
-export { MediaImageReferenceInput } from "./components/MediaImageReferenceInput"
 export type { SanityConfig as SanityEnvConfig, SanityConfigWithToken } from "./env-schema"
 
 // Export environment schemas

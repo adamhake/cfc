@@ -27,56 +27,6 @@ export const allProjectsQuery = defineQuery(`
   }
 `)
 
-// Get active projects
-export const activeProjectsQuery = defineQuery(`
-  *[_type == "project" && defined(slug.current) && status == "active"] | order(startDate desc) {
-    _id,
-    _type,
-    title,
-    slug,
-    description,
-    "heroImage": heroImageV2{
-      ${imageFieldProjectionSlim}
-    },
-    status,
-    startDate,
-    startDateOverride,
-    completionDate,
-    completionDateOverride,
-    goal,
-    location,
-    budget,
-    category,
-    featured,
-    publishedAt
-  }
-`)
-
-// Get featured project (single)
-export const featuredProjectQuery = defineQuery(`
-  *[_type == "project" && defined(slug.current) && featured == true] | order(startDate desc) [0] {
-    _id,
-    _type,
-    title,
-    slug,
-    description,
-    "heroImage": heroImageV2{
-      ${imageFieldProjectionSlim}
-    },
-    status,
-    startDate,
-    startDateOverride,
-    completionDate,
-    completionDateOverride,
-    goal,
-    location,
-    budget,
-    category,
-    featured,
-    publishedAt
-  }
-`)
-
 // Get all featured projects
 export const featuredProjectsQuery = defineQuery(`
   *[_type == "project" && defined(slug.current) && featured == true] | order(startDate desc) {
@@ -164,19 +114,6 @@ export const projectBySlugQuery = defineQuery(`
       logo{
         ${imageFieldProjection}
       }
-    }
-  }
-`)
-
-export const projectCardBySlugQuery = defineQuery(`
-  *[_type == "project" && slug.current == $slug][0] {
-    _id,
-    _type,
-    title,
-    slug,
-    description,
-    "heroImage": heroImageV2{
-      ${imageFieldProjection}
     }
   }
 `)

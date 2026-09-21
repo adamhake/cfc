@@ -1,3 +1,5 @@
+import type { MaybeStega } from "@/lib/sanity-types"
+import { cleanEnum } from "@/lib/stega"
 import { cn } from "@/utils/cn"
 
 export type ChipVariant =
@@ -17,7 +19,8 @@ export type ChipVariant =
   | "comingSoon"
 
 export interface ChipProps {
-  variant: ChipVariant
+  /** Accepts stega-branded values; cleaned internally before lookup. */
+  variant: MaybeStega<ChipVariant>
   label?: string
   className?: string
 }
@@ -63,13 +66,18 @@ const defaultLabels: Record<ChipVariant, string> = {
 }
 
 export default function Chip({ variant, label, className }: ChipProps) {
-  const displayLabel = label ?? defaultLabels[variant]
+  // Callers pass Sanity enums (project status, project category) straight
+  // through, so clean here rather than at every call site: in draft mode the
+  // raw value carries stega characters and both lookups below would miss.
+  const key = cleanEnum(variant)
+  const style = (key && variantStyles[key]) || variantStyles.comingSoon
+  const displayLabel = label ?? (key && defaultLabels[key]) ?? defaultLabels.comingSoon
 
   return (
     <span
       className={cn(
         "inline-flex items-center rounded-lg px-3 py-1 font-body text-sm font-semibold",
-        variantStyles[variant],
+        style,
         className,
       )}
     >

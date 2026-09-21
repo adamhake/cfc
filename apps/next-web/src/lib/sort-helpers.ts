@@ -1,12 +1,24 @@
-import type { SanityEvent, SanityProject } from "./sanity-types"
+import type { SanityEvent } from "./sanity-types"
+import { cleanEnum } from "./stega"
 
-/** Sort projects: active first, then most recent `startDate` descending. */
-export function sortProjects<T extends Pick<SanityProject, "status" | "startDate">>(
+/**
+ * Sort projects: active first, then most recent `startDate` descending.
+ *
+ * The constraint is structural rather than `Pick<SanityProject, ...>` so it
+ * accepts both clean and stega-branded results -- `StegaString<"active">` does
+ * not satisfy the literal union, and narrowing the constraint would silently
+ * widen `T` and lose every other field at the call site.
+ */
+export function sortProjects<T extends { status?: string | null; startDate?: string | null }>(
   projects: readonly T[],
 ): T[] {
   return [...projects].sort((a, b) => {
-    if (a.status === "active" && b.status !== "active") return -1
-    if (a.status !== "active" && b.status === "active") return 1
+    // `status` is compared, not rendered, so it must be stega-free -- otherwise
+    // every comparison is false in draft mode and the ordering silently changes.
+    const aActive = cleanEnum(a.status) === "active"
+    const bActive = cleanEnum(b.status) === "active"
+    if (aActive && !bActive) return -1
+    if (!aActive && bActive) return 1
     return new Date(b.startDate ?? 0).getTime() - new Date(a.startDate ?? 0).getTime()
   })
 }

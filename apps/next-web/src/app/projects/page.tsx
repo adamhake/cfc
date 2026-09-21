@@ -4,7 +4,6 @@ import Container from "@/components/Container/container"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { PageIntroduction } from "@/components/PageIntroduction/page-introduction"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
-import type { SanityProject, SanityProjectsPage } from "@/lib/sanity-types"
 import { sortProjects } from "@/lib/sort-helpers"
 import { generateItemListStructuredData, SITE_CONFIG } from "@/utils/seo"
 import ProjectsListClient from "./projects-list-client"
@@ -32,7 +31,7 @@ export const metadata: Metadata = {
 }
 
 export default async function ProjectsPage() {
-  const [{ data: projects }, { data: pageData }] = (await Promise.all([
+  const [{ data: projects }, { data: pageData }] = await Promise.all([
     cachedSanityFetch({
       ...(await getDynamicFetchOptions()),
       query: allProjectsQuery,
@@ -43,7 +42,7 @@ export default async function ProjectsPage() {
       query: getProjectsPageQuery,
       tags: [CACHE_TAGS.PROJECTS_LIST],
     }),
-  ])) as [{ data: SanityProject[] }, { data: SanityProjectsPage | null }]
+  ])
 
   // Active first, then by startDate desc. Client re-sorts after optimistic updates.
   const sortedProjects = sortProjects(projects)

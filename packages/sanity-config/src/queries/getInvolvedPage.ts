@@ -4,6 +4,7 @@ import { imageFieldProjection } from "./imageProjections"
 export const getGetInvolvedPageQuery = defineQuery(`
   *[_type == "getInvolvedPage"][0]{
     _id,
+    _type,
     pageHero{
       title,
       description,

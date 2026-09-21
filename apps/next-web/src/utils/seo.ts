@@ -4,6 +4,7 @@
  * Centralized utilities for managing page metadata, Open Graph tags,
  * Twitter cards, and structured data consistently across the site.
  */
+import { stegaClean } from "next-sanity"
 
 /**
  * Site-wide SEO configuration
@@ -28,6 +29,53 @@ export const SITE_CONFIG = {
     alt: "Chimborazo Park at sunset",
   },
 } as const
+
+/**
+ * Site-wide metadata, with editor-controlled values from Sanity Site Settings
+ * layered over the build-time defaults in {@link SITE_CONFIG}.
+ *
+ * Stega-encoded characters are stripped here: invisible markers inside a
+ * <title> or og:image URL break search results and social previews.
+ */
+export interface ResolvedSiteMetadata {
+  name: string
+  description: string
+  image: { url: string; width: number; height: number; alt: string }
+}
+
+interface SiteSettingsMetaInput {
+  organizationName?: string | null
+  description?: string | null
+  metaDefaults?: {
+    siteTitle?: string | null
+    ogImage?: {
+      alt?: string | null
+      asset?: {
+        url?: string | null
+        metadata?: { dimensions?: { width?: number | null; height?: number | null } | null } | null
+      } | null
+    } | null
+  } | null
+}
+
+export function resolveSiteMetadata(settings: SiteSettingsMetaInput | null): ResolvedSiteMetadata {
+  const meta = settings?.metaDefaults
+  const ogImage = meta?.ogImage
+  const ogUrl = stegaClean(ogImage?.asset?.url) || undefined
+
+  return {
+    name: stegaClean(meta?.siteTitle) || stegaClean(settings?.organizationName) || SITE_CONFIG.name,
+    description: stegaClean(settings?.description) || SITE_CONFIG.description,
+    image: ogUrl
+      ? {
+          url: ogUrl,
+          width: ogImage?.asset?.metadata?.dimensions?.width ?? SITE_CONFIG.defaultImage.width,
+          height: ogImage?.asset?.metadata?.dimensions?.height ?? SITE_CONFIG.defaultImage.height,
+          alt: stegaClean(ogImage?.alt) || SITE_CONFIG.defaultImage.alt,
+        }
+      : { ...SITE_CONFIG.defaultImage },
+  }
+}
 
 /**
  * Type-safe metadata configuration

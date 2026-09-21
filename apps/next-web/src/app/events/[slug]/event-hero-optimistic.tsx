@@ -3,9 +3,10 @@
 import EventStatusChip from "@/components/EventStatusChip/event-status-chip"
 import PageHero from "@/components/PageHero/page-hero"
 import { useOptimisticDocument } from "@/hooks/use-optimistic-sanity"
-import type { SanityEventDetail } from "@/lib/sanity-types"
+import { sanityAttr } from "@/lib/sanity-data-attribute"
+import type { MaybeStega, SanityEventDetail } from "@/lib/sanity-types"
 
-export default function EventHeroOptimistic({ event }: { event: SanityEventDetail }) {
+export default function EventHeroOptimistic({ event }: { event: MaybeStega<SanityEventDetail> }) {
   const optimistic = useOptimisticDocument(event) ?? event
 
   return (
@@ -13,6 +14,7 @@ export default function EventHeroOptimistic({ event }: { event: SanityEventDetai
       title={optimistic.title ?? ""}
       subtitle={optimistic.description ?? undefined}
       sanityImage={optimistic.heroImage ?? undefined}
+      imageDataAttr={sanityAttr(optimistic, "heroImage")}
       variant="detail"
       priority={true}
       alignment="bottom-mobile-center-desktop"

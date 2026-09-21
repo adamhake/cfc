@@ -4,7 +4,6 @@ import Container from "@/components/Container/container"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { PageIntroduction } from "@/components/PageIntroduction/page-introduction"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
-import type { SanityEvent, SanityEventsPage } from "@/lib/sanity-types"
 import { sortEventsByDate } from "@/lib/sort-helpers"
 import { generateItemListStructuredData, SITE_CONFIG } from "@/utils/seo"
 import EventsListClient from "./events-list-client"
@@ -32,7 +31,7 @@ export const metadata: Metadata = {
 }
 
 export default async function EventsPage() {
-  const [{ data: events }, { data: pageData }] = (await Promise.all([
+  const [{ data: events }, { data: pageData }] = await Promise.all([
     cachedSanityFetch({
       ...(await getDynamicFetchOptions()),
       query: allEventsQuery,
@@ -43,7 +42,7 @@ export default async function EventsPage() {
       query: getEventsPageQuery,
       tags: [CACHE_TAGS.EVENTS_LIST],
     }),
-  ])) as [{ data: SanityEvent[] }, { data: SanityEventsPage | null }]
+  ])
 
   // Sort events by date, newest first. Client re-sorts after optimistic updates.
   const sortedEvents = sortEventsByDate(events)

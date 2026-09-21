@@ -13,7 +13,6 @@ import { PageIntroduction } from "@/components/PageIntroduction/page-introductio
 import SectionHeader from "@/components/SectionHeader/section-header"
 import SupportOption from "@/components/SupportOption/support-option"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
-import type { SanityGetInvolvedPage, SanitySiteSettings } from "@/lib/sanity-types"
 import { SITE_CONFIG } from "@/utils/seo"
 
 export const metadata: Metadata = {
@@ -31,7 +30,7 @@ export const metadata: Metadata = {
 }
 
 export default async function GetInvolvedPage() {
-  const [{ data: pageData }, { data: siteSettings }] = (await Promise.all([
+  const [{ data: pageData }, { data: siteSettings }] = await Promise.all([
     cachedSanityFetch({
       ...(await getDynamicFetchOptions()),
       query: getGetInvolvedPageQuery,
@@ -42,7 +41,7 @@ export default async function GetInvolvedPage() {
       query: getSiteSettingsQuery,
       tags: [CACHE_TAGS.SITE_SETTINGS],
     }),
-  ])) as [{ data: SanityGetInvolvedPage | null }, { data: SanitySiteSettings | null }]
+  ])
 
   // Extract social media handles from URLs
   const facebookHandle =

@@ -20,6 +20,12 @@ export interface SanityImageProps {
    */
   image: SanityImageObject | SanityImageSource
   /**
+   * Click-to-edit target for the Presentation tool. Build it with
+   * `sanityAttr()` from `@/lib/sanity-data-attribute` -- an image has no stega
+   * markers of its own, so without this it is not selectable in the preview.
+   */
+  "data-sanity"?: string
+  /**
    * Alt text for the image (falls back to image.alt if available)
    */
   alt?: string
@@ -121,6 +127,7 @@ export function SanityImage({
   showPlaceholder = true,
   style,
   onLoad,
+  "data-sanity": dataSanity,
   useHotspotPosition = false,
 }: SanityImageProps) {
   // Extract image data - handle both full SanityImageObject and simple SanityImageSource
@@ -204,6 +211,7 @@ export function SanityImage({
       className={className}
       style={combinedStyle}
       onLoad={onLoad}
+      data-sanity={dataSanity}
     />
   )
 }
