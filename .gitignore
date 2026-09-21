@@ -28,3 +28,7 @@ storybook-static
 
 # Sanity extracted schema — regenerate with `pnpm --filter @chimborazo/sanity-config schema:generate`
 packages/sanity-config/schema.json
+
+# Local pnpm store / tool scratch dirs
+.pnpm-store
+.lavish
