@@ -11,6 +11,7 @@ import { extractGetInvolvedGalleryImages } from "@/lib/gallery-extractors"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import type { SanityAmenitiesPage } from "@/lib/sanity-types"
 import { getSiteSettings } from "@/lib/site-settings"
+import { cleanEnum } from "@/lib/stega"
 import { SITE_CONFIG } from "@/utils/seo"
 
 export const metadata: Metadata = {
@@ -39,16 +40,18 @@ export default async function AmenitiesPage() {
 
   const getInvolvedGalleryImages = extractGetInvolvedGalleryImages(siteSettings)
 
-  // Filter amenities by section
+  // Filter amenities by section. `section` is compared, not rendered, so it
+  // must be stega-free -- otherwise both lists come back empty in draft mode.
+  const inSection = (amenity: { section?: string | null }, section: string) => {
+    const value = cleanEnum(amenity.section)
+    return value === section || value === "both"
+  }
+
   const upperParkAmenities =
-    amenitiesPageData?.amenities?.filter(
-      (amenity) => amenity.section === "upper-park" || amenity.section === "both",
-    ) || []
+    amenitiesPageData?.amenities?.filter((amenity) => inSection(amenity, "upper-park")) || []
 
   const lowerParkAmenities =
-    amenitiesPageData?.amenities?.filter(
-      (amenity) => amenity.section === "lower-park" || amenity.section === "both",
-    ) || []
+    amenitiesPageData?.amenities?.filter((amenity) => inSection(amenity, "lower-park")) || []
 
   return (
     <div>
@@ -67,7 +70,7 @@ export default async function AmenitiesPage() {
       />
 
       {/* Main Content */}
-      <Container spacing="none" className="space-y-20 py-16 pb-20 md:space-y-28 md:py-24 md:pb-32">
+      <Container spacing="none" className="space-y-20 pt-10 pb-20 md:space-y-28 md:pt-14 md:pb-32">
         <div className="space-y-10 md:space-y-12">
           {/* Introduction */}
           <div className="max-w-4xl space-y-4">
@@ -96,7 +99,7 @@ export default async function AmenitiesPage() {
                   <MapPin className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />
                 </div>
                 <div>
-                  <dt className="mb-1 font-body text-xs font-semibold tracking-[0.12em] text-grey-500 uppercase dark:text-grey-400">
+                  <dt className="mb-1 font-body text-xs font-semibold text-grey-500 dark:text-grey-400">
                     Location
                   </dt>
                   <dd className="font-body text-lg font-medium text-grey-900 dark:text-grey-100">
@@ -113,7 +116,7 @@ export default async function AmenitiesPage() {
                   <Clock className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />
                 </div>
                 <div>
-                  <dt className="mb-1 font-body text-xs font-semibold tracking-[0.12em] text-grey-500 uppercase dark:text-grey-400">
+                  <dt className="mb-1 font-body text-xs font-semibold text-grey-500 dark:text-grey-400">
                     Hours
                   </dt>
                   <dd className="font-body text-lg font-medium text-grey-900 dark:text-grey-100">

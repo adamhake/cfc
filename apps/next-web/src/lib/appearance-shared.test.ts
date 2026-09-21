@@ -17,8 +17,8 @@ describe("buildAppearanceCookie", () => {
   })
 
   it("encodes special characters in value", () => {
-    const cookie = buildAppearanceCookie(APPEARANCE_COOKIES.PALETTE, "green-terra")
-    expect(cookie).toContain("green-terra")
+    const cookie = buildAppearanceCookie(APPEARANCE_COOKIES.RESOLVED_THEME, "dark")
+    expect(cookie).toContain("dark")
     expect(cookie).toContain("Path=/")
   })
 
@@ -37,11 +37,9 @@ describe("getAppearanceFromCookieValues", () => {
     const result = getAppearanceFromCookieValues({
       theme: null,
       resolvedTheme: null,
-      palette: null,
     })
     expect(result.theme).toBe("system")
     expect(result.resolvedTheme).toBe("light")
-    expect(result.palette).toBe("heritage")
   })
 
   it("parses valid theme from cookies", () => {
@@ -59,16 +57,6 @@ describe("getAppearanceFromCookieValues", () => {
   it("falls back to system for invalid theme", () => {
     const result = getAppearanceFromCookieValues({ theme: "invalid" })
     expect(result.theme).toBe("system")
-  })
-
-  it("parses valid palette from cookies", () => {
-    const result = getAppearanceFromCookieValues({ palette: "green-terra" })
-    expect(result.palette).toBe("green-terra")
-  })
-
-  it("falls back to default palette for invalid value", () => {
-    const result = getAppearanceFromCookieValues({ palette: "neon-pink" })
-    expect(result.palette).toBe("heritage")
   })
 
   it("uses resolvedTheme cookie when theme is system", () => {
@@ -107,24 +95,20 @@ describe("getAppearanceBootstrapScript", () => {
     const script = getAppearanceBootstrapScript({
       theme: "dark",
       resolvedTheme: "dark",
-      palette: "green",
     })
     expect(script).toContain('"theme":"dark"')
     expect(script).toContain('"resolvedTheme":"dark"')
-    expect(script).toContain('"palette":"green"')
   })
 
   it("includes cookie key constants", () => {
     const script = getAppearanceBootstrapScript(DEFAULT_APPEARANCE)
     expect(script).toContain(APPEARANCE_COOKIES.THEME)
     expect(script).toContain(APPEARANCE_COOKIES.RESOLVED_THEME)
-    expect(script).toContain(APPEARANCE_COOKIES.PALETTE)
   })
 
   it("includes theme validation logic", () => {
     const script = getAppearanceBootstrapScript(DEFAULT_APPEARANCE)
     expect(script).toContain("isTheme")
-    expect(script).toContain("isPalette")
   })
 
   it("includes system dark mode detection", () => {
@@ -149,13 +133,6 @@ describe("getAppearanceBootstrapScript", () => {
     expect(script).toContain("applyResolvedTheme")
     expect(script).toContain('classList.add("dark")')
     expect(script).toContain('classList.remove("dark")')
-  })
-
-  it("includes palette application with data-palette attribute", () => {
-    const script = getAppearanceBootstrapScript(DEFAULT_APPEARANCE)
-    expect(script).toContain("data-palette")
-    expect(script).toContain("removeAttribute")
-    expect(script).toContain("setAttribute")
   })
 
   it("includes media query listener for system theme changes", () => {

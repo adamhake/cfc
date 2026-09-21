@@ -1,6 +1,7 @@
 import type { ReactNode } from "react"
 import { Image } from "@/components/OptimizedImage/optimized-image"
 import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image"
+import { WaveDivider } from "@/components/WaveDivider/wave-divider"
 import { cn } from "@/utils/cn"
 
 interface PageHeroProps {
@@ -17,6 +18,11 @@ interface PageHeroProps {
   alignment?: "center" | "bottom-mobile-center-desktop"
   contentSpacing?: string
   titleSize?: "standard" | "compact"
+  /**
+   * `data-sanity` attribute for the hero image, so it is click-to-edit in the
+   * Presentation tool. Images carry no stega markers of their own.
+   */
+  imageDataAttr?: string
 }
 
 export default function PageHero({
@@ -27,6 +33,7 @@ export default function PageHero({
   imageWidth,
   imageHeight,
   sanityImage,
+  imageDataAttr,
   children,
   variant = "section",
   priority = false,
@@ -55,6 +62,7 @@ export default function PageHero({
     <header className={classes}>
       {sanityImage ? (
         <SanityImage
+          data-sanity={imageDataAttr}
           image={sanityImage}
           alt={imageAlt || sanityImage.alt || ""}
           className="absolute inset-0 h-full w-full object-cover"
@@ -113,25 +121,7 @@ export default function PageHero({
 
       {/* James River wave divider */}
       <div className="absolute bottom-[-1px] left-0 w-full overflow-hidden leading-[0]">
-        <svg
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-          className="relative block h-16 w-full lg:h-24"
-          xmlns="http://www.w3.org/2000/svg"
-          style={{ display: "block" }}
-          aria-hidden="true"
-        >
-          {/* The flowing curve and blue line reference the James River overlook. */}
-          <path
-            d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60 L1200,120 L0,120 Z"
-            className="fill-grey-50 dark:fill-primary-900"
-          />
-          <path
-            d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60"
-            className="fill-none stroke-soft-blue-600 dark:stroke-soft-blue-400"
-            strokeWidth="7"
-          />
-        </svg>
+        <WaveDivider fill="fill-grey-50 dark:fill-primary-900" />
       </div>
     </header>
   )

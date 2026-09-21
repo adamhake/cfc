@@ -4,7 +4,7 @@ import Container from "@/components/Container/container"
 import { FAQSection } from "@/components/FAQSection/faq-section"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
-import type { SanityDonatePage } from "@/lib/sanity-types"
+
 import { generateFAQStructuredData, SITE_CONFIG } from "@/utils/seo"
 import DonateFormClient from "./donate-form-client"
 
@@ -51,11 +51,11 @@ export const metadata: Metadata = {
 }
 
 export default async function DonatePage() {
-  const { data: donatePageData } = (await cachedSanityFetch({
+  const { data: donatePageData } = await cachedSanityFetch({
     ...(await getDynamicFetchOptions()),
     query: getDonatePageQuery,
     tags: [CACHE_TAGS.DONATE],
-  })) as { data: SanityDonatePage | null }
+  })
 
   const faqStructuredData = generateFAQStructuredData(DONATE_FAQS)
 
@@ -79,7 +79,7 @@ export default async function DonatePage() {
         priority={true}
       />
       <div>
-        <Container spacing="xl" className="py-12 md:py-20">
+        <Container spacing="xl" className="pt-8 pb-12 md:pt-12 md:pb-20">
           <div className="space-y-8">
             {/* Opening statement */}
             <div className="max-w-3xl space-y-4">

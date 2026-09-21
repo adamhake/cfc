@@ -1,6 +1,7 @@
 import { Calendar, MapPin } from "lucide-react"
 import Link from "next/link"
-import type { SanityProject } from "@/lib/sanity-types"
+import { sanityAttr } from "@/lib/sanity-data-attribute"
+import type { MaybeStega, SanityProject } from "@/lib/sanity-types"
 import { formatDateString } from "@/utils/time"
 import Chip from "../Chip/chip"
 import { SanityImage } from "../SanityImage/sanity-image"
@@ -8,7 +9,7 @@ import { SanityImage } from "../SanityImage/sanity-image"
 const PROJECT_IMAGE_SIZES = "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 576px"
 
 export interface ProjectProps {
-  project: SanityProject
+  project: MaybeStega<SanityProject>
 }
 
 export default function Project({ project }: ProjectProps) {
@@ -32,12 +33,14 @@ export default function Project({ project }: ProjectProps) {
 
   return (
     <Link
+      data-sanity={sanityAttr(project, "title")}
       href={`/projects/${slug.current}`}
-      className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-primary-200 bg-grey-50 shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent-500 hover:shadow-md active:scale-[0.99] dark:border-primary-700 dark:bg-primary-950 dark:hover:border-accent-500"
+      className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-primary-200 bg-grey-50 shadow-sm transition-all hover:border-accent-500 hover:shadow-md active:scale-[0.99] dark:border-primary-700 dark:bg-primary-950 dark:hover:border-accent-500"
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-neutral-200 dark:bg-primary-900">
         {heroImage && (
           <SanityImage
+            data-sanity={sanityAttr(project, "heroImageV2")}
             image={heroImage}
             alt={heroImage.alt ?? title ?? ""}
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"

@@ -2,7 +2,8 @@
 
 import { Calendar, CheckCircle2, DollarSign, MapPin, Target } from "lucide-react"
 import { useOptimisticDocument } from "@/hooks/use-optimistic-sanity"
-import type { SanityProjectDetail } from "@/lib/sanity-types"
+import type { MaybeStega, SanityProjectDetail } from "@/lib/sanity-types"
+import { cleanEnum } from "@/lib/stega"
 import { formatDateString } from "@/utils/time"
 
 const categoryLabels = {
@@ -12,7 +13,11 @@ const categoryLabels = {
   preservation: "Preservation",
 } as const
 
-export default function ProjectSidebarOptimistic({ project }: { project: SanityProjectDetail }) {
+export default function ProjectSidebarOptimistic({
+  project,
+}: {
+  project: MaybeStega<SanityProjectDetail>
+}) {
   const optimisticProject = useOptimisticDocument(project) ?? project
 
   const fmtStartDate =
@@ -36,7 +41,7 @@ export default function ProjectSidebarOptimistic({ project }: { project: SanityP
           <div className="flex items-start gap-3">
             <Calendar className="mt-1 h-5 w-5 flex-shrink-0 stroke-accent-600 dark:stroke-accent-400" />
             <div>
-              <div className="font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
+              <div className="font-body text-xs font-semibold text-grey-600 dark:text-grey-400">
                 Started
               </div>
               <div className="font-body font-medium text-grey-900 dark:text-grey-100">
@@ -50,7 +55,7 @@ export default function ProjectSidebarOptimistic({ project }: { project: SanityP
             <div className="flex items-start gap-3">
               <CheckCircle2 className="mt-1 h-5 w-5 flex-shrink-0 stroke-accent-600 dark:stroke-accent-400" />
               <div>
-                <div className="font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
+                <div className="font-body text-xs font-semibold text-grey-600 dark:text-grey-400">
                   Completed
                 </div>
                 <div className="font-body font-medium text-grey-900 dark:text-grey-100">
@@ -65,11 +70,11 @@ export default function ProjectSidebarOptimistic({ project }: { project: SanityP
             <div className="flex items-start gap-3">
               <Target className="mt-1 h-5 w-5 flex-shrink-0 stroke-accent-600 dark:stroke-accent-400" />
               <div>
-                <div className="font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
+                <div className="font-body text-xs font-semibold text-grey-600 dark:text-grey-400">
                   Category
                 </div>
                 <div className="font-body font-medium text-grey-900 dark:text-grey-100">
-                  {categoryLabels[optimisticProject.category]}
+                  {categoryLabels[cleanEnum(optimisticProject.category) ?? "restoration"]}
                 </div>
               </div>
             </div>
@@ -80,7 +85,7 @@ export default function ProjectSidebarOptimistic({ project }: { project: SanityP
             <div className="flex items-start gap-3">
               <MapPin className="mt-1 h-5 w-5 flex-shrink-0 stroke-accent-600 dark:stroke-accent-400" />
               <div>
-                <div className="font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
+                <div className="font-body text-xs font-semibold text-grey-600 dark:text-grey-400">
                   Location
                 </div>
                 <div className="font-body font-medium text-grey-900 dark:text-grey-100">
@@ -95,7 +100,7 @@ export default function ProjectSidebarOptimistic({ project }: { project: SanityP
             <div className="flex items-start gap-3">
               <DollarSign className="mt-1 h-5 w-5 flex-shrink-0 stroke-accent-600 dark:stroke-accent-400" />
               <div>
-                <div className="font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
+                <div className="font-body text-xs font-semibold text-grey-600 dark:text-grey-400">
                   Budget
                 </div>
                 <div className="font-body font-medium text-grey-900 dark:text-grey-100">

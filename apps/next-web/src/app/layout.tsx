@@ -10,38 +10,45 @@ import { getSiteSettings } from "@/lib/site-settings"
 import {
   generateOrganizationStructuredData,
   generateParkStructuredData,
+  resolveSiteMetadata,
   SITE_CONFIG,
 } from "@/utils/seo"
 import "./globals.css"
 import { Providers } from "./providers"
 
-export const metadata: Metadata = {
-  title: {
-    default: SITE_CONFIG.name,
-    template: `%s | ${SITE_CONFIG.name}`,
-  },
-  description: SITE_CONFIG.description,
-  metadataBase: new URL(SITE_CONFIG.url),
-  openGraph: {
-    type: "website",
-    locale: SITE_CONFIG.locale,
-    siteName: SITE_CONFIG.name,
-    images: [SITE_CONFIG.defaultImage],
-  },
-  twitter: {
-    card: "summary_large_image",
-  },
-  icons: {
-    icon: [
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-    ],
-    apple: "/apple-touch-icon.png",
-  },
-  manifest: "/manifest.json",
-  other: {
-    "theme-color": SITE_CONFIG.themeColor,
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  // Site name, description, and the default share image are editor-controlled
+  // via Site Settings > SEO Defaults, falling back to SITE_CONFIG.
+  const site = resolveSiteMetadata(await getSiteSettings())
+
+  return {
+    title: {
+      default: site.name,
+      template: `%s | ${site.name}`,
+    },
+    description: site.description,
+    metadataBase: new URL(SITE_CONFIG.url),
+    openGraph: {
+      type: "website",
+      locale: SITE_CONFIG.locale,
+      siteName: site.name,
+      images: [site.image],
+    },
+    twitter: {
+      card: "summary_large_image",
+    },
+    icons: {
+      icon: [
+        { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+        { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      ],
+      apple: "/apple-touch-icon.png",
+    },
+    manifest: "/manifest.json",
+    other: {
+      "theme-color": SITE_CONFIG.themeColor,
+    },
+  }
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -49,7 +56,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const bootstrapScript = getAppearanceBootstrapScript({
     theme: "system",
     resolvedTheme: "light",
-    palette: "heritage",
   })
   const structuredData = generateOrganizationStructuredData()
   const parkStructuredData = generateParkStructuredData()
@@ -69,7 +75,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
         <script
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: bootstrap script for theme/palette init
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: bootstrap script for theme init
           dangerouslySetInnerHTML={{ __html: bootstrapScript }}
         />
         <link
@@ -81,7 +87,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
         <link
           rel="preload"
-          href="/fonts/Vollkorn_SC/VollkornSC-Regular.woff2"
+          href="/fonts/Vollkorn/Vollkorn-Regular.woff2"
           as="font"
           type="font/woff2"
           crossOrigin="anonymous"
@@ -108,7 +114,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
       </head>
       <body className="min-h-screen bg-grey-50 dark:bg-primary-900" suppressHydrationWarning>
-        <Providers initialTheme="system" initialResolvedTheme="light" initialPalette="heritage">
+        <Providers initialTheme="system" initialResolvedTheme="light">
           <a
             href="#main-content"
             className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-primary-700 focus:px-4 focus:py-2 focus:text-primary-50 focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 focus:outline-none"

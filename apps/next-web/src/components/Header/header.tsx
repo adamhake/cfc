@@ -102,7 +102,10 @@ export default function Header({ facebookUrl, instagramUrl }: HeaderProps) {
 
   return (
     <div className="fixed top-4 right-4 left-4 z-20 flex flex-row items-center justify-center">
-      <header className="w-full max-w-6xl rounded-2xl transition md:border md:border-primary-200/70 md:bg-grey-50/95 md:px-3 md:py-2 md:shadow-sm md:backdrop-blur dark:md:border-primary-700 dark:md:bg-primary-900/95">
+      {/* In dark mode the bar sits on a primary-900 page, so it needs its own
+          darker surface and a visible edge — otherwise content scrolls through
+          it with nothing marking where the header starts. */}
+      <header className="w-full max-w-6xl rounded-2xl transition md:border md:border-primary-200/70 md:bg-grey-50/95 md:px-3 md:py-2 md:shadow-sm md:backdrop-blur dark:md:border-primary-600/60 dark:md:bg-primary-950/95 dark:md:shadow-lg dark:md:shadow-primary-950/50">
         <div className="flex w-full items-center justify-between gap-2">
           {/* Logo - Mobile only */}
           <Link
@@ -118,7 +121,7 @@ export default function Header({ facebookUrl, instagramUrl }: HeaderProps) {
             className="group hidden shrink-0 items-center gap-2 rounded-xl px-2 py-1 text-primary-800 transition hover:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none md:flex dark:text-grey-100 dark:hover:bg-primary-800/50"
           >
             <IconLogo className="mr-1 h-10 w-10 transition group-hover:text-accent-600 dark:text-primary-600 dark:group-hover:text-accent-400" />
-            <div className="flex flex-col font-display transition group-hover:text-accent-700 dark:group-hover:text-accent-400">
+            <div className="flex flex-col font-wordmark transition group-hover:text-accent-700 dark:group-hover:text-accent-400">
               <span className="text-xl leading-none">Chimborazo</span>
               <span className="text-sm leading-none">Park Conservancy</span>
             </div>

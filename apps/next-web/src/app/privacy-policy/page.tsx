@@ -29,7 +29,7 @@ export default function PrivacyPolicyPage() {
         imageWidth={2000}
         imageHeight={1262}
       />
-      <Container className="py-16 md:py-24">
+      <Container className="pt-10 pb-16 md:pt-14 md:pb-24">
         <div className="prose-grey prose max-w-4xl dark:prose-invert">
           <p className="font-body text-grey-700 dark:text-grey-300">
             <strong>Effective Date:</strong> January 1, 2025

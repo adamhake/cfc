@@ -3,7 +3,8 @@
 import type { PortableTextBlock, PortableTextComponents } from "@portabletext/react"
 import { PortableText } from "@portabletext/react"
 import { BookOpenText, HeartHandshake, LeafyGreen, type LucideIcon, Trees } from "lucide-react"
-import { useReducedMotion } from "@/hooks/useReducedMotion"
+import type { MaybeStega } from "@/lib/sanity-types"
+import { cleanEnum } from "@/lib/stega"
 import { cn } from "@/utils/cn"
 
 type Pillar = "restoration" | "preservation" | "connection" | "recreation"
@@ -12,7 +13,12 @@ interface VisionProps {
   title: string
   description?: string | string[]
   content?: PortableTextBlock[]
-  pillar: Pillar
+  pillar: MaybeStega<Pillar>
+  /**
+   * Click-to-edit target for this array item. Also what lets an editor drag the
+   * pillars into a new order from inside the preview.
+   */
+  dataSanity?: string
 }
 
 const descriptionComponents: PortableTextComponents = {
@@ -33,92 +39,86 @@ const descriptionComponents: PortableTextComponents = {
   listItem: {
     bullet: ({ children }) => <li>{children}</li>,
   },
+  // Pillar descriptions use the homepage block config, which allows links.
+  marks: {
+    link: ({ children, value }) => {
+      const href = typeof value?.href === "string" ? value.href : undefined
+      if (!href) return <>{children}</>
+      const isExternal = href.startsWith("http")
+      return (
+        <a
+          href={href}
+          className="underline decoration-primary-600/50 underline-offset-2 hover:decoration-primary-600"
+          {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        >
+          {children}
+        </a>
+      )
+    },
+  },
 }
 
+/**
+ * The four pillars are parallel, not sequential — restoration isn't a step
+ * before preservation — so they carry no ordinal.
+ *
+ * They also carry no card. A bordered, rounded, near-page-colored box around
+ * each one equalised the heights (leaving voids under the shorter entries) and
+ * left the pillar's colour doing nothing but tinting a small icon.
+ *
+ * The tinted circular icon well stays, because it is a shape the site already
+ * uses elsewhere — SiteAlert and the amenities Location/Hours cells both set
+ * their icon in one. Carrying the pillar colour in that well keeps these in
+ * the site's existing vocabulary instead of introducing a new marker.
+ */
 interface PillarStyle {
   Icon: LucideIcon
   iconBackground: string
   iconColor: string
-  labelColor: string
-  numeralColor: string
-  ordinal: string
 }
 
 const pillarStyles: Record<Pillar, PillarStyle> = {
   restoration: {
     Icon: LeafyGreen,
-    iconBackground: "bg-primary-100 dark:bg-primary-800",
-    iconColor: "stroke-primary-800 dark:stroke-primary-200",
-    labelColor: "text-primary-700 dark:text-primary-300",
-    numeralColor: "text-primary-700/10 dark:text-primary-200/10",
-    ordinal: "01",
+    iconBackground: "bg-primary-700/10 dark:bg-primary-400/15",
+    iconColor: "stroke-primary-700 dark:stroke-primary-300",
   },
   recreation: {
     Icon: Trees,
-    iconBackground: "bg-soft-blue-100 dark:bg-soft-blue-800",
-    iconColor: "stroke-soft-blue-800 dark:stroke-soft-blue-200",
-    labelColor: "text-soft-blue-700 dark:text-soft-blue-300",
-    numeralColor: "text-soft-blue-700/10 dark:text-soft-blue-200/10",
-    ordinal: "02",
+    iconBackground: "bg-soft-blue-600/10 dark:bg-soft-blue-300/15",
+    iconColor: "stroke-soft-blue-700 dark:stroke-soft-blue-300",
   },
   connection: {
     Icon: HeartHandshake,
-    iconBackground: "bg-heather-100 dark:bg-heather-800",
-    iconColor: "stroke-heather-900 dark:stroke-heather-200",
-    labelColor: "text-heather-700 dark:text-heather-300",
-    numeralColor: "text-heather-700/10 dark:text-heather-200/10",
-    ordinal: "03",
+    iconBackground: "bg-heather-600/12 dark:bg-heather-300/15",
+    iconColor: "stroke-heather-700 dark:stroke-heather-300",
   },
   preservation: {
     Icon: BookOpenText,
-    iconBackground: "bg-terra-100 dark:bg-terra-800",
-    iconColor: "stroke-terra-800 dark:stroke-terra-200",
-    labelColor: "text-terra-700 dark:text-terra-300",
-    numeralColor: "text-terra-700/10 dark:text-terra-200/10",
-    ordinal: "04",
+    iconBackground: "bg-terra-600/12 dark:bg-terra-300/15",
+    iconColor: "stroke-terra-700 dark:stroke-terra-300",
   },
 }
 
-export default function Vision({ title, description, content, pillar }: VisionProps) {
-  const prefersReducedMotion = useReducedMotion()
-  const { Icon, iconBackground, iconColor, labelColor, numeralColor, ordinal } =
-    pillarStyles[pillar]
+export default function Vision({ title, description, content, pillar, dataSanity }: VisionProps) {
+  // `pillar` comes from Sanity, so in draft mode it carries stega characters
+  // and would miss the lookup below. Fall back rather than crash if an unknown
+  // pillar value ever reaches here.
+  const { Icon, iconBackground, iconColor } =
+    pillarStyles[cleanEnum(pillar) ?? "restoration"] ?? pillarStyles.restoration
 
   return (
-    <div
-      className={cn(
-        "group relative h-full overflow-hidden rounded-2xl border border-neutral-200",
-        "bg-neutral-50 p-8 lg:p-10",
-        "dark:border-primary-700 dark:bg-primary-950",
-        !prefersReducedMotion &&
-          "transition-all duration-300 hover:-translate-y-0.5 hover:border-neutral-300 dark:hover:border-primary-600",
-      )}
-    >
-      <div className="relative">
-        <div className="mb-7 flex items-start justify-between gap-4">
-          <div className={cn("inline-flex rounded-full p-3", iconBackground)}>
-            <Icon className={cn("h-8 w-8 md:h-10 md:w-10", iconColor)} aria-hidden="true" />
-          </div>
-          <span
-            className={cn("select-none font-display text-6xl leading-none", numeralColor)}
-            aria-hidden="true"
-          >
-            {ordinal}
-          </span>
-        </div>
-
-        <p
-          className={cn(
-            "mb-2 font-body text-xs font-semibold tracking-[0.14em] uppercase",
-            labelColor,
-          )}
-        >
-          Pillar {ordinal}
-        </p>
-        <h3 className="mb-4 font-display text-2xl text-grey-900 md:text-3xl dark:text-grey-100">
+    <div data-sanity={dataSanity} className="relative">
+      <div className="flex items-center gap-4">
+        <span className={cn("inline-flex shrink-0 rounded-full p-3.5", iconBackground)}>
+          <Icon className={cn("h-7 w-7 md:h-8 md:w-8", iconColor)} aria-hidden="true" />
+        </span>
+        <h3 className="font-display text-2xl text-grey-900 md:text-3xl dark:text-grey-100">
           {title}
         </h3>
+      </div>
 
+      <div className="mt-5 max-w-prose">
         {content ? (
           <PortableText value={content} components={descriptionComponents} />
         ) : Array.isArray(description) ? (

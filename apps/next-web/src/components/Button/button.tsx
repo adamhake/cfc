@@ -131,7 +131,7 @@ export const Button: React.FC<ButtonProps> = ({
   trackingLocation,
 }) => {
   const baseStyles =
-    "group inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 font-body font-semibold tracking-wider uppercase transition-all duration-150 no-underline"
+    "group inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 font-body font-semibold transition-all duration-150 no-underline"
 
   const sizeStyles = {
     small: "px-4 py-3 md:py-2 text-sm",

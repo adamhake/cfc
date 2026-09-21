@@ -1,7 +1,8 @@
 import { Calendar, Clock, MapPin } from "lucide-react"
 import Link from "next/link"
 import EventStatusChip from "@/components/EventStatusChip/event-status-chip"
-import type { SanityEvent } from "@/lib/sanity-types"
+import { sanityAttr } from "@/lib/sanity-data-attribute"
+import type { MaybeStega, SanityEvent } from "@/lib/sanity-types"
 import { formatDateString } from "@/utils/time"
 import Chip from "../Chip/chip"
 import { SanityImage } from "../SanityImage/sanity-image"
@@ -11,7 +12,9 @@ const DEFAULT_EVENT_IMAGE_MAX_WIDTH = 1024
 const DEFAULT_EVENT_IMAGE_BREAKPOINTS = [320, 480, 576, 640, 768, 896, 1024]
 const DEFAULT_EVENT_IMAGE_QUALITY = 70
 
-interface EventProps extends SanityEvent {
+// An intersection, not `extends`: `MaybeStega<T>` is a union, and an interface
+// can only extend a type with statically known members.
+type EventProps = MaybeStega<SanityEvent> & {
   isPast?: boolean
   layoutFeatured?: boolean
   imageSizes?: string
@@ -21,6 +24,8 @@ interface EventProps extends SanityEvent {
 }
 
 export default function Event({
+  _id,
+  _type,
   title,
   slug,
   description,
@@ -36,17 +41,22 @@ export default function Event({
   imageQuality = DEFAULT_EVENT_IMAGE_QUALITY,
 }: EventProps) {
   const fmtDate = formatDateString(date ?? "", "short")
+  // This component receives the event's fields spread as props, so rebuild the
+  // minimal document reference the overlay needs.
+  const doc = { _id, _type }
 
   return (
     <Link
+      data-sanity={sanityAttr(doc, "title")}
       href={`/events/${slug?.current}`}
-      className={`group h-full cursor-pointer overflow-hidden rounded-2xl border border-primary-200 bg-grey-50 shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent-500 hover:shadow-md active:scale-[0.99] dark:border-primary-700 dark:bg-primary-950 dark:hover:border-accent-500 ${layoutFeatured ? "grid md:grid-cols-[1.15fr_0.85fr]" : "flex flex-col"}`}
+      className={`group h-full cursor-pointer overflow-hidden rounded-2xl border border-primary-200 bg-grey-50 shadow-sm transition-all hover:border-accent-500 hover:shadow-md active:scale-[0.99] dark:border-primary-700 dark:bg-primary-950 dark:hover:border-accent-500 ${layoutFeatured ? "grid md:grid-cols-[1.15fr_0.85fr]" : "flex flex-col"}`}
     >
       <div
         className={`relative overflow-hidden bg-neutral-200 dark:bg-primary-900 ${layoutFeatured ? "aspect-[16/10] md:aspect-auto md:min-h-80" : "aspect-[16/10]"}`}
       >
         {heroImage && (
           <SanityImage
+            data-sanity={sanityAttr(doc, "heroImage")}
             image={heroImage}
             alt={heroImage.alt ?? undefined}
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"

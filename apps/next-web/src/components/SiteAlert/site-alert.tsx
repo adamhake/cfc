@@ -65,7 +65,7 @@ export function SiteAlert({ settings }: SiteAlertProps) {
         <div className="min-w-0">
           <h2
             id="site-alert-label"
-            className="shrink-0 font-body text-xs font-bold tracking-[0.12em] text-terra-800 uppercase dark:text-terra-300"
+            className="shrink-0 font-body text-xs font-bold text-terra-800 dark:text-terra-300"
           >
             {alert.label}
           </h2>

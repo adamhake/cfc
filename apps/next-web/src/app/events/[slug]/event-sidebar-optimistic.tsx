@@ -20,7 +20,7 @@ export default function EventSidebarOptimistic({ event }: { event: SanityEvent }
           <div className="flex items-start gap-3">
             <Calendar className="mt-1 h-5 w-5 shrink-0 stroke-accent-600 dark:stroke-accent-400" />
             <div>
-              <div className="font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
+              <div className="font-body text-xs font-semibold text-grey-600 dark:text-grey-400">
                 Date
               </div>
               <div className="font-body font-medium text-grey-900 dark:text-grey-100">
@@ -31,7 +31,7 @@ export default function EventSidebarOptimistic({ event }: { event: SanityEvent }
           <div className="flex items-start gap-3">
             <Clock className="mt-1 h-5 w-5 shrink-0 stroke-accent-600 dark:stroke-accent-400" />
             <div>
-              <div className="font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
+              <div className="font-body text-xs font-semibold text-grey-600 dark:text-grey-400">
                 Time
               </div>
               <div className="font-body font-medium text-grey-900 dark:text-grey-100">
@@ -42,7 +42,7 @@ export default function EventSidebarOptimistic({ event }: { event: SanityEvent }
           <div className="flex items-start gap-3">
             <MapPin className="mt-1 h-5 w-5 shrink-0 stroke-accent-600 dark:stroke-accent-400" />
             <div>
-              <div className="font-body text-xs font-semibold text-grey-600 uppercase dark:text-grey-400">
+              <div className="font-body text-xs font-semibold text-grey-600 dark:text-grey-400">
                 Location
               </div>
               <div className="font-body font-medium text-grey-900 dark:text-grey-100">

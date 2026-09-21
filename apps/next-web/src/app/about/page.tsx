@@ -52,7 +52,7 @@ export default async function AboutPage() {
         priority={true}
       />
 
-      <Container spacing="xl" className="space-y-20 py-16 pb-20 md:space-y-24 md:py-24 md:pb-28">
+      <Container spacing="xl" className="space-y-20 pt-10 pb-20 md:space-y-24 md:pt-14 md:pb-28">
         {/* Mission & Vision */}
         {(pageData?.mission || pageData?.vision) && (
           <div className="space-y-8 md:space-y-10">
@@ -180,7 +180,7 @@ function MemberCard({ member }: { member: SanityBoardMember }) {
         {member.name}
       </h3>
       {member.role && (
-        <p className="mt-2 font-body text-[0.6875rem] font-medium tracking-[0.16em] text-grey-600 uppercase dark:text-grey-400">
+        <p className="mt-2 font-body text-sm font-medium text-grey-600 dark:text-grey-400">
           {member.role}
         </p>
       )}

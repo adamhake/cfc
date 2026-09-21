@@ -6,7 +6,7 @@ import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { PortableText } from "@/components/PortableText/portable-text"
 import { DonutChart, HorizontalBarChart, SplitBar, SurveySection } from "@/components/SurveyCharts"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
-import type { SanitySurveyResultsPage } from "@/lib/sanity-types"
+
 import { generateBreadcrumbStructuredData, SITE_CONFIG } from "@/utils/seo"
 import {
   Q1_FREQUENCY,
@@ -104,11 +104,11 @@ const breadcrumbStructuredData = generateBreadcrumbStructuredData([
 ])
 
 export default async function SurveyResultsPage() {
-  const { data: pageData } = (await cachedSanityFetch({
+  const { data: pageData } = await cachedSanityFetch({
     ...(await getDynamicFetchOptions()),
     query: getSurveyResultsPageQuery,
     tags: [CACHE_TAGS.SURVEY_RESULTS],
-  })) as { data: SanitySurveyResultsPage | null }
+  })
 
   return (
     <div>
@@ -140,7 +140,7 @@ export default async function SurveyResultsPage() {
         priority={true}
       />
 
-      <Container spacing="xl" className="space-y-16 py-16 pb-24 md:space-y-24">
+      <Container spacing="xl" className="space-y-16 pt-10 pb-24 md:space-y-24 md:pt-14">
         {/* CMS Introduction */}
         {pageData?.introduction && (
           <article className="mx-auto max-w-3xl">

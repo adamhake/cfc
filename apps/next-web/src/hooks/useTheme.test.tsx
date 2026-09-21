@@ -22,7 +22,6 @@ vi.mock("@/lib/appearance-shared", () => ({
   APPEARANCE_COOKIES: {
     THEME: "theme-preference",
     RESOLVED_THEME: "resolved-theme",
-    PALETTE: "palette-preference",
   },
 }))
 

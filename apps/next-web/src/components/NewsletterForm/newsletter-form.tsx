@@ -171,20 +171,22 @@ export function NewsletterForm({
         ref={successRef}
         tabIndex={-1}
         className={cn(
-          "block rounded-xl border border-green-200 bg-green-50 p-4",
-          "dark:border-green-800 dark:bg-green-900/20",
+          "block rounded-xl border border-primary-200 bg-primary-50 p-4",
+          "dark:border-primary-800 dark:bg-primary-900/20",
           "focus:outline-none",
           className,
         )}
         aria-live="polite"
       >
         <div className="flex items-start gap-3">
-          <CheckCircle className="h-6 w-6 shrink-0 text-green-600 dark:text-green-400" />
+          <CheckCircle className="h-6 w-6 shrink-0 text-primary-600 dark:text-primary-400" />
           <div className="space-y-1">
-            <p className="font-display text-base font-semibold text-green-800 dark:text-green-300">
+            <p className="font-display text-base font-semibold text-primary-800 dark:text-primary-300">
               You're subscribed!
             </p>
-            <p className="font-body text-sm text-green-700 dark:text-green-400">{successMessage}</p>
+            <p className="font-body text-sm text-primary-700 dark:text-primary-400">
+              {successMessage}
+            </p>
           </div>
         </div>
       </output>

@@ -1,4 +1,8 @@
-import { updateBySlugQuery, updateSlugsQuery } from "@chimborazo/sanity-config/queries"
+import {
+  updateBySlugQuery,
+  updateNavigationQuery,
+  updateSlugsQuery,
+} from "@chimborazo/sanity-config/queries"
 import type { PortableTextBlock } from "@portabletext/react"
 import { ArrowLeft } from "lucide-react"
 import type { Metadata } from "next"
@@ -7,9 +11,10 @@ import { notFound } from "next/navigation"
 import Container from "@/components/Container/container"
 import PageHero from "@/components/PageHero/page-hero"
 import { PortableText } from "@/components/PortableText/portable-text"
+import { UpdateEndDate } from "@/components/UpdateEndDate/update-end-date"
 import { sanityClient } from "@/lib/sanity"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
-import type { SanityUpdateDetail, UpdateSlug } from "@/lib/sanity-types"
+import type { UpdateSlug } from "@/lib/sanity-types"
 import { withPlaceholderSlug } from "@/lib/static-params"
 import {
   generateArticleStructuredData,
@@ -29,12 +34,12 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: UpdatePageProps): Promise<Metadata> {
   const { slug } = await params
-  const { data: update } = (await cachedSanityFetch({
+  const { data: update } = await cachedSanityFetch({
     ...(await getDynamicFetchOptions()),
     query: updateBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.UPDATE_DETAIL, CACHE_TAGS.UPDATES],
-  })) as { data: SanityUpdateDetail | null }
+  })
 
   if (!update) {
     return {
@@ -52,6 +57,8 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
       title: update.title ?? undefined,
       description: update.description ?? undefined,
       type: "article",
+      publishedTime: update.publishedAt ?? undefined,
+      modifiedTime: update._updatedAt,
       url: updateUrl,
       images: update.heroImage?.asset?.url
         ? [
@@ -62,30 +69,37 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
               alt: update.heroImage.alt ?? update.title ?? undefined,
             },
           ]
-        : undefined,
+        : [SITE_CONFIG.defaultImage],
     },
   }
 }
 
 export default async function UpdatePage({ params }: UpdatePageProps) {
   const { slug } = await params
-  const { data: update } = (await cachedSanityFetch({
+  const { data: update } = await cachedSanityFetch({
     ...(await getDynamicFetchOptions()),
     query: updateBySlugQuery,
     params: { slug },
     tags: [CACHE_TAGS.UPDATE_DETAIL, CACHE_TAGS.UPDATES],
-  })) as { data: SanityUpdateDetail | null }
+  })
 
   if (!update) {
     notFound()
   }
 
   const updateUrl = `${SITE_CONFIG.url}/updates/${update.slug?.current}`
+  const { data: navigation } = await cachedSanityFetch({
+    ...(await getDynamicFetchOptions()),
+    query: updateNavigationQuery,
+    params: { publishedAt: update.publishedAt, id: update._id },
+    tags: [CACHE_TAGS.UPDATES],
+  })
   const articleData = generateArticleStructuredData({
     headline: update.title ?? "",
     description: update.description ?? "",
     image: update.heroImage?.asset?.url || SITE_CONFIG.defaultImage.url,
     datePublished: update.publishedAt ?? "",
+    dateModified: update._updatedAt,
   })
   const breadcrumbData = generateBreadcrumbStructuredData([
     { name: "Home", url: SITE_CONFIG.url },
@@ -114,7 +128,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
         <PageHero
           title={update.title ?? ""}
           subtitle={update.description ?? undefined}
-          sanityImage={update.heroImage ?? undefined}
+          sanityImage={update.heroImage?.asset ? update.heroImage : undefined}
           variant="detail"
           priority={true}
           titleSize="compact"
@@ -147,16 +161,11 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
                     Featured update
                   </span>
                 )}
+                {update.endDate && <UpdateEndDate endDate={update.endDate} />}
               </div>
 
-              {update.body && update.body.length > 0 ? (
+              {update.body && update.body.length > 0 && (
                 <PortableText value={update.body as PortableTextBlock[]} />
-              ) : (
-                <div className="rounded-2xl border border-neutral-200 bg-neutral-100/60 p-8 md:p-12 dark:border-primary-700/30 dark:bg-primary-900/20">
-                  <p className="font-body text-lg leading-relaxed text-grey-700 dark:text-grey-300">
-                    More details for this update are coming soon.
-                  </p>
-                </div>
               )}
 
               {update.relatedEvents && update.relatedEvents.length > 0 && (
@@ -178,7 +187,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
                           {event.description}
                         </p>
                         {event.date && (
-                          <p className="mt-3 font-body text-sm font-medium uppercase tracking-[0.08em] text-primary-700 dark:text-primary-300">
+                          <p className="mt-3 font-body text-sm font-medium text-primary-700 dark:text-primary-300">
                             {formatDateString(event.date, "short")}
                           </p>
                         )}
@@ -205,7 +214,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
                             {project.title}
                           </h3>
                           {project.status && (
-                            <span className="rounded-full bg-primary-100 px-2.5 py-1 font-body text-xs font-semibold uppercase tracking-[0.08em] text-primary-800 dark:bg-primary-900/60 dark:text-primary-200">
+                            <span className="rounded-full bg-primary-100 px-2.5 py-1 font-body text-xs font-semibold text-primary-800 dark:bg-primary-900/60 dark:text-primary-200">
                               {project.status}
                             </span>
                           )}
@@ -227,7 +236,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
                 </h2>
                 <dl className="mt-5 space-y-4 font-body text-sm text-grey-700 dark:text-grey-300">
                   <div>
-                    <dt className="text-xs font-semibold uppercase tracking-[0.12em] text-grey-500 dark:text-grey-400">
+                    <dt className="text-xs font-semibold text-grey-500 dark:text-grey-400">
                       Published
                     </dt>
                     <dd className="mt-1 text-base text-grey-900 dark:text-grey-100">
@@ -236,16 +245,21 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
                   </div>
                   {update.category?.title && (
                     <div>
-                      <dt className="text-xs font-semibold uppercase tracking-[0.12em] text-grey-500 dark:text-grey-400">
+                      <dt className="text-xs font-semibold text-grey-500 dark:text-grey-400">
                         Category
                       </dt>
                       <dd className="mt-1 text-base text-grey-900 dark:text-grey-100">
-                        {update.category.title}
+                        <Link
+                          href={`/updates?category=${encodeURIComponent(update.category.slug?.current ?? "")}`}
+                          className="underline underline-offset-4"
+                        >
+                          {update.category.title}
+                        </Link>
                       </dd>
                     </div>
                   )}
                   <div>
-                    <dt className="text-xs font-semibold uppercase tracking-[0.12em] text-grey-500 dark:text-grey-400">
+                    <dt className="text-xs font-semibold text-grey-500 dark:text-grey-400">
                       Permalink
                     </dt>
                     <dd className="mt-1 break-all text-base text-grey-900 dark:text-grey-100">
@@ -256,6 +270,29 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
               </div>
             </aside>
           </article>
+          {(navigation.previous?.slug?.current || navigation.next?.slug?.current) && (
+            <nav
+              aria-label="More updates"
+              className="mt-12 grid gap-6 border-t border-primary-200 pt-8 md:grid-cols-2 dark:border-primary-700"
+            >
+              {navigation.previous?.slug?.current && (
+                <Link
+                  href={`/updates/${navigation.previous.slug.current}`}
+                  className="font-body text-primary-800 underline underline-offset-4 dark:text-primary-200"
+                >
+                  Older update: {navigation.previous.title}
+                </Link>
+              )}
+              {navigation.next?.slug?.current && (
+                <Link
+                  href={`/updates/${navigation.next.slug.current}`}
+                  className="font-body text-primary-800 underline underline-offset-4 dark:text-primary-200"
+                >
+                  Newer update: {navigation.next.title}
+                </Link>
+              )}
+            </nav>
+          )}
         </Container>
       </div>
     </>

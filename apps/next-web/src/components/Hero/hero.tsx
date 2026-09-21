@@ -1,4 +1,5 @@
 import { Image } from "@/components/OptimizedImage/optimized-image"
+import { WaveDivider } from "@/components/WaveDivider/wave-divider"
 import { Button } from "../Button/button"
 import { SanityImage, type SanityImageObject } from "../SanityImage/sanity-image"
 
@@ -58,9 +59,10 @@ export default function HeroSoftGradientDivider({
       {/* Solid scrim keeps contrast consistent across changing photography. */}
       <div className="absolute inset-0 bg-primary-950/55 dark:bg-grey-950/65"></div>
 
-      {/* Content */}
-      <div className="absolute inset-0 z-10 flex items-center justify-center px-4 sm:items-end sm:px-6 lg:px-8">
-        <div className="relative mb-8 w-full max-w-6xl space-y-6 sm:mb-12 lg:mb-24">
+      {/* Content sits at the bottom at every width. Centering it on mobile
+          pushed the h1 up behind the floating logo and hamburger. */}
+      <div className="absolute inset-0 z-10 flex items-end justify-center px-4 pt-24 sm:px-6 lg:px-8">
+        <div className="relative mb-10 w-full max-w-6xl space-y-5 sm:mb-12 sm:space-y-6 lg:mb-24">
           <h1 className="font-display text-4xl text-primary-50 md:text-6xl dark:text-grey-50">
             {heading}
           </h1>
@@ -84,25 +86,7 @@ export default function HeroSoftGradientDivider({
 
       {/* James River wave divider */}
       <div className="absolute bottom-[-1px] left-0 w-full overflow-hidden leading-[0]">
-        <svg
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-          className="relative block h-16 w-full lg:h-24"
-          xmlns="http://www.w3.org/2000/svg"
-          style={{ display: "block" }}
-          aria-hidden="true"
-        >
-          {/* The flowing curve and blue line reference the James River overlook. */}
-          <path
-            d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60 L1200,120 L0,120 Z"
-            className="fill-grey-50 dark:fill-primary-900"
-          />
-          <path
-            d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60"
-            className="fill-none stroke-soft-blue-600 dark:stroke-soft-blue-400"
-            strokeWidth="7"
-          />
-        </svg>
+        <WaveDivider fill="fill-grey-50 dark:fill-primary-900" />
       </div>
     </div>
   )

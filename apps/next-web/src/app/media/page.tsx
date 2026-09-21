@@ -7,7 +7,6 @@ import type { Metadata } from "next"
 import Container from "@/components/Container/container"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
-import type { SanityMediaImage, SanityMediaPage } from "@/lib/sanity-types"
 import { SITE_CONFIG } from "@/utils/seo"
 import MediaGalleryClient from "./media-gallery-client"
 
@@ -29,7 +28,7 @@ const PAGE_SIZE = 9
 
 export default async function MediaPage() {
   const [{ data: mediaPageData }, { data: initialImages }, { data: totalCount }] =
-    (await Promise.all([
+    await Promise.all([
       cachedSanityFetch({
         ...(await getDynamicFetchOptions()),
         query: getMediaPageQuery,
@@ -49,7 +48,7 @@ export default async function MediaPage() {
         query: mediaImagesCountQuery,
         tags: [CACHE_TAGS.MEDIA],
       }),
-    ])) as [{ data: SanityMediaPage | null }, { data: SanityMediaImage[] }, { data: number }]
+    ])
 
   return (
     <div className="min-h-screen">
@@ -66,7 +65,7 @@ export default async function MediaPage() {
         variant="section"
         priority={true}
       />
-      <Container maxWidth="6xl" spacing="md" className="py-12 md:py-20">
+      <Container maxWidth="6xl" spacing="md" className="pt-8 pb-12 md:pt-12 md:pb-20">
         <MediaGalleryClient
           initialImages={initialImages}
           totalCount={totalCount}
