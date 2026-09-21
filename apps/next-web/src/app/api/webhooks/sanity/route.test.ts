@@ -101,6 +101,7 @@ describe("Sanity Webhook Route", () => {
       expect(json.tags).toContain(CACHE_TAGS.EVENTS)
       expect(json.tags).toContain(CACHE_TAGS.EVENTS_LIST)
       expect(json.tags).toContain(CACHE_TAGS.EVENT_DETAIL)
+      expect(json.tags).toContain(CACHE_TAGS.UPDATE_DETAIL)
       expect(json.tags).toContain(CACHE_TAGS.HOMEPAGE)
       expect(revalidateTag).toHaveBeenCalledWith(CACHE_TAGS.EVENTS, { expire: 0 })
     })
@@ -115,6 +116,7 @@ describe("Sanity Webhook Route", () => {
       expect(json.tags).toContain(CACHE_TAGS.PROJECTS)
       expect(json.tags).toContain(CACHE_TAGS.PROJECTS_LIST)
       expect(json.tags).toContain(CACHE_TAGS.PROJECT_DETAIL)
+      expect(json.tags).toContain(CACHE_TAGS.UPDATE_DETAIL)
       expect(json.tags).toContain(CACHE_TAGS.HOMEPAGE)
     })
 

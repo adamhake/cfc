@@ -48,7 +48,7 @@ passed in.
 `revalidate: 31_536_000` (one year). Freshness comes from tag invalidation, not
 expiry.
 
-Two deliberate exceptions, both because they depend on the current time — which
+Time-dependent UI uses deliberate exceptions because the current time
 can't be read while prerendering without freezing a build timestamp into the
 shell:
 
@@ -60,6 +60,9 @@ shell:
   are absent from the initial HTML and appear on hydration. This is a decorative
   badge, and client rendering makes it correct for the viewer rather than as of
   the last build.
+- **Update end-date labels** (`UpdateEndDate`) render a fixed end date in the
+  initial HTML, then determine whether it has ended on the client. See Updates
+  below for the inclusive date and refresh rules.
 
 ## Invalidation
 
@@ -108,3 +111,27 @@ Cache behavior doesn't show up in unit tests. On a deploy preview:
 4. Reload a page repeatedly and confirm Sanity's request log doesn't show a
    query per request — that's what proves the host's cache handler is actually
    backing `use cache`.
+
+## Updates
+
+The homepage, update list, article navigation, and related-update sections all
+fetch with `UPDATES`, so publishing an update or renaming a category refreshes
+every place it is shown. Event and project publishes also invalidate
+`UPDATE_DETAIL`, since articles display the titles, slugs, and summaries of
+those related documents.
+
+Optional update end dates are calendar dates in `America/New_York`, inclusive
+of the entire last day. `UpdateEndDate` renders the date in the cached HTML,
+then shows “Through” or “Ended” after hydration. It refreshes every minute and
+when the tab's visibility changes; no publish or rebuild is needed when the
+date passes. Ended articles remain in the archive, related sections, and any
+featured placement until an editor changes that placement.
+
+Add these checks to the deploy-preview verification above:
+
+- Publish an update without an image or body; its summary and permalink work.
+- Set an end date in the past; the article and its cards show “Ended”.
+- Link an event and project; verify links in both directions. Rename the linked
+  document and confirm the article reflects the change without a rebuild.
+- Feature/unfeature an update and rename its category; confirm homepage and
+  listing refresh. Check category URLs and browser back/forward navigation.

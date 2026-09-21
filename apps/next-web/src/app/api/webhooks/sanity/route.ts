@@ -113,10 +113,12 @@ function getCacheTagsForDocumentType(docType: string): CacheTag[] {
   switch (docType) {
     case "event":
       tags.push(CACHE_TAGS.EVENTS, CACHE_TAGS.EVENTS_LIST, CACHE_TAGS.EVENT_DETAIL)
+      tags.push(CACHE_TAGS.UPDATE_DETAIL)
       tags.push(CACHE_TAGS.HOMEPAGE)
       break
     case "project":
       tags.push(CACHE_TAGS.PROJECTS, CACHE_TAGS.PROJECTS_LIST, CACHE_TAGS.PROJECT_DETAIL)
+      tags.push(CACHE_TAGS.UPDATE_DETAIL)
       tags.push(CACHE_TAGS.HOMEPAGE)
       break
     case "update":

@@ -13,6 +13,7 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
   { href: "/about", label: "About Us" },
   { href: "/projects", label: "Projects" },
   { href: "/events", label: "Events" },
+  { href: "/updates", label: "Updates" },
   { href: "/amenities", label: "Amenities" },
   { href: "/history", label: "History" },
   { href: "/get-involved", label: "Get Involved" },
