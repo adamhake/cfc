@@ -1,7 +1,10 @@
 import { createGenerateMetadataAction, schemas } from "@chimborazo/sanity-config"
+import { CalendarIcon } from "@sanity/icons/Calendar"
 import { CogIcon } from "@sanity/icons/Cog"
 import { DocumentTextIcon } from "@sanity/icons/DocumentText"
 import { HomeIcon } from "@sanity/icons/Home"
+import { ImagesIcon } from "@sanity/icons/Images"
+import { RocketIcon } from "@sanity/icons/Rocket"
 import {
   urlSearchParamPreviewPathname,
   urlSearchParamPreviewSecret,
@@ -9,11 +12,23 @@ import {
 import { createPreviewSecret } from "@sanity/preview-url-secret/create-secret"
 import { visionTool } from "@sanity/vision"
 import { defineConfig } from "sanity"
-import { defineDocuments, defineLocations, presentationTool } from "sanity/presentation"
+import {
+  type DocumentLocationResolvers,
+  defineDocuments,
+  defineLocations,
+  presentationTool,
+} from "sanity/presentation"
 import type { StructureResolver } from "sanity/structure"
 import { structureTool } from "sanity/structure"
 import { StudioLogo } from "./components/StudioLogo"
+import { resolveDocumentBadges } from "./src/badges"
 import { env } from "./src/env"
+import {
+  CONTENT_ROUTES,
+  getPreviewPathForDocument,
+  SINGLETON_PAGES,
+  SINGLETON_TYPES,
+} from "./src/routes"
 import "./studio.css"
 
 // Get environment variables from validated env config
@@ -31,59 +46,6 @@ const generateMetadataAction = createGenerateMetadataAction({
   apiUrl: apiUrl ?? "",
 })
 
-// Singleton document types (managed as single instances, not lists)
-const singletonTypes = [
-  "siteSettings",
-  "homePage",
-  "aboutPage",
-  "amenitiesPage",
-  "eventsPage",
-  "projectsPage",
-  "updatesPage",
-  "mediaPage",
-  "donatePage",
-  "getInvolvedPage",
-  "historyPage",
-  "surveyResultsPage",
-]
-
-function getPreviewPathForDocument(document: { _type?: string; slug?: { current?: string } }) {
-  const slug = document.slug?.current
-
-  switch (document._type) {
-    case "homePage":
-      return "/"
-    case "aboutPage":
-      return "/about"
-    case "historyPage":
-      return "/history"
-    case "amenitiesPage":
-      return "/amenities"
-    case "getInvolvedPage":
-      return "/get-involved"
-    case "donatePage":
-      return "/donate"
-    case "mediaPage":
-      return "/media"
-    case "eventsPage":
-      return "/events"
-    case "projectsPage":
-      return "/projects"
-    case "updatesPage":
-      return "/updates"
-    case "surveyResultsPage":
-      return "/2022-park-survey"
-    case "event":
-      return slug ? `/events/${slug}` : null
-    case "project":
-      return slug ? `/projects/${slug}` : null
-    case "update":
-      return slug ? `/updates/${slug}` : null
-    default:
-      return null
-  }
-}
-
 function buildDraftPreviewUrl(options: { baseUrl: string; path: string; secret: string }) {
   const previewUrl = new URL("/api/draft", options.baseUrl)
   previewUrl.searchParams.set(urlSearchParamPreviewSecret, options.secret)
@@ -91,93 +53,176 @@ function buildDraftPreviewUrl(options: { baseUrl: string; path: string; secret: 
   return previewUrl.toString()
 }
 
+type S = Parameters<StructureResolver>[0]
+
+/** A singleton list item that locks the document to a fixed ID. */
+const singletonItem = (S: S, type: string, title: string, icon = DocumentTextIcon) =>
+  S.listItem()
+    .title(title)
+    .icon(icon)
+    .child(S.document().schemaType(type).documentId(type).title(title))
+
+/**
+ * A content section: the listing page's own settings sit alongside the
+ * documents that appear on it, so an editor changing the Events intro and an
+ * editor adding an event start from the same place.
+ */
+const contentSection = (
+  S: S,
+  options: {
+    title: string
+    icon: typeof DocumentTextIcon
+    pageType: string
+    pageTitle: string
+    documents: Array<{ type: string; title: string }>
+  },
+) =>
+  S.listItem()
+    .title(options.title)
+    .icon(options.icon)
+    .child(
+      S.list()
+        .title(options.title)
+        .items([
+          singletonItem(S, options.pageType, options.pageTitle, CogIcon),
+          S.divider(),
+          ...options.documents.map((doc) => S.documentTypeListItem(doc.type).title(doc.title)),
+        ]),
+    )
+
 // Define custom structure for organizing content
 const structure: StructureResolver = (S) =>
   S.list()
     .title("Content")
     .items([
       // --- Homepage (most frequently edited) ---
-      S.listItem()
-        .title("Homepage")
-        .icon(HomeIcon)
-        .child(S.document().schemaType("homePage").documentId("homePage")),
+      singletonItem(S, "homePage", "Homepage", HomeIcon),
 
       S.divider(),
 
-      // --- Content that drives pages ---
-      S.documentTypeListItem("event").title("Events"),
-      S.documentTypeListItem("project").title("Projects"),
-      S.documentTypeListItem("update").title("Updates"),
+      // --- Content sections: listing page settings + their documents ---
+      contentSection(S, {
+        title: "Events",
+        icon: CalendarIcon,
+        pageType: "eventsPage",
+        pageTitle: "Events Page Settings",
+        documents: [{ type: "event", title: "All Events" }],
+      }),
+      contentSection(S, {
+        title: "Projects",
+        icon: RocketIcon,
+        pageType: "projectsPage",
+        pageTitle: "Projects Page Settings",
+        documents: [{ type: "project", title: "All Projects" }],
+      }),
+      contentSection(S, {
+        title: "Updates",
+        icon: DocumentTextIcon,
+        pageType: "updatesPage",
+        pageTitle: "Updates Page Settings",
+        documents: [
+          { type: "update", title: "All Updates" },
+          { type: "updateCategory", title: "Categories" },
+        ],
+      }),
+      contentSection(S, {
+        title: "Media",
+        icon: ImagesIcon,
+        pageType: "mediaPage",
+        pageTitle: "Media Page Settings",
+        documents: [{ type: "mediaImage", title: "All Media Items" }],
+      }),
 
       S.divider(),
 
-      // --- Informational pages ---
-      S.listItem()
-        .title("About Page")
-        .icon(DocumentTextIcon)
-        .child(S.document().schemaType("aboutPage").documentId("aboutPage")),
-      S.listItem()
-        .title("History Page")
-        .icon(DocumentTextIcon)
-        .child(S.document().schemaType("historyPage").documentId("historyPage")),
-      S.listItem()
-        .title("Amenities Page")
-        .icon(DocumentTextIcon)
-        .child(S.document().schemaType("amenitiesPage").documentId("amenitiesPage")),
-      S.listItem()
-        .title("Get Involved Page")
-        .icon(DocumentTextIcon)
-        .child(S.document().schemaType("getInvolvedPage").documentId("getInvolvedPage")),
-      S.listItem()
-        .title("Survey Results Page")
-        .icon(DocumentTextIcon)
-        .child(S.document().schemaType("surveyResultsPage").documentId("surveyResultsPage")),
+      // --- Standalone pages ---
+      singletonItem(S, "aboutPage", "About Page"),
+      singletonItem(S, "historyPage", "History Page"),
+      singletonItem(S, "amenitiesPage", "Amenities Page"),
+      singletonItem(S, "getInvolvedPage", "Get Involved Page"),
+      singletonItem(S, "donatePage", "Donate Page"),
+      singletonItem(S, "surveyResultsPage", "Survey Results Page"),
 
       S.divider(),
 
-      // --- Support & media pages ---
-      S.listItem()
-        .title("Donate Page")
-        .icon(DocumentTextIcon)
-        .child(S.document().schemaType("donatePage").documentId("donatePage")),
-      S.listItem()
-        .title("Media Page")
-        .icon(DocumentTextIcon)
-        .child(S.document().schemaType("mediaPage").documentId("mediaPage")),
-      S.documentTypeListItem("mediaImage").title("Media Images"),
-
-      S.divider(),
-
-      // --- Listing page configuration ---
-      S.listItem()
-        .title("Events Page")
-        .icon(DocumentTextIcon)
-        .child(S.document().schemaType("eventsPage").documentId("eventsPage")),
-      S.listItem()
-        .title("Projects Page")
-        .icon(DocumentTextIcon)
-        .child(S.document().schemaType("projectsPage").documentId("projectsPage")),
-      S.listItem()
-        .title("Updates Page")
-        .icon(DocumentTextIcon)
-        .child(S.document().schemaType("updatesPage").documentId("updatesPage")),
-
-      S.divider(),
-
-      // --- Shared content ---
+      // --- Reusable content referenced from many pages ---
       S.documentTypeListItem("partner").title("Partners"),
       S.documentTypeListItem("quote").title("Quotes"),
       S.documentTypeListItem("gallery").title("Galleries"),
-      S.documentTypeListItem("updateCategory").title("Update Categories"),
 
       S.divider(),
 
       // --- Settings ---
-      S.listItem()
-        .title("Site Settings")
-        .icon(CogIcon)
-        .child(S.document().schemaType("siteSettings").documentId("siteSettings")),
+      singletonItem(S, "siteSettings", "Site Settings", CogIcon),
     ])
+
+// --- Presentation: document locations, derived from the shared route table ---
+
+const singletonLocations = Object.fromEntries(
+  SINGLETON_PAGES.map((page) => [
+    page.type,
+    defineLocations({
+      message: `This document controls the ${page.title.replace(/ Page$/, "")} page`,
+      locations: [{ title: page.title.replace(/ Page$/, ""), href: page.path }],
+    }),
+  ]),
+)
+
+const contentLocations = Object.fromEntries(
+  CONTENT_ROUTES.map((route) => [
+    route.type,
+    defineLocations({
+      select: { title: "title", slug: "slug.current" },
+      resolve: (doc) => ({
+        locations: doc?.slug
+          ? [
+              {
+                title: doc.title || `Untitled ${route.label}`,
+                href: `${route.basePath}/${doc.slug}`,
+              },
+              { title: route.listingTitle, href: route.basePath },
+            ]
+          : [],
+      }),
+    }),
+  ]),
+)
+
+/**
+ * Types with no page of their own. Without an entry here the Presentation tool
+ * shows nothing at all, which reads as "this document is unused".
+ */
+const sharedContentLocations: DocumentLocationResolvers = {
+  siteSettings: defineLocations({
+    message: "This document is used across the entire site",
+    tone: "caution",
+  }),
+  gallery: defineLocations({
+    message: "Galleries appear wherever a page or event references them",
+    tone: "caution",
+  }),
+  partner: defineLocations({
+    message: "Partners appear on the homepage and on any project that references them",
+    tone: "caution",
+    locations: [{ title: "Homepage", href: "/" }],
+  }),
+  quote: defineLocations({
+    message:
+      "Quotes appear wherever they are referenced. The homepage uses Homepage > Quote if set, otherwise Site Settings > Featured Quote.",
+    tone: "caution",
+    locations: [{ title: "Homepage", href: "/" }],
+  }),
+  updateCategory: defineLocations({
+    message: "Categories appear as filter chips on the Updates page",
+    tone: "caution",
+    locations: [{ title: "Updates", href: "/updates" }],
+  }),
+  mediaImage: defineLocations({
+    message: "Media items appear in the Media page gallery",
+    tone: "caution",
+    locations: [{ title: "Media", href: "/media" }],
+  }),
+}
 
 export default defineConfig({
   name: "chimborazo-park-conservancy",
@@ -195,7 +240,10 @@ export default defineConfig({
 
   plugins: [
     structureTool({ structure }),
-    visionTool(),
+    visionTool({
+      defaultApiVersion: apiVersion,
+      defaultDataset: dataset,
+    }),
     presentationTool({
       previewUrl: {
         initial: env.SANITY_STUDIO_PREVIEW_URL,
@@ -211,129 +259,16 @@ export default defineConfig({
       ],
       resolve: {
         mainDocuments: defineDocuments([
-          // Singleton pages
-          { route: "/", type: "homePage" },
-          { route: "/about", type: "aboutPage" },
-          { route: "/history", type: "historyPage" },
-          { route: "/amenities", type: "amenitiesPage" },
-          { route: "/get-involved", type: "getInvolvedPage" },
-          { route: "/donate", type: "donatePage" },
-          { route: "/media", type: "mediaPage" },
-          { route: "/events", type: "eventsPage" },
-          { route: "/projects", type: "projectsPage" },
-          { route: "/updates", type: "updatesPage" },
-          { route: "/2022-park-survey", type: "surveyResultsPage" },
-          // Dynamic routes
-          {
-            route: "/events/:slug",
-            filter: `_type == "event" && slug.current == $slug`,
-          },
-          {
-            route: "/projects/:slug",
-            filter: `_type == "project" && slug.current == $slug`,
-          },
-          {
-            route: "/updates/:slug",
-            filter: `_type == "update" && slug.current == $slug`,
-          },
+          ...SINGLETON_PAGES.map((page) => ({ route: page.path, type: page.type })),
+          ...CONTENT_ROUTES.map((route) => ({
+            route: `${route.basePath}/:slug`,
+            filter: `_type == "${route.type}" && slug.current == $slug`,
+          })),
         ]),
         locations: {
-          // Homepage
-          homePage: defineLocations({
-            message: "This document controls the homepage content",
-            locations: [{ title: "Homepage", href: "/" }],
-          }),
-          // Informational pages
-          aboutPage: defineLocations({
-            message: "This document controls the About page",
-            locations: [{ title: "About", href: "/about" }],
-          }),
-          historyPage: defineLocations({
-            message: "This document controls the History page",
-            locations: [{ title: "History", href: "/history" }],
-          }),
-          amenitiesPage: defineLocations({
-            message: "This document controls the Amenities page",
-            locations: [{ title: "Amenities", href: "/amenities" }],
-          }),
-          getInvolvedPage: defineLocations({
-            message: "This document controls the Get Involved page",
-            locations: [{ title: "Get Involved", href: "/get-involved" }],
-          }),
-          // Support pages
-          donatePage: defineLocations({
-            message: "This document controls the Donate page",
-            locations: [{ title: "Donate", href: "/donate" }],
-          }),
-          mediaPage: defineLocations({
-            message: "This document controls the Media page",
-            locations: [{ title: "Media", href: "/media" }],
-          }),
-          // Listing pages
-          eventsPage: defineLocations({
-            message: "This document controls the Events listing page",
-            locations: [{ title: "Events", href: "/events" }],
-          }),
-          projectsPage: defineLocations({
-            message: "This document controls the Projects listing page",
-            locations: [{ title: "Projects", href: "/projects" }],
-          }),
-          updatesPage: defineLocations({
-            message: "This document controls the Updates page",
-            locations: [{ title: "Updates", href: "/updates" }],
-          }),
-          surveyResultsPage: defineLocations({
-            message: "This document controls the Survey Results page",
-            locations: [{ title: "Survey Results", href: "/2022-park-survey" }],
-          }),
-          // Dynamic content types
-          event: defineLocations({
-            select: {
-              title: "title",
-              slug: "slug.current",
-            },
-            resolve: (doc) => ({
-              locations: doc?.slug
-                ? [
-                    { title: doc.title || "Untitled Event", href: `/events/${doc.slug}` },
-                    { title: "Events Listing", href: "/events" },
-                  ]
-                : [],
-            }),
-          }),
-          project: defineLocations({
-            select: {
-              title: "title",
-              slug: "slug.current",
-            },
-            resolve: (doc) => ({
-              locations: doc?.slug
-                ? [
-                    { title: doc.title || "Untitled Project", href: `/projects/${doc.slug}` },
-                    { title: "Projects Listing", href: "/projects" },
-                  ]
-                : [],
-            }),
-          }),
-          update: defineLocations({
-            select: {
-              title: "title",
-              slug: "slug.current",
-            },
-            resolve: (doc) => ({
-              locations: doc?.slug
-                ? [
-                    { title: doc.title || "Untitled Update", href: `/updates/${doc.slug}` },
-                    { title: "Updates Listing", href: "/updates" },
-                  ]
-                : [],
-            }),
-          }),
-          // Site settings appears across all pages
-          siteSettings: defineLocations({
-            message: "This document is used across the entire site",
-            tone: "caution",
-          }),
+          ...singletonLocations,
+          ...contentLocations,
+          ...sharedContentLocations,
         },
       },
     }),
@@ -341,6 +276,11 @@ export default defineConfig({
 
   schema: {
     types: schemas,
+
+    // Singletons are created by Structure at a fixed document ID. Without this
+    // filter the global "Create new" menu can still mint a second homePage,
+    // which would then compete with the real one in `*[_type == "homePage"][0]`.
+    templates: (prev) => prev.filter((template) => !SINGLETON_TYPES.includes(template.schemaType)),
   },
 
   document: {
@@ -358,6 +298,9 @@ export default defineConfig({
       }
 
       const previewSecretClient = context.getClient({ apiVersion })
+      // `createPreviewSecret` wants the Studio's own origin. The Studio only
+      // ever runs in a browser, so `window.location.origin` is the real value;
+      // the SSR branch is a build-time fallback that is never exercised.
       const studioUrl =
         typeof window === "undefined" ? env.SANITY_STUDIO_PREVIEW_URL : window.location.origin
       const { secret } = await createPreviewSecret(
@@ -375,7 +318,7 @@ export default defineConfig({
     },
     actions: (prev, context) => {
       // Restrict actions for singleton documents
-      if (singletonTypes.includes(context.schemaType)) {
+      if (SINGLETON_TYPES.includes(context.schemaType)) {
         return prev.filter((action) => !["delete", "duplicate"].includes(action.action ?? ""))
       }
       // Add AI metadata generation action for mediaImage documents
@@ -384,5 +327,6 @@ export default defineConfig({
       }
       return prev
     },
+    badges: resolveDocumentBadges,
   },
 })

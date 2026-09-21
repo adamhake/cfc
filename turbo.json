@@ -5,7 +5,13 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", ".sanity/**"],
-      "env": ["SANITY_STUDIO_PROJECT_ID", "SANITY_STUDIO_DATASET", "SANITY_STUDIO_PREVIEW_URL"]
+      "env": [
+        "SANITY_STUDIO_PROJECT_ID",
+        "SANITY_STUDIO_DATASET",
+        "SANITY_STUDIO_API_VERSION",
+        "SANITY_STUDIO_PREVIEW_URL",
+        "SANITY_STUDIO_API_URL"
+      ]
     },
     "dev": {
       "cache": false,
