@@ -43,7 +43,6 @@ export default function StaggeredGrid({
   return (
     <div className={`grid grid-cols-1 ${columnClasses[columns]} ${gapClasses[gap]}`}>
       {items.map((child, index) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: ReactNode children have no inherent unique key
         <div key={`stagger-${index}`} className={pattern[index % pattern.length]}>
           {child}
         </div>

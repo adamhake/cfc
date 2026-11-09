@@ -38,7 +38,7 @@
     "lint": "biome lint .",
     "format": "biome format --write .",
     "check": "biome check --write .",
-    "schema:extract": "sanity schema extract",
+    "schema:extract": "sanity schema extract --force",
     "schema:typegen": "sanity typegen generate",
     "schema:generate": "pnpm schema:extract && pnpm schema:typegen"
   },
