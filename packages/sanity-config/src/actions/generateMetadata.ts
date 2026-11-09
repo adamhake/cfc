@@ -55,6 +55,7 @@ type DialogState =
 export const createGenerateMetadataAction = (
   config: GenerateMetadataActionConfig,
 ): DocumentActionComponent => {
+  // biome-ignore lint/correctness/noComponentHookFactories: Sanity document actions are registered once at module scope, so this component's identity is stable
   const GenerateMetadataAction: DocumentActionComponent = (props) => {
     const { type, draft, published, onComplete } = props
     const { patch } = useDocumentOperation(props.id, props.type)
