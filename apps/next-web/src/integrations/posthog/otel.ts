@@ -1,5 +1,12 @@
-import { DiagConsoleLogger, DiagLogLevel, diag, trace } from "@opentelemetry/api"
-import { logs } from "@opentelemetry/api-logs"
+import {
+  context,
+  DiagConsoleLogger,
+  DiagLogLevel,
+  diag,
+  logs,
+  propagation,
+  trace,
+} from "@opentelemetry/api"
 import { OTLPLogExporter } from "@opentelemetry/exporter-logs-otlp-http"
 import { resourceFromAttributes } from "@opentelemetry/resources"
 import { BatchLogRecordProcessor, LoggerProvider } from "@opentelemetry/sdk-logs"
@@ -57,9 +64,10 @@ function createLoggerProvider(): LoggerProvider {
 }
 
 /**
- * Register the global tracer provider. Node-only: `sdk-trace-node` pulls in
- * `async_hooks` for its context manager, so it is imported dynamically to keep
- * it out of any edge bundle that reaches this module.
+ * Register the global tracer provider. Node-only: `context-async-hooks` pulls
+ * in `async_hooks` for its context manager, so the tracing packages are
+ * imported dynamically to keep them out of any edge bundle that reaches this
+ * module.
  */
 async function startTracing(): Promise<void> {
   // The OTLP/JSON exporter, not the protobuf one PostHog's Node docs suggest.
@@ -67,19 +75,23 @@ async function startTracing(): Promise<void> {
   // way, so the protobuf exporter logs "could not deserialize response —
   // Unknown wire type 3" after every successful batch. Verified against the
   // live endpoint: JSON in, JSON out, no spurious errors.
-  const [{ NodeTracerProvider }, { BatchSpanProcessor }, { OTLPTraceExporter }] = await Promise.all(
-    [
-      import("@opentelemetry/sdk-trace-node"),
-      import("@opentelemetry/sdk-trace-base"),
-      import("@opentelemetry/exporter-trace-otlp-http"),
-    ],
-  )
+  const [
+    { TracerProvider, BatchSpanProcessor },
+    { AsyncLocalStorageContextManager },
+    { CompositePropagator, W3CBaggagePropagator, W3CTraceContextPropagator },
+    { OTLPTraceExporter },
+  ] = await Promise.all([
+    import("@opentelemetry/sdk-trace"),
+    import("@opentelemetry/context-async-hooks"),
+    import("@opentelemetry/core"),
+    import("@opentelemetry/exporter-trace-otlp-http"),
+  ])
 
-  const provider = new NodeTracerProvider({
+  const provider = new TracerProvider({
     resource,
     spanProcessors: [
-      new BatchSpanProcessor(
-        new OTLPTraceExporter({ url: OTLP_TRACES_ENDPOINT, headers: otlpHeaders }),
+      new BatchSpanProcessor({
+        exporter: new OTLPTraceExporter({ url: OTLP_TRACES_ENDPOINT, headers: otlpHeaders }),
         // Registering a provider switches on Next's own 16 allowlisted span
         // types for every route at 100% sampling, but only handlers that call
         // scheduleFlush() force an export. A short delay means a warm container
@@ -87,14 +99,20 @@ async function startTracing(): Promise<void> {
         // holding them until the next invocation. Spans carry their own
         // timestamps, so a late export is still accurate — only a container
         // reaped while idle loses them.
-        { scheduledDelayMillis: 1000 },
-      ),
+        scheduledDelayMillis: 1000,
+      }),
     ],
   })
 
-  // Sets the global tracer provider *and* the AsyncLocalStorage context
-  // manager, which is what lets Next.js's own spans parent ours.
-  provider.register()
+  trace.setGlobalTracerProvider(provider)
+  // The AsyncLocalStorage context manager is what lets Next.js's own spans
+  // parent ours; without it every span becomes its own root.
+  context.setGlobalContextManager(new AsyncLocalStorageContextManager().enable())
+  propagation.setGlobalPropagator(
+    new CompositePropagator({
+      propagators: [new W3CTraceContextPropagator(), new W3CBaggagePropagator()],
+    }),
+  )
 }
 
 /**
