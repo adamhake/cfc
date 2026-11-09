@@ -4,6 +4,8 @@ import { sanity } from "next-sanity/live/cache-life"
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
+  // Keeps per-link prefetching. Unset behaves the same but warns on every build.
+  partialPrefetching: false,
   // next-sanity's own profile: revalidate is effectively infinite (1 year).
   // Content freshness comes from tag invalidation — the Sanity webhook calling
   // revalidateTag, plus the sync tags sanityFetch registers for Sanity Live —
