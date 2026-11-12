@@ -74,10 +74,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     // client-side route transitions (which would otherwise animate scroll-to-top).
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
-        <script
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: bootstrap script for theme init
-          dangerouslySetInnerHTML={{ __html: bootstrapScript }}
-        />
+        <script dangerouslySetInnerHTML={{ __html: bootstrapScript }} />
         <link
           rel="preload"
           href="/fonts/Nebula_Sans/NebulaSans-Book.woff2"
@@ -96,7 +93,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="dns-prefetch" href="https://d.chimborazoparkconservancy.org" />
         <script
           type="application/ld+json"
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(structuredData)
               .replace(/</g, "\\u003c")
@@ -105,7 +101,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
         <script
           type="application/ld+json"
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(parkStructuredData)
               .replace(/</g, "\\u003c")

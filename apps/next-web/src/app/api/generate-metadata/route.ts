@@ -11,13 +11,10 @@ const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages"
 const ANTHROPIC_MODEL = "claude-sonnet-4-20250514"
 
 const requestSchema = z.object({
-  imageUrl: z
-    .string()
-    .url()
-    .refine((value) => {
-      const url = new URL(value)
-      return url.protocol === "https:" && url.hostname === "cdn.sanity.io"
-    }, "imageUrl must be a Sanity CDN URL"),
+  imageUrl: z.url().refine((value) => {
+    const url = new URL(value)
+    return url.protocol === "https:" && url.hostname === "cdn.sanity.io"
+  }, "imageUrl must be a Sanity CDN URL"),
 })
 
 const metadataSchema = z.object({

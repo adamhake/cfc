@@ -114,7 +114,6 @@ export default async function SurveyResultsPage() {
     <div>
       <script
         type="application/ld+json"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(surveyStructuredData)
             .replace(/</g, "\\u003c")
@@ -123,7 +122,6 @@ export default async function SurveyResultsPage() {
       />
       <script
         type="application/ld+json"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(breadcrumbStructuredData)
             .replace(/</g, "\\u003c")

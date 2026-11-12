@@ -144,7 +144,6 @@ export function SanityImage({
   // Generate srcset with multiple widths
   const srcset = responsiveWidths
     .map((width) => {
-      // biome-ignore lint/suspicious/noFocusedTests: .fit() is Sanity image builder method, not a test
       const url = urlForImage(image).width(width).fit(fit).quality(quality).auto("format").url()
       return `${url} ${width}w`
     })
@@ -155,7 +154,6 @@ export function SanityImage({
     typeof maxWidth === "number" && maxWidth > 0
       ? Math.round(maxWidth)
       : responsiveWidths[responsiveWidths.length - 1]
-  // biome-ignore lint/suspicious/noFocusedTests: .fit() is Sanity image builder method, not a test
   let srcBuilder = urlForImage(image).width(defaultWidth).fit(fit).quality(quality).auto("format")
 
   // Apply maxHeight if provided
@@ -239,7 +237,6 @@ export function SanityBackgroundImage({
   /** Apply hotspot data as CSS background-position */
   useHotspotPosition?: boolean
 }) {
-  // biome-ignore lint/suspicious/noFocusedTests: not a test - Sanity image URL builder chain
   const url = urlForImage(image).width(maxWidth).fit(fit).quality(quality).auto("format").url()
 
   const imageObject = image as SanityImageObject

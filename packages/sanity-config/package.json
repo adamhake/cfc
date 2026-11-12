@@ -38,7 +38,7 @@
     "lint": "biome lint .",
     "format": "biome format --write .",
     "check": "biome check --write .",
-    "schema:extract": "sanity schema extract",
+    "schema:extract": "sanity schema extract --force",
     "schema:typegen": "sanity typegen generate",
     "schema:generate": "pnpm schema:extract && pnpm schema:typegen"
   },
@@ -48,7 +48,7 @@
     "@sanity/image-url": "catalog:",
     "@sanity/types": "catalog:",
     "@t3-oss/env-core": "catalog:",
-    "groq": "^6.15.0",
+    "groq": "^6.22.0",
     "zod": "catalog:"
   },
   "peerDependencies": {

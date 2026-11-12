@@ -15,42 +15,27 @@ allowBuilds:
   sharp: true
 
 catalog:
-  '@biomejs/biome': ^2.5.14
-  '@sanity/client': ^8.6.2
-  '@sanity/icons': ^5.2.2
+  '@biomejs/biome': ^2.6.6
+  '@sanity/client': ^8.15.0
+  '@sanity/icons': ^5.3.0
   '@sanity/image-url': ^2.1.1
-  '@sanity/types': ^6.15.0
+  '@sanity/types': ^6.22.0
   '@t3-oss/env-core': ^0.13.11
   '@total-typescript/ts-reset': ^0.6.1
   '@types/node': ^24.13.6
   '@types/react': ^19.3.0
   '@types/react-dom': ^19.3.0
-  react: ^19.3.0
-  react-dom: ^19.3.0
-  sanity: ^6.15.0
+  react: ^19.3.1
+  react-dom: ^19.3.1
+  sanity: ^6.22.0
   typescript: ^7.0.2
-  zod: ^4.6.5
+  zod: ^4.6.7
 
-# `sanity` depends on @sanity/client ^8.2.0 and @sanity/ui ^4.0.x, which resolve
+# `sanity` depends on @sanity/client ^8.14.1 and @sanity/ui ^4.4.10, which can resolve
 # a patch behind our own direct deps and produce two copies in the graph — the
 # duplicate `SanityClient` types then fail to unify in apps/studio. Pin one 8.x
 # and one 4.x. Scoped by range so next-sanity's own @sanity/client ^7 is
 # untouched.
 overrides:
-  '@sanity/client@^8': 8.4.0
-  '@sanity/ui@^4': 4.0.7
-
-# pnpm 11 refuses packages published within the last 24h. These were all newer
-# than that on 2026-08-28 and are pinned above or by a `^latest` floor, so they
-# have no older candidate. Prune entries here as they age out — the policy is
-# the point, the exclusions are a dated exception to it.
-minimumReleaseAgeExclude:
-  - '@sanity/client@8.4.0'
-  - '@sanity/ui@4.0.7'
-  - '@posthog/browser-common@0.7.0'
-  - '@posthog/core@1.49.1 || 1.49.2'
-  - '@posthog/types@1.407.1'
-  - '@testing-library/react@16.3.3'
-  - lucide-react@1.35.0
-  - posthog-js@1.422.5
-  - posthog-node@5.51.4
+  '@sanity/client@^8': 8.15.0
+  '@sanity/ui@^4': 4.4.10

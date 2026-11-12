@@ -4,7 +4,7 @@ vi.mock("@chimborazo/sanity-config/queries", () => ({
   paginatedMediaImagesQuery: "mock-query",
 }))
 
-vi.mock("@/lib/sanity-fetch", async (importOriginal) => ({
+vi.mock("@/lib/sanity-fetch", async () => ({
   // Real CACHE_TAGS via the import-free `cache-tags` module; only the pieces
   // that touch env or request scope are stubbed.
   CACHE_TAGS: (await vi.importActual<typeof import("@/lib/cache-tags")>("@/lib/cache-tags"))

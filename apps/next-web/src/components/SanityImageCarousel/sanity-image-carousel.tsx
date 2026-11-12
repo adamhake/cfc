@@ -198,7 +198,6 @@ export default function SanityImageCarousel({
             <fieldset className="flex gap-2 border-none p-0 m-0" aria-label="Carousel pagination">
               {scrollSnaps.map((_snap, index) => (
                 <button
-                  // biome-ignore lint/suspicious/noArrayIndexKey: pagination dots have no unique identifier
                   key={`dot-${index}`}
                   onClick={() => scrollTo(index)}
                   className={`relative h-2.5 overflow-hidden rounded-full transition-all duration-200 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none ${
