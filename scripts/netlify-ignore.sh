@@ -25,13 +25,15 @@ shared_paths=(
   .nvmrc
 )
 
-# CACHED_COMMIT_REF is empty when Netlify has no build cache — a first build, or
-# a cache that expired after the site sat idle. Left unguarded, the two-commit
-# `git diff` below collapses into a one-commit diff against the working tree,
-# which is always clean in a fresh checkout: exit 0, build skipped. That state
-# is self-perpetuating, because a skipped build never writes a cache.
-if [[ -z ${CACHED_COMMIT_REF:-} ]]; then
-  echo "netlify-ignore: no CACHED_COMMIT_REF (no build cache) — building."
+# With no build cache (a first build, or a cache that expired after the site sat
+# idle), Netlify sets CACHED_COMMIT_REF to COMMIT_REF itself — documented under
+# "Git metadata" in Netlify's environment-variable docs — rather than leaving it
+# empty. Left unguarded, the `git diff` below then compares the commit with
+# itself, which is always clean: exit 0, build skipped. That state is
+# self-perpetuating, because a skipped build never writes a cache. Handle empty
+# too, in case it is ever unset.
+if [[ -z ${CACHED_COMMIT_REF:-} || ${CACHED_COMMIT_REF} == "${COMMIT_REF:-}" ]]; then
+  echo "netlify-ignore: no previous build to compare against (no build cache) — building."
   exit 1
 fi
 
