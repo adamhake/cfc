@@ -83,16 +83,16 @@ export default function Header({ facebookUrl, instagramUrl }: HeaderProps) {
           </nav>
 
           <div className="flex shrink-0 items-center gap-2">
-            {/* Donate stays one tap away on phones. Between lg and xl the full
-                nav needs the room, so it drops out there; the mobile menu and
-                every page footer still carry it. */}
+            {/* Header Donate is desktop-only (xl and up). Below that the bar
+                is just the wordmark and menu button: the mobile menu carries
+                Donate, and the homepage hero shows it on the first screen. */}
             <Button
               as="a"
               variant="accent"
               size="small"
               href="/donate"
               trackingLocation="header"
-              className="inline-flex min-h-11 shrink-0 text-center lg:hidden xl:inline-flex xl:min-h-0"
+              className="hidden shrink-0 text-center xl:inline-flex"
             >
               Donate
             </Button>

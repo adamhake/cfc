@@ -83,18 +83,9 @@ export default function HeroSoftGradientDivider({
             {subheading}
           </p>
           {/* Donate is the one filled button on the page; the editor-set CTA
-              is the outline secondary, drawn light so it holds on the photo.
-              Below sm the header bar already carries Donate on the same
-              screen, so the hero drops its copy rather than show it twice. */}
+              is the outline secondary, drawn light so it holds on the photo. */}
           <div className="flex flex-wrap gap-3 pb-4">
-            <Button
-              variant="accent"
-              size="small"
-              as="a"
-              href="/donate"
-              trackingLocation="hero"
-              className="hidden sm:inline-flex"
-            >
+            <Button variant="accent" size="small" as="a" href="/donate" trackingLocation="hero">
               Donate
             </Button>
             <Button
