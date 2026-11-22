@@ -8,8 +8,11 @@ import { Suspense } from "react"
 import Container from "@/components/Container/container"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { PageIntroduction } from "@/components/PageIntroduction/page-introduction"
+import { SiteAlert } from "@/components/SiteAlert/site-alert"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import type { SanityUpdate, SanityUpdateCategory, SanityUpdatesPage } from "@/lib/sanity-types"
+import { CURRENT_SITE_ALERT } from "@/lib/site-alert"
+import { getSiteSettings } from "@/lib/site-settings"
 import { generateItemListStructuredData, SITE_CONFIG } from "@/utils/seo"
 import UpdatesListClient from "./updates-list-client"
 
@@ -29,27 +32,33 @@ export const metadata: Metadata = {
 }
 
 export default async function UpdatesPage() {
-  const [{ data: updates }, { data: pageData }, { data: categories }] = (await Promise.all([
-    cachedSanityFetch({
-      ...(await getDynamicFetchOptions()),
-      query: allUpdatesQuery,
-      tags: [CACHE_TAGS.UPDATES_LIST, CACHE_TAGS.UPDATES],
-    }),
-    cachedSanityFetch({
-      ...(await getDynamicFetchOptions()),
-      query: updatesPageQuery,
-      tags: [CACHE_TAGS.UPDATES_LIST],
-    }),
-    cachedSanityFetch({
-      ...(await getDynamicFetchOptions()),
-      query: updateCategoriesQuery,
-      tags: [CACHE_TAGS.UPDATES],
-    }),
-  ])) as [
-    { data: SanityUpdate[] },
-    { data: SanityUpdatesPage | null },
-    { data: SanityUpdateCategory[] },
-  ]
+  const [{ data: updates }, { data: pageData }, { data: categories }, siteSettings] =
+    (await Promise.all([
+      cachedSanityFetch({
+        ...(await getDynamicFetchOptions()),
+        query: allUpdatesQuery,
+        tags: [CACHE_TAGS.UPDATES_LIST, CACHE_TAGS.UPDATES],
+      }),
+      cachedSanityFetch({
+        ...(await getDynamicFetchOptions()),
+        query: updatesPageQuery,
+        tags: [CACHE_TAGS.UPDATES_LIST],
+      }),
+      cachedSanityFetch({
+        ...(await getDynamicFetchOptions()),
+        query: updateCategoriesQuery,
+        tags: [CACHE_TAGS.UPDATES],
+      }),
+      getSiteSettings(),
+    ])) as [
+      { data: SanityUpdate[] },
+      { data: SanityUpdatesPage | null },
+      { data: SanityUpdateCategory[] },
+      Awaited<ReturnType<typeof getSiteSettings>>,
+    ]
+  // The same notice the homepage shows. Without it, /updates could say "No
+  // updates yet" while a road closure was live on the front page.
+  const siteAlert = siteSettings?.siteAlert ?? CURRENT_SITE_ALERT
 
   const itemListData = generateItemListStructuredData(
     updates.map((update) => ({
@@ -88,6 +97,8 @@ export default async function UpdatesPage() {
             "These updates give neighbors and supporters a clearer view into what is changing, why it matters, and where help is still needed.",
           ]}
         />
+
+        <SiteAlert settings={siteAlert} />
 
         <Suspense fallback={<p className="mt-12 font-body">Loading updates…</p>}>
           <UpdatesListClient updates={updates} categories={categories} />

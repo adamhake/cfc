@@ -406,6 +406,22 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Type polish, in the base layer so utilities still override it.
+   - font-size-adjust: from-font scales a fallback font to the web font's
+     x-height while Nebula Sans / Vollkorn load, so text doesn't visibly
+     shrink or grow (and reflow) when they swap in.
+   - text-wrap: pretty on paragraphs avoids one-word last lines in running
+     prose. Scoped to <p>, not *, since it has a layout cost. */
+@layer base {
+  body {
+    font-size-adjust: from-font;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
 /* Tell the browser up front that both schemes are supported, so the canvas
    and native UI (scrollbars, form controls) match before any script runs. The
    appearance bootstrap script and applyTheme() then pin it to the resolved

@@ -79,58 +79,63 @@ export default async function DonatePage() {
       />
       <div>
         <Container spacing="xl" className="pt-8 pb-12 md:pt-12 md:pb-20">
-          <div className="space-y-8">
-            {/* Opening statement */}
-            <div className="max-w-3xl space-y-4">
-              <p className="font-body text-xl leading-relaxed font-medium text-grey-800 md:text-2xl dark:text-grey-100">
-                Your generous contributions breathe new life into Chimborazo Park—restoring historic
-                landmarks, maintaining green spaces, and creating welcoming places for our community
-                to gather.
-              </p>
+          {/* The form sits beside the case for giving from lg up, and right
+              after the opening sentence on phones -- it used to start below
+              the first screen on desktop and ~1.3 screens down on a phone.
+              DOM order (lead, form, details) is the phone order; the grid
+              places them in two columns at lg. */}
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-x-14 lg:gap-y-8">
+            <p className="font-body text-xl leading-relaxed font-medium text-grey-800 md:text-2xl lg:col-start-1 lg:row-start-1 dark:text-grey-100">
+              Your generous contributions breathe new life into Chimborazo Park—restoring historic
+              landmarks, maintaining green spaces, and creating welcoming places for our community
+              to gather.
+            </p>
+
+            {/* Donation form (client component for iframe loading state) */}
+            <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
+              <DonateFormClient />
+            </div>
+
+            <div className="space-y-8 lg:col-start-1 lg:row-start-2">
               <p className="font-body text-grey-700 md:text-lg dark:text-grey-300">
                 As a grassroots 501(c)(3) nonprofit, we rely entirely on community donations,
                 grants, and volunteer support to care for this 33-acre historic treasure. Every
                 gift—large or small—directly funds park improvements and ensures Chimborazo remains
                 beautiful, safe, and accessible for generations to come.
               </p>
+
+              <div className="space-y-2">
+                <h2 className="font-display text-xl text-primary-800 md:text-2xl dark:text-primary-300">
+                  No fees, via Zeffy
+                </h2>
+                <p className="font-body text-grey-700 md:text-lg dark:text-grey-300">
+                  We partner with{" "}
+                  <a
+                    href="https://www.zeffy.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-accent-700 underline decoration-accent-300 decoration-2 underline-offset-2 transition-colors hover:text-accent-800 hover:decoration-accent-500 dark:text-accent-400 dark:decoration-accent-600 dark:hover:text-accent-300"
+                  >
+                    Zeffy
+                  </a>
+                  , a secure donation platform built specifically for nonprofits. Zeffy offers 100%
+                  free payment processing—they'll never charge us fees, so more of your donation
+                  goes directly to the park. Your payment information is securely processed and
+                  never stored by us.
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <h2 className="font-display text-xl text-primary-800 md:text-2xl dark:text-primary-300">
+                  Tax-deductible
+                </h2>
+                <p className="font-body text-grey-700 md:text-lg dark:text-grey-300">
+                  The Chimborazo Park Conservancy is a registered 501(c)(3) nonprofit organization.
+                  Your contribution is tax-deductible to the fullest extent permitted by law. You'll
+                  receive a receipt from Zeffy for your records.
+                </p>
+              </div>
             </div>
-          </div>
-
-          {/* Donation form (client component for iframe loading state) */}
-          <DonateFormClient />
-
-          {/* Donation info callout */}
-          <div className="mt-10 rounded-2xl border border-neutral-200 bg-neutral-100 p-6 md:p-8 dark:border-primary-700 dark:bg-primary-950">
-            <h3 className="mb-3 font-display text-xl font-semibold text-primary-800 md:text-2xl dark:text-primary-200">
-              Powered by Zeffy
-            </h3>
-            <p className="font-body text-grey-800 md:text-lg dark:text-grey-200">
-              We partner with{" "}
-              <a
-                href="https://www.zeffy.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold text-accent-700 underline decoration-accent-300 decoration-2 underline-offset-2 transition-colors hover:text-accent-800 hover:decoration-accent-500 dark:text-accent-400 dark:decoration-accent-600 dark:hover:text-accent-300"
-              >
-                Zeffy
-              </a>
-              , a secure donation platform built specifically for nonprofits. Zeffy offers 100% free
-              payment processing—they'll never charge us fees, so more of your donation goes
-              directly to the park. Your payment information is securely processed and never stored
-              by us.
-            </p>
-          </div>
-
-          {/* Tax deductibility info */}
-          <div className="mt-8 rounded-xl bg-white p-6 shadow-sm md:p-8 dark:border dark:border-accent-600/20 dark:bg-transparent">
-            <p className="font-body text-grey-700 md:text-lg dark:text-grey-300">
-              <strong className="font-semibold text-grey-900 dark:text-grey-100">
-                Tax-deductible:
-              </strong>{" "}
-              The Chimborazo Park Conservancy is a registered 501(c)(3) nonprofit organization. Your
-              contribution is tax-deductible to the fullest extent permitted by law. You'll receive
-              a receipt from Zeffy for your records.
-            </p>
           </div>
 
           {/* FAQ Section */}

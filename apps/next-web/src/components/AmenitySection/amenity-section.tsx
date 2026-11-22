@@ -1,8 +1,6 @@
 import { ExternalLink } from "lucide-react"
 import { Button } from "@/components/Button/button"
-import SanityImageCarousel, {
-  type SanityImageObject,
-} from "@/components/SanityImageCarousel/sanity-image-carousel"
+import { SanityImage, type SanityImageObject } from "@/components/SanityImage/sanity-image"
 
 interface AmenitySectionProps {
   title: string
@@ -32,22 +30,38 @@ export default function AmenitySection({
   imagePosition = "left",
   priority = false,
 }: AmenitySectionProps) {
+  // A still group of up to three photos instead of a timed slideshow: the
+  // pictures are there to show what the place looks like, so they should all
+  // be visible at once, with no timer to pause and no 8px dots to hit. The
+  // first photo leads at full width; the next two share a row beneath it.
+  const shownImages = images.slice(0, 3)
   const imageContent = (
     <div
-      className={`order-1 w-full lg:w-3/5 ${imagePosition === "right" ? "lg:order-2" : "lg:order-1"}`}
+      className={`order-1 grid w-full grid-cols-2 gap-3 lg:w-3/5 ${imagePosition === "right" ? "lg:order-2" : "lg:order-1"}`}
     >
-      <SanityImageCarousel
-        images={images}
-        aspectRatio="3/2"
-        showNavigation={true}
-        showDots={true}
-        showCaptions={false}
-        loop={true}
-        autoPlay
-        autoPlayInterval={5000}
-        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 60vw, 720px"
-        priority={priority}
-      />
+      {shownImages.map((image, index) => {
+        const isLead = index === 0
+        // With exactly two photos, the second takes the full width too rather
+        // than leaving an empty half-row.
+        const isFullWidth = isLead || shownImages.length === 2
+        return (
+          <div
+            key={image.asset?._id ?? `amenity-image-${index}`}
+            className={`relative aspect-[3/2] overflow-hidden rounded-2xl bg-grey-200 dark:bg-primary-700 ${isFullWidth ? "col-span-2" : ""}`}
+          >
+            <SanityImage
+              image={image}
+              alt={image.alt || ""}
+              className="absolute inset-0 h-full w-full object-cover"
+              sizes={
+                isFullWidth ? "(max-width: 1024px) 100vw, 720px" : "(max-width: 1024px) 50vw, 360px"
+              }
+              priority={priority && isLead}
+              useHotspotPosition
+            />
+          </div>
+        )
+      })}
     </div>
   )
 

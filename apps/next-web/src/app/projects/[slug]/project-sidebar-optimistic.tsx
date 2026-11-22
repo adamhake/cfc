@@ -27,6 +27,11 @@ export default function ProjectSidebarOptimistic({
     : optimisticProject.completionDate
       ? formatDateString(optimisticProject.completionDate)
       : null
+  // A completion date on a project that isn't marked completed is a target,
+  // not a fact; labelling it "Completed" put a finished date next to an
+  // "Active" chip. cleanEnum: status is a Sanity enum and carries stega marks
+  // in draft mode.
+  const isCompleted = cleanEnum(optimisticProject.status) === "completed"
 
   return (
     <div className="overflow-hidden rounded-2xl border border-accent-200 bg-white shadow-sm dark:border-accent-700/30 dark:bg-primary-950">
@@ -56,7 +61,7 @@ export default function ProjectSidebarOptimistic({
               <CheckCircle2 className="mt-1 h-5 w-5 flex-shrink-0 stroke-accent-600 dark:stroke-accent-400" />
               <div>
                 <div className="font-body text-xs font-semibold text-grey-600 dark:text-grey-400">
-                  Completed
+                  {isCompleted ? "Completed" : "Target completion"}
                 </div>
                 <div className="font-body font-medium text-grey-900 dark:text-grey-100">
                   {fmtCompletionDate}
