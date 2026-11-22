@@ -148,7 +148,9 @@ export default function SanityImageCarousel({
       <div className="relative overflow-hidden rounded-2xl" ref={emblaRef}>
         <div className="flex touch-pan-y touch-pinch-zoom">
           {images.map((item, index) => (
-            <section
+            // biome-ignore lint/a11y/useSemanticElements: a carousel slide is a group of content, not form controls, so <fieldset> would be wrong. A labelled <section> made every slide its own landmark.
+            <div
+              role="group"
               key={item.asset?.url ?? item.asset?._id ?? `slide-${index}`}
               className="min-w-0 flex-[0_0_100%]"
               style={{
@@ -179,7 +181,7 @@ export default function SanityImageCarousel({
                   </p>
                 </div>
               )}
-            </section>
+            </div>
           ))}
         </div>
 

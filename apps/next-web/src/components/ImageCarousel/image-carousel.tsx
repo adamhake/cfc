@@ -146,7 +146,9 @@ export default function ImageCarousel({
       <div className="relative overflow-hidden rounded-2xl" ref={emblaRef}>
         <div className="flex">
           {images.map((image, index) => (
-            <section
+            // biome-ignore lint/a11y/useSemanticElements: a carousel slide is a group of content, not form controls, so <fieldset> would be wrong. A labelled <section> made every slide its own landmark.
+            <div
+              role="group"
               key={image.src}
               className="min-w-0 flex-[0_0_100%]"
               aria-roledescription="slide"
@@ -194,7 +196,7 @@ export default function ImageCarousel({
                   )}
                 </div>
               )}
-            </section>
+            </div>
           ))}
         </div>
 

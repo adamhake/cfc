@@ -130,7 +130,7 @@ export default function RotatingImages({
           <div
             className={`font-body text-sm font-medium text-white md:text-base ${
               scrollableCaptions
-                ? "scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent hover:scrollbar-thumb-white/50 max-h-full overflow-y-auto pb-4"
+                ? "scrollbar-on-dark max-h-full overflow-y-auto pb-4"
                 : lineClampClass
             }`}
           >
@@ -194,9 +194,7 @@ export default function RotatingImages({
               >
                 <div
                   className={`font-body text-base leading-relaxed text-white md:text-lg ${
-                    scrollableCaptions
-                      ? "scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent hover:scrollbar-thumb-white/50 max-h-full overflow-y-auto pb-6"
-                      : ""
+                    scrollableCaptions ? "scrollbar-on-dark max-h-full overflow-y-auto pb-6" : ""
                   }`}
                 >
                   {image.caption}
@@ -230,9 +228,7 @@ export default function RotatingImages({
         {showCaptions && captionStyle === "below" && image.caption && (
           <div
             className={`font-body text-sm text-grey-700 dark:text-grey-300 ${
-              scrollableCaptions
-                ? "scrollbar-thin scrollbar-thumb-grey-300 scrollbar-track-transparent hover:scrollbar-thumb-grey-400 dark:scrollbar-thumb-grey-600 dark:hover:scrollbar-thumb-grey-500 overflow-y-auto pb-2"
-                : lineClampClass
+              scrollableCaptions ? "scrollbar-subtle overflow-y-auto pb-2" : lineClampClass
             }`}
             style={scrollableCaptions ? { maxHeight: `${maxCaptionHeight}px` } : undefined}
           >
@@ -282,9 +278,7 @@ export default function RotatingImages({
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
             className={`font-body text-sm text-grey-700 dark:text-grey-300 ${
-              scrollableCaptions
-                ? "scrollbar-thin scrollbar-thumb-grey-300 scrollbar-track-transparent hover:scrollbar-thumb-grey-400 dark:scrollbar-thumb-grey-600 dark:hover:scrollbar-thumb-grey-500 overflow-y-auto pb-2"
-                : lineClampClass
+              scrollableCaptions ? "scrollbar-subtle overflow-y-auto pb-2" : lineClampClass
             }`}
             style={scrollableCaptions ? { maxHeight: `${maxCaptionHeight}px` } : undefined}
           >
