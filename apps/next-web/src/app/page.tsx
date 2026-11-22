@@ -396,8 +396,12 @@ export default async function HomePage() {
         <section aria-labelledby="park-heading">
           {/* -mb-px / -mt-px overlap the SVG and the band so subpixel rounding
               can't open a hairline seam between them. */}
-          <WaveDivider fill="fill-primary-900 dark:fill-primary-950" className="-mb-px" />
-          <div className="bg-primary-900 pt-6 pb-16 text-primary-50 md:pb-20 dark:bg-primary-950">
+          <WaveDivider
+            fill="fill-primary-900 dark:fill-primary-800"
+            stroke={false}
+            className="-mb-px"
+          />
+          <div className="bg-primary-900 pt-6 pb-16 text-primary-50 md:pb-20 dark:bg-primary-800">
             <Container spacing="none">
               <SectionHeader
                 id="park-heading"
@@ -484,8 +488,8 @@ export default async function HomePage() {
               </div>
             </Container>
           </div>
-          <div className="-mt-px bg-primary-900 dark:bg-primary-950">
-            <WaveDivider flip fill="fill-grey-50 dark:fill-primary-900" />
+          <div className="-mt-px bg-primary-900 dark:bg-primary-800">
+            <WaveDivider flip stroke={false} fill="fill-grey-50 dark:fill-primary-900" />
           </div>
         </section>
 

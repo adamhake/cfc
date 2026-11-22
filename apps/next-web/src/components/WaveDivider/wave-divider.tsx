@@ -9,6 +9,13 @@ interface WaveDividerProps {
   fill: string
   /** Mirrors the curve horizontally. Use to vary the shape between dividers. */
   flip?: boolean
+  /**
+   * Draws the river-blue line along the curve. Turn it off where two solid
+   * surfaces meet and the change of colour already marks the edge -- there
+   * the line reads as a hard cut rather than a transition.
+   * @default true
+   */
+  stroke?: boolean
   className?: string
 }
 
@@ -21,7 +28,7 @@ interface WaveDividerProps {
  * point. `flip` mirrors on the x-axis instead, which varies the shape while
  * keeping the fill below the line.
  */
-export function WaveDivider({ fill, flip = false, className }: WaveDividerProps) {
+export function WaveDivider({ fill, flip = false, stroke = true, className }: WaveDividerProps) {
   return (
     <svg
       viewBox="0 0 1200 120"
@@ -34,11 +41,13 @@ export function WaveDivider({ fill, flip = false, className }: WaveDividerProps)
         d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60 L1200,120 L0,120 Z"
         className={fill}
       />
-      <path
-        d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60"
-        className="fill-none stroke-soft-blue-600 dark:stroke-soft-blue-400"
-        strokeWidth="7"
-      />
+      {stroke && (
+        <path
+          d="M0,60 C300,90 500,30 700,60 C900,90 1050,40 1200,60"
+          className="fill-none stroke-soft-blue-600 dark:stroke-soft-blue-400"
+          strokeWidth="7"
+        />
+      )}
     </svg>
   )
 }
