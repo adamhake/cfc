@@ -34,6 +34,23 @@ export function formatDateString(dateStr: string, length: "short" | "long" = "lo
   })
 }
 
+/**
+ * Splits a calendar date into the pieces a date block sets separately
+ * ("Nov", "8", "2025"), in the park's time zone so a date-only value never
+ * slips to the previous day.
+ */
+export function formatDateParts(dateStr: string) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: DEFAULT_TIME_ZONE,
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }).formatToParts(parseCalendarDate(dateStr))
+  const get = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((part) => part.type === type)?.value ?? ""
+  return { month: get("month"), day: get("day"), year: get("year") }
+}
+
 export function isPastDate(dateStr: string, now = new Date()) {
   return getDateKey(parseCalendarDate(dateStr)) < getDateKey(now)
 }

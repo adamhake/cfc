@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { formatDateString, isPastDate } from "./time"
+import { formatDateParts, formatDateString, isPastDate } from "./time"
 
 describe("formatDateString", () => {
   it("formats date in long format by default", () => {
@@ -39,5 +39,15 @@ describe("isPastDate", () => {
 
   it("treats prior eastern calendar days as past", () => {
     expect(isPastDate("2025-06-15", new Date("2025-06-16T00:00:00-04:00"))).toBe(true)
+  })
+})
+
+describe("formatDateParts", () => {
+  it("splits a date-only value without shifting the day", () => {
+    expect(formatDateParts("2025-11-08")).toEqual({ month: "Nov", day: "8", year: "2025" })
+  })
+
+  it("keeps the first of the month on the first", () => {
+    expect(formatDateParts("2026-01-01")).toEqual({ month: "Jan", day: "1", year: "2026" })
   })
 })

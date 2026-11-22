@@ -1,9 +1,13 @@
+import { cn } from "@/utils/cn"
+
 interface SectionHeaderProps {
   title: string
   level?: "h2" | "h3" | "h4"
   size?: "small" | "medium" | "large"
   /** Lets the enclosing <section> name itself with aria-labelledby */
   id?: string
+  /** Extra classes, merged so a colour here overrides the default */
+  className?: string
 }
 
 export default function SectionHeader({
@@ -11,6 +15,7 @@ export default function SectionHeader({
   level = "h2",
   size = "medium",
   id,
+  className,
 }: SectionHeaderProps) {
   const Component = level
 
@@ -23,7 +28,11 @@ export default function SectionHeader({
   return (
     <Component
       id={id}
-      className={`font-display text-primary-800 dark:text-primary-400 ${sizeClasses[size]}`}
+      className={cn(
+        "font-display text-primary-800 dark:text-primary-400",
+        sizeClasses[size],
+        className,
+      )}
     >
       {title}
     </Component>
