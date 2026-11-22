@@ -74,7 +74,9 @@ const introBodyComponents: PortableTextComponents = {
 
 const parkBodyComponents: PortableTextComponents = {
   block: {
-    normal: ({ children }) => <p className="font-body text-primary-100 md:text-lg">{children}</p>,
+    normal: ({ children }) => (
+      <p className="font-body text-grey-800 md:text-lg dark:text-primary-100">{children}</p>
+    ),
   },
   marks: proseLinkMark,
 }
@@ -86,11 +88,15 @@ const parkBodyComponents: PortableTextComponents = {
  */
 const parkCalloutComponents: PortableTextComponents = {
   block: {
-    normal: ({ children }) => <p className="font-body text-primary-100 md:text-lg">{children}</p>,
+    normal: ({ children }) => (
+      <p className="font-body text-grey-800 md:text-lg dark:text-primary-100">{children}</p>
+    ),
   },
   marks: {
     ...proseLinkMark,
-    strong: ({ children }) => <strong className="font-semibold text-grey-50">{children}</strong>,
+    strong: ({ children }) => (
+      <strong className="font-semibold text-primary-900 dark:text-grey-50">{children}</strong>
+    ),
   },
 }
 
@@ -390,28 +396,28 @@ export default async function HomePage() {
 
         {/* The Park -- the homepage's one full-bleed moment. Every other
             section shares the same quiet rhythm, so the park's own history
-            (the thing no other site can say) gets the weight: a dark iron
-            band framed by the James River wave, the intro set in the display
+            (the thing no other site can say) gets the weight: a band on the footer's surface,
+            framed by the James River wave, the intro set in the display
             face, and the archival images at a size they can be read. */}
         <section aria-labelledby="park-heading">
           {/* -mb-px / -mt-px overlap the SVG and the band so subpixel rounding
               can't open a hairline seam between them. */}
           <WaveDivider
-            fill="fill-primary-900 dark:fill-primary-800"
+            fill="fill-neutral-100 dark:fill-primary-800"
             stroke={false}
             className="-mb-px"
           />
-          <div className="bg-primary-900 pt-6 pb-16 text-primary-50 md:pb-20 dark:bg-primary-800">
+          <div className="bg-neutral-100 pt-6 pb-16 text-grey-900 md:pb-20 dark:bg-primary-800 dark:text-primary-50">
             <Container spacing="none">
               <SectionHeader
                 id="park-heading"
                 title={park?.title || FALLBACKS.park.title}
                 size="large"
-                className="text-primary-300 dark:text-primary-300"
+                className="dark:text-primary-300"
               />
 
               {/* Lining figures: in Vollkorn's default old-style figures "1874" reads as "I874". */}
-              <p className="mt-6 max-w-5xl text-pretty font-display text-2xl leading-snug text-grey-50 lining-nums md:text-3xl lg:text-4xl">
+              <p className="mt-6 max-w-5xl text-pretty font-display text-2xl leading-snug text-primary-900 lining-nums md:text-3xl lg:text-4xl dark:text-grey-50">
                 {park?.intro || FALLBACKS.park.intro}
               </p>
 
@@ -421,12 +427,15 @@ export default async function HomePage() {
                     <PortableText value={park.body} components={parkBodyComponents} />
                   ) : (
                     FALLBACKS.park.body.map((text) => (
-                      <p key={text} className="font-body text-primary-100 md:text-lg">
+                      <p
+                        key={text}
+                        className="font-body text-grey-800 md:text-lg dark:text-primary-100"
+                      >
                         {text}
                       </p>
                     ))
                   )}
-                  <p className="font-body text-primary-100 md:text-lg">
+                  <p className="font-body text-grey-800 md:text-lg dark:text-primary-100">
                     {park?.today || FALLBACKS.park.today}
                   </p>
                 </div>
@@ -468,12 +477,12 @@ export default async function HomePage() {
                   intro so the band opens and closes in the same voice. A
                   last-child rule keeps that true for editor-authored callouts
                   of any length, not just the fallback below. */}
-              <div className="mt-14 space-y-6 md:mt-20 [&>p]:max-w-prose [&>p:last-child]:max-w-5xl [&>p:last-child]:text-pretty [&>p:last-child]:font-display [&>p:last-child]:text-2xl [&>p:last-child]:leading-snug [&>p:last-child]:text-grey-50 [&>p:last-child]:lining-nums [&>p:last-child]:md:text-3xl [&>p:last-child]:lg:text-4xl">
+              <div className="mt-14 space-y-6 md:mt-20 [&>p]:max-w-prose [&>p:last-child]:max-w-5xl [&>p:last-child]:text-pretty [&>p:last-child]:font-display [&>p:last-child]:text-2xl [&>p:last-child]:leading-snug [&>p:last-child]:text-primary-900 [&>p:last-child]:lining-nums [&>p:last-child]:dark:text-grey-50 [&>p:last-child]:md:text-3xl [&>p:last-child]:lg:text-4xl">
                 {park?.callout ? (
                   <PortableText value={park.callout} components={parkCalloutComponents} />
                 ) : (
                   <>
-                    <p className="font-body text-primary-100 md:text-lg">
+                    <p className="font-body text-grey-800 md:text-lg dark:text-primary-100">
                       Time and reduced funding have taken their toll&mdash;many of the park&apos;s
                       original features have fallen into disrepair. Invasive species and climate
                       change have further diminished its native plantings and natural areas.
@@ -488,7 +497,7 @@ export default async function HomePage() {
               </div>
             </Container>
           </div>
-          <div className="-mt-px bg-primary-900 dark:bg-primary-800">
+          <div className="-mt-px bg-neutral-100 dark:bg-primary-800">
             <WaveDivider flip stroke={false} fill="fill-grey-50 dark:fill-primary-900" />
           </div>
         </section>
