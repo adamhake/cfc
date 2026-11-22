@@ -8,6 +8,7 @@ import type { PortableTextBlock, PortableTextComponents } from "@portabletext/re
 import { PortableText } from "@portabletext/react"
 import type { Metadata } from "next"
 import Container from "@/components/Container/container"
+import { EventList } from "@/components/EventList/event-list"
 import GetInvolved from "@/components/GetInvolved/get-involved"
 import ImageGallery from "@/components/ImageGallery/image-gallery"
 import { Image } from "@/components/OptimizedImage/optimized-image"
@@ -19,6 +20,7 @@ import { SectionLink } from "@/components/SectionHeader/section-link"
 import { SiteAlert } from "@/components/SiteAlert/site-alert"
 import { UpdateCard } from "@/components/UpdateCard/update-card"
 import Vision from "@/components/Vision/vision"
+import { WaveDivider } from "@/components/WaveDivider/wave-divider"
 import { extractGetInvolvedGalleryImages } from "@/lib/gallery-extractors"
 import { sanityAttr } from "@/lib/sanity-data-attribute"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
@@ -32,7 +34,6 @@ import type {
 import { CURRENT_SITE_ALERT } from "@/lib/site-alert"
 import { getSiteSettings } from "@/lib/site-settings"
 import { SITE_CONFIG } from "@/utils/seo"
-import HomepageEventsClient from "./homepage-events-client"
 import HomepageHeroClient from "./homepage-hero-client"
 import HomepageProjectsClient from "./homepage-projects-client"
 
@@ -73,9 +74,7 @@ const introBodyComponents: PortableTextComponents = {
 
 const parkBodyComponents: PortableTextComponents = {
   block: {
-    normal: ({ children }) => (
-      <p className="font-body text-grey-800 md:text-lg dark:text-grey-200">{children}</p>
-    ),
+    normal: ({ children }) => <p className="font-body text-primary-100 md:text-lg">{children}</p>,
   },
   marks: proseLinkMark,
 }
@@ -88,16 +87,12 @@ const parkBodyComponents: PortableTextComponents = {
 const parkCalloutComponents: PortableTextComponents = {
   block: {
     normal: ({ children }) => (
-      <p className="font-body text-lg leading-relaxed text-grey-700 md:text-xl dark:text-grey-300">
-        {children}
-      </p>
+      <p className="font-body text-lg leading-relaxed text-primary-200 md:text-xl">{children}</p>
     ),
   },
   marks: {
     ...proseLinkMark,
-    strong: ({ children }) => (
-      <strong className="font-semibold text-primary-800 dark:text-primary-200">{children}</strong>
-    ),
+    strong: ({ children }) => <strong className="font-semibold text-grey-50">{children}</strong>,
   },
 }
 
@@ -353,10 +348,7 @@ export default async function HomePage() {
 
         {/* Featured Projects */}
         {featuredProjects && featuredProjects.length > 0 && (
-          <section
-            aria-labelledby="projects-heading"
-            className="bg-neutral-100/70 py-12 md:py-16 dark:bg-primary-950"
-          >
+          <section aria-labelledby="projects-heading">
             <Container>
               <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
                 <SectionHeader
@@ -398,47 +390,53 @@ export default async function HomePage() {
           </section>
         )}
 
-        {/* The Park */}
-        <section aria-labelledby="park-heading" className="text-grey-900 dark:text-grey-100">
-          <Container spacing="md">
-            <SectionHeader
-              id="park-heading"
-              title={park?.title || FALLBACKS.park.title}
-              size="large"
-            />
+        {/* The Park -- the homepage's one full-bleed moment. Every other
+            section shares the same quiet rhythm, so the park's own history
+            (the thing no other site can say) gets the weight: a dark iron
+            band framed by the James River wave, the intro set in the display
+            face, and the archival images at a size they can be read. */}
+        <section aria-labelledby="park-heading">
+          {/* -mb-px / -mt-px overlap the SVG and the band so subpixel rounding
+              can't open a hairline seam between them. */}
+          <WaveDivider fill="fill-primary-900 dark:fill-primary-950" className="-mb-px" />
+          <div className="bg-primary-900 pt-6 pb-16 text-primary-50 md:pb-20 dark:bg-primary-950">
+            <Container spacing="none">
+              <SectionHeader
+                id="park-heading"
+                title={park?.title || FALLBACKS.park.title}
+                size="large"
+                className="text-primary-300 dark:text-primary-300"
+              />
 
-            {/* Enhanced opening with larger text */}
-            <p className="font-body text-xl leading-relaxed font-medium text-grey-800 md:text-2xl dark:text-grey-200">
-              {park?.intro || FALLBACKS.park.intro}
-            </p>
+              {/* Lining figures: in Vollkorn's default old-style figures "1874" reads as "I874". */}
+              <p className="mt-6 max-w-5xl text-pretty font-display text-2xl leading-snug text-grey-50 lining-nums md:text-3xl lg:text-4xl">
+                {park?.intro || FALLBACKS.park.intro}
+              </p>
 
-            {/* Content with subtle background and integrated image */}
-            <div className="mt-10">
-              <div className="grid gap-8 md:grid-cols-2 md:gap-10 lg:gap-12">
-                {/* Text content */}
+              <div className="mt-12 grid gap-10 md:grid-cols-[1fr_1.15fr] md:gap-12 lg:gap-16">
                 <div className="space-y-6">
                   {park?.body ? (
                     <PortableText value={park.body} components={parkBodyComponents} />
                   ) : (
                     FALLBACKS.park.body.map((text) => (
-                      <p
-                        key={text}
-                        className="font-body text-grey-800 md:text-lg dark:text-grey-200"
-                      >
+                      <p key={text} className="font-body text-primary-100 md:text-lg">
                         {text}
                       </p>
                     ))
                   )}
+                  <p className="font-body text-primary-100 md:text-lg">
+                    {park?.today || FALLBACKS.park.today}
+                  </p>
                 </div>
 
                 {/* Historic images - rotating gallery */}
                 {parkGalleryData.length > 0 ? (
                   <RotatingImages
                     images={parkGalleryData}
-                    className="h-full overflow-hidden rounded-2xl"
+                    className="h-full min-h-80 overflow-hidden rounded-2xl"
                     imageClassName="h-full w-full object-cover"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 576px"
-                    maxWidth={1024}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 55vw, 640px"
+                    maxWidth={1280}
                     quality={70}
                     interval={5000}
                     showCaptions={true}
@@ -460,45 +458,35 @@ export default async function HomePage() {
                 )}
               </div>
 
-              {/* Continued text */}
-              <div className="mt-8 space-y-8 md:space-y-10">
-                <p className="font-body text-grey-800 md:text-lg dark:text-grey-200">
-                  {park?.today || FALLBACKS.park.today}
-                </p>
-
-                {/* The closing turn of the section: the park's decline, and the
-                    answer to it. A surface step sets it apart while keeping it
-                    attached to the copy it follows.
-
-                    Only the final paragraph carries the answer, so it alone is
-                    promoted to the display face at size; anything before it
-                    stays supporting body copy. Expressing that as a last-child
-                    rule keeps it true for editor-authored callouts of any
-                    length, not just the fallback below. */}
-                <div className="rounded-3xl bg-neutral-100 p-8 md:p-12 dark:bg-primary-950">
-                  <div className="max-w-4xl space-y-6 [&>p:last-child]:font-display [&>p:last-child]:text-2xl [&>p:last-child]:leading-snug [&>p:last-child]:text-primary-800 [&>p:last-child]:md:text-3xl [&>p:last-child]:dark:text-primary-200">
-                    {park?.callout ? (
-                      <PortableText value={park.callout} components={parkCalloutComponents} />
-                    ) : (
-                      <>
-                        <p className="font-body text-lg leading-relaxed text-grey-700 md:text-xl dark:text-grey-300">
-                          Time and reduced funding have taken their toll&mdash;many of the
-                          park&apos;s original features have fallen into disrepair. Invasive species
-                          and climate change have further diminished its native plantings and
-                          natural areas.
-                        </p>
-                        <p>
-                          We&apos;re changing that. The Chimborazo Park Conservancy is restoring,
-                          repairing, and enhancing this treasured greenspace to ensure it remains
-                          beautiful, safe, and inclusive for generations to come.
-                        </p>
-                      </>
-                    )}
-                  </div>
-                </div>
+              {/* The closing turn: the park's decline, and the answer to it,
+                  set as a pull statement on the river-blue rule. Only the
+                  final paragraph carries the answer, so it alone is promoted
+                  to the display face; anything before it stays supporting
+                  copy. A last-child rule keeps that true for editor-authored
+                  callouts of any length, not just the fallback below. */}
+              <div className="mt-14 max-w-4xl space-y-5 border-l-4 border-soft-blue-400 pl-6 md:mt-16 md:pl-8 [&>p:last-child]:font-display [&>p:last-child]:text-2xl [&>p:last-child]:leading-snug [&>p:last-child]:text-grey-50 [&>p:last-child]:md:text-3xl">
+                {park?.callout ? (
+                  <PortableText value={park.callout} components={parkCalloutComponents} />
+                ) : (
+                  <>
+                    <p className="font-body text-lg leading-relaxed text-primary-200 md:text-xl">
+                      Time and reduced funding have taken their toll&mdash;many of the park&apos;s
+                      original features have fallen into disrepair. Invasive species and climate
+                      change have further diminished its native plantings and natural areas.
+                    </p>
+                    <p>
+                      We&apos;re changing that. The Chimborazo Park Conservancy is restoring,
+                      repairing, and enhancing this treasured greenspace to ensure it remains
+                      beautiful, safe, and inclusive for generations to come.
+                    </p>
+                  </>
+                )}
               </div>
-            </div>
-          </Container>
+            </Container>
+          </div>
+          <div className="-mt-px bg-primary-900 dark:bg-primary-950">
+            <WaveDivider flip fill="fill-grey-50 dark:fill-primary-900" />
+          </div>
         </section>
 
         {/* Events */}
@@ -518,7 +506,7 @@ export default async function HomePage() {
               {eventsHeader?.description || FALLBACKS.events.description}
             </p>
 
-            <HomepageEventsClient events={recentEvents} />
+            <EventList events={recentEvents} />
           </Container>
         </section>
 
