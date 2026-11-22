@@ -6,13 +6,27 @@ export default function DonateFormClient() {
   const [isIframeLoaded, setIsIframeLoaded] = useState(false)
 
   return (
-    <div className="mt-12" style={{ position: "relative", minHeight: "700px", width: "100%" }}>
-      {/* Loading skeleton */}
+    // min-h reserves the form's height up front so nothing jumps when Zeffy
+    // loads. While it loads, a quiet outline of a form on the page's own
+    // surface stands in, instead of an empty grey box with a spinner.
+    <div className="relative min-h-[700px] w-full">
       {!isIframeLoaded && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl bg-grey-100 dark:bg-grey-800">
-          <div className="flex flex-col items-center gap-4">
-            <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary-200 border-t-primary-600 dark:border-primary-700 dark:border-t-primary-400" />
-            <p className="font-body text-grey-600 dark:text-grey-400">Loading donation form...</p>
+        <div
+          role="status"
+          className="absolute inset-0 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-100 p-6 md:p-8 dark:border-primary-700 dark:bg-primary-950"
+        >
+          <span className="sr-only">Loading the donation form…</span>
+          <div aria-hidden="true" className="space-y-5 motion-safe:animate-pulse">
+            <div className="h-7 w-2/3 rounded-lg bg-neutral-200 dark:bg-primary-800" />
+            <div className="grid grid-cols-3 gap-3">
+              <div className="h-12 rounded-xl bg-neutral-200 dark:bg-primary-800" />
+              <div className="h-12 rounded-xl bg-neutral-200 dark:bg-primary-800" />
+              <div className="h-12 rounded-xl bg-neutral-200 dark:bg-primary-800" />
+            </div>
+            <div className="h-12 rounded-xl bg-neutral-200 dark:bg-primary-800" />
+            <div className="h-12 rounded-xl bg-neutral-200 dark:bg-primary-800" />
+            <div className="h-12 rounded-xl bg-neutral-200 dark:bg-primary-800" />
+            <div className="h-12 w-1/2 rounded-xl bg-neutral-300 dark:bg-primary-700" />
           </div>
         </div>
       )}

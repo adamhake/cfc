@@ -29,9 +29,12 @@ const descriptionComponents: PortableTextComponents = {
       </p>
     ),
   },
+  // Pillars share one shape. A bulleted description used to sit 20px off the
+  // others' left edge and read as a different kind of entry, so list items
+  // render as plain stacked sentences, the same as a paragraph pillar.
   list: {
     bullet: ({ children }) => (
-      <ul className="list-disc space-y-2 pl-5 font-body text-base leading-relaxed text-grey-700 md:text-lg dark:text-grey-300">
+      <ul className="space-y-3 font-body text-base leading-relaxed text-grey-700 md:text-lg dark:text-grey-300">
         {children}
       </ul>
     ),
@@ -113,7 +116,9 @@ export default function Vision({ title, description, content, pillar, dataSanity
         <span className={cn("inline-flex shrink-0 rounded-full p-3.5", iconBackground)}>
           <Icon className={cn("h-7 w-7 md:h-8 md:w-8", iconColor)} aria-hidden="true" />
         </span>
-        <h3 className="font-display text-2xl text-grey-900 md:text-3xl dark:text-grey-100">
+        {/* One step below the section's "Our Vision" heading, which these
+            used to match in size. */}
+        <h3 className="font-display text-xl text-grey-900 md:text-2xl dark:text-grey-100">
           {title}
         </h3>
       </div>
@@ -122,7 +127,7 @@ export default function Vision({ title, description, content, pillar, dataSanity
         {content ? (
           <PortableText value={content} components={descriptionComponents} />
         ) : Array.isArray(description) ? (
-          <ul className="list-disc space-y-2 pl-5 font-body text-base leading-relaxed text-grey-700 md:text-lg dark:text-grey-300">
+          <ul className="space-y-3 font-body text-base leading-relaxed text-grey-700 md:text-lg dark:text-grey-300">
             {description.map((item) => (
               <li key={item}>{item}</li>
             ))}

@@ -1,5 +1,4 @@
 import { getGetInvolvedPageQuery, getSiteSettingsQuery } from "@chimborazo/sanity-config/queries"
-import { CalendarDays, Leaf, Paintbrush, Trees, Users, Wrench } from "lucide-react"
 import type { Metadata } from "next"
 import { Button } from "@/components/Button/button"
 import Chip from "@/components/Chip/chip"
@@ -11,7 +10,6 @@ import { Image } from "@/components/OptimizedImage/optimized-image"
 import PageHeroOptimistic from "@/components/PageHero/page-hero-optimistic"
 import { PageIntroduction } from "@/components/PageIntroduction/page-introduction"
 import SectionHeader from "@/components/SectionHeader/section-header"
-import SupportOption from "@/components/SupportOption/support-option"
 import { CACHE_TAGS, cachedSanityFetch, getDynamicFetchOptions } from "@/lib/sanity-fetch"
 import { SITE_CONFIG } from "@/utils/seo"
 
@@ -87,44 +85,65 @@ export default async function GetInvolvedPage() {
               the biggest difference:
             </p>
 
-            <div className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-200 md:grid-cols-2 lg:grid-cols-3 dark:border-primary-700 dark:bg-primary-700">
-              <SupportOption
-                title="Trail Maintenance"
-                description="Help maintain and improve the park's extensive trail network, including historic cobbled paths and woodland trails that connect communities."
-                icon={<Leaf className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />}
-                variant="wall"
-              />
-              <SupportOption
-                title="Historic Restoration"
-                description="Assist in preserving the Round House, gazebo, and other heritage structures that tell Chimborazo's rich story."
-                icon={<Wrench className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />}
-                variant="wall"
-              />
-              <SupportOption
-                title="Landscape Care"
-                description="Join seasonal plantings, bulb installations, and ongoing maintenance of the park's gardens and natural areas."
-                icon={<Trees className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />}
-                variant="wall"
-              />
-              <SupportOption
-                title="Event Support"
-                description="Help organize and run community events, educational programs, and seasonal celebrations that bring neighbors together."
-                icon={<CalendarDays className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />}
-                variant="wall"
-              />
-              <SupportOption
-                title="Park Beautification"
-                description="Support cleanup days, graffiti removal, signage restoration, and other projects that keep the park welcoming."
-                icon={<Paintbrush className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />}
-                variant="wall"
-              />
-              <SupportOption
-                title="Community Outreach"
-                description="Help spread the word about the park, engage neighbors, and build partnerships that strengthen our mission."
-                icon={<Users className="h-6 w-6 stroke-accent-600 dark:stroke-accent-400" />}
-                variant="wall"
-              />
-            </div>
+            {/* A plain two-column list. These are areas of need, not actions
+                with their own buttons, so the icon-in-a-box card wall read as a
+                generic feature grid without telling people anything more. */}
+            <ul className="grid max-w-5xl grid-cols-1 gap-x-16 gap-y-10 md:grid-cols-2">
+              <li>
+                <h3 className="font-display text-xl text-grey-900 md:text-2xl dark:text-grey-100">
+                  Trail Maintenance
+                </h3>
+                <p className="mt-2 font-body leading-relaxed text-grey-700 md:text-lg dark:text-grey-300">
+                  Help maintain and improve the park's extensive trail network, including historic
+                  cobbled paths and woodland trails that connect communities.
+                </p>
+              </li>
+              <li>
+                <h3 className="font-display text-xl text-grey-900 md:text-2xl dark:text-grey-100">
+                  Historic Restoration
+                </h3>
+                <p className="mt-2 font-body leading-relaxed text-grey-700 md:text-lg dark:text-grey-300">
+                  Assist in preserving the Round House, gazebo, and other heritage structures that
+                  tell Chimborazo's rich story.
+                </p>
+              </li>
+              <li>
+                <h3 className="font-display text-xl text-grey-900 md:text-2xl dark:text-grey-100">
+                  Landscape Care
+                </h3>
+                <p className="mt-2 font-body leading-relaxed text-grey-700 md:text-lg dark:text-grey-300">
+                  Join seasonal plantings, bulb installations, and ongoing maintenance of the park's
+                  gardens and natural areas.
+                </p>
+              </li>
+              <li>
+                <h3 className="font-display text-xl text-grey-900 md:text-2xl dark:text-grey-100">
+                  Event Support
+                </h3>
+                <p className="mt-2 font-body leading-relaxed text-grey-700 md:text-lg dark:text-grey-300">
+                  Help organize and run community events, educational programs, and seasonal
+                  celebrations that bring neighbors together.
+                </p>
+              </li>
+              <li>
+                <h3 className="font-display text-xl text-grey-900 md:text-2xl dark:text-grey-100">
+                  Park Beautification
+                </h3>
+                <p className="mt-2 font-body leading-relaxed text-grey-700 md:text-lg dark:text-grey-300">
+                  Support cleanup days, graffiti removal, signage restoration, and other projects
+                  that keep the park welcoming.
+                </p>
+              </li>
+              <li>
+                <h3 className="font-display text-xl text-grey-900 md:text-2xl dark:text-grey-100">
+                  Community Outreach
+                </h3>
+                <p className="mt-2 font-body leading-relaxed text-grey-700 md:text-lg dark:text-grey-300">
+                  Help spread the word about the park, engage neighbors, and build partnerships that
+                  strengthen our mission.
+                </p>
+              </li>
+            </ul>
           </div>
 
           {/* Ways to Get Involved */}
@@ -179,7 +198,7 @@ export default async function GetInvolvedPage() {
                           href="/events"
                           trackingLocation="get-involved-volunteer"
                         >
-                          View Upcoming Events
+                          See the events calendar
                         </Button>
                         <Button
                           as="a"
