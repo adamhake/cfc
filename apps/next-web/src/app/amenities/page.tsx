@@ -155,7 +155,6 @@ export default async function AmenitiesPage() {
                 }
                 images={amenity.images ?? []}
                 imagePosition={index % 2 === 0 ? "left" : "right"}
-                priority={index === 0}
               />
             ))}
           </div>

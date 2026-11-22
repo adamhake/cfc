@@ -4,9 +4,8 @@ import { Menu } from "lucide-react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 import IconLogo from "@/components/IconLogo/icon-logo"
-import { useReducedMotion } from "@/hooks/useReducedMotion"
 import { isNavigationItemActive, NAVIGATION_ITEMS } from "@/lib/navigation"
 import { Button } from "../Button/button"
 
@@ -20,7 +19,6 @@ const HeaderMobileMenu = dynamic(() => import("./header-mobile-menu"), { ssr: fa
  * - Theme toggle for dark/light mode
  * - Social media links (Facebook, Instagram)
  * - Upcoming event display in mobile menu
- * - Smooth animations with reduced motion support
  * - Active route highlighting
  *
  * @example
@@ -37,68 +35,10 @@ interface HeaderProps {
 export default function Header({ facebookUrl, instagramUrl }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [hasOpened, setHasOpened] = useState(false)
-  const mobileMenuRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
-  const prefersReducedMotion = useReducedMotion()
 
-  // Prevent body scroll when mobile menu is open
-  useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = ""
-    }
-    return () => {
-      document.body.style.overflow = ""
-    }
-  }, [menuOpen])
-
-  // Handle escape key to close menu
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && menuOpen) {
-        setMenuOpen(false)
-      }
-    }
-    window.addEventListener("keydown", handleEscape)
-    return () => window.removeEventListener("keydown", handleEscape)
-  }, [menuOpen])
-
-  // Focus trap for mobile menu
-  useEffect(() => {
-    if (!menuOpen || !mobileMenuRef.current) return
-
-    const menuElement = mobileMenuRef.current
-    const focusableElements = menuElement.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-    )
-    const firstElement = focusableElements[0]
-    const lastElement = focusableElements[focusableElements.length - 1]
-
-    // Focus the first element when menu opens
-    firstElement?.focus()
-
-    const handleTabKey = (e: KeyboardEvent) => {
-      if (e.key !== "Tab") return
-
-      if (e.shiftKey) {
-        // Shift + Tab
-        if (document.activeElement === firstElement) {
-          e.preventDefault()
-          lastElement?.focus()
-        }
-      } else {
-        // Tab
-        if (document.activeElement === lastElement) {
-          e.preventDefault()
-          firstElement?.focus()
-        }
-      }
-    }
-
-    menuElement.addEventListener("keydown", handleTabKey)
-    return () => menuElement.removeEventListener("keydown", handleTabKey)
-  }, [menuOpen])
+  // Focus, the focus trap, Escape, and scroll containment are all handled by
+  // the native <dialog> inside HeaderMobileMenu.
 
   return (
     <div className="fixed top-4 right-4 left-4 z-20 flex flex-row items-center justify-center">
@@ -187,8 +127,6 @@ export default function Header({ facebookUrl, instagramUrl }: HeaderProps) {
           currentPath={pathname}
           facebookUrl={facebookUrl}
           instagramUrl={instagramUrl}
-          mobileMenuRef={mobileMenuRef}
-          prefersReducedMotion={prefersReducedMotion}
         />
       )}
     </div>

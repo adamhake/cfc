@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { draftMode } from "next/headers"
 import Footer from "@/components/Footer/footer"
 import Header from "@/components/Header/header"
@@ -15,6 +15,12 @@ import {
 } from "@/utils/seo"
 import "./globals.css"
 import { Providers } from "./providers"
+
+// Emits <meta name="color-scheme" content="light dark"> so the browser paints
+// a theme-appropriate canvas before the appearance bootstrap script runs.
+export const viewport: Viewport = {
+  colorScheme: "light dark",
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   // Site name, description, and the default share image are editor-controlled
