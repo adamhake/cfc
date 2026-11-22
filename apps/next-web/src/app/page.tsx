@@ -86,9 +86,7 @@ const parkBodyComponents: PortableTextComponents = {
  */
 const parkCalloutComponents: PortableTextComponents = {
   block: {
-    normal: ({ children }) => (
-      <p className="font-body text-lg leading-relaxed text-primary-200 md:text-xl">{children}</p>
-    ),
+    normal: ({ children }) => <p className="font-body text-primary-100 md:text-lg">{children}</p>,
   },
   marks: {
     ...proseLinkMark,
@@ -458,18 +456,20 @@ export default async function HomePage() {
                 )}
               </div>
 
-              {/* The closing turn: the park's decline, and the answer to it,
-                  set as a pull statement on the river-blue rule. Only the
-                  final paragraph carries the answer, so it alone is promoted
-                  to the display face; anything before it stays supporting
-                  copy. A last-child rule keeps that true for editor-authored
-                  callouts of any length, not just the fallback below. */}
-              <div className="mt-14 max-w-4xl space-y-5 border-l-4 border-soft-blue-400 pl-6 md:mt-16 md:pl-8 [&>p:last-child]:font-display [&>p:last-child]:text-2xl [&>p:last-child]:leading-snug [&>p:last-child]:text-grey-50 [&>p:last-child]:md:text-3xl">
+              {/* The closing turn: the park's decline, and the answer to it.
+                  No rule, box or indent -- it is the end of the story the
+                  band tells, not a quote. The supporting copy keeps the body
+                  measure of the history above, and only the final paragraph
+                  (the answer) steps up to the display face, matching the
+                  intro so the band opens and closes in the same voice. A
+                  last-child rule keeps that true for editor-authored callouts
+                  of any length, not just the fallback below. */}
+              <div className="mt-14 space-y-6 md:mt-20 [&>p]:max-w-prose [&>p:last-child]:max-w-5xl [&>p:last-child]:text-pretty [&>p:last-child]:font-display [&>p:last-child]:text-2xl [&>p:last-child]:leading-snug [&>p:last-child]:text-grey-50 [&>p:last-child]:lining-nums [&>p:last-child]:md:text-3xl [&>p:last-child]:lg:text-4xl">
                 {park?.callout ? (
                   <PortableText value={park.callout} components={parkCalloutComponents} />
                 ) : (
                   <>
-                    <p className="font-body text-lg leading-relaxed text-primary-200 md:text-xl">
+                    <p className="font-body text-primary-100 md:text-lg">
                       Time and reduced funding have taken their toll&mdash;many of the park&apos;s
                       original features have fallen into disrepair. Invasive species and climate
                       change have further diminished its native plantings and natural areas.
