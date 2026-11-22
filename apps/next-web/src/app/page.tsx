@@ -7,7 +7,6 @@ import {
 import type { PortableTextBlock, PortableTextComponents } from "@portabletext/react"
 import { PortableText } from "@portabletext/react"
 import type { Metadata } from "next"
-import { Button } from "@/components/Button/button"
 import Container from "@/components/Container/container"
 import GetInvolved from "@/components/GetInvolved/get-involved"
 import ImageGallery from "@/components/ImageGallery/image-gallery"
@@ -16,6 +15,7 @@ import Partners from "@/components/Partners/partners"
 import Quote from "@/components/Quote/quote"
 import RotatingImages from "@/components/RotatingImages/rotating-images"
 import SectionHeader from "@/components/SectionHeader/section-header"
+import { SectionLink } from "@/components/SectionHeader/section-link"
 import { SiteAlert } from "@/components/SiteAlert/site-alert"
 import { UpdateCard } from "@/components/UpdateCard/update-card"
 import Vision from "@/components/Vision/vision"
@@ -306,9 +306,13 @@ export default async function HomePage() {
         </div>
 
         {/* Our Vision */}
-        <div>
+        <section aria-labelledby="vision-heading">
           <Container spacing="md">
-            <SectionHeader title={vision?.title || FALLBACKS.vision.title} size="large" />
+            <SectionHeader
+              id="vision-heading"
+              title={vision?.title || FALLBACKS.vision.title}
+              size="large"
+            />
             <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
               {vision?.description || FALLBACKS.vision.description}
             </p>
@@ -345,42 +349,43 @@ export default async function HomePage() {
                   ))}
             </div>
           </Container>
-        </div>
+        </section>
 
         {/* Featured Projects */}
         {featuredProjects && featuredProjects.length > 0 && (
-          <div className="bg-neutral-100/70 py-12 md:py-16 dark:bg-primary-950">
+          <section
+            aria-labelledby="projects-heading"
+            className="bg-neutral-100/70 py-12 md:py-16 dark:bg-primary-950"
+          >
             <Container>
-              <SectionHeader
-                title={projectsHeader?.title || FALLBACKS.projects.title}
-                size="large"
-              />
+              <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+                <SectionHeader
+                  id="projects-heading"
+                  title={projectsHeader?.title || FALLBACKS.projects.title}
+                  size="large"
+                />
+                <SectionLink href="/projects" trackingLocation="homepage-projects">
+                  All projects
+                </SectionLink>
+              </div>
               <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
                 {projectsHeader?.description || FALLBACKS.projects.description}
               </p>
 
               <HomepageProjectsClient projects={featuredProjects} />
-
-              {/* View All Projects CTA */}
-              <div className="mt-10 flex justify-center">
-                <Button
-                  as="a"
-                  href="/projects"
-                  variant="outline"
-                  trackingLocation="homepage-projects"
-                  className="group border-accent-700 text-accent-800 hover:border-accent-800 hover:bg-accent-50 dark:border-accent-500 dark:text-accent-300 dark:hover:bg-primary-800"
-                >
-                  View All Projects
-                </Button>
-              </div>
             </Container>
-          </div>
+          </section>
         )}
 
         {featuredUpdates.length > 0 && (
-          <section aria-label="Park updates">
+          <section aria-labelledby="updates-heading">
             <Container spacing="md">
-              <SectionHeader title="Park Updates" size="large" />
+              <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+                <SectionHeader id="updates-heading" title="Park Updates" size="large" />
+                <SectionLink href="/updates" trackingLocation="homepage-updates">
+                  All updates
+                </SectionLink>
+              </div>
               <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
                 Seasonal news, construction progress, and notices to help you plan your visit.
               </p>
@@ -389,24 +394,18 @@ export default async function HomePage() {
                   <UpdateCard key={update._id} update={update} compact />
                 ))}
               </div>
-              <div className="mt-10 flex justify-center">
-                <Button
-                  as="a"
-                  href="/updates"
-                  variant="outline"
-                  trackingLocation="homepage-updates"
-                >
-                  View All Updates
-                </Button>
-              </div>
             </Container>
           </section>
         )}
 
         {/* The Park */}
-        <div className="text-grey-900 dark:text-grey-100">
+        <section aria-labelledby="park-heading" className="text-grey-900 dark:text-grey-100">
           <Container spacing="md">
-            <SectionHeader title={park?.title || FALLBACKS.park.title} size="large" />
+            <SectionHeader
+              id="park-heading"
+              title={park?.title || FALLBACKS.park.title}
+              size="large"
+            />
 
             {/* Enhanced opening with larger text */}
             <p className="font-body text-xl leading-relaxed font-medium text-grey-800 md:text-2xl dark:text-grey-200">
@@ -500,32 +499,28 @@ export default async function HomePage() {
               </div>
             </div>
           </Container>
-        </div>
+        </section>
 
         {/* Events */}
-        <div>
+        <section aria-labelledby="events-heading">
           <Container>
-            <SectionHeader title={eventsHeader?.title || FALLBACKS.events.title} size="large" />
+            <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+              <SectionHeader
+                id="events-heading"
+                title={eventsHeader?.title || FALLBACKS.events.title}
+                size="large"
+              />
+              <SectionLink href="/events" trackingLocation="homepage-events">
+                All events
+              </SectionLink>
+            </div>
             <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
               {eventsHeader?.description || FALLBACKS.events.description}
             </p>
 
             <HomepageEventsClient events={recentEvents} />
-
-            {/* View All Events CTA */}
-            <div className="mt-10 flex justify-center">
-              <Button
-                as="a"
-                href="/events"
-                variant="outline"
-                trackingLocation="homepage-events"
-                className="group border-accent-700 text-accent-800 hover:border-accent-800 hover:bg-accent-50 dark:border-accent-500 dark:text-accent-300 dark:hover:bg-primary-800"
-              >
-                View All Events
-              </Button>
-            </div>
           </Container>
-        </div>
+        </section>
 
         {/* Get Involved */}
         <div>
@@ -539,9 +534,13 @@ export default async function HomePage() {
         </div>
 
         {/* Partners */}
-        <div>
+        <section aria-labelledby="partners-heading">
           <Container>
-            <SectionHeader title={partnersHeader?.title || FALLBACKS.partners.title} size="large" />
+            <SectionHeader
+              id="partners-heading"
+              title={partnersHeader?.title || FALLBACKS.partners.title}
+              size="large"
+            />
             <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
               {partnersHeader?.description || FALLBACKS.partners.description}
             </p>
@@ -569,7 +568,7 @@ export default async function HomePage() {
               />
             </div>
           </Container>
-        </div>
+        </section>
 
         {/* Quote */}
         <Quote

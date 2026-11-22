@@ -25,11 +25,14 @@ export interface ChipProps {
   className?: string
 }
 
+// Every pair here clears WCAG AA (4.5:1) for this small semibold text in both
+// themes. Note the accent ramp is remapped lighter under .dark, so a filled
+// accent chip needs dark text there, not white.
 const variantStyles: Record<ChipVariant, string> = {
   // Project Status
-  planned: "bg-accent-600 text-white dark:bg-accent-500",
-  active: "bg-primary-600 text-white dark:bg-primary-500",
-  completed: "bg-grey-600 text-white dark:bg-grey-500",
+  planned: "bg-accent-700 text-white dark:bg-accent-500 dark:text-grey-900",
+  active: "bg-primary-600 text-white dark:bg-primary-700",
+  completed: "bg-grey-600 text-white dark:bg-grey-600",
 
   // Project Category
   restoration: "bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200",
@@ -38,7 +41,7 @@ const variantStyles: Record<ChipVariant, string> = {
   preservation: "bg-terra-100 text-terra-800 dark:bg-terra-900 dark:text-terra-200",
 
   // Event Status
-  upcoming: "bg-accent-500 text-white dark:bg-accent-500 dark:text-grey-900",
+  upcoming: "bg-accent-700 text-white dark:bg-accent-500 dark:text-grey-900",
   past: "bg-primary-800 text-primary-50 dark:bg-primary-700 dark:text-primary-100",
 
   // General

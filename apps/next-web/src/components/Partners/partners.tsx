@@ -44,7 +44,11 @@ export default function Partners({ partners, variant = "full" }: PartnersProps) 
 
   if (variant === "compact") {
     return (
-      <div className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-200 sm:grid-cols-2 md:grid-cols-4 dark:border-neutral-300 dark:bg-neutral-300">
+      // Logos are partners' own artwork, drawn for light backgrounds, and one
+      // ships with an opaque white box -- so they can't be inverted. In dark
+      // mode each logo sits on its own small light plate instead of the whole
+      // band turning light, which glared against the dark page.
+      <div className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-200 sm:grid-cols-2 md:grid-cols-4 dark:border-primary-700 dark:bg-primary-700">
         {partners.map((partner) => {
           const logo = isSanityLogo(partner.logo) ? (
             <SanityImage
@@ -66,13 +70,13 @@ export default function Partners({ partners, variant = "full" }: PartnersProps) 
             />
           )
           const className =
-            "group flex min-h-36 flex-col items-center justify-center gap-4 bg-grey-50 p-6 text-center transition-colors hover:bg-neutral-100 dark:bg-neutral-200 dark:hover:bg-neutral-100"
+            "group flex min-h-36 flex-col items-center justify-center gap-4 bg-grey-50 p-6 text-center transition-colors hover:bg-neutral-100 dark:bg-primary-950 dark:hover:bg-primary-900"
           const content = (
             <>
-              <span className="flex h-14 w-full max-w-52 items-center justify-center overflow-hidden">
+              <span className="flex h-14 w-full max-w-52 items-center justify-center overflow-hidden dark:h-16 dark:rounded-lg dark:bg-grey-50 dark:px-3 dark:py-2">
                 {logo}
               </span>
-              <span className="flex items-center justify-center gap-1.5 font-display text-sm leading-tight text-grey-700 transition-colors group-hover:text-accent-800 dark:text-grey-800 dark:group-hover:text-accent-800">
+              <span className="flex items-center justify-center gap-1.5 font-display text-sm leading-tight text-grey-700 transition-colors group-hover:text-accent-800 dark:text-grey-300 dark:group-hover:text-accent-300">
                 {partner.name}
                 {partner.url && (
                   <ExternalLink className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
