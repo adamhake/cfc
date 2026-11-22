@@ -349,47 +349,32 @@
   --color-accent-700: var(--color-soft-blue-200);
 }
 
-/* Custom scrollbar styles */
-.scrollbar-thin {
-  scrollbar-width: thin;
+/* Scrollbars on scrollable captions. Colour only: scrollbar-width stays
+   auto, because "thin" shrinks the thumb below a comfortable target, and
+   scrollbar-color replaces the old ::-webkit-scrollbar rules everywhere it is
+   supported (elsewhere the platform scrollbar shows, which is fine). */
+.scrollbar-on-dark {
+  scrollbar-color: rgb(255 255 255 / 0.3) transparent;
 }
 
-.scrollbar-thin::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+.scrollbar-on-dark:hover {
+  scrollbar-color: rgb(255 255 255 / 0.5) transparent;
 }
 
-.scrollbar-thumb-white\/30::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 3px;
+.scrollbar-subtle {
+  scrollbar-color: var(--color-grey-300) transparent;
 }
 
-.scrollbar-thumb-white\/30:hover::-webkit-scrollbar-thumb,
-.hover\:scrollbar-thumb-white\/50:hover::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.5);
+.scrollbar-subtle:hover {
+  scrollbar-color: var(--color-grey-400) transparent;
 }
 
-.scrollbar-thumb-grey-300::-webkit-scrollbar-thumb {
-  background-color: rgb(209 213 219);
-  border-radius: 3px;
+.dark .scrollbar-subtle {
+  scrollbar-color: var(--color-grey-600) transparent;
 }
 
-.scrollbar-thumb-grey-300:hover::-webkit-scrollbar-thumb,
-.hover\:scrollbar-thumb-grey-400:hover::-webkit-scrollbar-thumb {
-  background-color: rgb(156 163 175);
-}
-
-.dark .dark\:scrollbar-thumb-grey-600::-webkit-scrollbar-thumb {
-  background-color: rgb(75 85 99);
-}
-
-.dark .dark\:scrollbar-thumb-grey-600:hover::-webkit-scrollbar-thumb,
-.dark .dark\:hover\:scrollbar-thumb-grey-500:hover::-webkit-scrollbar-thumb {
-  background-color: rgb(107 114 128);
-}
-
-.scrollbar-track-transparent::-webkit-scrollbar-track {
-  background-color: transparent;
+.dark .scrollbar-subtle:hover {
+  scrollbar-color: var(--color-grey-500) transparent;
 }
 
 /* Carousel progress animation - runs on compositor thread for smooth 60fps */
@@ -402,8 +387,12 @@
   }
 }
 
-html {
-  scroll-behavior: smooth;
+/* Smooth in-page scrolling only for people who haven't asked for less
+   motion; a long animated jump is exactly what reduced-motion users opt out of. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 /* Tell the browser up front that both schemes are supported, so the canvas

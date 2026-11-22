@@ -46,13 +46,15 @@ export default function Footer({ facebookUrl, instagramUrl }: FooterProps) {
               </h3>
               <nav
                 aria-label="Footer navigation"
-                className="grid grid-cols-1 gap-y-2 sm:grid-cols-2 sm:gap-x-6"
+                // Phone tap targets are 44px tall, so the row gap that spaced the
+                // 20px-tall links on desktop isn't needed below md.
+                className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-6 md:gap-y-2"
               >
                 {NAVIGATION_ITEMS.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
+                    className="inline-flex min-h-11 items-center md:min-h-0 font-body text-sm text-grey-700 transition hover:text-accent-700 dark:text-grey-300 dark:hover:text-accent-400"
                   >
                     {item.label}
                   </Link>
@@ -66,14 +68,16 @@ export default function Footer({ facebookUrl, instagramUrl }: FooterProps) {
                 Connect
               </h3>
               <SocialLinks
-                className="flex gap-3"
-                linkClassName="text-grey-600 transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-400 dark:hover:text-accent-400"
+                // -ml-2.5 cancels the 44px hit area's inset so the icons line up
+                // with the "Connect" heading.
+                className="-ml-2.5 flex gap-1"
+                linkClassName="inline-flex h-11 w-11 items-center justify-center rounded-lg text-grey-600 transition hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-grey-400 dark:hover:text-accent-400"
                 iconClassName="h-6 w-6 fill-grey-600 transition hover:fill-accent-700 dark:fill-grey-400 dark:hover:fill-accent-400"
                 facebookUrl={facebookUrl}
                 instagramUrl={instagramUrl}
               />
               <div className="space-y-2 pt-4">
-                <ThemeToggle variant="button" showLabel={true} />
+                <ThemeToggle variant="button" showLabel={true} className="min-h-11" />
               </div>
             </div>
           </div>
@@ -84,7 +88,7 @@ export default function Footer({ facebookUrl, instagramUrl }: FooterProps) {
             <div className="flex gap-6">
               <Link
                 href="/privacy-policy"
-                className="font-body text-sm text-grey-600 transition hover:text-accent-700 dark:text-grey-400 dark:hover:text-accent-400"
+                className="inline-flex min-h-11 items-center md:min-h-0 font-body text-sm text-grey-600 transition hover:text-accent-700 dark:text-grey-400 dark:hover:text-accent-400"
               >
                 Privacy Policy
               </Link>

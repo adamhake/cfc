@@ -212,7 +212,10 @@ export function NewsletterForm({
           placeholder="your.email@example.com"
           required
           aria-required="true"
-          aria-invalid={!!emailError || !!displayError}
+          autoComplete="email"
+          // Only a problem with the address itself marks the field invalid; a
+          // Turnstile or server failure is about the form, not the email.
+          aria-invalid={!!emailError}
           aria-describedby={emailError || displayError ? errorId : undefined}
           disabled={isPending}
           className={cn(
