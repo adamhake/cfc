@@ -77,9 +77,14 @@ export function applyTheme(theme: ResolvedTheme): void {
     return
   }
 
+  const root = document.documentElement
   if (theme === "dark") {
-    document.documentElement.classList.add("dark")
+    root.classList.add("dark")
   } else {
-    document.documentElement.classList.remove("dark")
+    root.classList.remove("dark")
   }
+  // Keep native UI (scrollbars, form controls) in step with the class. The
+  // bootstrap script sets this inline on first paint, so it must be updated
+  // here too or it goes stale after a toggle.
+  root.style.colorScheme = theme
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import dynamic from "next/dynamic"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { SanityImage, type SanityImageObject } from "@/components/SanityImage"
 import { useReducedMotion } from "@/hooks/useReducedMotion"
 import { getResponsiveColumnClasses } from "./image-gallery-utils"
@@ -80,9 +80,9 @@ export default function ImageGallery({
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [selectedImage, setSelectedImage] = useState<number | null>(null)
   const [captionHovered, setCaptionHovered] = useState(false)
-  const modalRef = useRef<HTMLDivElement>(null)
-  const closeButtonRef = useRef<HTMLButtonElement>(null)
-  const previouslyFocusedRef = useRef<HTMLElement | null>(null)
+  // Keep the lightbox mounted after the first open so the <dialog> can close
+  // itself (and return focus) rather than being ripped out of the DOM.
+  const [hasOpened, setHasOpened] = useState(false)
   const prefersReducedMotion = useReducedMotion()
 
   const { gridClassNames, masonryClassNames } = getResponsiveColumnClasses(columns)
@@ -90,66 +90,13 @@ export default function ImageGallery({
   const gapClass = gap === "sm" ? "gap-2" : gap === "md" ? "gap-4" : "gap-6"
   const gapSize = gap === "sm" ? "0.5rem" : gap === "md" ? "1rem" : "1.5rem"
 
-  // Prevent body scroll when modal is open, and manage focus
-  useEffect(() => {
-    if (selectedImage !== null) {
-      // Store the element that had focus before the modal opened
-      previouslyFocusedRef.current = document.activeElement as HTMLElement
-      document.body.style.overflow = "hidden"
-      // Focus the close button for accessibility
-      closeButtonRef.current?.focus()
-    } else {
-      document.body.style.overflow = ""
-      // Restore focus when modal closes
-      previouslyFocusedRef.current?.focus()
-      previouslyFocusedRef.current = null
-    }
-
-    return () => {
-      document.body.style.overflow = ""
-    }
-  }, [selectedImage])
-
-  // Focus trap for modal
-  useEffect(() => {
-    if (selectedImage === null || !modalRef.current) return
-
-    const modalElement = modalRef.current
-
-    const handleTabKey = (e: KeyboardEvent) => {
-      if (e.key !== "Tab") return
-
-      const focusableElements = modalElement.querySelectorAll<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      )
-      const firstElement = focusableElements[0]
-      const lastElement = focusableElements[focusableElements.length - 1]
-
-      if (e.shiftKey) {
-        if (document.activeElement === firstElement) {
-          e.preventDefault()
-          lastElement?.focus()
-        }
-      } else {
-        if (document.activeElement === lastElement) {
-          e.preventDefault()
-          firstElement?.focus()
-        }
-      }
-    }
-
-    modalElement.addEventListener("keydown", handleTabKey)
-    return () => modalElement.removeEventListener("keydown", handleTabKey)
-  }, [selectedImage])
-
   // Keyboard navigation for modal
   useEffect(() => {
     if (selectedImage === null) return
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setSelectedImage(null)
-      } else if (e.key === "ArrowLeft" && selectedImage > 0) {
+      // Escape is handled natively by the <dialog>.
+      if (e.key === "ArrowLeft" && selectedImage > 0) {
         setCaptionHovered(false)
         setSelectedImage(selectedImage - 1)
       } else if (e.key === "ArrowRight" && selectedImage < images.length - 1) {
@@ -164,6 +111,7 @@ export default function ImageGallery({
 
   // Memoize handlers for performance
   const handleImageClick = useCallback((index: number) => {
+    setHasOpened(true)
     setSelectedImage(index)
   }, [])
 
@@ -230,21 +178,18 @@ export default function ImageGallery({
     )
   }
 
-  const lightbox =
-    selectedImage !== null ? (
-      <ImageGalleryLightbox
-        images={images}
-        selectedImage={selectedImage}
-        captionHovered={captionHovered}
-        setCaptionHovered={setCaptionHovered}
-        modalRef={modalRef}
-        closeButtonRef={closeButtonRef}
-        prefersReducedMotion={prefersReducedMotion}
-        handlePrevImage={handlePrevImage}
-        handleNextImage={handleNextImage}
-        handleCloseModal={handleCloseModal}
-      />
-    ) : null
+  const lightbox = hasOpened ? (
+    <ImageGalleryLightbox
+      images={images}
+      selectedImage={selectedImage}
+      captionHovered={captionHovered}
+      setCaptionHovered={setCaptionHovered}
+      prefersReducedMotion={prefersReducedMotion}
+      handlePrevImage={handlePrevImage}
+      handleNextImage={handleNextImage}
+      handleCloseModal={handleCloseModal}
+    />
+  ) : null
 
   if (variant === "grid") {
     // CSS Grid layout

@@ -406,6 +406,56 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Tell the browser up front that both schemes are supported, so the canvas
+   and native UI (scrollbars, form controls) match before any script runs. The
+   appearance bootstrap script and applyTheme() then pin it to the resolved
+   theme with an inline style. */
+:root {
+  color-scheme: light dark;
+}
+
+/* ============================================
+   MODAL DIALOGS (mobile menu, gallery lightbox)
+   ============================================ */
+
+/* Keep scroll gestures from chaining to the page underneath, instead of
+   locking body overflow (which removes the scrollbar and shifts the layout).
+   Progressive enhancement: browsers that don't yet honor overscroll-behavior on
+   non-scrollable containers still get showModal()'s inert page. */
+dialog:modal {
+  overscroll-behavior: contain;
+}
+
+dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+/* Fade in on open and out on close. The entry fade works wherever
+   @starting-style does; the exit fade needs `overlay` + discrete display
+   transitions (Chromium today) and elsewhere the dialog just closes. */
+.modal-dialog {
+  opacity: 0;
+  transition-property: opacity, display, overlay;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+  transition-behavior: allow-discrete;
+}
+
+.modal-dialog[open] {
+  opacity: 1;
+
+  @starting-style {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-dialog {
+    transition-duration: 0s;
+  }
+}
+
 /* The header is fixed and opaque, so anything scrolled to by an in-page anchor
    would otherwise land underneath it. Keep this in sync with the header's
    height plus its top offset (top-4 + ~64px chrome). */

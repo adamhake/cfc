@@ -1,7 +1,7 @@
 "use client"
 
 import { AnimatePresence, motion } from "framer-motion"
-import { type RefObject, useCallback, useRef } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import { Image } from "@/components/OptimizedImage/optimized-image"
 import { SanityImage } from "@/components/SanityImage"
 import type { GalleryImage, SanityGalleryImage } from "./image-gallery"
@@ -60,8 +60,6 @@ interface ImageGalleryLightboxProps {
   selectedImage: number | null
   captionHovered: boolean
   setCaptionHovered: (hovered: boolean) => void
-  modalRef: RefObject<HTMLDivElement | null>
-  closeButtonRef: RefObject<HTMLButtonElement | null>
   prefersReducedMotion: boolean
   handlePrevImage: (e: React.MouseEvent) => void
   handleNextImage: (e: React.MouseEvent) => void
@@ -73,8 +71,6 @@ export default function ImageGalleryLightbox({
   selectedImage,
   captionHovered,
   setCaptionHovered,
-  modalRef,
-  closeButtonRef,
   prefersReducedMotion,
   handlePrevImage,
   handleNextImage,
@@ -82,6 +78,23 @@ export default function ImageGalleryLightbox({
 }: ImageGalleryLightboxProps) {
   const activeImage = selectedImage !== null ? images[selectedImage] : null
   const contentRef = useRef<HTMLDivElement>(null)
+  const dialogRef = useRef<HTMLDialogElement>(null)
+  const isOpen = selectedImage !== null && activeImage !== null
+
+  // Sync React state to the native modal dialog. showModal() handles initial
+  // focus (the close button, as the first focusable child), the focus trap,
+  // the inert page, Escape, and returning focus to the thumbnail on close.
+  // Running on mount matters: the lightbox is lazy-loaded, so on the first
+  // open it mounts already open.
+  useEffect(() => {
+    const dialog = dialogRef.current
+    if (!dialog) return
+    if (isOpen && !dialog.open) {
+      dialog.showModal()
+    } else if (!isOpen && dialog.open) {
+      dialog.close()
+    }
+  }, [isOpen])
 
   // Dismiss on backdrop click. Checking the target here rather than stopping
   // propagation on the content wrapper keeps the wrapper a non-interactive
@@ -96,30 +109,27 @@ export default function ImageGalleryLightbox({
   )
 
   return (
-    <AnimatePresence>
+    // The dialog fills the viewport, so "backdrop" clicks land on the dialog
+    // itself rather than ::backdrop; handleBackdropClick covers them.
+    // biome-ignore lint/a11y/useKeyWithClickEvents: Escape closes the dialog natively; this click is a pointer-only convenience
+    <dialog
+      ref={dialogRef}
+      className="modal-dialog m-0 h-dvh max-h-none w-full max-w-none overflow-hidden border-0 bg-black/95 p-0 backdrop:bg-transparent open:flex open:flex-col"
+      style={{
+        paddingTop: "env(safe-area-inset-top)",
+        paddingBottom: "env(safe-area-inset-bottom)",
+      }}
+      onClose={handleCloseModal}
+      onClick={handleBackdropClick}
+      aria-labelledby="gallery-modal-title"
+    >
       {selectedImage !== null && activeImage && (
-        <motion.div
-          ref={modalRef}
-          className="fixed top-0 right-0 bottom-0 left-0 z-50 flex h-full min-h-[100dvh] w-full flex-col overflow-hidden bg-black/95"
-          style={{
-            paddingTop: "env(safe-area-inset-top)",
-            paddingBottom: "env(safe-area-inset-bottom)",
-          }}
-          initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0 }}
-          transition={prefersReducedMotion ? { duration: 0 } : undefined}
-          onClick={handleBackdropClick}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="gallery-modal-title"
-        >
+        <>
           {/* Screen reader heading for modal context */}
           <h2 id="gallery-modal-title" className="sr-only">
             Image Viewer
           </h2>
           <button
-            ref={closeButtonRef}
             className="absolute top-4 right-4 z-10 rounded-full bg-white/10 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:ring-2 focus:ring-white focus:outline-none"
             onClick={handleCloseModal}
             aria-label="Close image viewer"
@@ -356,8 +366,8 @@ export default function ImageGalleryLightbox({
               </svg>
             </button>
           </nav>
-        </motion.div>
+        </>
       )}
-    </AnimatePresence>
+    </dialog>
   )
 }

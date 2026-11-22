@@ -85,6 +85,16 @@ export interface ButtonProps {
   "aria-label"?: string
 
   /**
+   * Disclosure state, for buttons that open and close something (e.g. a menu)
+   */
+  "aria-expanded"?: boolean
+
+  /**
+   * ID of the element this button controls
+   */
+  "aria-controls"?: string
+
+  /**
    * Allow custom data attributes for external integrations (e.g., zeffy-form-link)
    * Note: Using specific data attribute typing instead of index signature for better type safety
    */
@@ -127,6 +137,8 @@ export const Button: React.FC<ButtonProps> = ({
   rel,
   download,
   "aria-label": ariaLabel,
+  "aria-expanded": ariaExpanded,
+  "aria-controls": ariaControls,
   "data-zeffy-form-link": zeffyFormLink,
   trackingLocation,
 }) => {
@@ -225,6 +237,8 @@ export const Button: React.FC<ButtonProps> = ({
       onClick={handleClick}
       disabled={disabled}
       aria-label={ariaLabel}
+      aria-expanded={ariaExpanded}
+      aria-controls={ariaControls}
       className={combinedClassName}
       {...dataProps}
     >

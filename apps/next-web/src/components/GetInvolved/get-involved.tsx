@@ -1,6 +1,7 @@
 "use client"
 
 import { AnimatePresence, motion } from "framer-motion"
+import { Pause, Play } from "lucide-react"
 import { useEffect, useState } from "react"
 import Container from "@/components/Container/container"
 import { NewsletterForm } from "@/components/NewsletterForm"
@@ -30,20 +31,24 @@ export default function GetInvolved({
   instagramUrl,
 }: GetInvolvedProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
   const prefersReducedMotion = useReducedMotion()
 
   const images = galleryImages
+  // Auto-advancing content that runs longer than 5s needs a way to stop it
+  // (WCAG 2.2.2), so the slideshow gets a pause/play control whenever it cycles.
+  const canCycle = !prefersReducedMotion && images.length > 1
 
   useEffect(() => {
     // Only cycle images if user hasn't requested reduced motion and there are multiple images
-    if (prefersReducedMotion || images.length <= 1) return
+    if (!canCycle || isPaused) return
 
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % images.length)
     }, 5000) // Change image every 5 seconds
 
     return () => clearInterval(interval)
-  }, [prefersReducedMotion, images.length])
+  }, [canCycle, isPaused, images.length])
 
   return (
     <Container spacing="none" gutter={gutter} id={id}>
@@ -67,7 +72,6 @@ export default function GetInvolved({
                       alt={images[currentImageIndex].alt || ""}
                       sizes="(max-width: 1024px) 100vw, 576px"
                       className="h-full w-full object-cover"
-                      priority={currentImageIndex === 0}
                       maxWidth={1024}
                       breakpoints={[320, 480, 640, 768, 896, 1024]}
                       quality={70}
@@ -75,6 +79,20 @@ export default function GetInvolved({
                   </motion.div>
                 </AnimatePresence>
                 <div className="absolute inset-0 bg-primary-950/20 dark:bg-primary-950/30"></div>
+                {canCycle && (
+                  <button
+                    type="button"
+                    onClick={() => setIsPaused((paused) => !paused)}
+                    aria-label={isPaused ? "Play slideshow" : "Pause slideshow"}
+                    className="absolute right-4 bottom-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary-950/70 text-white backdrop-blur-sm transition-colors hover:bg-primary-950/90 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary-950 focus-visible:outline-none"
+                  >
+                    {isPaused ? (
+                      <Play aria-hidden="true" className="h-5 w-5" />
+                    ) : (
+                      <Pause aria-hidden="true" className="h-5 w-5" />
+                    )}
+                  </button>
+                )}
               </>
             ) : (
               <div className="flex h-full items-center justify-center bg-accent-100 dark:bg-accent-900">
