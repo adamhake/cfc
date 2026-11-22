@@ -44,7 +44,7 @@ export default function Error({
             We're sorry, but something unexpected happened. Please try again.
           </p>
         </div>
-        <Button onClick={reset} variant="primary" className="w-full">
+        <Button onClick={reset} variant="accent" className="w-full">
           Try Again
         </Button>
       </div>

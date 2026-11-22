@@ -65,7 +65,7 @@ export function FileAttachment({ asset, title, description }: FileAttachmentProp
         <Button
           as="a"
           href={asset.url}
-          variant="secondary"
+          variant="outline"
           size="standard"
           className="inline-flex items-center gap-2"
           download

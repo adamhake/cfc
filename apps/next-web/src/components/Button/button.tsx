@@ -10,7 +10,13 @@ import { cn } from "@/utils/cn"
  */
 export interface ButtonProps {
   /**
-   * Visual style variant of the button
+   * Visual style variant of the button. The site uses two button looks:
+   * - `accent`: filled river blue. The one main action in a view (Donate,
+   *   Subscribe, Register, Try again).
+   * - `outline`: everything else that is a text button.
+   * `secondary` is kept for icon-only utility buttons (the menu toggle, close).
+   * `primary` (filled green) is legacy; don't use it for new buttons, since a
+   * second filled colour blurs which action is the main one.
    * @default "primary"
    */
   variant?: "primary" | "secondary" | "outline" | "accent"

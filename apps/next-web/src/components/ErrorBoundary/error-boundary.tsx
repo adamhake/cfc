@@ -70,7 +70,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 </pre>
               </details>
             )}
-            <Button onClick={() => window.location.reload()} variant="primary" className="w-full">
+            <Button onClick={() => window.location.reload()} variant="accent" className="w-full">
               Refresh Page
             </Button>
           </div>

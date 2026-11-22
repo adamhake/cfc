@@ -99,7 +99,7 @@ export default function MediaGalleryClient({
       />
       {hasMore && (
         <div className="flex justify-center">
-          <Button onClick={loadMore} variant="primary" size="standard" disabled={isLoading}>
+          <Button onClick={loadMore} variant="outline" size="standard" disabled={isLoading}>
             {isLoading ? "Loading..." : "Load More Photos"}
           </Button>
         </div>

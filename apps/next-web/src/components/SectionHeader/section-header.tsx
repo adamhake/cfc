@@ -2,12 +2,15 @@ interface SectionHeaderProps {
   title: string
   level?: "h2" | "h3" | "h4"
   size?: "small" | "medium" | "large"
+  /** Lets the enclosing <section> name itself with aria-labelledby */
+  id?: string
 }
 
 export default function SectionHeader({
   title,
   level = "h2",
   size = "medium",
+  id,
 }: SectionHeaderProps) {
   const Component = level
 
@@ -19,6 +22,7 @@ export default function SectionHeader({
 
   return (
     <Component
+      id={id}
       className={`font-display text-primary-800 dark:text-primary-400 ${sizeClasses[size]}`}
     >
       {title}

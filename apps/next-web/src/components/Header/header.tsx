@@ -42,28 +42,20 @@ export default function Header({ facebookUrl, instagramUrl }: HeaderProps) {
 
   return (
     <div className="fixed top-4 right-4 left-4 z-20 flex flex-row items-center justify-center">
-      {/* In dark mode the bar sits on a primary-900 page, so it needs its own
-          darker surface and a visible edge — otherwise content scrolls through
-          it with nothing marking where the header starts. */}
-      <header className="w-full max-w-6xl rounded-2xl transition md:border md:border-primary-200/70 md:bg-grey-50/95 md:px-3 md:py-2 md:shadow-sm md:backdrop-blur dark:md:border-primary-600/60 dark:md:bg-primary-950/95 dark:md:shadow-lg dark:md:shadow-primary-950/50">
+      {/* One bar at every width. On phones the logo and menu button used to
+          float on their own, so body text and photos scrolled straight through
+          them. In dark mode the bar sits on a primary-900 page, so it needs
+          its own darker surface and a visible edge. */}
+      <header className="w-full max-w-6xl rounded-2xl border border-primary-200/70 bg-grey-50/95 px-2 py-1.5 shadow-sm backdrop-blur transition md:px-3 md:py-2 dark:border-primary-600/60 dark:bg-primary-950/95 dark:shadow-lg dark:shadow-primary-950/50">
         <div className="flex w-full items-center justify-between gap-2">
-          {/* Logo - Mobile only */}
           <Link
             href="/"
-            className="flex h-12 w-12 items-center justify-center rounded-full border border-grey-200 bg-grey-50 text-primary-800 shadow-md focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 focus-visible:outline-none md:hidden dark:border-primary-700 dark:bg-primary-900 dark:text-primary-400"
+            className="group flex shrink-0 items-center gap-2 rounded-xl px-1.5 py-1 text-primary-800 transition hover:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none md:px-2 dark:text-grey-100 dark:hover:bg-primary-800/50"
           >
-            <IconLogo className="h-7 w-7" />
-          </Link>
-
-          {/* Branding - Desktop only */}
-          <Link
-            href="/"
-            className="group hidden shrink-0 items-center gap-2 rounded-xl px-2 py-1 text-primary-800 transition hover:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-accent-600 focus-visible:ring-offset-2 focus-visible:outline-none md:flex dark:text-grey-100 dark:hover:bg-primary-800/50"
-          >
-            <IconLogo className="mr-1 h-10 w-10 transition group-hover:text-accent-600 dark:text-primary-600 dark:group-hover:text-accent-400" />
+            <IconLogo className="h-8 w-8 transition group-hover:text-accent-600 md:mr-1 md:h-10 md:w-10 dark:text-primary-600 dark:group-hover:text-accent-400" />
             <div className="flex flex-col font-wordmark transition group-hover:text-accent-700 dark:group-hover:text-accent-400">
-              <span className="text-xl leading-none">Chimborazo</span>
-              <span className="text-sm leading-none">Park Conservancy</span>
+              <span className="text-lg leading-none md:text-xl">Chimborazo</span>
+              <span className="text-xs leading-none md:text-sm">Park Conservancy</span>
             </div>
           </Link>
 
@@ -90,32 +82,36 @@ export default function Header({ facebookUrl, instagramUrl }: HeaderProps) {
             })}
           </nav>
 
-          {/* Mobile menu button */}
-          <Button
-            onClick={() => {
-              setHasOpened(true)
-              setMenuOpen((s) => !s)
-            }}
-            variant="secondary"
-            className="flex h-12 w-12 items-center justify-center border p-0 shadow-md lg:hidden dark:border-grey-800 dark:bg-grey-900"
-            aria-label="Toggle menu"
-            aria-expanded={menuOpen}
-            aria-controls="mobile-menu"
-          >
-            <Menu className="h-6 w-6" />
-          </Button>
+          <div className="flex shrink-0 items-center gap-2">
+            {/* Donate stays one tap away on phones. Between lg and xl the full
+                nav needs the room, so it drops out there; the mobile menu and
+                every page footer still carry it. */}
+            <Button
+              as="a"
+              variant="accent"
+              size="small"
+              href="/donate"
+              trackingLocation="header"
+              className="inline-flex min-h-11 shrink-0 text-center lg:hidden xl:inline-flex xl:min-h-0"
+            >
+              Donate
+            </Button>
 
-          {/* Desktop donate button */}
-          <Button
-            as="a"
-            variant="accent"
-            size="small"
-            href="/donate"
-            trackingLocation="header"
-            className="hidden shrink-0 text-center xl:inline-flex"
-          >
-            Donate
-          </Button>
+            {/* Mobile menu button */}
+            <Button
+              onClick={() => {
+                setHasOpened(true)
+                setMenuOpen((s) => !s)
+              }}
+              variant="secondary"
+              className="flex h-11 w-11 items-center justify-center border p-0 lg:hidden dark:border-primary-700 dark:bg-primary-900"
+              aria-label="Toggle menu"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
+            >
+              <Menu className="h-6 w-6" aria-hidden="true" />
+            </Button>
+          </div>
         </div>
       </header>
 
