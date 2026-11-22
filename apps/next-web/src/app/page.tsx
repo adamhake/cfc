@@ -350,6 +350,30 @@ export default async function HomePage() {
           </Container>
         </section>
 
+        {/* Park Updates sits above Projects: it's the section that changes
+            week to week (access notices, plantings, repairs), so returning
+            neighbors see what's new before the slower-moving project list. */}
+        {featuredUpdates.length > 0 && (
+          <section aria-labelledby="updates-heading">
+            <Container spacing="md">
+              <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+                <SectionHeader id="updates-heading" title="Park Updates" size="large" />
+                <SectionLink href="/updates" trackingLocation="homepage-updates">
+                  All updates
+                </SectionLink>
+              </div>
+              <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
+                Seasonal news, construction progress, and notices to help you plan your visit.
+              </p>
+              <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {featuredUpdates.map((update) => (
+                  <UpdateCard key={update._id} update={update} compact />
+                ))}
+              </div>
+            </Container>
+          </section>
+        )}
+
         {/* Featured Projects */}
         {featuredProjects && featuredProjects.length > 0 && (
           <section aria-labelledby="projects-heading">
@@ -369,27 +393,6 @@ export default async function HomePage() {
               </p>
 
               <HomepageProjectsClient projects={featuredProjects} />
-            </Container>
-          </section>
-        )}
-
-        {featuredUpdates.length > 0 && (
-          <section aria-labelledby="updates-heading">
-            <Container spacing="md">
-              <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
-                <SectionHeader id="updates-heading" title="Park Updates" size="large" />
-                <SectionLink href="/updates" trackingLocation="homepage-updates">
-                  All updates
-                </SectionLink>
-              </div>
-              <p className="mt-4 max-w-3xl font-body text-grey-700 md:text-lg dark:text-grey-300">
-                Seasonal news, construction progress, and notices to help you plan your visit.
-              </p>
-              <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {featuredUpdates.map((update) => (
-                  <UpdateCard key={update._id} update={update} compact />
-                ))}
-              </div>
             </Container>
           </section>
         )}
